@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use Iterator;
 use LimitIterator;
 use SplFileObject;
+use SplTempFileObject;
 use UnexpectedValueException;
 
 /**
@@ -18,6 +19,8 @@ class Reader
     protected int $offset = 0;
     protected int $limit = -1;
     protected array $headers;
+    /** @var int|string */
+    protected $primary;
     protected Iterator $iterator;
     protected SplFileObject $file;
 
@@ -40,7 +43,7 @@ class Reader
      */
     public function open($filePath): self
     {
-        $this->file = new SplFileObject($filePath);
+        $this->file = new SplFileObject($filePath, 'a+');
         $this->file->setFlags(
             SplFileObject::SKIP_EMPTY |
             SplFileObject::DROP_NEW_LINE |
@@ -49,6 +52,7 @@ class Reader
         $this->file->rewind();
 
         $this->headers = $this->headers();
+        $this->primary = $this->getPrimaryKey();
         $this->iterator = new LimitIterator($this->file, 1);
 
         return $this;
@@ -73,17 +77,24 @@ class Reader
      */
     public function headers(): array
     {
-        static $headers;
+        $this->file->seek(0);
 
-        if (! $headers) {
-            $this->file->seek(0);
-            $headers = str_getcsv($this->file->current());
-        }
-
-        return $headers;
+        return str_getcsv($this->file->current());
     }
 
     /**
+     * Get primary key
+     *
+     * @return int|string
+     */
+    public function getPrimaryKey()
+    {
+        return $this->headers[0];
+    }
+
+    /**
+     * Applies condition
+     *
      * @param string $field
      * @param null $operator
      * @param null $value
@@ -100,7 +111,7 @@ class Reader
         }
 
         if (func_num_args() === 2) {
-            $value    = $operator;
+            $value    = (string) $operator;
             $operator = '=';
         }
 
@@ -147,6 +158,11 @@ class Reader
         return $this->mapper($this->iterator());
     }
 
+    /**
+     * Get count fields
+     *
+     * @return int
+     */
     public function count(): int
     {
         return iterator_count($this->iterator());
@@ -157,9 +173,9 @@ class Reader
      *
      * @param int $limit
      *
-     * @return array|mixed
+     * @return array|bool
      */
-    public function first(int $limit = 1): array
+    public function first(int $limit = 1)
     {
         $iterator = new LimitIterator($this->iterator, 0, $limit);
         $lines    = $this->mapper($iterator);
@@ -212,6 +228,162 @@ class Reader
     }
 
     /**
+     * Insert field
+     *
+     * @param array $data
+     *
+     * @return int|string last insert id
+     */
+    public function insert(array $data)
+    {
+        $keys = array_fill_keys($this->headers, '');
+        $diffKeys = array_diff_key($data, $keys);
+
+        if ($diffKeys) {
+            throw new UnexpectedValueException(sprintf('%s() called undefined column. Column "%s" does not exist', __METHOD__, key($diffKeys)));
+        }
+
+        if (! $this->file->flock(LOCK_EX)) {
+            throw new UnexpectedValueException(sprintf('Unable to obtain lock on file: %s', $this->file->getFilename()));
+        }
+
+        $ids = array_column($this->mapper($this->iterator), $this->primary, $this->primary);
+
+        if (! isset($data[$this->primary])) {
+            if ($ids) {
+                $maxId = max($ids);
+                if (is_numeric($maxId)) {
+                    ++$maxId;
+                } else {
+                    throw new UnexpectedValueException(sprintf('%s() no unique ID assigned. Column "%s" cannot be generated', __METHOD__, $this->primary));
+                }
+            } else {
+                $maxId = 1;
+            }
+
+            $data[$this->primary] = $maxId;
+        }
+
+        if (isset($ids[$data[$this->primary]])) {
+            throw new UnexpectedValueException(sprintf('%s() duplicate entry. Column "%s" with the value "%s" already exists', __METHOD__, $this->primary, $data[$this->primary]));
+        }
+
+        $this->file->fputcsv(array_replace($keys, $data));
+        $this->file->flock(LOCK_UN);
+
+
+        return $data[$this->primary];
+    }
+
+    /**
+     * Update fields
+     *
+     * @param array $data
+     *
+     * @return int affected lines
+     */
+    public function update(array $data): int
+    {
+        $affectedLines = 0;
+        $ids = array_column($this->mapper($this->iterator), $this->primary, $this->primary);
+
+        if (! $this->file->flock(LOCK_EX)) {
+            throw new UnexpectedValueException(sprintf('Unable to obtain lock on file: %s', $this->file->getFilename()));
+        }
+
+        $this->file->fseek(0);
+
+        $temp = new SplTempFileObject(-1);
+        while(! $this->file->eof()) {
+            $temp->fwrite($this->file->fread(1024));
+        }
+
+        $temp->rewind();
+        $this->file->ftruncate(0);
+        $this->file->fseek(0);
+
+        while ($temp->valid()) {
+            $current = $temp->current();
+
+            if (isset($ids[str_getcsv($current)[0]])) {
+                $map = $this->mapper($current);
+                $newData = array_replace($map, $data);
+
+                $this->file->fputcsv($newData);
+                $affectedLines++;
+            } else {
+                $this->file->fwrite($current);
+            }
+
+            $temp->next();
+        }
+
+        $this->file->flock(LOCK_UN);
+
+        return $affectedLines;
+    }
+
+    /**
+     * Delete fields
+     *
+     * @return int affected lines
+     */
+    public function delete(): int
+    {
+        $affectedLines = 0;
+        $ids = array_column($this->mapper($this->iterator), $this->primary, $this->primary);
+
+        if (! $this->file->flock(LOCK_EX)) {
+            throw new UnexpectedValueException(sprintf('Unable to obtain lock on file: %s', $this->file->getFilename()));
+        }
+
+        $this->file->fseek(0);
+
+        $temp = new SplTempFileObject(-1);
+        while(! $this->file->eof()) {
+            $temp->fwrite($this->file->fread(1024));
+        }
+
+        $temp->rewind();
+        $this->file->ftruncate(0);
+        $this->file->fseek(0);
+
+        while ($temp->valid()) {
+            $current = $temp->current();
+
+            if (isset($ids[str_getcsv($current)[0]])) {
+                $affectedLines++;
+            } else {
+                $this->file->fwrite($current);
+            }
+
+            $temp->next();
+        }
+
+        $this->file->flock(LOCK_UN);
+
+        return $affectedLines;
+    }
+
+    /**
+     * Truncate file
+     *
+     * @return bool
+     */
+    public function truncate(): bool
+    {
+        if (! $this->file->flock(LOCK_EX)) {
+            throw new UnexpectedValueException(sprintf('Unable to obtain lock on file: %s', $this->file->getFilename()));
+        }
+
+        $this->file->seek(0);
+        $this->file->ftruncate($this->file->ftell());
+        $this->file->flock(LOCK_UN);
+
+        return true;
+    }
+
+    /**
      * Combine fields
      *
      * @return Closure
@@ -238,15 +410,15 @@ class Reader
      */
     protected function mapper($data): array
     {
-        $mapper = $this->combiner();
+        $combiner = $this->combiner();
 
         if (is_string($data)) {
-            return $mapper(str_getcsv($data));
+            return $combiner(str_getcsv($data));
         }
 
         $rows = [];
         foreach ($data as $line) {
-            $rows[] = $mapper(str_getcsv($line));
+            $rows[] = $combiner(str_getcsv($line));
         }
 
         return $rows;

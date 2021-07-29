@@ -14,11 +14,15 @@ final class ReaderTest extends TestCase
      * @var Reader
      */
     private Reader $reader;
+    private Reader $reader2;
+    private Reader $reader3;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->reader = new Reader('tests/data/test.csv');
+        $this->reader2 = new Reader('tests/data/test2.csv');
+        $this->reader3 = new Reader('tests/data/test3.csv');
     }
 
     /**
@@ -27,19 +31,22 @@ final class ReaderTest extends TestCase
     public function testReader(): void
     {
         $this->assertInstanceOf(Reader::class, $this->reader);
+        $this->assertInstanceOf(Reader::class, $this->reader2);
+        $this->assertInstanceOf(Reader::class, $this->reader3);
+        $this->assertNotEquals($this->reader, $this->reader2);
     }
 
     /**
-     * Find by id
+     * Find by primary key
      * @covers ::find()
      */
     public function testFind(): void
     {
-        $find = $this->reader->find('Vantuz');
+        $find = $this->reader->find(17);
 
         $this->assertIsArray($find);
         $this->assertArrayHasKey('id', $find);
-        $this->assertEquals('Vantuz', $find['id']);
+        $this->assertEquals('17', $find['id']);
     }
 
     /**
@@ -251,5 +258,172 @@ final class ReaderTest extends TestCase
         $this->assertArrayHasKey('id', $find[0]);
         $this->assertEquals('Петя', $find[0]['name']);
         $this->assertEquals('Заголовок20', $find[0]['title']);
+    }
+
+    /**
+     * Find by string primary key
+     * @covers ::find()
+     */
+    public function testFindStringKey(): void
+    {
+        $find = $this->reader2->find('key1');
+
+        $this->assertIsArray($find);
+        $this->assertArrayHasKey('key', $find);
+        $this->assertEquals('key1', $find['key']);
+        $this->assertEquals('500', $find['value']);
+    }
+
+    /**
+     * Find by empty string primary key
+     * @covers ::find()
+     */
+    public function testFindEmptyStringKey(): void
+    {
+        $find = $this->reader2->find('key3');
+
+        $this->assertIsArray($find);
+        $this->assertArrayHasKey('key', $find);
+        $this->assertEquals('key3', $find['key']);
+        $this->assertEquals('', $find['value']);
+    }
+
+    /**
+     * Get all
+     * @covers ::get()
+     */
+    public function testAllGet(): void
+    {
+        $find = $this->reader2->get();
+
+        $this->assertCount(5, $find);
+        $this->assertArrayHasKey('key', $find[0]);
+        $this->assertEquals('key1', $find[0]['key']);
+        $this->assertEquals('500', $find[0]['value']);
+    }
+
+    /**
+     * Insert field
+     * @covers ::insert()
+     */
+    public function testInsert(): void
+    {
+        $lastInsertId = $this->reader3->insert([
+           'name' => 'name1',
+           'value' => 555,
+        ]);
+
+        $find = $this->reader3->reverse()->first();
+
+        $this->assertEquals($find['id'], $lastInsertId);
+        $this->assertArrayHasKey('name', $find);
+        $this->assertEquals('name1', $find['name']);
+        $this->assertEquals('555', $find['value']);
+
+        $this->reader3->truncate();
+    }
+
+    /**
+     * Insert multiple fields
+     * @covers ::insert()
+     */
+    public function testMultipleInsert(): void
+    {
+        foreach ($this->data() as $val) {
+            $this->reader3->insert($val);
+        }
+
+        $find = $this->reader3->get();
+
+        $this->assertCount(6, $find);
+        $this->assertEquals('name3', $find[2]['name']);
+        $this->assertEquals('value3', $find[2]['value']);
+
+        $this->reader3->truncate();
+    }
+
+    /**
+     * Update fields
+     * @covers ::update()
+     */
+    public function testUpdate(): void
+    {
+        foreach ($this->data() as $val) {
+            $this->reader3->insert($val);
+        }
+        $this->reader3->where('id', 3)->update(['name' => 'xxx', 'value' => 888]);
+
+        $find = $this->reader3->find(3);
+
+        $this->assertEquals('xxx', $find['name']);
+        $this->assertEquals('888', $find['value']);
+
+        $this->reader3->truncate();
+    }
+
+    /**
+     * Delete fields
+     * @covers ::delete()
+     */
+    public function testDelete(): void
+    {
+        foreach ($this->data() as $val) {
+            $this->reader3->insert($val);
+        }
+        $this->reader3->where('id', 3)->delete();
+
+        $find = $this->reader3->find(3);
+
+        $this->assertEquals(false, $find);
+
+        $this->reader3->truncate();
+    }
+
+    /**
+     * Truncate fields
+     * @covers ::truncate()
+     */
+    public function testTruncate(): void
+    {
+        foreach ($this->data() as $val) {
+            $this->reader3->insert($val);
+        }
+
+        $this->reader3->truncate();
+
+        $find = $this->reader3->get();
+        $this->assertCount(0, $find);
+    }
+
+    /**
+     * @return array
+     */
+    private function data(): array
+    {
+        return [
+            [
+                'name' => 'name1',
+                'value' => 555,
+            ],
+            [
+                'name' => 'name2',
+                'value' => 777,
+            ],
+            [
+                'name' => 'name3',
+                'value' => 'value3',
+            ],
+            [
+                'name' => 'name4',
+                'value' => null,
+            ],
+            [
+                'name' => 'name5',
+            ],
+            [
+                'name' => 'name6',
+                'value' => ',',
+            ],
+        ];
     }
 }
