@@ -115,6 +115,23 @@ final class ReaderTest extends TestCase
     }
 
     /**
+     * Find by condition in
+     *
+     * @covers ::whereIn()
+     */
+    public function testWhereIn(): void
+    {
+        $find = $this->reader->whereIn('id', [1, 3, 5, 7])->get();
+
+        $this->assertIsArray($find);
+        $this->assertCount(4, $find);
+        $this->assertEquals('1', $find[0]['id']);
+        $this->assertEquals('3', $find[1]['id']);
+        $this->assertEquals('5', $find[2]['id']);
+        $this->assertEquals('7', $find[3]['id']);
+    }
+
+    /**
      * Get count
      *
      * @covers ::count()
@@ -237,7 +254,7 @@ final class ReaderTest extends TestCase
      */
     public function testFirst3(): void
     {
-        $find = $this->reader->first(3);
+        $find = $this->reader->limit(3)->get();
 
         $this->assertCount(3, $find);
         $this->assertArrayHasKey('id', $find[0]);
@@ -252,7 +269,7 @@ final class ReaderTest extends TestCase
      */
     public function testLast3(): void
     {
-        $find = $this->reader->reverse()->first(3);
+        $find = $this->reader->reverse()->limit(3)->get();
 
         $this->assertCount(3, $find);
         $this->assertArrayHasKey('id', $find[0]);

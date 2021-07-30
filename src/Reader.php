@@ -126,7 +126,34 @@ class Reader
     }
 
     /**
-     * Get field by id
+     * Applies condition
+     *
+     * @param string $field
+     * @param array  $values
+     *
+     * @return $this
+     */
+    public function whereIn(string $field, array $values): self
+    {
+        $values = array_flip($values);
+        $key    = array_search($field, $this->headers, true);
+
+        if ($key === false) {
+            throw new UnexpectedValueException(sprintf('%s() called undefined column. Column "%s" does not exist', __METHOD__, $field));
+        }
+
+        $this->iterator = new CallbackFilterIterator(
+            $this->iterator,
+            function ($current) use ($key, $values) {
+                return isset($values[str_getcsv($current)[$key]]);
+            }
+        );
+
+        return $this;
+    }
+
+    /**
+     * Get field by primary key
      *
      * @param int|string $id
      *
@@ -171,16 +198,14 @@ class Reader
         /**
      * Get first fields
      *
-     * @param int $limit
-     *
      * @return array|bool
      */
-    public function first(int $limit = 1)
+    public function first()
     {
-        $iterator = new LimitIterator($this->iterator, 0, $limit);
+        $iterator = new LimitIterator($this->iterator, 0, 1);
         $lines    = $this->mapper($iterator);
 
-        return $limit === 1 ? current($lines) : $lines;
+        return current($lines);
     }
 
     /**

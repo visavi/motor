@@ -8,8 +8,8 @@
 
 - Поиск по уникальному ключу
 - Поиск по любым заданным условиям
-- Поиск первой записи (или нескольких первых)
-- Поиск последней записи (или нескольких последних)
+- Поиск первой записи
+- Поиск последней записи
 - Возврат структуры файла
 - Возврат количества записей в файле
 - Запись строки в файл с генерацией автоинкрементного ключа
@@ -27,7 +27,6 @@
 
 Если столбец числовой, то уникальный ключ будет генерироваться автоматически
 
-
 ### Примеры
 ```php
 use App\Reader;
@@ -37,8 +36,8 @@ $file = __DIR__ . '/index.csv';
 $fileObject = new Reader($file);
 echo '<pre>';
 
-echo ' ---- Find by id -------<br>';
-var_dump($fileObject->find('Vantuz'));
+echo ' ---- Find by primary key -------<br>';
+var_dump($fileObject->find(1));
 
 echo ' ---- Find by name limit 1 -----------<br>';
 var_dump($fileObject->where('name', 'Миша')->limit(1)->get());
@@ -51,6 +50,9 @@ var_dump($fileObject->where('name', 'Миша')->where('title', 'Заголов�
 
 echo ' ---- Get from condition -----------<br>';
 var_dump($fileObject->where('time', '>=', 1231231235)->get());
+
+echo ' ---- Get by condition in -------<br>';
+var_dump($fileObject->whereIn('id', [1,3,4,7])->get());
 
 echo ' ---- Get count -----------<br>';
 var_dump($fileObject->where('time', '>', 1231231234)->count());
@@ -71,10 +73,10 @@ echo ' ---- Get first line -----------<br>';
 var_dump($fileObject->first());
 
 echo ' ---- Get first 3 lines -----------<br>';
-var_dump($fileObject->first(3));
+var_dump($fileObject->limit(3)->get());
 
 echo ' ---- Get last 3 lines -----------<br>';
-var_dump($fileObject->reverse()->first(3));
+var_dump($fileObject->reverse()->limit(3)->get());
 
 echo ' ---- Insert string -----------<br>';
 var_dump($fileObject->insert(['name' => 'Миша']));
