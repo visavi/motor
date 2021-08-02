@@ -33,60 +33,59 @@ use App\Reader;
 
 $file = __DIR__ . '/index.csv';
 
-$fileObject = new Reader($file);
-echo '<pre>';
+$reader = new Reader($file);
 
-echo ' ---- Find by primary key -------<br>';
-var_dump($fileObject->find(1));
+# Find by primary key
+$reader->find(1);
 
-echo ' ---- Find by name limit 1 -----------<br>';
-var_dump($fileObject->where('name', 'Миша')->limit(1)->get());
+# Find by name limit 1
+$reader->where('name', 'Миша')->limit(1)->get();
 
-echo ' ---- Find by name and last 1 -----------<br>';
-var_dump($fileObject->where('name', 'Миша')->reverse()->first());
+# Find by name and last 1
+$reader->where('name', 'Миша')->reverse()->first();
 
-echo ' ---- Find by name and title -----------<br>';
-var_dump($fileObject->where('name', 'Миша')->where('title', 'Заголовок10')->get());
+# Find by name and title
+$reader->where('name', 'Миша')->where('title', 'Заголовок10')->get();
 
-echo ' ---- Get from condition -----------<br>';
-var_dump($fileObject->where('time', '>=', 1231231235)->get());
+# Get from condition
+$reader->where('time', '>=', 1231231235)->get();
 
-echo ' ---- Get by condition in -------<br>';
-var_dump($fileObject->whereIn('id', [1,3,4,7])->get());
+# Get by condition in
+$reader->whereIn('id', [1,3,4,7])->get();
 
-echo ' ---- Get count -----------<br>';
-var_dump($fileObject->where('time', '>', 1231231234)->count());
+# Get count
+$reader->where('time', '>', 1231231234)->count();
 
-echo ' ---- Get lines 1 - 10 -----------<br>';
-var_dump($lines = $fileObject->offset(0)->limit(10)->get());
+# Get lines 1 - 10
+$lines = $reader->offset(0)->limit(10)->get();
 
-echo ' ---- Get lines reverse (last 10 lines reversed)  -----------<br>';
-var_dump($lines = $fileObject->reverse()->offset(0)->limit(10)->get());
+# Get lines reverse (last 10 lines reversed)
+$lines = $reader->reverse()->offset(0)->limit(10)->get();
 
-echo ' ---- Get from condition limit and reverse -----------<br>';
-var_dump($lines = $fileObject->where('name', 'Миша')->limit(10)->reverse()->get());
+# Get from condition limit and reverse
+$lines = $reader->where('name', 'Миша')->limit(10)->reverse()->get();
 
-echo ' ---- Get headers -----------<br>';
-var_dump($fileObject->headers());
+# Get headers
+$reader->headers();
 
-echo ' ---- Get first line -----------<br>';
-var_dump($fileObject->first());
+# Get first line
+$reader->first();
 
-echo ' ---- Get first 3 lines -----------<br>';
-var_dump($fileObject->limit(3)->get());
+# Get first 3 lines
+$reader->limit(3)->get();
 
-echo ' ---- Get last 3 lines -----------<br>';
-var_dump($fileObject->reverse()->limit(3)->get());
+# Get last 3 lines
+$reader->reverse()->limit(3)->get();
 
-echo ' ---- Insert string -----------<br>';
-var_dump($fileObject->insert(['name' => 'Миша']));
+# Insert string
+$reader->insert(['name' => 'Миша']);
 
-echo ' ---- Update strings -----------<br>';
-var_dump($fileObject->where('name', 'Миша')->update(['text' => 'Новый текст']));
+# Update strings
+$reader->where('name', 'Миша')->update(['text' => 'Новый текст']);
 
-echo ' ---- Delete strings -----------<br>';
-var_dump($fileObject->where('name', 'Миша')->delete());
+# Delete strings
+$reader->where('name', 'Миша')->delete();
 
-echo ' ---- Truncate file -----------<br>';
-var_dump($fileObject->truncate());
+# Truncate file
+$reader->truncate();
 ```

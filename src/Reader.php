@@ -4,6 +4,7 @@ namespace App;
 
 use CallbackFilterIterator;
 use Closure;
+use Illuminate\Support\Collection;
 use InvalidArgumentException;
 use Iterator;
 use LimitIterator;
@@ -421,6 +422,18 @@ class Reader
             if (count($record) !== $fieldCount) {
                 $record = array_slice(array_pad($record, $fieldCount, null), 0, $fieldCount);
             }
+
+            $record = array_map(static function ($value) {
+                if (is_numeric($value)) {
+                    return strpos($value, '.') === false ? (int) $value : (float) $value;
+                }
+
+                if ($value === '') {
+                    return null;
+                }
+
+                return $value;
+            }, $record);
 
             return array_combine($this->headers, $record);
         };
