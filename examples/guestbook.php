@@ -3,7 +3,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require 'vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 use App\Paginator;
 use App\Reader;
@@ -12,8 +12,7 @@ use App\Reader;
     <link rel="stylesheet" type="text/css" href="/src/css/bootstrap.css">
 <?php
 
-
-$file = __DIR__ . '/tests/data/test.csv';
+$file = __DIR__ . '/../tests/data/test.csv';
 
 $reader = new Reader($file);
 

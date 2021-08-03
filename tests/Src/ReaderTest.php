@@ -132,6 +132,29 @@ final class ReaderTest extends TestCase
     }
 
     /**
+     * Find by condition not in
+     *
+     * @covers ::whereNotIn()
+     */
+    public function testWhereNotIn(): void
+    {
+        $find = $this->reader->whereNotIn('id', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])->get();
+
+        $this->assertIsArray($find);
+        $this->assertCount(10, $find);
+        $this->assertEquals('11', $find[0]['id']);
+        $this->assertEquals('12', $find[1]['id']);
+        $this->assertEquals('13', $find[2]['id']);
+        $this->assertEquals('14', $find[3]['id']);
+        $this->assertEquals('15', $find[4]['id']);
+        $this->assertEquals('16', $find[5]['id']);
+        $this->assertEquals('17', $find[6]['id']);
+        $this->assertEquals('18', $find[7]['id']);
+        $this->assertEquals('19', $find[8]['id']);
+        $this->assertEquals('20', $find[9]['id']);
+    }
+
+    /**
      * Get count
      *
      * @covers ::count()

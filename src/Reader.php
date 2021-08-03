@@ -4,7 +4,6 @@ namespace App;
 
 use CallbackFilterIterator;
 use Closure;
-use Illuminate\Support\Collection;
 use InvalidArgumentException;
 use Iterator;
 use LimitIterator;
@@ -104,12 +103,8 @@ class Reader
      */
     public function where(string $field, $operator = null, $value = null): self
     {
+        $key   = $this->getKeyByField($field);
         $value = (string) $value;
-        $key   = array_search($field, $this->headers, true);
-
-        if ($key === false) {
-            throw new UnexpectedValueException(sprintf('%s() called undefined column. Column "%s" does not exist', __METHOD__, $field));
-        }
 
         if (func_num_args() === 2) {
             $value    = (string) $operator;
@@ -136,17 +131,36 @@ class Reader
      */
     public function whereIn(string $field, array $values): self
     {
+        $key    = $this->getKeyByField($field);
         $values = array_flip($values);
-        $key    = array_search($field, $this->headers, true);
-
-        if ($key === false) {
-            throw new UnexpectedValueException(sprintf('%s() called undefined column. Column "%s" does not exist', __METHOD__, $field));
-        }
 
         $this->iterator = new CallbackFilterIterator(
             $this->iterator,
             function ($current) use ($key, $values) {
                 return isset($values[str_getcsv($current)[$key]]);
+            }
+        );
+
+        return $this;
+    }
+
+    /**
+     * Applies condition
+     *
+     * @param string $field
+     * @param array  $values
+     *
+     * @return $this
+     */
+    public function whereNotIn(string $field, array $values): self
+    {
+        $key    = $this->getKeyByField($field);
+        $values = array_flip($values);
+
+        $this->iterator = new CallbackFilterIterator(
+            $this->iterator,
+            function ($current) use ($key, $values) {
+                return ! isset($values[str_getcsv($current)[$key]]);
             }
         );
 
@@ -256,14 +270,14 @@ class Reader
     /**
      * Insert field
      *
-     * @param array $data
+     * @param array $values
      *
      * @return int|string last insert id
      */
-    public function insert(array $data)
+    public function insert(array $values)
     {
-        $keys = array_fill_keys($this->headers, '');
-        $diffKeys = array_diff_key($data, $keys);
+        $fields   = array_fill_keys($this->headers, '');
+        $diffKeys = array_diff_key($values, $fields);
 
         if ($diffKeys) {
             throw new UnexpectedValueException(sprintf('%s() called undefined column. Column "%s" does not exist', __METHOD__, key($diffKeys)));
@@ -275,7 +289,7 @@ class Reader
 
         $ids = array_column($this->mapper($this->iterator), $this->primary, $this->primary);
 
-        if (! isset($data[$this->primary])) {
+        if (! isset($values[$this->primary])) {
             if ($ids) {
                 $maxId = max($ids);
                 if (is_numeric($maxId)) {
@@ -287,30 +301,36 @@ class Reader
                 $maxId = 1;
             }
 
-            $data[$this->primary] = $maxId;
+            $values[$this->primary] = $maxId;
         }
 
-        if (isset($ids[$data[$this->primary]])) {
-            throw new UnexpectedValueException(sprintf('%s() duplicate entry. Column "%s" with the value "%s" already exists', __METHOD__, $this->primary, $data[$this->primary]));
+        if (isset($ids[$values[$this->primary]])) {
+            throw new UnexpectedValueException(sprintf('%s() duplicate entry. Column "%s" with the value "%s" already exists', __METHOD__, $this->primary, $values[$this->primary]));
         }
 
-        $this->file->fputcsv(array_replace($keys, $data));
+        $this->file->fputcsv(array_replace($fields, $values));
         $this->file->flock(LOCK_UN);
 
 
-        return $data[$this->primary];
+        return $values[$this->primary];
     }
 
     /**
      * Update fields
      *
-     * @param array $data
+     * @param array $values
      *
      * @return int affected lines
      */
-    public function update(array $data): int
+    public function update(array $values): int
     {
-        $affectedLines = 0;
+        $diffKeys = array_diff_key($values, array_flip($this->headers));
+
+        if ($diffKeys) {
+            throw new UnexpectedValueException(sprintf('%s() called undefined column. Column "%s" does not exist', __METHOD__, key($diffKeys)));
+        }
+
+        $updatedLines = 0;
         $ids = array_column($this->mapper($this->iterator), $this->primary, $this->primary);
 
         if (! $this->file->flock(LOCK_EX)) {
@@ -333,10 +353,9 @@ class Reader
 
             if (isset($ids[str_getcsv($current)[0]])) {
                 $map = $this->mapper($current);
-                $newData = array_replace($map, $data);
 
-                $this->file->fputcsv($newData);
-                $affectedLines++;
+                $this->file->fputcsv(array_replace($map, $values));
+                $updatedLines++;
             } else {
                 $this->file->fwrite($current);
             }
@@ -346,7 +365,7 @@ class Reader
 
         $this->file->flock(LOCK_UN);
 
-        return $affectedLines;
+        return $updatedLines;
     }
 
     /**
@@ -356,7 +375,7 @@ class Reader
      */
     public function delete(): int
     {
-        $affectedLines = 0;
+        $deletedLines = 0;
         $ids = array_column($this->mapper($this->iterator), $this->primary, $this->primary);
 
         if (! $this->file->flock(LOCK_EX)) {
@@ -378,7 +397,7 @@ class Reader
             $current = $temp->current();
 
             if (isset($ids[str_getcsv($current)[0]])) {
-                $affectedLines++;
+                $deletedLines++;
             } else {
                 $this->file->fwrite($current);
             }
@@ -388,7 +407,7 @@ class Reader
 
         $this->file->flock(LOCK_UN);
 
-        return $affectedLines;
+        return $deletedLines;
     }
 
     /**
@@ -442,20 +461,20 @@ class Reader
     /**
      * Mapper fields
      *
-     * @param array|string|iterable $data
+     * @param array|string|iterable $values
      *
      * @return array
      */
-    protected function mapper($data): array
+    protected function mapper($values): array
     {
         $combiner = $this->combiner();
 
-        if (is_string($data)) {
-            return $combiner(str_getcsv($data));
+        if (is_string($values)) {
+            return $combiner(str_getcsv($values));
         }
 
         $rows = [];
-        foreach ($data as $line) {
+        foreach ($values as $line) {
             $rows[] = $combiner(str_getcsv($line));
         }
 
@@ -511,6 +530,24 @@ class Reader
             default:
                 return $field === $value;
         }
+    }
+
+    /**
+     * Get key by name
+     *
+     * @param string $field
+     *
+     * @return int
+     */
+    private function getKeyByField(string $field): int
+    {
+        $key = array_search($field, $this->headers, true);
+
+        if ($key === false) {
+            throw new UnexpectedValueException(sprintf('%s() called undefined column. Column "%s" does not exist', __METHOD__, $field));
+        }
+
+        return $key;
     }
 
     /**

@@ -3,11 +3,11 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require 'vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 use App\Reader;
 
-$file = __DIR__ . '/tests/data/test.csv';
+$file = __DIR__ . '/../tests/data/test.csv';
 
 $reader = new Reader($file);
 echo '<pre>';
@@ -28,7 +28,10 @@ echo ' ---- Get from condition -----------<br>';
 var_dump($reader->where('time', '>=', 1231231235)->get());
 
 echo ' ---- Get by condition in -------<br>';
-var_dump($reader->whereIn('id', [1,3,4,7])->get());
+var_dump($reader->whereIn('id', [1, 3, 4, 7])->get());
+
+echo ' ---- Get by condition not in -------<br>';
+var_dump($reader->whereNotIn('id', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])->get());
 
 echo ' ---- Get count -----------<br>';
 var_dump($reader->where('time', '>', 1231231234)->count());

@@ -51,7 +51,10 @@ $reader->where('name', 'Миша')->where('title', 'Заголовок10')->get(
 $reader->where('time', '>=', 1231231235)->get();
 
 # Get by condition in
-$reader->whereIn('id', [1,3,4,7])->get();
+$reader->whereIn('id', [1, 3, 4, 7])->get();
+
+# Get by condition not in
+$reader->whereNotIn('id', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])->get();
 
 # Get count
 $reader->where('time', '>', 1231231234)->count();

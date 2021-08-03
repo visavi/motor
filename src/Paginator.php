@@ -20,7 +20,7 @@ class Paginator {
     public int $offset;
     public int $page;
 
-    public function __construct($limit, $total, $crumbs = 2)
+    public function __construct($limit, $total, $crumbs = 1)
     {
         $this->limit  = $limit;
         $this->total  = $total;
@@ -86,7 +86,6 @@ class Paginator {
         if ($this->page !== 1) {
             $pages[] = [
                 'page' => $this->page - 1,
-                'title' => 'Предыдущая',
                 'name' => '«',
             ];
         }
@@ -94,7 +93,6 @@ class Paginator {
         if ($this->page > $this->crumbs + 1) {
             $pages[] = [
                 'page' => 1,
-                'title' => '1 страница',
                 'name' => 1,
             ];
             if ($this->page !== $this->crumbs + 2) {
@@ -109,12 +107,11 @@ class Paginator {
             if ($i === $this->page) {
                 $pages[] = [
                     'current' => true,
-                    'name' => $i,
+                    'name'    => $i,
                 ];
             } else {
                 $pages[] = [
                     'page' => $i,
-                    'title' => $i.' страница',
                     'name' => $i,
                 ];
             }
@@ -124,12 +121,11 @@ class Paginator {
             if ($this->page !== $pg_cnt - $this->crumbs - 1) {
                 $pages[] = [
                     'separator' => true,
-                    'name' => ' ... ',
+                    'name'      => ' ... ',
                 ];
             }
             $pages[] = [
                 'page' => $pg_cnt,
-                'title' => $pg_cnt.' страница',
                 'name' => $pg_cnt,
             ];
         }
@@ -137,7 +133,6 @@ class Paginator {
         if ($this->page !== $pg_cnt) {
             $pages[] = [
                 'page' => $this->page + 1,
-                'title' => 'Следующая',
                 'name' => '»',
             ];
         }
@@ -154,6 +149,6 @@ class Paginator {
     {
         $view = new View();
 
-        return $view->render('src/views/bootstrap.php', ['pages' => $this->items()]);
+        return $view->render(__DIR__ . '/views/bootstrap.php', ['pages' => $this->items()]);
     }
 }
