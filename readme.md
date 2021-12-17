@@ -27,68 +27,72 @@
 
 Если столбец числовой, то уникальный ключ будет генерироваться автоматически
 
+### Запросы
+
+Все запросы проводятся через модели в котором должен быть указан путь к файлу с данными
+В самих моделях могут быть реализованы дополнительные методы
+
 ### Примеры
 ```php
-use App\Reader;
-
-$file = __DIR__ . '/index.csv';
-
-$reader = new Reader($file);
 
 # Find by primary key
-$reader->find(1);
+TestModel::query()->find(1);
 
 # Find by name limit 1
-$reader->where('name', 'Миша')->limit(1)->get();
+TestModel::query()->where('name', 'Миша')->limit(1)->get();
 
 # Find by name and last 1
-$reader->where('name', 'Миша')->reverse()->first();
+TestModel::query()->where('name', 'Миша')->reverse()->first();
 
 # Find by name and title
-$reader->where('name', 'Миша')->where('title', 'Заголовок10')->get();
+TestModel::query()->where('name', 'Миша')->where('title', 'Заголовок10')->get();
 
 # Get from condition
-$reader->where('time', '>=', 1231231235)->get();
+TestModel::query()->where('time', '>=', 1231231235)->get();
 
 # Get by condition in
-$reader->whereIn('id', [1, 3, 4, 7])->get();
+TestModel::query()->whereIn('id', [1, 3, 4, 7])->get();
 
 # Get by condition not in
-$reader->whereNotIn('id', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])->get();
+TestModel::query()->whereNotIn('id', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])->get();
 
 # Get count
-$reader->where('time', '>', 1231231234)->count();
+TestModel::query()->where('time', '>', 1231231234)->count();
 
 # Get lines 1 - 10
-$lines = $reader->offset(0)->limit(10)->get();
+$lines = TestModel::query()->offset(0)->limit(10)->get();
 
 # Get lines reverse (last 10 lines reversed)
-$lines = $reader->reverse()->offset(0)->limit(10)->get();
+$lines = TestModel::query()->reverse()->offset(0)->limit(10)->get();
 
 # Get from condition limit and reverse
-$lines = $reader->where('name', 'Миша')->limit(10)->reverse()->get();
+$lines = TestModel::query()->where('name', 'Миша')->limit(10)->reverse()->get();
 
 # Get headers
-$reader->headers();
+TestModel::query()->headers();
 
 # Get first line
-$reader->first();
+TestModel::query()->first();
 
 # Get first 3 lines
-$reader->limit(3)->get();
+TestModel::query()->limit(3)->get();
 
 # Get last 3 lines
-$reader->reverse()->limit(3)->get();
+TestModel::query()->reverse()->limit(3)->get();
 
 # Insert string
-$reader->insert(['name' => 'Миша']);
+TestModel::query()->insert(['name' => 'Миша']);
 
 # Update strings
-$reader->where('name', 'Миша')->update(['text' => 'Новый текст']);
+TestModel::query()->where('name', 'Миша')->update(['text' => 'Новый текст']);
+
+# Update strings
+$testModel = TestModel::query()->find(17);
+$affectedLines = $testModel->update(['text' => 'Новый текст']);
 
 # Delete strings
-$reader->where('name', 'Миша')->delete();
+TestModel::query()->where('name', 'Миша')->delete();
 
 # Truncate file
-$reader->truncate();
+TestModel::query()->truncate();
 ```

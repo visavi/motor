@@ -9,41 +9,41 @@ use Iterator;
 use LimitIterator;
 use SplFileObject;
 use SplTempFileObject;
+use stdClass;
 use UnexpectedValueException;
 
 /**
  * Class Reader
  */
-class Reader
+class Model
 {
+    protected string $filePath;
     protected int $offset = 0;
     protected int $limit = -1;
     protected array $headers;
-    /** @var int|string */
-    protected $primary;
+    protected int|string $primary;
     protected Iterator $iterator;
     protected SplFileObject $file;
+    protected ?stdClass $attr;
 
     /**
-     * Reader constructor.
+     * Begin querying the model.
      *
-     * @param string $filePath
+     * @return self
      */
-    public function __construct(string $filePath)
+    public static function query(): self
     {
-        $this->open($filePath);
+        return (new static)->open();
     }
 
     /**
      * Open file
      *
-     * @param $filePath
-     *
      * @return $this
      */
-    public function open($filePath): self
+    public function open(): self
     {
-        $this->file = new SplFileObject($filePath, 'a+');
+        $this->file = new SplFileObject($this->filePath, 'a+');
         $this->file->setFlags(
             SplFileObject::SKIP_EMPTY |
             SplFileObject::DROP_NEW_LINE |
@@ -87,7 +87,7 @@ class Reader
      *
      * @return int|string
      */
-    public function getPrimaryKey()
+    public function getPrimaryKey(): int|string
     {
         return $this->headers[0];
     }
@@ -96,12 +96,12 @@ class Reader
      * Applies condition
      *
      * @param string $field
-     * @param null $operator
-     * @param null $value
+     * @param mixed $operator
+     * @param mixed $value
      *
      * @return $this
      */
-    public function where(string $field, $operator = null, $value = null): self
+    public function where(string $field, mixed $operator, mixed $value = null): self
     {
         $key   = $this->getKeyByField($field);
         $value = (string) $value;
@@ -172,22 +172,17 @@ class Reader
      *
      * @param int|string $id
      *
-     * @return array|bool
+     * @return self|null
      */
-    public function find($id)
+    public function find(int|string $id): ?self
     {
-        $id = (string) $id;
-        $this->iterator->rewind();
+        $this->where($this->getPrimaryKey(), $id)->first();
 
-        while ($this->iterator->valid()) {
-            if ($id === str_getcsv($this->iterator->current())[0]) {
-                return $this->mapper($this->iterator->current());
-            }
-
-            $this->iterator->next();
+        if (! iterator_count($this->iterator)) {
+            return null;
         }
 
-        return false;
+        return $this;
     }
 
     /**
@@ -197,7 +192,9 @@ class Reader
      */
     public function get(): array
     {
-        return $this->mapper($this->iterator());
+        $this->iterator = new LimitIterator($this->iterator, $this->offset, $this->limit);
+
+        return $this->mapper($this->iterator);
     }
 
     /**
@@ -207,20 +204,25 @@ class Reader
      */
     public function count(): int
     {
-        return iterator_count($this->iterator());
+        return iterator_count($this->iterator);
     }
 
-        /**
+     /**
      * Get first fields
      *
-     * @return array|bool
+     * @return self|null
      */
-    public function first()
+    public function first(): ?self
     {
-        $iterator = new LimitIterator($this->iterator, 0, 1);
-        $lines    = $this->mapper($iterator);
+        $this->iterator = new LimitIterator($this->iterator, 0, 1);
 
-        return current($lines);
+        if (! iterator_count($this->iterator)) {
+            return null;
+        }
+
+        $this->attr = $this->mapper($this->iterator)[0];
+
+        return $this;
     }
 
     /**
@@ -274,7 +276,7 @@ class Reader
      *
      * @return int|string last insert id
      */
-    public function insert(array $values)
+    public function insert(array $values): int|string
     {
         $fields   = array_fill_keys($this->headers, '');
         $diffKeys = array_diff_key($values, $fields);
@@ -429,6 +431,34 @@ class Reader
     }
 
     /**
+     * @param string $field
+     *
+     * @return null
+     */
+    public function __get(string $field){
+        return $this->attr->$field ?? null;
+    }
+
+    /**
+     * @param string $field
+     * @param mixed  $value
+     */
+    public function __set(string $field, mixed $value): void
+    {
+        $this->attr->$field = $value;
+    }
+
+    /**
+     * @param string $field
+     *
+     * @return bool
+     */
+    public function __isset(string $field)
+    {
+        return isset($this->attr->$field);
+    }
+
+    /**
      * Combine fields
      *
      * @return Closure
@@ -444,7 +474,7 @@ class Reader
 
             $record = array_map(static function ($value) {
                 if (is_numeric($value)) {
-                    return strpos($value, '.') === false ? (int) $value : (float) $value;
+                    return ! str_contains($value, '.') ? (int) $value : (float) $value;
                 }
 
                 if ($value === '') {
@@ -461,11 +491,11 @@ class Reader
     /**
      * Mapper fields
      *
-     * @param array|string|iterable $values
+     * @param iterable|string $values
      *
      * @return array
      */
-    protected function mapper($values): array
+    protected function mapper(iterable|string $values): array
     {
         $combiner = $this->combiner();
 
@@ -475,33 +505,10 @@ class Reader
 
         $rows = [];
         foreach ($values as $line) {
-            $rows[] = $combiner(str_getcsv($line));
+            $rows[] = (object) $combiner(str_getcsv($line));
         }
 
         return $rows;
-    }
-
-    /**
-     * Iterator
-     *
-     * @return LimitIterator
-     */
-    protected function iterator(): LimitIterator
-    {
-        $iterator = new LimitIterator($this->iterator, $this->offset, $this->limit);
-        $this->resetProperties();
-
-        return $iterator;
-    }
-
-    /**
-     * Reset properties
-     */
-    protected function resetProperties(): void
-    {
-        $this->offset = 0;
-        $this->limit = -1;
-        $this->iterator = new LimitIterator($this->file, 1);
     }
 
     /**
@@ -509,27 +516,20 @@ class Reader
      *
      * @param string $field
      * @param string $operator
-     * @param $value
+     * @param string $value
      *
      * @return bool
      */
-    private function condition(string $field, string $operator, $value): bool
+    private function condition(string $field, string $operator, string $value): bool
     {
-        switch ($operator) {
-            case '!=':
-            case '<>':
-                return $field !== $value;
-            case '>=':
-                return $field >= $value;
-            case '<=':
-                return $field <= $value;
-            case '>':
-                return $field > $value;
-            case '<':
-                return $field < $value;
-            default:
-                return $field === $value;
-        }
+        return match ($operator) {
+            '!=', '<>' => $field !== $value,
+            '>=' => $field >= $value,
+            '<=' => $field <= $value,
+            '>' => $field > $value,
+            '<' => $field < $value,
+            default => $field === $value,
+        };
     }
 
     /**

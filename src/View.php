@@ -2,12 +2,12 @@
 
 namespace App;
 
-class View {
-
+class View
+{
     protected string $template;
 
     /**
-     * Render the template, returning it's content.
+     * Render template
      *
      * @param string $template
      * @param array  $data
@@ -16,10 +16,16 @@ class View {
      */
     public function render(string $template, array $data): string
     {
-        extract($data, EXTR_OVERWRITE);
+        $file = __DIR__ . '/views/' . $template . '.php';
+
+/*        if (! is_readable($file)) {
+            throw new \Exception("$file not found");
+        }*/
+
+        extract($data, EXTR_SKIP);
         ob_start();
 
-        include($template);
+        require $file;
 
         return ob_get_clean();
     }

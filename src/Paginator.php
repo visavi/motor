@@ -1,8 +1,6 @@
 <?php
 /**
- * Класс постраничной навигации
- * Выводит страницы с учетом переданных данных 1 ... 5 [6] 7 ... 50
- * Имеется возможность кастомизировать вид вывода страниц
+ * Page navigation
  *
  * @license Code and contributions have MIT License
  * @link    http://visavi.net
@@ -12,8 +10,8 @@
 
 namespace App;
 
-class Paginator {
-
+class Paginator
+{
     public int $limit;
     public int $total;
     public int $crumbs;
@@ -147,8 +145,6 @@ class Paginator {
      */
     public function links(): string
     {
-        $view = new View();
-
-        return $view->render(__DIR__ . '/views/bootstrap.php', ['pages' => $this->items()]);
+        return (new View())->render('bootstrap', ['pages' => $this->items()]);
     }
 }
