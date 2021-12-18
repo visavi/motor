@@ -3,7 +3,7 @@
 namespace App\Models;
 
 /**
- * Class Guestbook
+ * Class Test
  *
  * @property int $id
  * @property string $name

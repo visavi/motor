@@ -18,7 +18,7 @@ class Paginator
     public int $offset;
     public int $page;
 
-    public function __construct($limit, $total, $crumbs = 1)
+    public function __construct(int $total, int $limit = 10, int $crumbs = 1)
     {
         $this->limit  = $limit;
         $this->total  = $total;
@@ -34,26 +34,12 @@ class Paginator
      */
     public function offset(): int
     {
-        if ($this->page * $this->limit >= $this->total) {
+        if ($this->total && $this->page * $this->limit >= $this->total) {
             $this->page = (int) ceil($this->total / $this->limit);
         }
 
         return $this->page * $this->limit - $this->limit;
     }
-
-    /**
-     * Get offset
-     *
-     * @return int
-     */
-/*    public function offset(): int
-    {
-        $totalPage = ceil($this->total / $this->limit);
-        $curOffset = ($this->page - 1) * $this->limit;
-        $lastOffset = ($totalPage - 1) * $this->limit;
-
-        return $this->page > $totalPage ? $lastOffset : $curOffset;
-    }*/
 
     /**
      * Get current page
@@ -96,7 +82,6 @@ class Paginator
             if ($this->page !== $this->crumbs + 2) {
                 $pages[] = [
                     'separator' => true,
-                    'name' => ' ... ',
                 ];
             }
         }
@@ -119,7 +104,6 @@ class Paginator
             if ($this->page !== $pg_cnt - $this->crumbs - 1) {
                 $pages[] = [
                     'separator' => true,
-                    'name'      => ' ... ',
                 ];
             }
             $pages[] = [

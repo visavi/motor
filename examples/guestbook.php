@@ -7,21 +7,29 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use App\Models\Test;
 use App\Paginator;
-
 ?>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/src/css/bootstrap.css">
 <?php
-
-$file = __DIR__ . '/../tests/data/test.csv';
 
 $action = htmlspecialchars($_GET['action'] ?? 'index');
 
 if ($action === 'index') {
-    $perPage = 3;
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $text = preg_replace('/\R/u', '\n', $_POST['text']);
+
+        Test::query()->insert([
+            'name' => htmlspecialchars($_POST['name']),
+            'title' => htmlspecialchars($_POST['title']),
+            'text' => $text,
+            'time' => time(),
+        ]);
+
+        header('location: guestbook.php'); exit;
+    }
+
     $total = Test::query()->count();
-
-    $paginator = new Paginator($perPage, $total);
-
+    $paginator = new Paginator($total);
     $messages = Test::query()->reverse()->offset($paginator->offset)->limit($paginator->limit)->get();
 
     if ($messages) {
@@ -34,34 +42,27 @@ if ($action === 'index') {
         }
 
         echo $paginator->links();
-
-        echo '<form method="post">
-  Имя<br>
-  <input name="name"><br>
-  Заголовок<br>
-  <input name="title"><br>
-  Текст<br>
-  <textarea name="text"></textarea><br>
-  <button>Отправить</button>
- </form>';
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $text = preg_replace('/\R/u', '\n', $_POST['text']);
-
-            Test::query()->insert([
-                'name' => htmlspecialchars($_POST['name']),
-                'title' => htmlspecialchars($_POST['title']),
-                'text' => $text,
-                'time' => time(),
-            ]);
-
-            header('location: guestbook.php');
-        }
-
-
     } else {
         echo 'Сообщений нет<br>';
     }
+
+    echo '<div class="row mb-3 shadow">
+        <form method="post">
+          <div class="mb-3">
+            <label for="name" class="form-label">Имя</label>
+            <input type="text" class="form-control" id="name" name="name">
+          </div>
+          <div class="mb-3">
+            <label for="title" class="form-label">Заголовок</label>
+            <input type="text" class="form-control" id="title" name="title">
+          </div>
+            <div class="mb-3">
+              <label for="text" class="form-label">Текст</label>
+              <textarea class="form-control" id="text" rows="3" name="text"></textarea>
+            </div>
+          <button type="submit" class="btn btn-primary">Отправить</button>
+        </form>
+    </div>';
 }
 
 if ($action === 'edit') {
@@ -76,29 +77,35 @@ if ($action === 'edit') {
                 'text' => $text,
             ]);
 
-            header('location: guestbook.php');
+            header('location: guestbook.php'); exit;
         }
 
-        echo '<form method="post">
-  Имя<br>
-  <input name="name" value="' . $message->name . '"><br>
-  Заголовок<br>
-  <input name="title" value="' . $message->title . '"><br>
-  Текст<br>
-  <textarea name="text">' . $message->text . '</textarea><br>
-  <button>Изменить</button>
- </form>';
-    } else {echo 'Сообщение не найдено';}
-}
+        echo '<div class="row mb-3 shadow">
+            <form method="post">
+              <div class="mb-3">
+                <label for="name" class="form-label">Имя</label>
+                <input type="text" class="form-control" id="name" name="name" value="' . $message->name . '">
+              </div>
+              <div class="mb-3">
+                <label for="title" class="form-label">Заголовок</label>
+                <input type="text" class="form-control" id="title" name="title" value="' . $message->title . '">
+              </div>
+                <div class="mb-3">
+                  <label for="text" class="form-label">Текст</label>
+                  <textarea class="form-control" id="text" rows="3" name="text">' . $message->text . '</textarea>
+                </div>
+              <button type="submit" class="btn btn-primary">Изменить</button>
+            </form>
+        </div>';
 
+    } else {
+        echo 'Сообщение не найдено';
+    }
+}
 
 if ($action === 'delete') {
     $message = Test::query()->find((int) $_GET['id']);
+    $message?->delete();
 
-    if ($message) {
-        $message->delete();
-    }
-
-    header('location: guestbook.php');
+    header('location: guestbook.php'); exit;
 }
-

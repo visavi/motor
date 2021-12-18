@@ -29,7 +29,7 @@ class Model
     /**
      * Begin querying the model.
      *
-     * @return self
+     * @return $this
      */
     public static function query(): self
     {
@@ -172,13 +172,13 @@ class Model
      *
      * @param int|string $id
      *
-     * @return self|null
+     * @return static|null
      */
     public function find(int|string $id): ?self
     {
-        $this->where($this->getPrimaryKey(), $id)->first();
+        $find = $this->where($this->getPrimaryKey(), $id)->first();
 
-        if (! iterator_count($this->iterator)) {
+        if (! $find) {
             return null;
         }
 
@@ -210,7 +210,7 @@ class Model
      /**
      * Get first fields
      *
-     * @return self|null
+     * @return static|null
      */
     public function first(): ?self
     {
