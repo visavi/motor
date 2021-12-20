@@ -2,6 +2,7 @@
 
 namespace App;
 
+use ArrayIterator;
 use CallbackFilterIterator;
 use Closure;
 use InvalidArgumentException;
@@ -13,9 +14,9 @@ use stdClass;
 use UnexpectedValueException;
 
 /**
- * Class Reader
+ * Class Model
  */
-class Model
+abstract class Model
 {
     protected string $filePath;
     protected int $offset = 0;
@@ -25,6 +26,7 @@ class Model
     protected Iterator $iterator;
     protected SplFileObject $file;
     protected ?stdClass $attr;
+    protected array $orders = [];
 
     /**
      * Begin querying the model.
@@ -65,7 +67,7 @@ class Model
      */
     public function reverse(): self
     {
-        $this->iterator = new ReverseArrayIterator(iterator_to_array($this->iterator));
+        $this->iterator = new ArrayIterator(array_reverse(iterator_to_array($this->iterator)));
 
         return $this;
     }
@@ -113,9 +115,7 @@ class Model
 
         $this->iterator = new CallbackFilterIterator(
             $this->iterator,
-            function ($current) use ($key, $operator, $value) {
-                return $this->condition(str_getcsv($current)[$key], $operator, $value);
-            }
+            fn ($current) => $this->condition(str_getcsv($current)[$key], $operator, $value)
         );
 
         return $this;
@@ -136,9 +136,7 @@ class Model
 
         $this->iterator = new CallbackFilterIterator(
             $this->iterator,
-            function ($current) use ($key, $values) {
-                return isset($values[str_getcsv($current)[$key]]);
-            }
+            fn ($current) => isset($values[str_getcsv($current)[$key]])
         );
 
         return $this;
@@ -159,10 +157,37 @@ class Model
 
         $this->iterator = new CallbackFilterIterator(
             $this->iterator,
-            function ($current) use ($key, $values) {
-                return ! isset($values[str_getcsv($current)[$key]]);
-            }
+            fn ($current) => ! isset($values[str_getcsv($current)[$key]])
         );
+
+        return $this;
+    }
+
+    /**
+     * Sorting by asc
+     *
+     * @param string      $field
+     * @param string|null $sort
+     *
+     * @return $this
+     */
+    public function orderBy(string $field, ?string $sort = 'asc'): self
+    {
+        $this->orders[$field] = $sort;
+
+        return $this;
+    }
+
+    /**
+     * Sorting by desc
+     *
+     * @param string $field
+     *
+     * @return $this
+     */
+    public function orderByDesc(string $field): self
+    {
+        $this->orders[$field] = 'desc';
 
         return $this;
     }
@@ -186,12 +211,32 @@ class Model
     }
 
     /**
+     * Get first fields
+     *
+     * @return static|null
+     */
+    public function first(): ?self
+    {
+        $this->sorting();
+        $this->iterator = new LimitIterator($this->iterator, 0, 1);
+
+        if (! $this->count()) {
+            return null;
+        }
+
+        $this->attr = $this->mapper($this->iterator)[0];
+
+        return $this;
+    }
+
+    /**
      * Get fields
      *
      * @return array
      */
     public function get(): array
     {
+        $this->sorting();
         $this->iterator = new LimitIterator($this->iterator, $this->offset, $this->limit);
 
         return $this->mapper($this->iterator);
@@ -205,24 +250,6 @@ class Model
     public function count(): int
     {
         return iterator_count($this->iterator);
-    }
-
-     /**
-     * Get first fields
-     *
-     * @return static|null
-     */
-    public function first(): ?self
-    {
-        $this->iterator = new LimitIterator($this->iterator, 0, 1);
-
-        if (! iterator_count($this->iterator)) {
-            return null;
-        }
-
-        $this->attr = $this->mapper($this->iterator)[0];
-
-        return $this;
     }
 
     /**
@@ -354,7 +381,7 @@ class Model
             $current = $temp->current();
 
             if (isset($ids[str_getcsv($current)[0]])) {
-                $map = $this->mapper($current);
+                $map = (array) $this->mapper($current);
 
                 $this->file->fputcsv(array_replace($map, $values));
                 $updatedLines++;
@@ -493,14 +520,14 @@ class Model
      *
      * @param iterable|string $values
      *
-     * @return array
+     * @return stdClass[]|stdClass
      */
-    protected function mapper(iterable|string $values): array
+    protected function mapper(iterable|string $values): array|object
     {
         $combiner = $this->combiner();
 
         if (is_string($values)) {
-            return $combiner(str_getcsv($values));
+            return (object) $combiner(str_getcsv($values));
         }
 
         $rows = [];
@@ -509,6 +536,37 @@ class Model
         }
 
         return $rows;
+    }
+
+    /**
+     * Sorting
+     *
+     * @return void
+     */
+    private function sorting(): void
+    {
+        if (! $this->orders) {
+            return;
+        }
+
+        $this->iterator = new ArrayIterator(iterator_to_array($this->iterator));
+
+        $this->iterator->uasort(
+            function($a, $b) {
+                $retVal = 0;
+                foreach ($this->orders as $field => $sort) {
+                    if ($retVal === 0) {
+                        if ($sort === 'asc') {
+                            $retVal = $this->mapper($a)->$field <=> $this->mapper($b)->$field;
+                        } else {
+                            $retVal = $this->mapper($b)->$field <=> $this->mapper($a)->$field;
+                        }
+                    }
+                }
+
+                return $retVal;
+            }
+        );
     }
 
     /**

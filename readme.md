@@ -80,6 +80,14 @@ TestModel::query()->limit(3)->get();
 # Get last 3 lines
 TestModel::query()->reverse()->limit(3)->get();
 
+# Find by name and double sort (time desc, id asc)
+Test::query()
+    ->where('name', 'Миша')
+    ->orderByDesc('time')
+    ->orderBy('id')
+    ->limit(3)
+    ->get();
+
 # Insert string
 TestModel::query()->insert(['name' => 'Миша']);
 

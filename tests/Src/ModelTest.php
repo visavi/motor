@@ -316,6 +316,32 @@ final class ModelTest extends TestCase
     }
 
     /**
+     * Find by name and sort (time asc)
+     * @covers ::orderBy()
+     */
+    public function testSort(): void
+    {
+        $find = Test::query()->where('name', 'Миша')->orderBy('time')->limit(3)->get();
+
+        $this->assertCount(3, $find);
+        $this->assertEquals(10, $find[0]->id);
+        $this->assertEquals(18, $find[2]->id);
+    }
+
+    /**
+     * Find by name and double sort (time desc, id desc)
+     * @covers ::orderByDesc()
+     */
+    public function testDoubleSort(): void
+    {
+        $find = Test::query()->where('name', 'Миша')->orderBy('time', 'desc')->orderByDesc('id')->limit(3)->get();
+
+        $this->assertCount(3, $find);
+        $this->assertEquals(18, $find[0]->id);
+        $this->assertEquals(10, $find[2]->id);
+    }
+
+    /**
      * Insert field
      * @covers ::insert()
      */
