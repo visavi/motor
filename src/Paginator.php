@@ -129,6 +129,6 @@ class Paginator
      */
     public function links(): string
     {
-        return (new View())->render('bootstrap', ['pages' => $this->items()]);
+        return (new View())->render('_paginator', ['pages' => $this->items()]);
     }
 }

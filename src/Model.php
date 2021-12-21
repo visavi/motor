@@ -18,6 +18,14 @@ use UnexpectedValueException;
  */
 abstract class Model
 {
+    public const SORT_ASC = 'asc';
+    public const SORT_DESC = 'desc';
+
+    public const SORT_TYPES = [
+        self::SORT_ASC,
+        self::SORT_DESC
+    ];
+
     protected string $filePath;
     protected int $offset = 0;
     protected int $limit = -1;
@@ -25,8 +33,8 @@ abstract class Model
     protected int|string $primary;
     protected Iterator $iterator;
     protected SplFileObject $file;
-    protected ?stdClass $attr;
     protected array $orders = [];
+    protected ?stdClass $attr;
 
     /**
      * Begin querying the model.
@@ -35,7 +43,7 @@ abstract class Model
      */
     public static function query(): self
     {
-        return (new static)->open();
+        return (new static())->open();
     }
 
     /**
@@ -171,8 +179,12 @@ abstract class Model
      *
      * @return $this
      */
-    public function orderBy(string $field, ?string $sort = 'asc'): self
+    public function orderBy(string $field, ?string $sort = self::SORT_ASC): self
     {
+        if (! in_array($sort, self::SORT_TYPES, true)) {
+            throw new InvalidArgumentException(sprintf('%s(), Argument #2 must be a valid sort flag', __METHOD__));
+        }
+
         $this->orders[$field] = $sort;
 
         return $this;
@@ -187,7 +199,7 @@ abstract class Model
      */
     public function orderByDesc(string $field): self
     {
-        $this->orders[$field] = 'desc';
+        $this->orders[$field] = self::SORT_DESC;
 
         return $this;
     }
@@ -349,7 +361,7 @@ abstract class Model
      *
      * @param array $values
      *
-     * @return int affected lines
+     * @return int affected rows
      */
     public function update(array $values): int
     {
@@ -359,7 +371,7 @@ abstract class Model
             throw new UnexpectedValueException(sprintf('%s() called undefined column. Column "%s" does not exist', __METHOD__, key($diffKeys)));
         }
 
-        $updatedLines = 0;
+        $updatedRows = 0;
         $ids = array_column($this->mapper($this->iterator), $this->primary, $this->primary);
 
         if (! $this->file->flock(LOCK_EX)) {
@@ -384,7 +396,7 @@ abstract class Model
                 $map = (array) $this->mapper($current);
 
                 $this->file->fputcsv(array_replace($map, $values));
-                $updatedLines++;
+                $updatedRows++;
             } else {
                 $this->file->fwrite($current);
             }
@@ -394,17 +406,17 @@ abstract class Model
 
         $this->file->flock(LOCK_UN);
 
-        return $updatedLines;
+        return $updatedRows;
     }
 
     /**
      * Delete fields
      *
-     * @return int affected lines
+     * @return int affected rows
      */
     public function delete(): int
     {
-        $deletedLines = 0;
+        $deletedRows = 0;
         $ids = array_column($this->mapper($this->iterator), $this->primary, $this->primary);
 
         if (! $this->file->flock(LOCK_EX)) {
@@ -426,7 +438,7 @@ abstract class Model
             $current = $temp->current();
 
             if (isset($ids[str_getcsv($current)[0]])) {
-                $deletedLines++;
+                $deletedRows++;
             } else {
                 $this->file->fwrite($current);
             }
@@ -436,7 +448,7 @@ abstract class Model
 
         $this->file->flock(LOCK_UN);
 
-        return $deletedLines;
+        return $deletedRows;
     }
 
     /**
@@ -556,7 +568,7 @@ abstract class Model
                 $retVal = 0;
                 foreach ($this->orders as $field => $sort) {
                     if ($retVal === 0) {
-                        if ($sort === 'asc') {
+                        if ($sort === self::SORT_ASC) {
                             $retVal = $this->mapper($a)->$field <=> $this->mapper($b)->$field;
                         } else {
                             $retVal = $this->mapper($b)->$field <=> $this->mapper($a)->$field;

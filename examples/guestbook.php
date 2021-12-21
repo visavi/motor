@@ -7,6 +7,8 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use App\Models\Test;
 use App\Paginator;
+use App\View;
+
 ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/src/css/bootstrap.css">
@@ -30,39 +32,13 @@ if ($action === 'index') {
 
     $total = Test::query()->count();
     $paginator = new Paginator($total);
-    $messages = Test::query()->reverse()->offset($paginator->offset)->limit($paginator->limit)->get();
+    $messages = Test::query()
+        ->reverse()
+        ->offset($paginator->offset)
+        ->limit($paginator->limit)
+        ->get();
 
-    if ($messages) {
-        foreach ($messages as $message) {
-            echo '<div>' . $message->name . ' (' . date('Y-m-d H:i', $message->time) . ')<br>' . $message->title . '<br>' . nl2br(stripcslashes(htmlspecialchars($message->text))) . ' 
-
-    <a href="?action=edit&amp;id=' . $message->id . '">Edit</a>
-    <a href="?action=delete&amp;id=' . $message->id . '">Del</a>
-</div><hr>';
-        }
-
-        echo $paginator->links();
-    } else {
-        echo 'Сообщений нет<br>';
-    }
-
-    echo '<div class="row mb-3 shadow">
-        <form method="post">
-          <div class="mb-3">
-            <label for="name" class="form-label">Имя</label>
-            <input type="text" class="form-control" id="name" name="name">
-          </div>
-          <div class="mb-3">
-            <label for="title" class="form-label">Заголовок</label>
-            <input type="text" class="form-control" id="title" name="title">
-          </div>
-            <div class="mb-3">
-              <label for="text" class="form-label">Текст</label>
-              <textarea class="form-control" id="text" rows="3" name="text"></textarea>
-            </div>
-          <button type="submit" class="btn btn-primary">Отправить</button>
-        </form>
-    </div>';
+    echo (new View())->render('guestbook/index', compact('messages', 'paginator'));
 }
 
 if ($action === 'edit') {
@@ -80,23 +56,7 @@ if ($action === 'edit') {
             header('location: guestbook.php'); exit;
         }
 
-        echo '<div class="row mb-3 shadow">
-            <form method="post">
-              <div class="mb-3">
-                <label for="name" class="form-label">Имя</label>
-                <input type="text" class="form-control" id="name" name="name" value="' . $message->name . '">
-              </div>
-              <div class="mb-3">
-                <label for="title" class="form-label">Заголовок</label>
-                <input type="text" class="form-control" id="title" name="title" value="' . $message->title . '">
-              </div>
-                <div class="mb-3">
-                  <label for="text" class="form-label">Текст</label>
-                  <textarea class="form-control" id="text" rows="3" name="text">' . $message->text . '</textarea>
-                </div>
-              <button type="submit" class="btn btn-primary">Изменить</button>
-            </form>
-        </div>';
+        echo (new View())->render('guestbook/edit', compact('message'));
 
     } else {
         echo 'Сообщение не найдено';

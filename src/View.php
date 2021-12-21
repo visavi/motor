@@ -4,8 +4,6 @@ namespace App;
 
 class View
 {
-    protected string $template;
-
     /**
      * Render template
      *
@@ -14,7 +12,7 @@ class View
      *
      * @return string The rendered template.
      */
-    public function render(string $template, array $data): string
+    public function render(string $template, array $data = []): string
     {
         $file = __DIR__ . '/views/' . $template . '.php';
 
