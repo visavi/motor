@@ -9,7 +9,7 @@ namespace App\Models;
  * @property string $name
  * @property string $value
  */
-class Test3 extends \App\Model
+class Test3 extends Model
 {
     public string $filePath = __DIR__ . '/../../tests/data/test3.csv';
 }

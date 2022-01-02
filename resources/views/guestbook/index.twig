@@ -1,0 +1,27 @@
+{% extends 'layout.twig' %}
+
+{% block title %}
+    Гостевая книга
+{% endblock %}
+
+{% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="border-bottom p-3">
+                <div class="float-end">
+                    <a href="/guestbook/{{ message.id }}/edit">Edit</a>
+                    <a href="guestbook/{{ message.id }}/delete">Del</a>
+                </div>
+                {{ message.name }} ({{ message.time|date('d.m.Y H:i') }})<br>
+                {{ message.title }}<br>
+                {{ message.text|nl2br }}
+            </div>
+        {% endfor %}
+
+        {{ paginator.links|raw }}
+    {% else %}
+        echo 'Сообщений нет<br>
+    {% endif %}
+
+    {% include 'guestbook/_form.twig' %}
+{% endblock %}

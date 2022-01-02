@@ -10,6 +10,9 @@
 
 namespace App;
 
+use Slim\Views\Twig;
+use Twig\Error\Error;
+
 class Paginator
 {
     public int $limit;
@@ -18,13 +21,19 @@ class Paginator
     public int $offset;
     public int $page;
 
-    public function __construct(int $total, int $limit = 10, int $crumbs = 1)
+    public function __construct(
+        protected Twig $view
+    ) {}
+
+    public function create(int $total, int $limit = 10, int $crumbs = 1): self
     {
         $this->limit  = $limit;
         $this->total  = $total;
         $this->crumbs = $crumbs;
         $this->page   = $this->page();
         $this->offset = $this->offset();
+
+        return $this;
     }
 
     /**
@@ -126,9 +135,13 @@ class Paginator
      * Get rendered links
      *
      * @return string
+     * @throws Error
      */
     public function links(): string
     {
-        return (new View())->render('_paginator', ['pages' => $this->items()]);
+        return $this->view->fetch(
+            'app/_paginator.twig',
+            ['pages' => $this->items()]
+        );
     }
 }
