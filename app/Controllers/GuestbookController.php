@@ -3,9 +3,9 @@
 namespace App\Controllers;
 
 use App\Models\Test;
-use App\Paginator;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Throwable;
 
 /**
  * GuestbookController
@@ -18,7 +18,7 @@ class GuestbookController extends Controller
      * @param Response $response
      *
      * @return Response
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function index(Response $response): Response
     {
@@ -67,7 +67,7 @@ class GuestbookController extends Controller
      * @param Response $response
      *
      * @return Response
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function edit(int $id, Response $response): Response
     {

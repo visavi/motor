@@ -14,7 +14,7 @@
                 </div>
                 {{ message.name }} ({{ message.time|date('d.m.Y H:i') }})<br>
                 {{ message.title }}<br>
-                {{ message.text|nl2br }}
+                {{ message.text|bbCode }}
             </div>
         {% endfor %}
 

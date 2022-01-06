@@ -55,15 +55,22 @@ abstract class Model
     {
         $this->file = new SplFileObject($this->filePath, 'a+');
         $this->file->setFlags(
+            SplFileObject::READ_AHEAD |
             SplFileObject::SKIP_EMPTY |
-            SplFileObject::DROP_NEW_LINE |
-            SplFileObject::READ_AHEAD
+            SplFileObject::READ_CSV
         );
         $this->file->rewind();
 
         $this->headers = $this->headers();
         $this->primary = $this->getPrimaryKey();
+
         $this->iterator = new LimitIterator($this->file, 1);
+
+        /* Fix drop new line */
+        $this->iterator = new CallbackFilterIterator(
+            $this->iterator,
+            fn ($current) => $current !== [null]
+        );
 
         return $this;
     }
@@ -89,7 +96,7 @@ abstract class Model
     {
         $this->file->seek(0);
 
-        return str_getcsv($this->file->current());
+        return $this->file->current();
     }
 
     /**
@@ -123,7 +130,7 @@ abstract class Model
 
         $this->iterator = new CallbackFilterIterator(
             $this->iterator,
-            fn ($current) => $this->condition(str_getcsv($current)[$key], $operator, $value)
+            fn ($current) => $this->condition($current[$key], $operator, $value)
         );
 
         return $this;
@@ -144,7 +151,7 @@ abstract class Model
 
         $this->iterator = new CallbackFilterIterator(
             $this->iterator,
-            fn ($current) => isset($values[str_getcsv($current)[$key]])
+            fn ($current) => isset($values[$current[$key]])
         );
 
         return $this;
@@ -165,7 +172,7 @@ abstract class Model
 
         $this->iterator = new CallbackFilterIterator(
             $this->iterator,
-            fn ($current) => ! isset($values[str_getcsv($current)[$key]])
+            fn ($current) => ! isset($values[$current[$key]])
         );
 
         return $this;
@@ -381,6 +388,11 @@ abstract class Model
         $this->file->fseek(0);
 
         $temp = new SplTempFileObject(-1);
+        $temp->setFlags(
+            SplFileObject::READ_AHEAD |
+            SplFileObject::SKIP_EMPTY |
+            SplFileObject::READ_CSV
+        );
         while(! $this->file->eof()) {
             $temp->fwrite($this->file->fread(1024));
         }
@@ -392,13 +404,13 @@ abstract class Model
         while ($temp->valid()) {
             $current = $temp->current();
 
-            if (isset($ids[str_getcsv($current)[0]])) {
+            if (isset($ids[$current[0]])) {
                 $map = (array) $this->mapper($current);
 
                 $this->file->fputcsv(array_replace($map, $values));
                 $updatedRows++;
             } else {
-                $this->file->fwrite($current);
+                $this->file->fputcsv($current);
             }
 
             $temp->next();
@@ -426,6 +438,11 @@ abstract class Model
         $this->file->fseek(0);
 
         $temp = new SplTempFileObject(-1);
+        $temp->setFlags(
+            SplFileObject::READ_AHEAD |
+            SplFileObject::SKIP_EMPTY |
+            SplFileObject::READ_CSV
+        );
         while(! $this->file->eof()) {
             $temp->fwrite($this->file->fread(1024));
         }
@@ -437,10 +454,10 @@ abstract class Model
         while ($temp->valid()) {
             $current = $temp->current();
 
-            if (isset($ids[str_getcsv($current)[0]])) {
+            if (isset($ids[$current[0]])) {
                 $deletedRows++;
             } else {
-                $this->file->fwrite($current);
+                $this->file->fputcsv($current);
             }
 
             $temp->next();
@@ -530,21 +547,21 @@ abstract class Model
     /**
      * Mapper fields
      *
-     * @param iterable|string $values
+     * @param iterable $values
      *
      * @return stdClass[]|stdClass
      */
-    protected function mapper(iterable|string $values): array|object
+    protected function mapper(iterable $values): array|object
     {
         $combiner = $this->combiner();
 
-        if (is_string($values)) {
-            return (object) $combiner(str_getcsv($values));
+        if (is_array($values)) {
+            return (object) $combiner($values);
         }
 
         $rows = [];
         foreach ($values as $line) {
-            $rows[] = (object) $combiner(str_getcsv($line));
+            $rows[] = (object) $combiner($line);
         }
 
         return $rows;

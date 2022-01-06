@@ -39,11 +39,18 @@ AppFactory::setContainer($container);
 
 // Set view in Container
 $container->set('view', function() {
-    return Twig::create(__DIR__ . '/../resources/views', [
-        'cache'       => __DIR__ . '/../var/views',
+    $twig = Twig::create(__DIR__ . '/../resources/views', [
+        'cache'       => false/* __DIR__ . '/../var/views'*/,
         'auto_reload' => true,
         'debug'       => true,
     ]);
+
+    $filter = new \Twig\TwigFilter('bbCode', 'bbCode', ['is_safe' => ['html']]);
+
+    $twig->getEnvironment()->addFilter($filter);
+    $twig->addExtension(new \Twig\Extension\DebugExtension());
+
+    return $twig;
 });
 
 $container->set('paginator', function(ContainerInterface $container) {

@@ -1,18 +1,20 @@
 <?php
-/**
- * Page navigation
- *
- * @license Code and contributions have MIT License
- * @link    http://visavi.net
- * @author  Alexander Grigorev <admin@visavi.net>
- * @version 1.0
- */
+
+declare(strict_types=1);
 
 namespace App;
 
 use Slim\Views\Twig;
 use Twig\Error\Error;
 
+/**
+ * Page navigation
+ *
+ * @license Code and contributions have MIT License
+ * @link    https://visavi.net
+ * @author  Alexander Grigorev <admin@visavi.net>
+ * @version 1.0
+ */
 class Paginator
 {
     public int $limit;
