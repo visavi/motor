@@ -14,7 +14,12 @@ use stdClass;
 use UnexpectedValueException;
 
 /**
- * Class Model
+ * File model
+ *
+ * @license Code and contributions have MIT License
+ * @link    https://visavi.net
+ * @author  Alexander Grigorev <admin@visavi.net>
+ * @version 1.0
  */
 abstract class Model
 {
@@ -110,7 +115,7 @@ abstract class Model
     }
 
     /**
-     * Applies condition
+     * Where
      *
      * @param string $field
      * @param mixed $operator
@@ -137,7 +142,7 @@ abstract class Model
     }
 
     /**
-     * Applies condition
+     * Where in
      *
      * @param string $field
      * @param array  $values
@@ -158,7 +163,7 @@ abstract class Model
     }
 
     /**
-     * Applies condition
+     * Where not in
      *
      * @param string $field
      * @param array  $values
@@ -230,7 +235,7 @@ abstract class Model
     }
 
     /**
-     * Get first fields
+     * Get first record
      *
      * @return static|null
      */
@@ -249,7 +254,7 @@ abstract class Model
     }
 
     /**
-     * Get fields
+     * Get records
      *
      * @return array
      */
@@ -262,7 +267,7 @@ abstract class Model
     }
 
     /**
-     * Get count fields
+     * Get count records
      *
      * @return int
      */
@@ -316,7 +321,7 @@ abstract class Model
     }
 
     /**
-     * Insert field
+     * Insert record
      *
      * @param array $values
      *
@@ -364,7 +369,7 @@ abstract class Model
     }
 
     /**
-     * Update fields
+     * Update records
      *
      * @param array $values
      *
@@ -422,7 +427,7 @@ abstract class Model
     }
 
     /**
-     * Delete fields
+     * Delete records
      *
      * @return int affected rows
      */

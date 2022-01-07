@@ -20,7 +20,7 @@
 
         {{ paginator.links|raw }}
     {% else %}
-        echo 'Сообщений нет<br>
+        <div class="alert alert-danger">Сообщений еще нет!</div>
     {% endif %}
 
     {% include 'guestbook/_form.twig' %}

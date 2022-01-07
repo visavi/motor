@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace Tests\Models;
+
+use App\Models\Model;
 
 /**
  * Class Test2

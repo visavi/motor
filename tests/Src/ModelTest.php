@@ -2,9 +2,9 @@
 
 namespace Tests\Src;
 
-use App\Models\Test;
-use App\Models\Test2;
-use App\Models\Test3;
+use Tests\Models\Test;
+use Tests\Models\Test2;
+use Tests\Models\Test3;
 use Tests\TestCase;
 
 /**

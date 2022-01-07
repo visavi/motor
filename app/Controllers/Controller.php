@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Paginator;
+use App\Services\Paginator;
 use Psr\Container\ContainerInterface;
 use Slim\Views\Twig;
 

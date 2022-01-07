@@ -17,7 +17,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * @return mixed Method return.
      * @throws ReflectionException
      */
-    public function callMethod(object $object, string $methodName, array $parameters = [])
+    public function callMethod(object $object, string $methodName, array $parameters = []): mixed
     {
         $reflection = new ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);

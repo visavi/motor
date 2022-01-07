@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Models\Test;
+use App\Models\Guestbook;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Throwable;
@@ -22,10 +22,10 @@ class GuestbookController extends Controller
      */
     public function index(Response $response): Response
     {
-        $total = Test::query()->count();
+        $total = Guestbook::query()->count();
         $paginator = $this->paginator->create($total);
 
-        $messages = Test::query()
+        $messages = Guestbook::query()
             ->reverse()
             ->offset($paginator->offset)
             ->limit($paginator->limit)
@@ -50,7 +50,7 @@ class GuestbookController extends Controller
     {
         $data = $request->getParsedBody();
 
-        Test::query()->insert([
+        Guestbook::query()->insert([
             'name'  => sanitize($data['name']),
             'title' => sanitize($data['title']),
             'text'  => sanitize($data['text']),
@@ -71,7 +71,7 @@ class GuestbookController extends Controller
      */
     public function edit(int $id, Response $response): Response
     {
-        $message = Test::query()->find($id);
+        $message = Guestbook::query()->find($id);
         if (! $message) {
             echo 'Сообщение не найдено'; //TODO abort
         }
@@ -94,7 +94,7 @@ class GuestbookController extends Controller
      */
     public function store(int $id, Request $request, Response $response): Response
     {
-        $message = Test::query()->find($id);
+        $message = Guestbook::query()->find($id);
         if (! $message) {
             echo 'Сообщение не найдено'; //TODO abort
         }
@@ -120,7 +120,7 @@ class GuestbookController extends Controller
      */
     public function delete(int $id, Response $response): Response
     {
-        $message = Test::query()->find($id);
+        $message = Guestbook::query()->find($id);
         $message?->delete();
 
         return $response->withHeader('Location', '/guestbook');

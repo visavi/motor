@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use App\Models\Test;
+use Tests\Models\Test;
 
 echo '<pre>';
 

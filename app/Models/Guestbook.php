@@ -11,7 +11,7 @@ namespace App\Models;
  * @property string $text
  * @property int $time
  */
-class Test extends Model
+class Guestbook extends Model
 {
-    public string $filePath = __DIR__ . '/../../tests/data/test.csv';
+    public string $filePath = __DIR__ . '/../../database/guestbook.csv';
 }

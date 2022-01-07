@@ -1,14 +1,9 @@
 <?php
 
-use App\Controllers\GuestbookController;
-use App\Controllers\HomeController;
-use App\Paginator;
+use DI\Bridge\Slim\Bridge;
 use DI\ContainerBuilder;
-use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Slim\Factory\AppFactory;
-use Slim\Routing\RouteCollectorProxy;
-use Slim\Views\Twig;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -24,8 +19,8 @@ if (false) { // Should be set to true in production
 $settings($containerBuilder);*/
 
 // Set up dependencies
-/*$dependencies = require __DIR__ . '/../app/dependencies.php';
-$dependencies($containerBuilder);*/
+$dependencies = require __DIR__ . '/../app/dependencies.php';
+$dependencies($containerBuilder);
 
 // Set up repositories
 /*$repositories = require __DIR__ . '/../app/repositories.php';
@@ -37,32 +32,21 @@ $container = $containerBuilder->build();
 // Instantiate the app
 AppFactory::setContainer($container);
 
-// Set view in Container
-$container->set('view', function() {
-    $twig = Twig::create(__DIR__ . '/../resources/views', [
-        'cache'       => false/* __DIR__ . '/../var/views'*/,
-        'auto_reload' => true,
-        'debug'       => true,
-    ]);
-
-    $filter = new \Twig\TwigFilter('bbCode', 'bbCode', ['is_safe' => ['html']]);
-
-    $twig->getEnvironment()->addFilter($filter);
-    $twig->addExtension(new \Twig\Extension\DebugExtension());
-
-    return $twig;
-});
-
-$container->set('paginator', function(ContainerInterface $container) {
-    return new Paginator($container->get('view'));
-});
-
 // Create Request object from globals
 /*$serverRequestCreator = ServerRequestCreatorFactory::create();
 $request = $serverRequestCreator->createServerRequestFromGlobals();*/
 
 //$app = AppFactory::create();
-$app = \DI\Bridge\Slim\Bridge::create($container);
+$app = Bridge::create($container);
+
+// Register middleware
+$middleware = require __DIR__ . '/../app/middleware.php';
+$middleware($app);
+
+// Register routes
+$routes = require __DIR__ . '/../app/routes.php';
+$routes($app);
+
 /**
  * The routing middleware should be added earlier than the ErrorMiddleware
  * Otherwise exceptions thrown from it will not be handled by the middleware
@@ -81,15 +65,5 @@ $app->addRoutingMiddleware();
  * for middleware added after it.
  */
 $errorMiddleware = $app->addErrorMiddleware(true, true, true);
-
-$app->get('/', [HomeController::class, 'home']);
-
-$app->group('/guestbook', function (RouteCollectorProxy $group) {
-    $group->get('', [GuestbookController::class, 'index']);
-    $group->post('/create', [GuestbookController::class, 'create']);
-    $group->get('/{id:[0-9]+}/edit', [GuestbookController::class, 'edit']);
-    $group->post('/{id:[0-9]+}/edit', [GuestbookController::class, 'store']);
-    $group->get('/{id:[0-9]+}/delete', [GuestbookController::class, 'delete']);
-});
 
 $app->run();
