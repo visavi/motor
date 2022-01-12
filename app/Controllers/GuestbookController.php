@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\Guestbook;
+use App\Services\Validator;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Throwable;
@@ -41,21 +42,32 @@ class GuestbookController extends Controller
     /**
      * Create
      *
-     * @param Request  $request
-     * @param Response $response
+     * @param Request   $request
+     * @param Response  $response
+     * @param Validator $validator
      *
      * @return Response
      */
-    public function create(Request $request, Response $response): Response
+    public function create(Request $request, Response $response, Validator $validator): Response
     {
-        $data = $request->getParsedBody();
+        $data = (array) $request->getParsedBody();
 
-        Guestbook::query()->insert([
-            'name'  => sanitize($data['name']),
-            'title' => sanitize($data['title']),
-            'text'  => sanitize($data['text']),
-            'time'  => time(),
-        ]);
+        $validator
+            ->required(['name', 'title', 'text'])
+            ->lengthBetween('title', 5, 100)
+            ->lengthBetween(['name', 'text'], 5, 1000);
+
+        if ($validator->isValid($data)) {
+            Guestbook::query()->insert([
+                'name'  => sanitize($data['name']),
+                'title' => sanitize($data['title']),
+                'text'  => sanitize($data['text']),
+                'time'  => time(),
+            ]);
+        } else {
+            //setInput($request->all());
+            //setFlash('danger', $validator->getErrors());
+        }
 
         return $response->withHeader('Location', '/guestbook');
     }
@@ -86,26 +98,36 @@ class GuestbookController extends Controller
     /**
      * Store
      *
-     * @param int      $id
-     * @param Request  $request
-     * @param Response $response
+     * @param int       $id
+     * @param Request   $request
+     * @param Response  $response
+     * @param Validator $validator
      *
      * @return Response
      */
-    public function store(int $id, Request $request, Response $response): Response
+    public function store(int $id, Request $request, Response $response, Validator $validator): Response
     {
         $message = Guestbook::query()->find($id);
         if (! $message) {
             echo 'Сообщение не найдено'; //TODO abort
         }
 
-        $data = $request->getParsedBody();
+        $data = (array) $request->getParsedBody();
 
-        $message->update([
-            'name'  => sanitize($data['name']),
-            'title' => sanitize($data['title']),
-            'text'  => sanitize($data['text']),
-        ]);
+        $validator
+            ->required(['name', 'title', 'text'])
+            ->lengthBetween('title', 5, 100)
+            ->lengthBetween(['name', 'text'], 5, 1000);
+
+        if ($validator->isValid($data)) {
+            $message->update([
+                'name'  => sanitize($data['name']),
+                'title' => sanitize($data['title']),
+                'text'  => sanitize($data['text']),
+            ]);
+        } else {
+
+        }
 
         return $response->withHeader('Location', '/guestbook');
     }
