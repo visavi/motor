@@ -42,6 +42,25 @@ function bbCode(mixed $text, bool $parse = true): string
 }
 
 /**
+ * Возвращает размер в человеко читаемом формате
+ *
+ * @param int $bytes     размер в байтах
+ * @param int $precision кол. символов после запятой
+ *
+ * @return string Форматированный вывод размера
+ */
+function formatSize(int $bytes, int $precision = 2): string
+{
+    $units = ['B', 'Kb', 'Mb', 'Gb', 'Tb'];
+    $pow   = floor(($bytes ? log($bytes) : 0) / log(1000));
+    $pow   = min($pow, count($units) - 1);
+
+    $bytes /= (1 << (10 * $pow));
+
+    return round($bytes, $precision) . $units[$pow];
+}
+
+/**
  * Сохраняет flash уведомления
  *
  * @param string $status  Статус уведомления

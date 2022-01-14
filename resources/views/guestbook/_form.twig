@@ -1,5 +1,5 @@
 <div class="p-3 shadow">
-    <form method="post" action="/guestbook/{{ message ? message.id ~ '/edit' : 'create' }}">
+    <form method="post" action="/guestbook/{{ message ? message.id ~ '/edit' : 'create' }}"  enctype="multipart/form-data">
         <div class="mb-3">
             <label for="name" class="form-label">Имя</label>
             <input type="text" class="form-control" id="name" name="name" value="{{ message.name ?? null }}">
@@ -12,6 +12,15 @@
             <label for="text" class="form-label">Текст</label>
             <textarea class="form-control" id="text" rows="3" name="text">{{ message.text ?? null }}</textarea>
         </div>
+
+        <div class="mb-3">
+            <label for="image" class="btn btn-sm btn-secondary form-label">
+                <input id="image" type="file" name="image" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
+                Прикрепить фото&hellip;
+            </label>
+            <span class="badge bg-info" id="upload-file-info"></span>
+        </div>
+
         <button type="submit" class="btn btn-primary">{{ message ? 'Изменить' : 'Отправить' }}</button>
     </form>
 </div>

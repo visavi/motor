@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace App\Services;
 
 use BadMethodCallException;
-use Egulias\EmailValidator\EmailValidator;
-use Egulias\EmailValidator\Validation\RFCValidation;
-use Illuminate\Http\UploadedFile;
+use Countable;
+use Psr\Http\Message\UploadedFileInterface;
 
 /**
  * Class Validation data
@@ -17,22 +16,67 @@ use Illuminate\Http\UploadedFile;
  * @author  Alexander Grigorev <admin@visavi.net>
  *
  * @method $this required(array|string $key, ?string $label = null)
- * @method $this lengthBetween(array|string $key, int $min, int $max, ?string $label = null)
+ * @method $this length(array|string $key, int $min, int $max, ?string $label = null)
  * @method $this minLength(array|string $key, int $length, ?string $label = null)
  * @method $this maxLength(array|string $key, int $length, ?string $label = null)
- * @method $this range(array|string $key, int $min, $max, ?string $label = null)
+ * @method $this range(array|string $key, int|float $min, int|float $max, ?string $label = null)
+ * @method $this gt(array|string $key, int|float $num, ?string $label = null)
+ * @method $this gte(array|string $key, int|float $num, ?string $label = null)
+ * @method $this lt(array|string $key, int|float $num, ?string $label = null)
+ * @method $this lte(array|string $key, int|float $num, ?string $label = null)
+ * @method $this equal(string $key1, string $key2, ?string $label = null)
+ * @method $this notEqual(string $key1, string $key2, ?string $label = null)
+ * @method $this empty(array|string $key, ?string $label = null)
+ * @method $this notEmpty(array|string $key, ?string $label = null)
+ * @method $this in(array|string $key, array $haystack, ?string $label = null)
+ * @method $this notIn(array|string $key, array $haystack, ?string $label = null)
+ * @method $this regex(array|string $key, string $pattern, ?string $label = null)
+ * @method $this url(array|string $key, ?string $label = null)
+ * @method $this email(array|string $key, ?string $label = null)
+ * @method $this ip(array|string $key, ?string $label = null)
+ * @method $this phone(array|string $key, ?string $label = null)
+ * @method $this file(string $key, array $rules)
+ * @method $this add(string $key, callable $callable, string $label)
+ *
  */
 class Validator
 {
     private array $rules;
     private array $errors;
+    private array $input;
 
     private array $data = [
         'required'      => 'Поле %s является обязательным',
-        'lengthBetween' => 'Количество символов в поле %s должно быть от %d до %d',
-        'minLength'     => 'Количество символов в поле %s должно быть не меньше %d',
-        'maxLength'     => 'Количество символов в поле %s должно быть не больше %d',
+        'length'        => [
+            'between' => 'Количество символов в поле %s должно быть от %d до %d',
+            'min'     => 'Количество символов в поле %s должно быть не меньше %d',
+            'max'     => 'Количество символов в поле %s должно быть не больше %d',
+        ],
         'range'         => 'Значение поля %s должно быть между %d и %d',
+        'gt'            => 'Значение поля %s должно быть больше %d',
+        'gte'           => 'Значение поля %s должно быть больше или равно %d',
+        'lt'            => 'Значение поля %s должно быть меньше %d',
+        'lte'           => 'Значение поля %s должно быть меньше или равно %d',
+
+        'equal'         => 'Значения полей %s и %s должны совпадать',
+        'notEqual'      => 'Значения полей %s и %s должны различаться',
+        'empty'         => 'Значение поля %s должно быть пустым',
+        'notEmpty'      => 'Значение поля %s не должно быть пустым',
+        'in'            => 'Значение поля %s ошибочно',
+        'notIn'         => 'Значение поля %s ошибочно',
+        'regex'         => 'Значение поля %s имеет ошибочный формат',
+        'url'           => 'Значение поля %s содержит недействительный URL',
+        'email'         => 'Значение поля %s содержит недействительный email',
+        'ip'            => 'Значение поля %s содержит недействительный IP-адрес',
+        'phone'         => 'Значение поля %s содержит недействительный номер телефона',
+        'file'          => [
+            'error'        => 'Ошибка загрузки файла',
+            'extension'    => 'Поле %s должно быть файлом одного из следующих типов: %s',
+            'size_max'     => 'Размер файла в поле %s должен быть не больше %s',
+            'weight_min'   => 'Размер изображения в поле %s не должен быть меньше %s',
+            'weight_max'   => 'Размер изображения в поле %s не должен быть больше %s',
+            'weight_empty' => 'Размер изображения в поле %s слишком маленький!',
+        ],
     ];
 
     /**
@@ -43,7 +87,7 @@ class Validator
      *
      * @return $this
      */
-    public function __call(string $name, array $arguments)
+    public function __call(string $name, array $arguments): self
     {
         $keys = (array) $arguments[0];
 
@@ -58,22 +102,23 @@ class Validator
     /**
      * Возвращает успешность валидации
      *
-     * @param array $data
+     * @param array $input
      *
      * @return bool
      */
-    public function isValid(array $data): bool
+    public function isValid(array $input): bool
     {
+        $this->input = $input;
+
         foreach ($this->rules as $rules) {
             foreach ($rules as $rule => $params) {
-                $input = $data[$params[0]] ?? null;
                 $method = $rule . 'Rule';
 
                 if (! method_exists($this, $method)) {
                     throw new BadMethodCallException(sprintf('%s() called undefined method. Method "%s" does not exist', __METHOD__, $rule));
                 }
 
-                $this->$method($input, ...$params);
+                $this->$method(...$params);
             }
         }
 
@@ -83,17 +128,18 @@ class Validator
     /**
      * Required
      *
-     * @param mixed        $input
      * @param array|string $key
      * @param string|null  $label
      *
      * @return $this
      */
-    private function requiredRule(mixed $input, array|string $key, ?string $label = null): self
+    private function requiredRule(array|string $key, ?string $label = null): self
     {
         $key = (array) $key;
 
         foreach ($key as $field) {
+            $input = $this->getInput($field);
+
             if ($this->blank($input)) {
                 $this->addError($field, sprintf($label ?? $this->data['required'], $field));
             }
@@ -105,7 +151,6 @@ class Validator
     /**
      * Length
      *
-     * @param mixed        $input
      * @param array|string $key
      * @param int          $min
      * @param int          $max
@@ -113,17 +158,19 @@ class Validator
      *
      * @return $this
      */
-    private function lengthBetweenRule(mixed $input, array|string $key, int $min, int $max, ?string $label = null): self
+    private function lengthRule(array|string $key, int $min, int $max, ?string $label = null): self
     {
         $key = (array) $key;
 
         foreach ($key as $field) {
-            if (! isset($this->rules[$field]['required']) && $this->blank($input)) {
+            $input = $this->getInput($field);
+
+            if (! $this->isRequired($field) && $this->blank($input)) {
                 return $this;
             }
 
             if (mb_strlen((string) $input, 'utf-8') < $min || mb_strlen((string) $input, 'utf-8') > $max) {
-                $this->addError($field, sprintf($label ?? $this->data['lengthBetween'], $field, $min, $max));
+                $this->addError($field, sprintf($label ?? $this->data['length']['between'], $field, $min, $max));
             }
         }
 
@@ -133,24 +180,25 @@ class Validator
     /**
      * Min length
      *
-     * @param mixed       $input
-     * @param array|string      $key
-     * @param int         $length
-     * @param string|null $label
+     * @param array|string $key
+     * @param int          $length
+     * @param string|null  $label
      *
      * @return $this
      */
-    private function minLengthRule(mixed $input, array|string $key, int $length, ?string $label = null): self
+    private function minLengthRule(array|string $key, int $length, ?string $label = null): self
     {
         $key = (array) $key;
 
         foreach ($key as $field) {
-            if (! isset($this->rules[$field]['required']) && $this->blank($input)) {
+            $input = $this->getInput($field);
+
+            if (! $this->isRequired($field) && $this->blank($input)) {
                 return $this;
             }
 
             if (mb_strlen((string) $input, 'utf-8') < $length) {
-                $this->addError($field, sprintf($label ?? $this->data['minLength'], $field, $length));
+                $this->addError($field, sprintf($label ?? $this->data['length']['min'], $field, $length));
             }
         }
 
@@ -160,24 +208,25 @@ class Validator
     /**
      * Max length
      *
-     * @param mixed  $input
      * @param array|string $key
      * @param int    $length
      * @param string|null  $label
      *
      * @return $this
      */
-    private function maxLengthRule(mixed $input, array|string $key, int $length, ?string $label = null): self
+    private function maxLengthRule(array|string $key, int $length, ?string $label = null): self
     {
         $key = (array) $key;
 
         foreach ($key as $field) {
-            if (! isset($this->rules[$field]['required']) && $this->blank($input)) {
+            $input = $this->getInput($field);
+
+            if (! $this->isRequired($field) && $this->blank($input)) {
                 return $this;
             }
 
             if (mb_strlen((string) $input, 'utf-8') > $length) {
-                $this->addError($field, sprintf($label ?? $this->data['maxLength'], $field, $length));
+                $this->addError($field, sprintf($label ?? $this->data['length']['max'], $field, $length));
             }
         }
 
@@ -185,9 +234,8 @@ class Validator
     }
 
     /**
-     * Проверяет число на вхождение в диапазон
+     * Range
      *
-     * @param mixed        $input
      * @param array|string $key
      * @param int|float    $min
      * @param int|float    $max
@@ -195,12 +243,14 @@ class Validator
      *
      * @return $this
      */
-    public function rangeRule(mixed $input, array|string $key, int|float $min, int|float $max, ?string $label = null): self
+    private function rangeRule(array|string $key, int|float $min, int|float $max, ?string $label = null): self
     {
         $key = (array) $key;
 
         foreach ($key as $field) {
-            if (! isset($this->rules[$field]['required']) && $this->blank($input)) {
+            $input = $this->getInput($field);
+
+            if (! $this->isRequired($field) && $this->blank($input)) {
                 return $this;
             }
 
@@ -213,304 +263,354 @@ class Validator
     }
 
     /**
-     * Проверяет на больше чем число
+     * Greater than
      *
-     * @param int|float $input
-     * @param int|float $input2
-     * @param mixed     $label
+     * @param array|string $key
+     * @param int|float    $num
+     * @param string|null  $label
      *
-     * @return Validator
+     * @return $this
      */
-    public function gt($input, $input2, $label): Validator
+    private function gtRule(array|string $key, int|float $num, ?string $label = null): self
     {
-        if ($input <= $input2) {
-            $this->addError($label);
+        $key = (array) $key;
+
+        foreach ($key as $field) {
+            $input = $this->getInput($field);
+
+            if (! $this->isRequired($field) && $this->blank($input)) {
+                return $this;
+            }
+
+            if ($input <= $num) {
+                $this->addError($field, sprintf($label ?? $this->data['gt'], $field, $num));
+            }
         }
 
         return $this;
     }
 
     /**
-     * Проверяет на больше чем или равно
+     * Greater than or equal
      *
-     * @param int|float $input
-     * @param int|float $input2
-     * @param mixed     $label
+     * @param array|string $key
+     * @param int|float    $num
+     * @param string|null  $label
      *
-     * @return Validator
+     * @return $this
      */
-    public function gte($input, $input2, $label): Validator
+    private function gteRule(array|string $key, int|float $num, ?string $label = null): self
     {
-        if ($input < $input2) {
-            $this->addError($label);
+        $key = (array) $key;
+
+        foreach ($key as $field) {
+            $input = $this->getInput($field);
+
+            if (! $this->isRequired($field) && $this->blank($input)) {
+                return $this;
+            }
+
+            if ($input < $num) {
+                $this->addError($field, sprintf($label ?? $this->data['gte'], $field, $num));
+            }
         }
 
         return $this;
     }
 
     /**
-     * Проверяет на меньше чем число
+     * Less than
      *
-     * @param int|float $input
-     * @param int|float $input2
-     * @param mixed     $label
+     * @param array|string $key
+     * @param int|float    $num
+     * @param string|null  $label
      *
-     * @return Validator
+     * @return $this
      */
-    public function lt($input, $input2, $label): Validator
+    private function ltRule(array|string $key, int|float $num, ?string $label = null): self
     {
-        if ($input >= $input2) {
-            $this->addError($label);
+        $key = (array) $key;
+
+        foreach ($key as $field) {
+            $input = $this->getInput($field);
+
+            if (! $this->isRequired($field) && $this->blank($input)) {
+                return $this;
+            }
+
+            if ($input >= $num) {
+                $this->addError($field, sprintf($label ?? $this->data['lt'], $field, $num));
+            }
         }
 
         return $this;
     }
 
     /**
-     * Проверяет на меньше чем или равно
+     * Less than or equal
      *
-     * @param int|float $input
-     * @param int|float $input2
-     * @param mixed     $label
+     * @param array|string $key
+     * @param int|float    $num
+     * @param string|null  $label
      *
-     * @return Validator
+     * @return $this
      */
-    public function lte($input, $input2, $label): Validator
+    private function lteRule(array|string $key, int|float $num, ?string $label = null): self
     {
-        if ($input > $input2) {
-            $this->addError($label);
+        $key = (array) $key;
+
+        foreach ($key as $field) {
+            $input = $this->getInput($field);
+
+            if (! $this->isRequired($field) && $this->blank($input)) {
+                return $this;
+            }
+
+            if ($input > $num) {
+                $this->addError($field, sprintf($label ?? $this->data['lte'], $field, $num));
+            }
         }
 
         return $this;
     }
 
     /**
-     * Проверяет эквивалентны ли данные
+     * Equal
      *
-     * @param mixed $input
-     * @param mixed $input2
-     * @param mixed $label
+     * @param string      $key1
+     * @param string      $key2
+     * @param string|null $label
      *
-     * @return Validator
+     * @return $this
      */
-    public function equal($input, $input2, $label): Validator
+    private function equalRule(string $key1, string $key2, ?string $label = null): self
     {
-        if ($input !== $input2) {
-            $this->addError($label);
-        }
+        $input1 = $this->getInput($key1);
+        $input2 = $this->getInput($key2);
 
-        return $this;
-    }
-
-    /**
-     * Проверяет не эквивалентны ли данные
-     *
-     * @param mixed $input
-     * @param mixed $input2
-     * @param mixed $label
-     *
-     * @return Validator
-     */
-    public function notEqual($input, $input2, $label): Validator
-    {
-        if ($input === $input2) {
-            $this->addError($label);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Проверяет пустые ли данные
-     *
-     * @param mixed $input
-     * @param mixed $label
-     *
-     * @return Validator
-     */
-    public function empty($input, $label): Validator
-    {
-        if (! empty($input)) {
-            $this->addError($label);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Проверяет не пустые ли данные
-     *
-     * @param mixed $input
-     * @param mixed $label
-     *
-     * @return Validator
-     */
-    public function notEmpty($input, $label): Validator
-    {
-        if (empty($input)) {
-            $this->addError($label);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Проверяет на true
-     *
-     * @param mixed $input
-     * @param mixed $label
-     *
-     * @return Validator
-     */
-    public function true($input, $label): Validator
-    {
-        if (filter_var($input, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) === false) {
-            $this->addError($label);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Проверяет на false
-     *
-     * @param mixed $input
-     * @param mixed $label
-     *
-     * @return Validator
-     */
-    public function false($input, $label): Validator
-    {
-        if (filter_var($input, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) !== false) {
-            $this->addError($label);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Проверяет на вхождение в массив
-     *
-     * @param mixed $input
-     * @param array $haystack
-     * @param mixed $label
-     *
-     * @return Validator
-     */
-    public function in($input, array $haystack, $label): Validator
-    {
-        if (! is_array($haystack) || ! in_array($input, $haystack, true)) {
-            $this->addError($label);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Проверяет на не вхождение в массив
-     *
-     * @param mixed $input
-     * @param array $haystack
-     * @param mixed $label
-     *
-     * @return Validator
-     */
-    public function notIn($input, array $haystack, $label): Validator
-    {
-        if (! is_array($haystack) || in_array($input, $haystack, true)) {
-            $this->addError($label);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Проверяет по регулярному выражению
-     *
-     * @param mixed  $input
-     * @param string $pattern
-     * @param mixed  $label
-     * @param bool   $required
-     *
-     * @return Validator
-     */
-    public function regex($input, string $pattern, $label, bool $required = true): Validator
-    {
-        if (! $required && $this->blank($input)) {
+        if (! $this->isRequired($key1) && $this->blank($input1)) {
             return $this;
         }
 
-        if (! preg_match($pattern, $input)) {
-            $this->addError($label);
+        if ($input1 !== $input2) {
+            $this->addError($key1, sprintf($label ?? $this->data['equal'], $key1, $key2));
         }
 
         return $this;
     }
 
     /**
-     * Check float
+     * Not equal
      *
-     * @param mixed $input
-     * @param mixed $label
-     * @param bool  $required
+     * @param string      $key1
+     * @param string      $key2
+     * @param string|null $label
      *
-     * @return Validator
+     * @return $this
      */
-    public function float($input, $label, bool $required = true): Validator
+    private function notEqualRule(string $key1, string $key2, ?string $label = null): self
     {
-        if (! $required && $this->blank($input)) {
+        $input1 = $this->getInput($key1);
+        $input2 = $this->getInput($key2);
+
+        if (! $this->isRequired($key1) && $this->blank($input1)) {
             return $this;
         }
 
-        if (! is_float($input)) {
-            $this->addError($label);
+        if ($input1 === $input2) {
+            $this->addError($key1, sprintf($label ?? $this->data['notEqual'], $key1, $key2));
         }
 
         return $this;
     }
 
     /**
-     * Проверяет адрес сайта
+     * Empty
      *
-     * @param mixed $input
-     * @param mixed $label
-     * @param bool  $required
+     * @param array|string $key
+     * @param string|null  $label
      *
-     * @return Validator
+     * @return $this
      */
-    public function url($input, $label, bool $required = true): Validator
+    private function emptyRule(array|string $key, ?string $label = null): self
     {
-        if (! $required && $this->blank($input)) {
-            return $this;
-        }
+        $key = (array) $key;
 
-        if (! preg_match('|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu', $input)) {
-            $this->addError($label);
+        foreach ($key as $field) {
+            $input = $this->getInput($field);
+
+            if (! $this->isRequired($field) && $this->blank($input)) {
+                return $this;
+            }
+
+            if (! $this->blank($input)) {
+                $this->addError($field, sprintf($label ?? $this->data['empty'], $field));
+            }
         }
 
         return $this;
     }
 
     /**
-     * Проверяет email
+     * Not empty
      *
-     * @param mixed $input
-     * @param mixed $label
-     * @param bool  $required
+     * @param array|string $key
+     * @param string|null  $label
      *
-     * @return Validator
+     * @return $this
      */
-    public function email($input, $label, bool $required = true): Validator
+    private function notEmptyRule(array|string $key, ?string $label = null): self
     {
-        if (! $required && $this->blank($input)) {
-            return $this;
+        $key = (array) $key;
+
+        foreach ($key as $field) {
+            $input = $this->getInput($field);
+
+            if (! $this->isRequired($field) && $this->blank($input)) {
+                return $this;
+            }
+
+            if ($this->blank($input)) {
+                $this->addError($field, sprintf($label ?? $this->data['notEmpty'], $field));
+            }
         }
 
-        $validator = new EmailValidator();
-        $checkEmail = $validator->isValid($input, new RFCValidation());
+        return $this;
+    }
 
-        if (! $checkEmail || filter_var($input, FILTER_VALIDATE_EMAIL) === false) {
-            $this->addError($label);
+    /**
+     * In
+     *
+     * @param array|string $key
+     * @param array        $haystack
+     * @param string|null  $label
+     *
+     * @return $this
+     */
+    private function inRule(array|string $key, array $haystack, ?string $label = null): self
+    {
+        $key = (array) $key;
+
+        foreach ($key as $field) {
+            $input = $this->getInput($field);
+
+            if (! $this->isRequired($field) && $this->blank($input)) {
+                return $this;
+            }
+
+            if (! in_array($input, $haystack, true)) {
+                $this->addError($field, sprintf($label ?? $this->data['in'], $field));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Not in
+     *
+     * @param array|string $key
+     * @param array        $haystack
+     * @param string|null  $label
+     *
+     * @return $this
+     */
+    private function notInRule(array|string $key, array $haystack, ?string $label = null): self
+    {
+        $key = (array) $key;
+
+        foreach ($key as $field) {
+            $input = $this->getInput($field);
+
+            if (! $this->isRequired($field) && $this->blank($input)) {
+                return $this;
+            }
+
+            if (in_array($input, $haystack, true)) {
+                $this->addError($field, sprintf($label ?? $this->data['notIn'], $field));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Regex
+     *
+     * @param array|string $key
+     * @param string       $pattern
+     * @param string|null  $label
+     *
+     * @return $this
+     */
+    private function regexRule(array|string $key, string $pattern, ?string $label = null): self
+    {
+        $key = (array) $key;
+
+        foreach ($key as $field) {
+            $input = $this->getInput($field);
+
+            if (! $this->isRequired($field) && $this->blank($input)) {
+                return $this;
+            }
+
+            if (! preg_match($pattern, $input)) {
+                $this->addError($field, sprintf($label ?? $this->data['regex'], $field));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Check url
+     *
+     * @param array|string $key
+     * @param string|null  $label
+     *
+     * @return $this
+     */
+    private function urlRule(array|string $key, ?string $label = null): self
+    {
+        $key = (array) $key;
+
+        foreach ($key as $field) {
+            $input = $this->getInput($field);
+
+            if (! $this->isRequired($field) && $this->blank($input)) {
+                return $this;
+            }
+
+            if (! preg_match('|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu', $input)) {
+                $this->addError($field, sprintf($label ?? $this->data['url'], $field));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Check email
+     *
+     * @param array|string $key
+     * @param string|null  $label
+     *
+     * @return $this
+     */
+    private function emailRule(array|string $key, ?string $label = null): self
+    {
+        $key = (array) $key;
+
+        foreach ($key as $field) {
+            $input = $this->getInput($field);
+
+            if (! $this->isRequired($field) && $this->blank($input)) {
+                return $this;
+            }
+
+            if (filter_var($input, FILTER_VALIDATE_EMAIL) === false) {
+                $this->addError($field, sprintf($label ?? $this->data['email'], $field));
+            }
         }
 
         return $this;
@@ -519,20 +619,25 @@ class Validator
     /**
      * Check IP address
      *
-     * @param mixed $input
-     * @param mixed $label
-     * @param bool  $required
+     * @param array|string $key
+     * @param string|null  $label
      *
-     * @return Validator
+     * @return $this
      */
-    public function ip($input, $label, bool $required = true): Validator
+    private function ipRule(array|string $key, ?string $label = null): self
     {
-        if (! $required && $this->blank($input)) {
-            return $this;
-        }
+        $key = (array) $key;
 
-        if (filter_var($input, FILTER_VALIDATE_IP) === false) {
-            $this->addError($label);
+        foreach ($key as $field) {
+            $input = $this->getInput($field);
+
+            if (! $this->isRequired($field) && $this->blank($input)) {
+                return $this;
+            }
+
+            if (filter_var($input, FILTER_VALIDATE_IP) === false) {
+                $this->addError($field, sprintf($label ?? $this->data['ip'], $field));
+            }
         }
 
         return $this;
@@ -541,20 +646,49 @@ class Validator
     /**
      * Check phone
      *
-     * @param mixed $input
-     * @param mixed $label
-     * @param bool  $required
+     * @param array|string $key
+     * @param string|null  $label
      *
-     * @return Validator
+     * @return $this
      */
-    public function phone($input, $label, bool $required = true): Validator
+    private function phoneRule(array|string $key, ?string $label = null): self
     {
-        if (! $required && $this->blank($input)) {
+        $key = (array) $key;
+
+        foreach ($key as $field) {
+            $input = $this->getInput($field);
+
+            if (! $this->isRequired($field) && $this->blank($input)) {
+                return $this;
+            }
+
+            if (! preg_match('#^\d{8,13}$#', $input)) {
+                $this->addError($field, sprintf($label ?? $this->data['phone'], $field));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Custom rule
+     *
+     * @param string   $key
+     * @param callable $callable
+     * @param string   $label
+     *
+     * @return $this
+     */
+    private function addRule(string $key, callable $callable, string $label)
+    {
+        $input = $this->getInput($key);
+
+        if (! $this->isRequired($key) && $this->blank($input)) {
             return $this;
         }
 
-        if (! preg_match('#^\d{8,13}$#', $input)) {
-            $this->addError($label);
+        if (! $callable($input)) {
+            $this->addError($key, $label);
         }
 
         return $this;
@@ -563,60 +697,57 @@ class Validator
     /**
      * Проверяет файл
      *
-     * @param UploadedFile|null $input
-     * @param array             $rules
-     * @param mixed             $label
-     * @param bool              $required
+     * @param string $key
+     * @param array  $rules
      *
-     * @return Validator
+     * @return $this
      */
-    public function file(?UploadedFile $input, array $rules, $label, bool $required = true): Validator
+    private function fileRule(string $key, array $rules): self
     {
-        if (! $required && $this->blank($input)) {
+        $input = $this->getInput($key);
+
+        if (! $this->isRequired($key) && $this->blank($input)) {
             return $this;
         }
 
-        if (! $input instanceof UploadedFile) {
-            $this->addError($label);
+        if (! $input instanceof UploadedFileInterface) {
+            $this->addError($key, sprintf($this->data['file']['error'], $key));
             return $this;
         }
 
-        if (! $input->isValid()) {
-            $this->addError($input->getErrorMessage());
+        if ($input->getError() !== UPLOAD_ERR_OK) {
+            $this->addError($key, $this->getUploadErrorByCode($input->getError()));
             return $this;
         }
-
-        $key = is_array($label) ? key($label) : 0;
 
         if (empty($rules['extensions'])) {
             $rules['extensions'] = ['jpg', 'jpeg', 'gif', 'png'];
         }
 
-        $extension = strtolower($input->getClientOriginalExtension());
-
+        $extension = strtolower(pathinfo($input->getClientFilename(), PATHINFO_EXTENSION));
         if (! in_array($extension, $rules['extensions'], true)) {
-            $this->addError([$key => __('validator.extension')]);
+            $this->addError($key, sprintf($this->data['file']['extension'], $key));
         }
 
-        if (isset($rules['maxsize']) && $input->getSize() > $rules['maxsize']) {
-            $this->addError([$key => __('validator.size_max', ['size' => formatSize($rules['maxsize'])])]);
+        if (isset($rules['size_max']) && $input->getSize() > $rules['size_max']) {
+            $this->addError($key, sprintf($this->data['file']['size_max'], $key, formatSize($rules['size_max'])));
         }
 
         if (in_array($extension, ['jpg', 'jpeg', 'gif', 'png'], true)) {
-            [$width, $height] = getimagesize($input->getPathname());
+            [$width, $height] = getimagesize($input->getFilePath());
 
-            if (isset($rules['maxweight'])) {
-                if ($width > $rules['maxweight'] || $height > $rules['maxweight']) {
-                    $this->addError([$key => __('validator.weight_max', ['weight' => $rules['maxweight']])]);
+            if (isset($rules['weight_max'])) {
+                if ($width > $rules['weight_max'] || $height > $rules['weight_max']) {
+                    $this->addError($key, sprintf($this->data['file']['weight_max'], $key, $rules['weight_max']));
                 }
             }
 
-            if (isset($rules['minweight'])) {
-                if ($width < $rules['minweight'] || $height < $rules['minweight']) {
-                    $this->addError([$key => __('validator.weight_min', ['weight' => $rules['minweight']])]);
+            if (isset($rules['weight_min'])) {
+                if ($width < $rules['weight_min'] || $height < $rules['weight_min']) {
+                    $this->addError($key, sprintf($this->data['file']['weight_min'], $key, $rules['weight_min']));
                 }
             } elseif (empty($width) || empty($height)) {
-                $this->addError([$key => __('validator.weight_empty')]);
+                $this->addError($key, sprintf($this->data['file']['weight_empty'], $key));
             }
         }
 
@@ -624,14 +755,14 @@ class Validator
     }
 
     /**
-     * Добавляет ошибки в массив
+     * Add error
      *
-     * @param string      $key
-     * @param string|null $label Текст ошибки
+     * @param string $key   Field name
+     * @param string $label Text error
      *
      * @return void
      */
-    public function addError(string $key, ?string $label = null): void
+    public function addError(string $key, string $label): void
     {
         if (isset($this->errors[$key])) {
             $this->errors[] = $label;
@@ -641,7 +772,7 @@ class Validator
     }
 
     /**
-     * Возвращает список ошибок
+     * Get errors
      *
      * @return array
      */
@@ -651,22 +782,12 @@ class Validator
     }
 
     /**
-     * Очищает список ошибок
-     *
-     * @return void
-     */
-    public function clearErrors(): void
-    {
-        $this->errors = [];
-    }
-
-    /**
      * Determine if the given value is "blank".
      *
      * @param  mixed  $value
      * @return bool
      */
-    public function blank(mixed $value): bool
+    private function blank(mixed $value): bool
     {
         if (is_null($value)) {
             return true;
@@ -680,10 +801,59 @@ class Validator
             return false;
         }
 
-        if ($value instanceof \Countable) {
+        if ($value instanceof Countable) {
             return count($value) === 0;
         }
 
+        if ($value instanceof UploadedFileInterface) {
+            return $value->getError() === UPLOAD_ERR_NO_FILE;
+        }
+
         return empty($value);
+    }
+
+    /**
+     * Is required
+     *
+     * @param string $key
+     * @return bool
+     */
+    private function isRequired(string $key): bool
+    {
+        return isset($this->rules[$key]['required']);
+    }
+
+    /**
+     * Get input
+     *
+     * @param string     $key
+     * @param mixed|null $default
+     *
+     * @return mixed
+     */
+    private function getInput(string $key, mixed $default = null): mixed
+    {
+        return $this->input[$key] ?? $default;
+    }
+
+    /**
+     * Get upload error by code
+     *
+     * @param int $code
+     *
+     * @return string
+     */
+    private function getUploadErrorByCode(int $code): string
+    {
+        return match ($code) {
+            UPLOAD_ERR_INI_SIZE   => 'Размер файла превысил значение upload_max_filesize',
+            UPLOAD_ERR_FORM_SIZE  => 'Размер файла превысил значение MAX_FILE_SIZE',
+            UPLOAD_ERR_PARTIAL    => 'Загруженный файл был загружен только частично',
+            UPLOAD_ERR_NO_FILE    => 'Файл не был загружен',
+            UPLOAD_ERR_NO_TMP_DIR => 'Отсутствует временная папка',
+            UPLOAD_ERR_CANT_WRITE => 'Не удалось записать файл на диск',
+            UPLOAD_ERR_EXTENSION  => 'Модуль PHP остановил загрузку файла',
+            default               => 'Неизвестная ошибка загрузки',
+        };
     }
 }

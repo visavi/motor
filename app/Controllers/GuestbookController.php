@@ -51,11 +51,18 @@ class GuestbookController extends Controller
     public function create(Request $request, Response $response, Validator $validator): Response
     {
         $data = (array) $request->getParsedBody();
+        $uploadedFiles = $request->getUploadedFiles();
+        $data = array_merge($data, $uploadedFiles);
 
         $validator
-            ->required(['name', 'title', 'text'])
-            ->lengthBetween('title', 5, 100)
-            ->lengthBetween(['name', 'text'], 5, 1000);
+            ->required(['name', 'title', 'text', 'image'])
+            ->length('title', 5, 100)
+            ->length(['name', 'text'], 5, 1000)
+            ->file('image', [
+                'size_max'   => 500000,
+                'weight_min' => 100,
+            ]);
+            //->add('text', fn ($input) => str_starts_with($input, '-'), 'Текст должен начинаться со знака дефис!');
 
         if ($validator->isValid($data)) {
             Guestbook::query()->insert([
@@ -65,6 +72,7 @@ class GuestbookController extends Controller
                 'time'  => time(),
             ]);
         } else {
+            var_dump($validator->getErrors()); exit;
             //setInput($request->all());
             //setFlash('danger', $validator->getErrors());
         }
@@ -116,8 +124,8 @@ class GuestbookController extends Controller
 
         $validator
             ->required(['name', 'title', 'text'])
-            ->lengthBetween('title', 5, 100)
-            ->lengthBetween(['name', 'text'], 5, 1000);
+            ->length('title', 5, 100)
+            ->length(['name', 'text'], 5, 1000);
 
         if ($validator->isValid($data)) {
             $message->update([
