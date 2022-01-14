@@ -50,9 +50,9 @@ class GuestbookController extends Controller
      */
     public function create(Request $request, Response $response, Validator $validator): Response
     {
-        $data = (array) $request->getParsedBody();
+        $parsedBody = (array) $request->getParsedBody();
         $uploadedFiles = $request->getUploadedFiles();
-        $data = array_merge($data, $uploadedFiles);
+        $input = array_merge($parsedBody, $uploadedFiles);
 
         $validator
             ->required(['name', 'title', 'text', 'image'])
@@ -64,11 +64,11 @@ class GuestbookController extends Controller
             ]);
             //->add('text', fn ($input) => str_starts_with($input, '-'), 'Текст должен начинаться со знака дефис!');
 
-        if ($validator->isValid($data)) {
+        if ($validator->isValid($input)) {
             Guestbook::query()->insert([
-                'name'  => sanitize($data['name']),
-                'title' => sanitize($data['title']),
-                'text'  => sanitize($data['text']),
+                'name'  => sanitize($input['name']),
+                'title' => sanitize($input['title']),
+                'text'  => sanitize($input['text']),
                 'time'  => time(),
             ]);
         } else {
@@ -120,18 +120,18 @@ class GuestbookController extends Controller
             echo 'Сообщение не найдено'; //TODO abort
         }
 
-        $data = (array) $request->getParsedBody();
+        $input = (array) $request->getParsedBody();
 
         $validator
             ->required(['name', 'title', 'text'])
             ->length('title', 5, 100)
             ->length(['name', 'text'], 5, 1000);
 
-        if ($validator->isValid($data)) {
+        if ($validator->isValid($input)) {
             $message->update([
-                'name'  => sanitize($data['name']),
-                'title' => sanitize($data['title']),
-                'text'  => sanitize($data['text']),
+                'name'  => sanitize($input['name']),
+                'title' => sanitize($input['title']),
+                'text'  => sanitize($input['text']),
             ]);
         } else {
 

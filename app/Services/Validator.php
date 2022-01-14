@@ -726,7 +726,7 @@ class Validator
 
         $extension = strtolower(pathinfo($input->getClientFilename(), PATHINFO_EXTENSION));
         if (! in_array($extension, $rules['extensions'], true)) {
-            $this->addError($key, sprintf($this->data['file']['extension'], $key));
+            $this->addError($key, sprintf($this->data['file']['extension'], $key, implode(', ', $rules['extensions'])));
         }
 
         if (isset($rules['size_max']) && $input->getSize() > $rules['size_max']) {
