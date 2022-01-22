@@ -2,22 +2,26 @@
     <form method="post" action="/guestbook/{{ message ? message.id ~ '/edit' : 'create' }}"  enctype="multipart/form-data">
         <div class="mb-3">
             <label for="name" class="form-label">Имя</label>
-            <input type="text" class="form-control" id="name" name="name" value="{{ message.name ?? null }}">
+            <input type="text" class="form-control{{ hasError('name') }}" id="name" name="name" value="{{ old('name', message.name ?? null) }}" required>
+            <div class="invalid-feedback">{{ getError('name') }}</div>
         </div>
         <div class="mb-3">
             <label for="title" class="form-label">Заголовок</label>
-            <input type="text" class="form-control" id="title" name="title" value="{{ message.title ?? null }}">
+            <input type="text" class="form-control{{ hasError('title') }}" id="title" name="title" value="{{ old('title', message.title ?? null) }}" required>
+            <div class="invalid-feedback">{{ getError('title') }}</div>
         </div>
         <div class="mb-3">
             <label for="text" class="form-label">Текст</label>
-            <textarea class="form-control" id="text" rows="3" name="text">{{ message.text ?? null }}</textarea>
+            <textarea class="form-control{{ hasError('text') }}" id="text" rows="3" name="text" required>{{ old('text', message.text ?? null) }}</textarea>
+            <div class="invalid-feedback">{{ getError('text') }}</div>
         </div>
 
         <div class="mb-3">
-            <label for="image" class="btn btn-sm btn-secondary form-label">
+            <label for="image" class="btn btn-sm btn-secondary form-label{{ hasError('image') }}">
                 <input id="image" type="file" name="image" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
                 Прикрепить фото&hellip;
             </label>
+            <div class="invalid-feedback">{{ getError('image') }}</div>
             <span class="badge bg-info" id="upload-file-info"></span>
         </div>
 

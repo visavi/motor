@@ -25,8 +25,10 @@
     </header>
 
     <main>
+        {% include 'app/_flash.twig' %}
         {% block content %}{% endblock %}
     </main>
+
     <footer class="pt-5 my-5 text-muted border-top">
         Motor CMS &middot; &copy; {{ 'now' | date('Y') }}
     </footer>
@@ -37,6 +39,7 @@
 <script src="/assets/js/prettify.js"></script>
 <script src="/assets/js/main.js"></script>
 
-
 </body>
 </html>
+
+{% set session = session.delete('flash') %}

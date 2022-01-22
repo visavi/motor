@@ -15,7 +15,7 @@ return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions([
 
         // Set view in Container
-        'view' => function() {
+        'view' => function(ContainerInterface $container) {
             $twig = Twig::create(__DIR__ . '/../resources/views', [
                 'cache'       => false/* __DIR__ . '/../var/views'*/,
                 'auto_reload' => true,
@@ -23,8 +23,34 @@ return function (ContainerBuilder $containerBuilder) {
             ]);
 
             $filter = new \Twig\TwigFilter('bbCode', 'bbCode', ['is_safe' => ['html']]);
-
             $twig->getEnvironment()->addFilter($filter);
+
+            // Old
+            $session = $container->get('session');
+            $function = new \Twig\TwigFunction('old', function (string $key, mixed $default = null) use ($session) {
+                if (! $session['flash']['old']) {
+                    return $default;
+                }
+
+                return $session['flash']['old'][$key] ?? $default;
+            });
+            $twig->getEnvironment()->addFunction($function);
+
+            // HasError
+            $function = new \Twig\TwigFunction('hasError', function (string $field) use ($session) {
+                if ($session['flash']['errors']) {
+                    return $session['flash']['errors'][$field] ? ' is-invalid' : ' is-valid';
+                }
+
+                return '';
+            });
+            $twig->getEnvironment()->addFunction($function);
+
+            // Get Error
+            $function = new \Twig\TwigFunction('getError', fn (string $field) => $session['flash']['errors'][$field] ?? null);
+            $twig->getEnvironment()->addFunction($function);
+
+            $twig->getEnvironment()->addGlobal('session', $container->get('session'));
             $twig->addExtension(new \Twig\Extension\DebugExtension());
 
             return $twig;
@@ -35,8 +61,10 @@ return function (ContainerBuilder $containerBuilder) {
             return new Paginator($container->get('view'));
         },
 
-
-
+        // Set session in Container
+        'session' => function () {
+            return new \SlimSession\Helper();
+        },
 
 
         /*LoggerInterface::class => function (ContainerInterface $c) {
@@ -53,7 +81,5 @@ return function (ContainerBuilder $containerBuilder) {
 
             return $logger;
         },*/
-
-
     ]);
 };

@@ -50,9 +50,9 @@ class GuestbookController extends Controller
      */
     public function create(Request $request, Response $response, Validator $validator): Response
     {
-        $parsedBody = (array) $request->getParsedBody();
-        $uploadedFiles = $request->getUploadedFiles();
-        $input = array_merge($parsedBody, $uploadedFiles);
+        $input = (array) $request->getParsedBody();
+        $files = $request->getUploadedFiles();
+        $input = array_merge($input, $files);
 
         $validator
             ->required(['name', 'title', 'text', 'image'])
@@ -72,9 +72,7 @@ class GuestbookController extends Controller
                 'time'  => time(),
             ]);
         } else {
-            var_dump($validator->getErrors()); exit;
-            //setInput($request->all());
-            //setFlash('danger', $validator->getErrors());
+            $this->session->set('flash', ['errors' => $validator->getErrors(), 'old' => $input]);
         }
 
         return $response->withHeader('Location', '/guestbook');
@@ -134,8 +132,12 @@ class GuestbookController extends Controller
                 'text'  => sanitize($input['text']),
             ]);
         } else {
+            $this->session->set('flash', ['errors' => $validator->getErrors(), 'old' => $input]);
 
+            return $response->withHeader('Location', '/guestbook/' . $id . '/edit');
         }
+
+        $this->session->set('flash', ['success' => 'Сообщение успешно изменено!']);
 
         return $response->withHeader('Location', '/guestbook');
     }
@@ -152,6 +154,8 @@ class GuestbookController extends Controller
     {
         $message = Guestbook::query()->find($id);
         $message?->delete();
+
+        $this->session->set('flash', ['success' => 'Сообщение успешно удалено!']);
 
         return $response->withHeader('Location', '/guestbook');
     }
