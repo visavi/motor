@@ -1,0 +1,22 @@
+{% extends 'layout.twig' %}
+
+{% block title %}
+    Вход
+{% endblock %}
+
+{% block content %}
+    <div class="p-3 shadow">
+        <form method="post">
+            <div class="mb-3">
+                <label for="login" class="form-label">Логин</label>
+                <input type="text" class="form-control{{ hasError('login') }}" id="login" name="login" value="{{ old('login') }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Пароль</label>
+                <input type="password" class="form-control{{ hasError('password') }}" id="password" name="password" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Войти</button>
+        </form>
+    </div>
+{% endblock %}

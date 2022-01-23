@@ -8,7 +8,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 /**
  * HomeController
  */
-class HomeController
+class HomeController extends Controller
 {
     public function home(Request $request, Response $response): Response
     {

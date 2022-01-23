@@ -62,7 +62,6 @@ class GuestbookController extends Controller
                 'size_max'   => 500000,
                 'weight_min' => 100,
             ]);
-            //->add('text', fn ($input) => str_starts_with($input, '-'), 'Текст должен начинаться со знака дефис!');
 
         if ($validator->isValid($input)) {
             Guestbook::query()->insert([

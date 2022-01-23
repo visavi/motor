@@ -1,8 +1,10 @@
 <?php
 declare(strict_types=1);
 
+use App\Controllers\CaptchaController;
 use App\Controllers\GuestbookController;
 use App\Controllers\HomeController;
+use App\Controllers\UserController;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
@@ -15,6 +17,14 @@ return function (App $app) {
     });*/
 
     $app->get('/', [HomeController::class, 'home']);
+
+    $app->get('/captcha', [CaptchaController::class, 'captcha']);
+
+    $app->get('/login', [UserController::class, 'login']);
+    $app->post('/login', [UserController::class, 'auth']);
+    $app->get('/register', [UserController::class, 'register']);
+    $app->post('/register', [UserController::class, 'registration']);
+    $app->get('/logout', [UserController::class, 'logout']);
 
     $app->group('/guestbook', function (Group $group) {
         $group->get('', [GuestbookController::class, 'index']);

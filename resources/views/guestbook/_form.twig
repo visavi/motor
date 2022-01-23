@@ -5,11 +5,13 @@
             <input type="text" class="form-control{{ hasError('name') }}" id="name" name="name" value="{{ old('name', message.name ?? null) }}" required>
             <div class="invalid-feedback">{{ getError('name') }}</div>
         </div>
+
         <div class="mb-3">
             <label for="title" class="form-label">Заголовок</label>
             <input type="text" class="form-control{{ hasError('title') }}" id="title" name="title" value="{{ old('title', message.title ?? null) }}" required>
             <div class="invalid-feedback">{{ getError('title') }}</div>
         </div>
+
         <div class="mb-3">
             <label for="text" class="form-label">Текст</label>
             <textarea class="form-control{{ hasError('text') }}" id="text" rows="3" name="text" required>{{ old('text', message.text ?? null) }}</textarea>

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cdd9a82fdda497e11eda2ea13d69f1fb",
+    "content-hash": "201eca885cbf1e16782fd62f28fe1fa2",
     "packages": [
         {
             "name": "bryanjhv/slim-session",
@@ -1475,6 +1475,54 @@
                 }
             ],
             "time": "2022-01-03T21:15:37+00:00"
+        },
+        {
+            "name": "visavi/captcha",
+            "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/visavi/captcha.git",
+                "reference": "c1041647c824ca55e1046e37e9a087100f92a319"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/visavi/captcha/zipball/c1041647c824ca55e1046e37e9a087100f92a319",
+                "reference": "c1041647c824ca55e1046e37e9a087100f92a319",
+                "shasum": ""
+            },
+            "require": {
+                "ext-gd": "*",
+                "php": ">=7.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Visavi\\Captcha\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alexander Grigorev",
+                    "email": "admin@visavi.net",
+                    "homepage": "https://visavi.net"
+                }
+            ],
+            "description": "Animated captcha generator",
+            "homepage": "https://visavi.net",
+            "keywords": [
+                "antibot",
+                "antispam",
+                "captcha"
+            ],
+            "support": {
+                "issues": "https://github.com/visavi/captcha/issues",
+                "source": "https://github.com/visavi/captcha/tree/v2.0.0"
+            },
+            "time": "2021-09-20T02:05:26+00:00"
         }
     ],
     "packages-dev": [

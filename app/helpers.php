@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\User;
 use App\Services\BBCode;
+use SlimSession\Helper as Session;
 
 /**
  * Sanitize
@@ -42,12 +44,12 @@ function bbCode(mixed $text, bool $parse = true): string
 }
 
 /**
- * Возвращает размер в человеко читаемом формате
+ * Возвращает размер в читаемом формате
  *
- * @param int $bytes     размер в байтах
- * @param int $precision кол. символов после запятой
+ * @param int $bytes
+ * @param int $precision
  *
- * @return string Форматированный вывод размера
+ * @return string
  */
 function formatSize(int $bytes, int $precision = 2): string
 {
@@ -58,4 +60,33 @@ function formatSize(int $bytes, int $precision = 2): string
     $bytes /= (1 << (10 * $pow));
 
     return round($bytes, $precision) . $units[$pow];
+}
+
+/**
+ * Get session
+ *
+ * @return Session
+ */
+function session()
+{
+    return new Session();
+}
+
+/**
+ * Is user
+ *
+ * @return bool
+ */
+function isUser()
+{
+    $login    = session()->get('login');
+    $password = session()->get('password');
+
+    if ($login && $password) {
+        $user = User::query()->where('login', $login)->first();
+
+        return  $user && $password === $user->password;
+    }
+
+    return false;
 }

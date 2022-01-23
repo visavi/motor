@@ -15,4 +15,12 @@ namespace App\Models;
 class User extends Model
 {
     public string $filePath = __DIR__ . '/../../database/users.csv';
+
+    public const BOSS   = 'boss';   // Владелец
+    public const ADMIN  = 'admin';  // Админ
+    public const MODER  = 'moder';  // Модератор
+    public const EDITOR = 'editor'; // Редактор
+    public const USER   = 'user';   // Пользователь
+    public const PENDED = 'pended'; // Ожидающий
+    public const BANNED = 'banned'; // Забаненный
 }

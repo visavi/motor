@@ -50,6 +50,9 @@ return function (ContainerBuilder $containerBuilder) {
             $function = new \Twig\TwigFunction('getError', fn (string $field) => $session['flash']['errors'][$field] ?? null);
             $twig->getEnvironment()->addFunction($function);
 
+            $function = new \Twig\TwigFunction('isUser', 'isUser');
+            $twig->getEnvironment()->addFunction($function);
+
             $twig->getEnvironment()->addGlobal('session', $container->get('session'));
             $twig->addExtension(new \Twig\Extension\DebugExtension());
 
