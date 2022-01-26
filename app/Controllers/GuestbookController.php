@@ -50,25 +50,36 @@ class GuestbookController extends Controller
      */
     public function create(Request $request, Response $response, Validator $validator): Response
     {
+        if (! isUser()) {
+            abort(403, 'Доступ запрещен!');
+        }
+
         $input = (array) $request->getParsedBody();
         $files = $request->getUploadedFiles();
         $input = array_merge($input, $files);
 
         $validator
-            ->required(['name', 'title', 'text', 'image'])
-            ->length('title', 5, 100)
-            ->length(['name', 'text'], 5, 1000)
+            ->required(['title', 'text', 'image'])
+            ->add('user', fn () => isUser(), 'Необходимо авторизоваться!')
+            ->length('title', 5, 50)
+            ->length('text', 5, 5000)
             ->file('image', [
-                'size_max'   => 500000,
+                'size_max'   => 5000000,
                 'weight_min' => 100,
             ]);
 
         if ($validator->isValid($input)) {
+            $extension = getExtension($input['image']->getClientFilename());
+            $path = '/uploads/guestbook/' . uniqueName($extension);
+
+            $input['image']->moveTo(publicPath($path));
+
             Guestbook::query()->insert([
-                'name'  => sanitize($input['name']),
-                'title' => sanitize($input['title']),
-                'text'  => sanitize($input['text']),
-                'time'  => time(),
+                'login'      => $this->session->get('login'),
+                'title'      => sanitize($input['title']),
+                'text'       => sanitize($input['text']),
+                'image'      => $path,
+                'created_at' => time(),
             ]);
         } else {
             $this->session->set('flash', ['errors' => $validator->getErrors(), 'old' => $input]);
@@ -88,9 +99,13 @@ class GuestbookController extends Controller
      */
     public function edit(int $id, Response $response): Response
     {
+        if (! isUser()) {
+            abort(403, 'Доступ запрещен!');
+        }
+
         $message = Guestbook::query()->find($id);
         if (! $message) {
-            echo 'Сообщение не найдено'; //TODO abort
+            abort(404, 'Сообщение не найдено');
         }
 
         return $this->view->render(
@@ -112,21 +127,24 @@ class GuestbookController extends Controller
      */
     public function store(int $id, Request $request, Response $response, Validator $validator): Response
     {
+        if (! isUser()) {
+            abort(403, 'Доступ запрещен!');
+        }
+
         $message = Guestbook::query()->find($id);
         if (! $message) {
-            echo 'Сообщение не найдено'; //TODO abort
+            abort(404, 'Сообщение не найдено');
         }
 
         $input = (array) $request->getParsedBody();
 
         $validator
-            ->required(['name', 'title', 'text'])
-            ->length('title', 5, 100)
-            ->length(['name', 'text'], 5, 1000);
+            ->required(['title', 'text'])
+            ->length('title', 5, 50)
+            ->length('text', 5, 5000);
 
         if ($validator->isValid($input)) {
             $message->update([
-                'name'  => sanitize($input['name']),
                 'title' => sanitize($input['title']),
                 'text'  => sanitize($input['text']),
             ]);
@@ -151,8 +169,19 @@ class GuestbookController extends Controller
      */
     public function delete(int $id, Response $response): Response
     {
+        if (! isUser()) {
+            abort(403, 'Доступ запрещен!');
+        }
+
         $message = Guestbook::query()->find($id);
-        $message?->delete();
+
+        if ($message) {
+            $message->delete();
+
+            if ($message->image && file_exists(publicPath($message->image))) {
+                unlink(publicPath($message->image));
+            }
+        }
 
         $this->session->set('flash', ['success' => 'Сообщение успешно удалено!']);
 

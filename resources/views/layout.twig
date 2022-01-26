@@ -24,7 +24,7 @@
         </a>
 
         <nav class="d-inline-flex mt-2 ms-auto">
-            {% if (isUser()) %}
+            {% if isUser() %}
                 <a class="me-3 py-2 text-dark text-decoration-none" href="/logout">Выйти</a>
             {% else %}
                 <a class="me-3 py-2 text-dark text-decoration-none" href="/login">Войти</a>

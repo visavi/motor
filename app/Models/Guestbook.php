@@ -6,10 +6,11 @@ namespace App\Models;
  * Class Guestbook
  *
  * @property int $id
- * @property string $name
+ * @property string $login
  * @property string $title
  * @property string $text
- * @property int $time
+ * @property string $image
+ * @property int $created_at
  */
 class Guestbook extends Model
 {

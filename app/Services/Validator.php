@@ -683,10 +683,6 @@ class Validator
     {
         $input = $this->getInput($key);
 
-        if (! $this->isRequired($key) && $this->blank($input)) {
-            return $this;
-        }
-
         if (! $callable($input)) {
             $this->addError($key, $label);
         }

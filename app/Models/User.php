@@ -9,6 +9,7 @@ namespace App\Models;
  * @property string $login
  * @property string $password
  * @property string $email
+ * @property string $role
  * @property string $name
  * @property int $created_at
  */

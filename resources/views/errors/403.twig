@@ -1,0 +1,15 @@
+{% extends 'layout.twig' %}
+
+{% block title %}
+    Ошибка 403
+{% endblock %}
+
+{% block content %}
+    <div class="col-12 text-center">
+        <h1>Ошибка 403!</h1>
+
+        {% if message %}
+            <div class="lead">{{ message }}</div>
+        {% endif %}
+    </div>
+{% endblock %}

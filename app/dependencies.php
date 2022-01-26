@@ -28,7 +28,7 @@ return function (ContainerBuilder $containerBuilder) {
             // Old
             $session = $container->get('session');
             $function = new \Twig\TwigFunction('old', function (string $key, mixed $default = null) use ($session) {
-                if (! $session['flash']['old']) {
+                if (! isset($session['flash']['old'])) {
                     return $default;
                 }
 
@@ -38,7 +38,7 @@ return function (ContainerBuilder $containerBuilder) {
 
             // HasError
             $function = new \Twig\TwigFunction('hasError', function (string $field) use ($session) {
-                if ($session['flash']['errors']) {
+                if (isset($session['flash']['errors'])) {
                     return $session['flash']['errors'][$field] ? ' is-invalid' : ' is-valid';
                 }
 

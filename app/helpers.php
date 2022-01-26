@@ -90,3 +90,72 @@ function isUser()
 
     return false;
 }
+
+/**
+ * Get extension
+ *
+ * @param string $filename Имя файла
+ *
+ * @return string расширение
+ */
+function getExtension(string $filename): string
+{
+    return pathinfo($filename, PATHINFO_EXTENSION);
+}
+
+/**
+ * Get unique name
+ *
+ * @param string|null $extension
+ *
+ * @return string
+ */
+function uniqueName(string $extension = null): string
+{
+    if ($extension) {
+        $extension = '.' . $extension;
+    }
+
+    return str_replace('.', '', uniqid('', true)) . $extension;
+}
+
+/**
+ * Get public path
+ *
+ * @param string $path
+ *
+ * @return string
+ */
+function publicPath(string $path = ''): string
+{
+    return  dirname(__DIR__) . '/public' . $path;
+}
+
+/**
+ * Abort
+ *
+ * @param int    $code
+ * @param string $message
+ *
+ * @return mixed
+ * @throws Exception
+ */
+/*function abort(int $code, string $message = '')
+{
+    throw new \Exception($message, $code);
+}*/
+
+
+/**
+ * Throw an HttpException with the given data.
+ *
+ * @param int    $code
+ * @param string $message
+ *
+ * @return never
+ * @throws RuntimeException
+ */
+function abort(int $code, string $message = ''): never
+{
+    throw new RuntimeException($message, $code);
+}
