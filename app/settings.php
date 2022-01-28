@@ -6,8 +6,10 @@ use DI\ContainerBuilder;
 return function (ContainerBuilder $containerBuilder) {
 
     // Global Settings Object
-    $containerBuilder->addDefinitions([
-        'debug'              => true,
-        'guestbook_per_page' => 10,
-    ]);
+    $containerBuilder->addDefinitions(['setting' => [
+        'debug'     => false,
+        'guestbook' => [
+            'per_page' => 10,
+        ]
+    ]]);
 };

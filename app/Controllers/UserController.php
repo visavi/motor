@@ -23,7 +23,7 @@ class UserController extends Controller
     {
         return $this->view->render(
             $response,
-            'users/login.twig',
+            'users/login',
         );
     }
 
@@ -69,7 +69,7 @@ class UserController extends Controller
     {
         return $this->view->render(
             $response,
-            'users/register.twig',
+            'users/register',
         );
     }
 
@@ -123,8 +123,14 @@ class UserController extends Controller
         return $response->withHeader('Location', '/register');
     }
 
-
-    public function logout(Request $request, Response $response, Validator $validator): Response
+    /**
+     * Logout
+     *
+     * @param Response $response
+     *
+     * @return Response
+     */
+    public function logout(Response $response): Response
     {
         $this->session->delete('login');
         $this->session->delete('password');

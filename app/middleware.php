@@ -37,13 +37,13 @@ return function (App $app) {
 
         $code = $exception->getCode();
 
-        if (! $container->get('view')->getLoader()->exists('errors/' . $code . '.twig')) {
+        if (! $container->get('view')->exists('errors/' . $code)) {
             $code = 500;
         }
 
         $response = $container->get('view')->render(
             $response,
-            'errors/' . $code . '.twig',
+            'errors/' . $code,
             ['message' => $exception->getMessage()]
         );
 
@@ -65,8 +65,10 @@ return function (App $app) {
      * Note: This middleware should be added last. It will not handle any exceptions/errors
      * for middleware added after it.
      */
-
-    //$app->add(new Whoops());
-    $errorMiddleware = $app->addErrorMiddleware(true, true, true);
-    $errorMiddleware->setDefaultErrorHandler($errorHandler);
+    if ($app->getContainer()->get('setting')['debug']) {
+        $app->add(new Whoops());
+    } else {
+        $errorMiddleware = $app->addErrorMiddleware(true, true, true);
+        $errorMiddleware->setDefaultErrorHandler($errorHandler);
+    }
 };

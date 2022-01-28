@@ -24,7 +24,7 @@ class GuestbookController extends Controller
     public function index(Response $response): Response
     {
         $total = Guestbook::query()->count();
-        $paginator = $this->paginator->create($total);
+        $paginator = $this->paginator->create($total, $this->setting['guestbook']['per_page']);
 
         $messages = Guestbook::query()
             ->reverse()
@@ -32,9 +32,11 @@ class GuestbookController extends Controller
             ->limit($paginator->limit)
             ->get();
 
+       // return view($response, 'guestbook/index', compact('messages', 'paginator'));
+
         return $this->view->render(
             $response,
-            'guestbook/index.twig',
+            'guestbook/index',
             compact('messages', 'paginator')
         );
     }
@@ -110,7 +112,7 @@ class GuestbookController extends Controller
 
         return $this->view->render(
             $response,
-            'guestbook/edit.twig',
+            'guestbook/edit',
             compact('message')
         );
     }

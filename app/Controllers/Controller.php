@@ -3,8 +3,8 @@
 namespace App\Controllers;
 
 use App\Services\Paginator;
+use App\Services\View;
 use Psr\Container\ContainerInterface;
-use Slim\Views\Twig;
 use SlimSession\Helper as Session;
 
 /**
@@ -12,15 +12,17 @@ use SlimSession\Helper as Session;
  */
 class Controller
 {
-    protected Twig $view;
+    protected View $view;
     protected Paginator $paginator;
     protected Session $session;
+    protected array $setting;
 
     public function __construct(
         protected ContainerInterface $container
     ) {
-        $this->view = $container->get('view');
+        $this->view      = $container->get('view');
         $this->paginator = $container->get('paginator');
-        $this->session = $container->get('session');
+        $this->session   = $container->get('session');
+        $this->setting   = $container->get('setting');
     }
 }

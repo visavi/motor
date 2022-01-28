@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use Slim\Views\Twig;
-use Twig\Error\Error;
-
 /**
  * Page navigation
  *
@@ -24,7 +21,7 @@ class Paginator
     public int $page;
 
     public function __construct(
-        protected Twig $view
+        protected View $view
     ) {}
 
     public function create(int $total, int $limit = 10, int $crumbs = 1): self
@@ -137,12 +134,11 @@ class Paginator
      * Get rendered links
      *
      * @return string
-     * @throws Error
      */
     public function links(): string
     {
         return $this->view->fetch(
-            'app/_paginator.twig',
+            'app/_paginator',
             ['pages' => $this->items()]
         );
     }

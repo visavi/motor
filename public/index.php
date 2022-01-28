@@ -9,10 +9,6 @@ require __DIR__ . '/../vendor/autoload.php';
 // Instantiate PHP-DI ContainerBuilder
 $containerBuilder = new ContainerBuilder();
 
-if (false) { // Should be set to true in production
-    $containerBuilder->enableCompilation(__DIR__ . '/../var/cache');
-}
-
 // Set up settings
 $settings = require __DIR__ . '/../app/settings.php';
 $settings($containerBuilder);
@@ -24,6 +20,10 @@ $dependencies($containerBuilder);
 // Set up repositories
 /*$repositories = require __DIR__ . '/../app/repositories.php';
 $repositories($containerBuilder);*/
+
+//if ($containerBuilder->get('setting')['debug']) { // Should be set to true in production
+//    $containerBuilder->enableCompilation(__DIR__ . '/../var/cache');
+//}
 
 // Build PHP-DI Container instance
 $container = $containerBuilder->build();

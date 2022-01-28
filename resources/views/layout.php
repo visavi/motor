@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="{% block description %}{% endblock %}">
     <meta name="generator" content="Motor CMS">
-    <title>{% block title %}{% endblock %}</title>
+    <title><?= $this->section('title') ?></title>
 
     <!-- Bootstrap core CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 
     <link href="/assets/css/prettify.css" rel="stylesheet">
     <link href="/assets/css/main.css" rel="stylesheet">
@@ -24,22 +25,23 @@
         </a>
 
         <nav class="d-inline-flex mt-2 ms-auto">
-            {% if isUser() %}
+            <?php if (isUser()): ?>
                 <a class="me-3 py-2 text-dark text-decoration-none" href="/logout">Выйти</a>
-            {% else %}
+            <?php else: ?>
                 <a class="me-3 py-2 text-dark text-decoration-none" href="/login">Войти</a>
                 <a class="me-3 py-2 text-dark text-decoration-none" href="/register">Регистрация</a>
-            {% endif %}
+            <?php endif; ?>
         </nav>
     </header>
 
     <main>
-        {% include 'app/_flash.twig' %}
-        {% block content %}{% endblock %}
+        <?= $this->fetch('app/_flash') ?>
+        <?= $this->section('breadcrumb') ?>
+        <?= $this->section('content') ?>
     </main>
 
     <footer class="pt-5 my-5 text-muted border-top">
-        Motor CMS &middot; &copy; {{ 'now' | date('Y') }}
+        Motor CMS &middot; &copy; <?= date('Y') ?>
     </footer>
 </div>
 
@@ -51,4 +53,6 @@
 </body>
 </html>
 
-{% set session = session.delete('flash') %}
+<?php if (isset(session()->flash)): ?>
+    <?php session()->delete('flash'); ?>
+<?php endif; ?>

@@ -1,62 +1,23 @@
 <?php
 declare(strict_types=1);
 
-//use App\Application\Settings\SettingsInterface;
 use App\Services\Paginator;
+use App\Services\View;
 use DI\ContainerBuilder;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
-use Slim\Views\Twig;
+use SlimSession\Helper;
 
 return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions([
 
         // Set view in Container
-        'view' => function(ContainerInterface $container) {
-            $twig = Twig::create(__DIR__ . '/../resources/views', [
-                'cache'       => false/* __DIR__ . '/../var/views'*/,
-                'auto_reload' => true,
-                'debug'       => true,
-            ]);
-
-            $filter = new \Twig\TwigFilter('bbCode', 'bbCode', ['is_safe' => ['html']]);
-            $twig->getEnvironment()->addFilter($filter);
-
-            // Old
-            $session = $container->get('session');
-            $function = new \Twig\TwigFunction('old', function (string $key, mixed $default = null) use ($session) {
-                if (! isset($session['flash']['old'])) {
-                    return $default;
-                }
-
-                return $session['flash']['old'][$key] ?? $default;
-            });
-            $twig->getEnvironment()->addFunction($function);
-
-            // HasError
-            $function = new \Twig\TwigFunction('hasError', function (string $field) use ($session) {
-                if (isset($session['flash']['errors'])) {
-                    return $session['flash']['errors'][$field] ? ' is-invalid' : ' is-valid';
-                }
-
-                return '';
-            });
-            $twig->getEnvironment()->addFunction($function);
-
-            // Get Error
-            $function = new \Twig\TwigFunction('getError', fn (string $field) => $session['flash']['errors'][$field] ?? null);
-            $twig->getEnvironment()->addFunction($function);
-
-            $function = new \Twig\TwigFunction('isUser', 'isUser');
-            $twig->getEnvironment()->addFunction($function);
-
-            $twig->getEnvironment()->addGlobal('session', $container->get('session'));
-            $twig->addExtension(new \Twig\Extension\DebugExtension());
-
-            return $twig;
+        'view' => function() {
+            //return new League\Plates\Engine(dirname(__DIR__) . '/resources/views');
+            return new View(dirname(__DIR__) . '/resources/views');
         },
 
         // Set pagination in Container
@@ -66,7 +27,7 @@ return function (ContainerBuilder $containerBuilder) {
 
         // Set session in Container
         'session' => function () {
-            return new \SlimSession\Helper();
+            return new Helper();
         },
 
 

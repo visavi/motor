@@ -1,15 +1,15 @@
-{% if session.flash.errors is defined %}
+<?php if (isset(session()->flash['errors'])): ?>
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        {% for error in session.flash.errors %}
-            <div>{{ error }}</div>
-        {% endfor %}
+        <?php foreach (session()->flash['errors'] as $error): ?>
+            <div><?= $this->e($error) ?></div>
+        <?php endforeach; ?>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-{% endif %}
+<?php endif; ?>
 
-{% if session.flash.success is defined %}
+<?php if (isset(session()->flash['success'])): ?>
     <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <div>{{ session.flash.success }}</div>
+        <div><?= $this->e(session()->flash['success']) ?></div>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-{% endif %}
+<?php endif; ?>

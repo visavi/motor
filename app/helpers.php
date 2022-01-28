@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use App\Services\BBCode;
+use Psr\Http\Message\ResponseInterface;
 use SlimSession\Helper as Session;
 
 /**
@@ -67,9 +68,15 @@ function formatSize(int $bytes, int $precision = 2): string
  *
  * @return Session
  */
-function session()
+function session(): Session
 {
-    return new Session();
+    static $session;
+
+    if (! $session) {
+        $session = new Session();
+    }
+
+    return $session;
 }
 
 /**
@@ -77,7 +84,7 @@ function session()
  *
  * @return bool
  */
-function isUser()
+function isUser(): bool
 {
     $login    = session()->get('login');
     $password = session()->get('password');
@@ -128,26 +135,11 @@ function uniqueName(string $extension = null): string
  */
 function publicPath(string $path = ''): string
 {
-    return  dirname(__DIR__) . '/public' . $path;
+    return dirname(__DIR__) . '/public' . $path;
 }
 
 /**
- * Abort
- *
- * @param int    $code
- * @param string $message
- *
- * @return mixed
- * @throws Exception
- */
-/*function abort(int $code, string $message = '')
-{
-    throw new \Exception($message, $code);
-}*/
-
-
-/**
- * Throw an HttpException with the given data.
+ * Throw an Exception with the given data.
  *
  * @param int    $code
  * @param string $message
@@ -158,4 +150,42 @@ function publicPath(string $path = ''): string
 function abort(int $code, string $message = ''): never
 {
     throw new RuntimeException($message, $code);
+}
+
+
+// Old
+function old(string $key, mixed $default = null)
+{
+    if (! isset(session()['flash']['old'])) {
+        return $default;
+    }
+
+    return session()['flash']['old'][$key] ?? $default;
+}
+
+// HasError
+function hasError(string $field)
+{
+    if (isset(session()['flash']['errors'])) {
+        return isset(session()['flash']['errors'][$field]) ? ' is-invalid' : ' is-valid';
+    }
+
+    return '';
+}
+
+// Get Error
+function getError(string $field)
+{
+    return session()['flash']['errors'][$field] ?? null;
+}
+
+function view(ResponseInterface $response, string $template, array $data = [])
+{
+    $view = new League\Plates\Engine(dirname(__DIR__) . '/resources/views');
+
+    $render = $view->render($template, $data);
+
+    $response->getBody()->write($render);
+
+    return $response;
 }
