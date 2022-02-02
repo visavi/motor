@@ -581,7 +581,7 @@ class Validator
                 return $this;
             }
 
-            if (! preg_match('|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu', $input)) {
+            if (! preg_match('|^https?://([а-яa-z0-9_\-.])+(\.([а-яa-z0-9/\-?_=#])+)+$|iu', $input)) {
                 $this->addError($field, sprintf($label ?? $this->data['url'], $field));
             }
         }

@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Models\User;
 use App\Services\BBCode;
 use Psr\Http\Message\ResponseInterface;
+use Slim\Factory\ServerRequestCreatorFactory;
 use SlimSession\Helper as Session;
 
 /**
@@ -145,11 +148,14 @@ function publicPath(string $path = ''): string
  * @param string $message
  *
  * @return never
- * @throws RuntimeException
+ * @throws RuntimeException|\Slim\Exception\HttpException
  */
 function abort(int $code, string $message = ''): never
 {
-    throw new RuntimeException($message, $code);
+    $serverRequestCreator = ServerRequestCreatorFactory::create();
+    $request = $serverRequestCreator->createServerRequestFromGlobals();
+
+    throw new \Slim\Exception\HttpException($request, $message, $code);
 }
 
 

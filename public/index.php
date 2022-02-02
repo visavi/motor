@@ -29,7 +29,7 @@ $repositories($containerBuilder);*/
 $container = $containerBuilder->build();
 
 // Instantiate the app
-AppFactory::setContainer($container);
+//AppFactory::setContainer($container);
 
 // Create Request object from globals
 /*$serverRequestCreator = ServerRequestCreatorFactory::create();

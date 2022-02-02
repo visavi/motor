@@ -113,7 +113,7 @@ class BBCode
      *
      * @param string $source текст содержаший BBCode
      *
-     * @return string распарсенный текст
+     * @return string Распарсенный текст
      */
     public function parse(string $source): string
     {
@@ -144,9 +144,9 @@ class BBCode
     private function clearBreakLines(string $source): string
     {
         $tags = [
-            '</div><br>'           => '</div>',
-            '</pre><br>'           => '</pre>',
-            '</blockquote><br>'    => '</blockquote>',
+            '</div><br>'        => '</div>',
+            '</pre><br>'        => '</pre>',
+            '</blockquote><br>' => '</blockquote>',
         ];
 
         return strtr($source, $tags);
@@ -155,9 +155,9 @@ class BBCode
     /**
      * Очищает текст от BB-кодов
      *
-     * @param string $source неочищенный текст
+     * @param string $source Неочищенный текст
      *
-     * @return string очищенный текст
+     * @return string Очищенный текст
      */
     public function clear(string $source): string
     {
@@ -169,7 +169,7 @@ class BBCode
      *
      * @param array $match ссылка
      *
-     * @return string обработанная ссылка
+     * @return string Обработанная ссылка
      */
     public function urlReplace(array $match): string
     {
@@ -192,7 +192,7 @@ class BBCode
      *
      * @param array $match список
      *
-     * @return string обработанный список
+     * @return string Обработанный список
      */
     public function listReplace(array $match): string
     {
@@ -207,7 +207,7 @@ class BBCode
             $list[] = '<li>' . $l . '</li>';
         }
 
-        $tag  = strpos($match[0], '[list]') === false ? 'ol' : 'ul';
+        $tag  = ! str_contains($match[0], '[list]') ? 'ol' : 'ul';
 
         return '<' . $tag . '>' . implode($list) . '</' . $tag . '>';
     }
@@ -215,9 +215,9 @@ class BBCode
     /**
      * Обрабатывает размер текста
      *
-     * @param array $match массив элементов
+     * @param array $match Массив элементов
      *
-     * @return string обработанный текст
+     * @return string Обработанный текст
      */
     public function fontSize(array $match): string
     {
@@ -229,9 +229,9 @@ class BBCode
     /**
      * Подсвечивает код
      *
-     * @param array $match массив элементов
+     * @param array $match Массив элементов
      *
-     * @return string текст с подсветкой
+     * @return string Текст с подсветкой
      */
     public function highlightCode(array $match): string
     {
@@ -357,7 +357,7 @@ class BBCode
      *
      * @return BBCode object
      */
-    public function only($only = null): self
+    public function only(mixed $only = null): self
     {
         $only = is_array($only) ? $only : func_get_args();
         self::$parsers = $this->arrayOnly($only);
@@ -372,7 +372,7 @@ class BBCode
      *
      * @return BBCode object
      */
-    public function except($except = null): self
+    public function except(mixed $except = null): self
     {
         $except = is_array($except) ? $except : func_get_args();
         self::$parsers = $this->arrayExcept($except);

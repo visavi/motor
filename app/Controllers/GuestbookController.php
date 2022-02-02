@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers;
 
 use App\Models\Guestbook;
@@ -27,12 +29,10 @@ class GuestbookController extends Controller
         $paginator = $this->paginator->create($total, $this->setting['guestbook']['per_page']);
 
         $messages = Guestbook::query()
-            ->reverse()
             ->offset($paginator->offset)
             ->limit($paginator->limit)
+            ->orderByDesc('created_at')
             ->get();
-
-       // return view($response, 'guestbook/index', compact('messages', 'paginator'));
 
         return $this->view->render(
             $response,
@@ -61,7 +61,7 @@ class GuestbookController extends Controller
         $input = array_merge($input, $files);
 
         $validator
-            ->required(['title', 'text', 'image'])
+            ->required(['title', 'text'])
             ->add('user', fn () => isUser(), 'Необходимо авторизоваться!')
             ->length('title', 5, 50)
             ->length('text', 5, 5000)
@@ -71,16 +71,17 @@ class GuestbookController extends Controller
             ]);
 
         if ($validator->isValid($input)) {
-            $extension = getExtension($input['image']->getClientFilename());
-            $path = '/uploads/guestbook/' . uniqueName($extension);
-
-            $input['image']->moveTo(publicPath($path));
+            if ($input['image']->getError() === UPLOAD_ERR_OK) {
+                $extension = getExtension($input['image']->getClientFilename());
+                $path = '/uploads/guestbook/' . uniqueName($extension);
+                $input['image']->moveTo(publicPath($path));
+            }
 
             Guestbook::query()->insert([
                 'login'      => $this->session->get('login'),
                 'title'      => sanitize($input['title']),
                 'text'       => sanitize($input['text']),
-                'image'      => $path,
+                'image'      => $path ?? null,
                 'created_at' => time(),
             ]);
         } else {
@@ -97,7 +98,6 @@ class GuestbookController extends Controller
      * @param Response $response
      *
      * @return Response
-     * @throws Throwable
      */
     public function edit(int $id, Response $response): Response
     {

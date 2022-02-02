@@ -43,7 +43,12 @@ class View
         return $this->engine->render($name, $data);
     }
 
-    public function exists(string $name)
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function exists(string $name): bool
     {
         return $this->engine->exists($name);
     }

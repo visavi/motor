@@ -2,7 +2,7 @@
 
 namespace Tests\Models;
 
-use App\Models\Model;
+use App\Services\Model;
 
 /**
  * Class Test
