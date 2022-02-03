@@ -1,8 +1,7 @@
 <?php $this->layout('layout') ?>
 
-<?php $this->start('title') ?>
-    Гостевая книга
-<?php $this->stop() ?>
+<?php $this->push('title') ?>Гостевая книга (Стр. <?= $paginator->page ?>)<?php $this->stop() ?>
+<?php $this->start('description') ?>Гостевая книга (Стр. <?= $paginator->page ?>)<?php $this->stop() ?>
 
 <?php $this->start('breadcrumb') ?>
     <nav>
