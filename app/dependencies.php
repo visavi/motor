@@ -1,34 +1,60 @@
 <?php
+
 declare(strict_types=1);
 
 use App\Services\Paginator;
+use App\Services\Setting;
 use App\Services\View;
 use DI\ContainerBuilder;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
+use Odan\Session\Middleware\SessionMiddleware;
+use Odan\Session\PhpSession;
+use Odan\Session\SessionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Log\LoggerInterface;
+use Slim\App;
+use Slim\Factory\AppFactory;
 use SlimSession\Helper;
 
 return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions([
-
         // Set view in Container
-        'view' => function() {
-            //return new League\Plates\Engine(dirname(__DIR__) . '/resources/views');
-            return new View(dirname(__DIR__) . '/resources/views');
+        View::class => function(ContainerInterface $container) {
+            $view = new View(dirname(__DIR__) . '/resources/views');
+            $view->getEngine()->addData(['session' => $container->get(SessionInterface::class)]);
+
+            return $view;
         },
 
         // Set pagination in Container
-        'paginator' => function(ContainerInterface $container) {
-            return new Paginator($container->get('view'));
+        Paginator::class => function(ContainerInterface $container) {
+            return new Paginator($container->get(View::class));
         },
 
-        // Set session in Container
-        'session' => function () {
-            return new Helper();
+        SessionInterface::class => function (ContainerInterface $container) {
+            $settings = $container->get(Setting::class);
+            $session = new PhpSession();
+            $session->setOptions($settings->get('session'));
+
+            return $session;
         },
+
+        SessionMiddleware::class => function (ContainerInterface $container) {
+            return new SessionMiddleware($container->get(SessionInterface::class));
+        },
+
+        /*App::class => function (ContainerInterface $container) {
+            AppFactory::setContainer($container);
+
+            return AppFactory::create();
+        },
+
+        ResponseFactoryInterface::class => function (ContainerInterface $container) {
+            return $container->get(App::class)->getResponseFactory();
+        },*/
 
 
         /*LoggerInterface::class => function (ContainerInterface $c) {

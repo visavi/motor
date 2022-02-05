@@ -20,10 +20,8 @@ return function (App $app) {
 
     $app->get('/captcha', [CaptchaController::class, 'captcha']);
 
-    $app->get('/login', [UserController::class, 'login']);
-    $app->post('/login', [UserController::class, 'auth']);
-    $app->get('/register', [UserController::class, 'register']);
-    $app->post('/register', [UserController::class, 'registration']);
+    $app->map(['GET', 'POST'], '/login', [UserController::class, 'login']);
+    $app->map(['GET', 'POST'], '/register', [UserController::class, 'register']);
     $app->get('/logout', [UserController::class, 'logout']);
 
     $app->group('/guestbook', function (Group $group) {

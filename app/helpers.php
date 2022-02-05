@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 use App\Models\User;
 use App\Services\BBCode;
+use DI\Container;
+use DI\ContainerBuilder;
+use Odan\Session\PhpSession;
+use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Factory\ServerRequestCreatorFactory;
 use SlimSession\Helper as Session;
@@ -69,17 +73,38 @@ function formatSize(int $bytes, int $precision = 2): string
 /**
  * Get session
  *
- * @return Session
+ * @return SessionInterface
  */
-function session(): Session
+function session(): SessionInterface
 {
     static $session;
 
     if (! $session) {
-        $session = new Session();
+        $session = new PhpSession(new ArrayObject($_SESSION ?? []));
     }
 
     return $session;
+}
+
+/**
+ * Check auth
+ *
+ * @return User|bool
+ */
+function checkAuth(): User|bool
+{
+    $login    = session()->get('login');
+    $password = session()->get('password');
+
+    if ($login && $password) {
+        $user = User::query()->where('login', $login)->first();
+
+        if ($user && $password === $user->password) {
+            return $user;
+        }
+    }
+
+    return false;
 }
 
 /**
@@ -89,16 +114,41 @@ function session(): Session
  */
 function isUser(): bool
 {
-    $login    = session()->get('login');
-    $password = session()->get('password');
+    return (bool) getUser();
+}
 
-    if ($login && $password) {
-        $user = User::query()->where('login', $login)->first();
+/**
+ * Get user
+ *
+ * @param string $key
+ *
+ * @return User|bool|null
+ */
+function getUser(string $key = ''): mixed
+{
+    static $user;
 
-        return  $user && $password === $user->password;
+    if (! $user) {
+        $user = checkAuth();
     }
 
-    return false;
+    return $key ? ($user->$key ?? null) : $user;
+}
+
+/**
+ * Is admin
+ *
+ * @param string $role
+ *
+ * @return bool
+ */
+function isAdmin(string $role = User::EDITOR): bool
+{
+    $group = array_flip(User::ALL_GROUP);
+
+    return isUser()
+        && isset($group[$role], $group[getUser('role')])
+        && $group[getUser('role')] <= $group[$role];
 }
 
 /**
@@ -148,7 +198,7 @@ function publicPath(string $path = ''): string
  * @param string $message
  *
  * @return never
- * @throws RuntimeException|\Slim\Exception\HttpException
+ * @throws \Slim\Exception\HttpException
  */
 function abort(int $code, string $message = ''): never
 {
@@ -162,18 +212,18 @@ function abort(int $code, string $message = ''): never
 // Old
 function old(string $key, mixed $default = null)
 {
-    if (! isset(session()['flash']['old'])) {
+    if (! isset(session()->get('flash')['old'])) {
         return $default;
     }
 
-    return session()['flash']['old'][$key] ?? $default;
+    return session()->get('flash')['old'][$key] ?? $default;
 }
 
 // HasError
 function hasError(string $field)
 {
-    if (isset(session()['flash']['errors'])) {
-        return isset(session()['flash']['errors'][$field]) ? ' is-invalid' : ' is-valid';
+    if (isset(session()->get('flash')['errors'])) {
+        return isset(session()->get('flash')['errors'][$field]) ? ' is-invalid' : ' is-valid';
     }
 
     return '';
@@ -182,16 +232,5 @@ function hasError(string $field)
 // Get Error
 function getError(string $field)
 {
-    return session()['flash']['errors'][$field] ?? null;
-}
-
-function view(ResponseInterface $response, string $template, array $data = [])
-{
-    $view = new League\Plates\Engine(dirname(__DIR__) . '/resources/views');
-
-    $render = $view->render($template, $data);
-
-    $response->getBody()->write($render);
-
-    return $response;
+    return session()->get('flash')['errors'][$field] ?? null;
 }

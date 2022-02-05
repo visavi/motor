@@ -38,12 +38,12 @@ $request = $serverRequestCreator->createServerRequestFromGlobals();*/
 //$app = AppFactory::create();
 $app = Bridge::create($container);
 
-// Register routes
-$routes = require __DIR__ . '/../app/routes.php';
-$routes($app);
-
 // Register middleware
 $middleware = require __DIR__ . '/../app/middleware.php';
 $middleware($app);
+
+// Register routes
+$routes = require __DIR__ . '/../app/routes.php';
+$routes($app);
 
 $app->run();

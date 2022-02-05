@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Services\Model;
-
 /**
  * Class User
  *
@@ -28,4 +26,23 @@ class User extends Model
     public const USER   = 'user';   // Пользователь
     public const PENDED = 'pended'; // Ожидающий
     public const BANNED = 'banned'; // Забаненный
+
+    /**
+     * All group
+     */
+    public const ALL_GROUP = [
+        self::BOSS,
+        self::ADMIN,
+        self::MODER,
+        self::EDITOR,
+        self::USER,
+        self::PENDED,
+        self::BANNED,
+    ];
+
+    /**
+     * Genders
+     */
+    public const MALE   = 'male';
+    public const FEMALE = 'female';
 }

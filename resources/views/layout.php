@@ -52,7 +52,3 @@
 
 </body>
 </html>
-
-<?php if (isset(session()->flash)): ?>
-    <?php session()->delete('flash'); ?>
-<?php endif; ?>

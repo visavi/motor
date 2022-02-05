@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
+use App\Services\Setting;
+use App\Services\View;
+use Odan\Session\Middleware\SessionMiddleware;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\App;
 use Slim\Exception\HttpException;
-use Slim\Middleware\Session;
 use Whoops\Handler\JsonResponseHandler;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
@@ -19,14 +21,7 @@ return function (App $app) {
     $app->addRoutingMiddleware();
 
     // Session middleware
-    $app->add(
-        new Session([
-            'name'        => 'motor_session',
-            'lifetime'    => '1 hour',
-            'httponly'    => true,
-            'autorefresh' => true,
-        ])
-    );
+    $app->add(SessionMiddleware::class);
 
     // Define Custom Error Handler
     $errorHandler = function (
@@ -38,15 +33,15 @@ return function (App $app) {
 
         if (
             $exception instanceof HttpException
-            || ! $container->get('setting')['debug']
+            || ! $container->get(Setting::class)->get('debug')
         ) {
             $code = $exception->getCode();
 
-            if (! $container->get('view')->exists('errors/' . $code)) {
+            if (! $container->get(View::class)->exists('errors/' . $code)) {
                 $code = 500;
             }
 
-            $response = $container->get('view')->render(
+            $response = $container->get(View::class)->render(
                 $response,
                 'errors/' . $code,
                 ['message' => $exception->getMessage()]
@@ -55,7 +50,7 @@ return function (App $app) {
             return $response->withStatus($code);
         }
 
-        if ($container->get('setting')['debug']) {
+        if ($container->get(Setting::class)->get('debug')) {
             $handler = Misc::isAjaxRequest() ?
                 new JsonResponseHandler() :
                 new PrettyPageHandler();

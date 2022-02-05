@@ -13,11 +13,11 @@
         </div>
 
         <div class="mb-3">
-            <label for="image" class="btn btn-sm btn-secondary form-label{{ hasError('image') }}">
+            <label for="image" class="btn btn-sm btn-secondary form-label<?= hasError('image') ?>">
                 <input id="image" type="file" name="image" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
                 Прикрепить фото&hellip;
             </label>
-            <div class="invalid-feedback">{{ getError('image') }}</div>
+            <div class="invalid-feedback"><?= getError('image') ?></div>
             <span class="badge bg-info" id="upload-file-info"></span>
         </div>
 

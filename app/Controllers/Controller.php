@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Services\Paginator;
+use App\Services\Setting;
 use App\Services\View;
+use Odan\Session\SessionInterface;
 use Psr\Container\ContainerInterface;
-use SlimSession\Helper as Session;
 
 /**
  * Controller
@@ -16,15 +17,15 @@ class Controller
 {
     protected View $view;
     protected Paginator $paginator;
-    protected Session $session;
-    protected array $setting;
+    protected SessionInterface $session;
+    protected Setting $settings;
 
     public function __construct(
         protected ContainerInterface $container
     ) {
-        $this->view      = $container->get('view');
-        $this->paginator = $container->get('paginator');
-        $this->session   = $container->get('session');
-        $this->setting   = $container->get('setting');
+        $this->view      = $container->get(View::class);
+        $this->paginator = $container->get(Paginator::class);
+        $this->settings  = $container->get(Setting::class);
+        $this->session   = $container->get(SessionInterface::class);
     }
 }

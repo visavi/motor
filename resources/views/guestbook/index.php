@@ -15,10 +15,10 @@
 <?php if ($messages): ?>
     <?php foreach ($messages as $message): ?>
         <div class="shadow p-3 mb-3">
-            <?php if (isUser()): ?>
+            <?php if (isAdmin()): ?>
                 <div class="float-end">
-                    <a href="/guestbook/<?= $message->id ?>/edit">Edit</a>
-                    <a href="guestbook/<?= $message->id ?>/delete">Del</a>
+                    <a href="/guestbook/<?= $message->id ?>/edit"><i class="bi bi-pencil"></i></a>
+                    <a href="guestbook/<?= $message->id ?>/delete" onclick="return confirm('Подтвердите удаление!')"><i class="bi bi-x-lg"></i></a>
                 </div>
             <?php endif; ?>
 

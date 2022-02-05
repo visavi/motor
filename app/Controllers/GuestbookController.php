@@ -26,7 +26,7 @@ class GuestbookController extends Controller
     public function index(Response $response): Response
     {
         $total = Guestbook::query()->count();
-        $paginator = $this->paginator->create($total, $this->setting['guestbook']['per_page']);
+        $paginator = $this->paginator->create($total, $this->settings->get('guestbook')['per_page']);
 
         $messages = Guestbook::query()
             ->offset($paginator->offset)
@@ -101,7 +101,7 @@ class GuestbookController extends Controller
      */
     public function edit(int $id, Response $response): Response
     {
-        if (! isUser()) {
+        if (! isAdmin()) {
             abort(403, 'Доступ запрещен!');
         }
 
@@ -129,7 +129,7 @@ class GuestbookController extends Controller
      */
     public function store(int $id, Request $request, Response $response, Validator $validator): Response
     {
-        if (! isUser()) {
+        if (! isAdmin()) {
             abort(403, 'Доступ запрещен!');
         }
 
@@ -171,7 +171,7 @@ class GuestbookController extends Controller
      */
     public function delete(int $id, Response $response): Response
     {
-        if (! isUser()) {
+        if (! isAdmin()) {
             abort(403, 'Доступ запрещен!');
         }
 
