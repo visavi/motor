@@ -8,6 +8,9 @@ use Odan\Session\Middleware\SessionMiddleware;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\App;
 use Slim\Exception\HttpException;
+use Psr\Http\Message\RequestInterface as Request;
+use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
+use Slim\Psr7\Response;
 use Whoops\Handler\JsonResponseHandler;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
@@ -22,6 +25,31 @@ return function (App $app) {
 
     // Session middleware
     $app->add(SessionMiddleware::class);
+
+    // Trailing slash
+    $app->add(function (Request $request, RequestHandler $handler) {
+        $uri = $request->getUri();
+        $path = $uri->getPath();
+
+        if ($path !== '/' && str_ends_with($path, '/')) {
+            $path = rtrim($path, '/');
+
+            // permanently redirect paths with a trailing slash
+            // to their non-trailing counterpart
+            $uri = $uri->withPath($path);
+
+            if ($request->getMethod() === 'GET') {
+                $response = new Response();
+                return $response
+                    ->withHeader('Location', (string) $uri)
+                    ->withStatus(301);
+            }
+
+            $request = $request->withUri($uri);
+        }
+
+        return $handler->handle($request);
+    });
 
     // Define Custom Error Handler
     $errorHandler = function (

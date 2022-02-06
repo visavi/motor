@@ -2,3 +2,73 @@
     max-width: 600px;
     margin-bottom: 1rem;
 }
+
+.spoiler {
+    margin-bottom: 5px;
+}
+
+.spoiler:before {
+    content: "\F231";
+    font-family: "bootstrap-icons";
+    color: #bbb;
+    vertical-align: -0.2em;
+}
+
+.spoiler.spoiler-open:before {
+    content: "\F229";
+}
+
+.spoiler-title {
+    border-bottom: 1px dashed;
+    color: #6da3bd;
+    cursor: pointer;
+    font-weight: normal;
+}
+
+.spoiler-text {
+    padding: 10px 15px;
+    margin: 5px 0;
+    background-color: #f7f7f9;
+}
+
+.hidden-text {
+    padding: 10px 15px;
+    margin: 5px 0;
+    background-color: #f7f7f9;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+textarea.form-control {
+    resize: vertical;
+}
+
+.media-file {
+    max-width: 600px;
+    margin-bottom: 1rem;
+}
+
+.blockquote:before {
+    content: "\F6B0";
+    line-height: 1.0em;
+    font-size: 130%;
+    font-family: "bootstrap-icons";
+    font-weight: 900;
+    float: left;
+    margin-right: 10px;
+    color: #c73401;
+}
+
+.blockquote {
+    padding: 8px 15px;
+    font-size: 95%;
+    background:#f7f7f9;
+    border-left: 5px solid #ddd;
+    font-style:italic;
+}
+
+.blockquote-footer {
+    margin: 0;
+}
