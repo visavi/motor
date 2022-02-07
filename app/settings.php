@@ -13,7 +13,11 @@ return function (ContainerBuilder $containerBuilder) {
                 'debug' => true,
 
                 'guestbook' => [
-                    'per_page' => 10,
+                    'per_page'         => 10,
+                    'title_min_length' => 5,
+                    'title_max_length' => 50,
+                    'text_min_length'  => 5,
+                    'text_max_length'  => 5000,
                 ],
 
                 'session' => [

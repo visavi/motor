@@ -4,6 +4,7 @@ declare(strict_types=1);
 use App\Controllers\CaptchaController;
 use App\Controllers\GuestbookController;
 use App\Controllers\HomeController;
+use App\Controllers\StickerController;
 use App\Controllers\UserController;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -19,6 +20,7 @@ return function (App $app) {
     $app->get('/', [HomeController::class, 'home']);
 
     $app->get('/captcha', [CaptchaController::class, 'captcha']);
+    $app->get('/stickers/modal', [StickerController::class, 'modal']);
 
     $app->map(['GET', 'POST'], '/login', [UserController::class, 'login']);
     $app->map(['GET', 'POST'], '/register', [UserController::class, 'register']);

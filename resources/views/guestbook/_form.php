@@ -8,7 +8,7 @@
 
         <div class="mb-3">
             <label for="text" class="form-label">Текст</label>
-            <textarea class="form-control markItUp<?= hasError('text') ?>" id="text" rows="3" name="text" maxlength="5000" required><?= old('text', $message->text ?? null) ?></textarea>
+            <textarea class="form-control markItUp<?= hasError('text') ?>" id="text" rows="5" name="text" maxlength="5000" required><?= old('text', $message->text ?? null) ?></textarea>
             <span class="js-textarea-counter"></span>
             <div class="invalid-feedback"><?= getError('text') ?></div>
         </div>

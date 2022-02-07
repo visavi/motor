@@ -47,5 +47,5 @@
 <?php if (isUser()): ?>
     <?= $this->fetch('guestbook/_form') ?>
 <?php else: ?>
-    Авторизуйтесь для добавления сообщений
+    <div class="alert alert-danger">Авторизуйтесь для добавления сообщений</div>
 <?php endif; ?>

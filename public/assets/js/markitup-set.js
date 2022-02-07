@@ -49,16 +49,16 @@ mySettings = {
             name: '<i class="bi bi-emoji-smile"></i>',
             className: 'bb-sticker',
             beforeInsert: function () {
-                const stikerModal = $('#stickersModal');
+                const stickerModal = $('#stickersModal');
 
-                if (stikerModal.length) {
-                    stikerModal.modal('show');
+                if (stickerModal.length) {
+                    stickerModal.modal('show');
 
                     return false;
                 }
 
                 $.ajax({
-                    dataType: 'json', type: 'get', url: '/ajax/getstickers',
+                    dataType: 'json', type: 'get', url: '/stickers/modal',
                     success: function (data) {
                         if (data.success) {
                             $('body').append(data.stickers);

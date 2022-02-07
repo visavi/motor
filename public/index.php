@@ -40,7 +40,7 @@ $app = Bridge::create($container);
 
 // Register middleware
 $middleware = require __DIR__ . '/../app/middleware.php';
-$middleware($app);
+$middleware($app, $container);
 
 // Register routes
 $routes = require __DIR__ . '/../app/routes.php';

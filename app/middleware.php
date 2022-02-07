@@ -2,9 +2,14 @@
 
 declare(strict_types=1);
 
+use App\Middleware\TrailingSlashMiddleware;
+use App\Middleware\UserAuthMiddleware;
+use App\Models\User;
 use App\Services\Setting;
 use App\Services\View;
 use Odan\Session\Middleware\SessionMiddleware;
+use Odan\Session\SessionInterface;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\App;
 use Slim\Exception\HttpException;
@@ -16,47 +21,27 @@ use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
 use Whoops\Util\Misc;
 
-return function (App $app) {
+return function (App $app, ContainerInterface $container) {
     /**
      * The routing middleware should be added earlier than the ErrorMiddleware
      * Otherwise exceptions thrown from it will not be handled by the middleware
      */
     $app->addRoutingMiddleware();
 
+    // Trailing slash middleware
+    $app->add(TrailingSlashMiddleware::class);
+
+    // UserAuth middleware
+    $app->add(UserAuthMiddleware::class);
+
     // Session middleware
     $app->add(SessionMiddleware::class);
-
-    // Trailing slash
-    $app->add(function (Request $request, RequestHandler $handler) {
-        $uri = $request->getUri();
-        $path = $uri->getPath();
-
-        if ($path !== '/' && str_ends_with($path, '/')) {
-            $path = rtrim($path, '/');
-
-            // permanently redirect paths with a trailing slash
-            // to their non-trailing counterpart
-            $uri = $uri->withPath($path);
-
-            if ($request->getMethod() === 'GET') {
-                $response = new Response();
-                return $response
-                    ->withHeader('Location', (string) $uri)
-                    ->withStatus(301);
-            }
-
-            $request = $request->withUri($uri);
-        }
-
-        return $handler->handle($request);
-    });
 
     // Define Custom Error Handler
     $errorHandler = function (
         ServerRequestInterface $request,
         Throwable $exception,
-    ) use ($app) {
-        $container = $app->getContainer();
+    ) use ($app, $container) {
         $response = $app->getResponseFactory()->createResponse();
 
         if (

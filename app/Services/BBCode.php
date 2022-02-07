@@ -94,10 +94,10 @@ class BBCode
             'callback' => 'spoilerText',
             'iterate'  => 1,
         ],
-        /*'hide' => [
+        'hide' => [
             'pattern'  => '/\[hide\](.+?)\[\/hide\]/s',
             'callback' => 'hiddenText',
-        ],*/
+        ],
         'youtube' => [
             'pattern' => '/\[youtube\](.*youtu(?:\.be\/|be\.com\/.*(?:vi?\/?=?|embed\/)))([\w-]{11}).*\[\/youtube\]/U',
             'replace' => '<div class="media-file ratio ratio-16x9"><iframe src="//www.youtube.com/embed/$2" allowfullscreen></iframe></div>',
@@ -266,13 +266,13 @@ class BBCode
      *
      * @return string скрытый код
      */
-/*    public function hiddenText(array $match): string
+    public function hiddenText(array $match): string
     {
         return '<div class="hidden-text">
                 <span class="fw-bold">Скрытый текст:</span> ' .
-            (getUser() ? $match[1] : __('main.not_authorized')) .
+            (getUser() ? $match[1] : 'Авторизуйтесь для просмотра текста') .
             '</div>';
-    }*/
+    }
 
     /**
      * Обрабатывает логины пользователей
@@ -312,26 +312,18 @@ class BBCode
      *
      * @return string Обработанный текст
      */
-/*    public function parseStickers(string $source): string
+    public function parseStickers(string $source): string
     {
         static $listStickers;
 
         if (empty($listStickers)) {
-            $listStickers = Cache::rememberForever('stickers', static function () {
-                return Sticker::query()
-                    ->select('code', 'name')
-                    ->orderByDesc(DB::raw('CHAR_LENGTH(code)'))
-                    ->get()
-                    ->pluck('name', 'code')
-                    ->map(function ($item, $key) {
-                        return '<img src="' . $item . '" alt="' . getBodyName($item) . '">';
-                    })
-                    ->toArray();
-            });
+            $listStickers = [
+                ':D' => '<img src="/uploads/stickers/D.gif" alt="">', // TODO
+            ];
         }
 
         return strtr($source, $listStickers);
-    }*/
+    }
 
     /**
      * Добавляет или переопределяет парсер

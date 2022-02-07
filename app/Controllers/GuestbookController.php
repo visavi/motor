@@ -63,8 +63,8 @@ class GuestbookController extends Controller
         $validator
             ->required(['title', 'text'])
             ->add('user', fn () => isUser(), 'Необходимо авторизоваться!')
-            ->length('title', 5, 50)
-            ->length('text', 5, 5000)
+            ->length('title', $this->settings->get('guestbook')['title_min_length'], $this->settings->get('guestbook')['title_max_length'])
+            ->length('text', $this->settings->get('guestbook')['text_min_length'], $this->settings->get('guestbook')['text_max_length'])
             ->file('image', [
                 'size_max'   => 5000000,
                 'weight_min' => 100,

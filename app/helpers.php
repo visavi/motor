@@ -10,7 +10,6 @@ use Odan\Session\PhpSession;
 use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Factory\ServerRequestCreatorFactory;
-use SlimSession\Helper as Session;
 
 /**
  * Sanitize
@@ -46,7 +45,7 @@ function bbCode(mixed $text, bool $parse = true): string
     }
 
     $parseText = $bbCode->parse($checkText);
-    //$parseText = $bbCode->parseStickers($parseText);
+    $parseText = $bbCode->parseStickers($parseText);
 
     return $parseText;
 }
@@ -84,6 +83,11 @@ function session(): SessionInterface
     }
 
     return $session;
+}
+
+function setting()
+{
+
 }
 
 /**
@@ -197,10 +201,10 @@ function publicPath(string $path = ''): string
  * @param int    $code
  * @param string $message
  *
- * @return never
+ * @return void
  * @throws \Slim\Exception\HttpException
  */
-function abort(int $code, string $message = ''): never
+function abort(int $code, string $message = ''): void
 {
     $serverRequestCreator = ServerRequestCreatorFactory::create();
     $request = $serverRequestCreator->createServerRequestFromGlobals();
@@ -210,7 +214,7 @@ function abort(int $code, string $message = ''): never
 
 
 // Old
-function old(string $key, mixed $default = null)
+function old(string $key, mixed $default = null): mixed
 {
     if (! isset(session()->get('flash')['old'])) {
         return $default;
@@ -220,7 +224,7 @@ function old(string $key, mixed $default = null)
 }
 
 // HasError
-function hasError(string $field)
+function hasError(string $field): string
 {
     if (isset(session()->get('flash')['errors'])) {
         return isset(session()->get('flash')['errors'][$field]) ? ' is-invalid' : ' is-valid';
@@ -230,7 +234,7 @@ function hasError(string $field)
 }
 
 // Get Error
-function getError(string $field)
+function getError(string $field): string
 {
-    return session()->get('flash')['errors'][$field] ?? null;
+    return session()->get('flash')['errors'][$field] ?? '';
 }

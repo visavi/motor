@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Middleware\UserAuthMiddleware;
 use App\Services\Paginator;
 use App\Services\Setting;
 use App\Services\View;
@@ -17,7 +18,6 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Log\LoggerInterface;
 use Slim\App;
 use Slim\Factory\AppFactory;
-use SlimSession\Helper;
 
 return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions([
@@ -42,20 +42,19 @@ return function (ContainerBuilder $containerBuilder) {
             return $session;
         },
 
-        SessionMiddleware::class => function (ContainerInterface $container) {
+        /*SessionMiddleware::class => function (ContainerInterface $container) {
             return new SessionMiddleware($container->get(SessionInterface::class));
+        },*/
+
+        /*ResponseFactoryInterface::class => function (ContainerInterface $container) {
+            return $container->get(App::class)->getResponseFactory();
         },
 
-        /*App::class => function (ContainerInterface $container) {
+        App::class => function (ContainerInterface $container) {
             AppFactory::setContainer($container);
 
             return AppFactory::create();
-        },
-
-        ResponseFactoryInterface::class => function (ContainerInterface $container) {
-            return $container->get(App::class)->getResponseFactory();
         },*/
-
 
         /*LoggerInterface::class => function (ContainerInterface $c) {
             $settings = $c->get(SettingsInterface::class);

@@ -38,6 +38,18 @@ class UserController extends Controller
                     $this->session->set('password', $user->password);
                     $this->session->set('flash', ['success' => 'Вы успешно авторизованы!']);
 
+                    // @TODO remember
+                    $options = [
+                        'expires' => strtotime('+1 year'),
+                        'path' => '/',
+                        //'domain' => '.example.com',
+                        'secure' => true,
+                        'httponly' => true,
+                        'samesite' => 'Lax',
+                    ];
+                    setcookie('login', $user->login, $options);
+                    setcookie('password', $user->password, $options);
+
                     return $response->withHeader('Location', '/guestbook');
                 }
 
@@ -126,6 +138,16 @@ class UserController extends Controller
     {
         $this->session->remove('login');
         $this->session->remove('password');
+
+        $options = [
+            'expires' => strtotime('-1 hour'),
+            'path' => '/',
+            //'domain' => '.example.com',
+            'secure' => true,
+            'httponly' => true,
+            'samesite' => 'Lax',
+        ];
+        setcookie('password', '', $options);
 
         $this->session->set('flash', ['success' => 'Вы успешно вышли!']);
 
