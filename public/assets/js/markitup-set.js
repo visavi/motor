@@ -2,7 +2,8 @@
 // markItUp bb-code setting!
 // ----------------------------------------------------------------------------
 mySettings = {
-    previewParserPath: '/ajax/bbcode', // path to your BBCode parser
+    nameSpace: 'markItUpBlock',
+    previewParserPath: '/bbcode', // path to your BBCode parser
     previewAutoRefresh: false,
     onTab: {keepDefault: false, openWith: '    '},
     markupSet: [
@@ -16,7 +17,7 @@ mySettings = {
 
         {title: 'Изображение', name: '<i class="bi bi-image"></i>', className: 'bb-image', openWith: '[img][![' + 'URL изображения' + ':!:http://]!]', closeWith: '[/img]'},
 
-        {title: 'Видео', name: '<i class="bi bi-youtube"></i>', className: 'bb-youtube', openWith: '[youtube][![' + 'Ссылка на видео с youtube' + ']!]', closeWith: '[/youtube]'},
+        {title: 'Видео', name: '<i class="bi bi-play-btn"></i>', className: 'bb-youtube', openWith: '[youtube][![' + 'Ссылка на видео с youtube' + ']!]', closeWith: '[/youtube]'},
         {title: 'Цвет', name: '<i class="bi bi-palette"></i>', className: 'bb-color', openWith: '[color=[![' + 'Код цвета' + ']!]]', closeWith: '[/color]',
         dropMenu: [
             {name: 'Yellow', openWith: '[color=#ffd700]', closeWith: '[/color]', className: 'col1-1'},
@@ -43,7 +44,7 @@ mySettings = {
         ]},
 
         {title: 'По центру', name: '<i class="bi bi-text-center"></i>', className: 'bb-center', openWith: '[center]', closeWith: '[/center]'},
-        {title: 'Спойлер', name: '<i class="bi bi-plus-square"></i>', className: 'bb-spoiler', openWith: '[spoiler=[![' + 'Заголовок спойлера' + ']!]]', closeWith: '[/spoiler]', placeHolder: 'Текст спойлера...'},
+        {title: 'Спойлер', name: '<i class="bi bi-plus-lg"></i>', className: 'bb-spoiler', openWith: '[spoiler=[![' + 'Заголовок спойлера' + ']!]]', closeWith: '[/spoiler]', placeHolder: 'Текст спойлера...'},
         {
             title: 'Стикер',
             name: '<i class="bi bi-emoji-smile"></i>',
@@ -82,6 +83,6 @@ mySettings = {
         {separator: '---------------'},
         {title: 'Очистка тегов', name: '<i class="bi bi-eraser"></i>', className: 'bb-clean', replaceWith:function(markitup) { return markitup.selection.replace(/\[(.*?)]/g, '') } },
         {title: 'Обрезка страницы', name: '<i class="bi bi-scissors"></i>', className: 'bb-cutpage', openWith: '[cut]'},
-        {title: 'Просмотр', name: '<i class="bi bi-check-square"></i>', classname: 'bb-preview',  call: 'preview'}
+        {title: 'Просмотр', name: '<i class="bi bi-check2"></i>', classname: 'bb-preview',  call: 'preview'}
     ]
 };

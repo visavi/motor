@@ -2,24 +2,12 @@
 
 declare(strict_types=1);
 
+use App\Handlers\HttpErrorHandler;
 use App\Middleware\TrailingSlashMiddleware;
 use App\Middleware\UserAuthMiddleware;
-use App\Models\User;
-use App\Services\Setting;
-use App\Services\View;
 use Odan\Session\Middleware\SessionMiddleware;
-use Odan\Session\SessionInterface;
 use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Slim\App;
-use Slim\Exception\HttpException;
-use Psr\Http\Message\RequestInterface as Request;
-use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
-use Slim\Psr7\Response;
-use Whoops\Handler\JsonResponseHandler;
-use Whoops\Handler\PrettyPageHandler;
-use Whoops\Run;
-use Whoops\Util\Misc;
 
 return function (App $app, ContainerInterface $container) {
     /**
@@ -38,44 +26,8 @@ return function (App $app, ContainerInterface $container) {
     $app->add(SessionMiddleware::class);
 
     // Define Custom Error Handler
-    $errorHandler = function (
-        ServerRequestInterface $request,
-        Throwable $exception,
-    ) use ($app, $container) {
-        $response = $app->getResponseFactory()->createResponse();
-
-        if (
-            $exception instanceof HttpException
-            || ! $container->get(Setting::class)->get('debug')
-        ) {
-            $code = $exception->getCode();
-
-            if (! $container->get(View::class)->exists('errors/' . $code)) {
-                $code = 500;
-            }
-
-            $response = $container->get(View::class)->render(
-                $response,
-                'errors/' . $code,
-                ['message' => $exception->getMessage()]
-            );
-
-            return $response->withStatus($code);
-        }
-
-        if ($container->get(Setting::class)->get('debug')) {
-            $handler = Misc::isAjaxRequest() ?
-                new JsonResponseHandler() :
-                new PrettyPageHandler();
-
-            $whoops = new Run();
-            $whoops->pushHandler($handler);
-
-            $response->getBody()->write($whoops->handleException($exception));
-        }
-
-        return $response;
-    };
+    $errorHandler = new HttpErrorHandler($app->getCallableResolver(), $app->getResponseFactory());
+    $errorHandler->setContainer($container);
 
     /**
      * Add Error Middleware

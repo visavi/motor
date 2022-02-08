@@ -1,6 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
+use App\Controllers\BBCodeController;
 use App\Controllers\CaptchaController;
 use App\Controllers\GuestbookController;
 use App\Controllers\HomeController;
@@ -21,6 +23,7 @@ return function (App $app) {
 
     $app->get('/captcha', [CaptchaController::class, 'captcha']);
     $app->get('/stickers/modal', [StickerController::class, 'modal']);
+    $app->post('/bbcode', [BBCodeController::class, 'bbcode']);
 
     $app->map(['GET', 'POST'], '/login', [UserController::class, 'login']);
     $app->map(['GET', 'POST'], '/register', [UserController::class, 'register']);

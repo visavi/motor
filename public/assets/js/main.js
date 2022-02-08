@@ -39,4 +39,9 @@ $(function () {
         spoiler.toggleClass('spoiler-open');
         spoiler.find('.spoiler-text:first').slideToggle();
     });
+
+    // Fix invalid markitup
+    $('.markItUp .is-invalid')
+        .closest('.markItUpBlock').parent()
+        .find('.invalid-feedback').show();
 });

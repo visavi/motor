@@ -6,20 +6,20 @@
     margin:0; padding:0;
     outline:none;
 }
+
 .markItUp a:link,
 .markItUp a:visited {
     text-decoration:none;
     border: none;
 }
-.markItUpContainer {
-    font:11px Verdana, Arial, Helvetica, sans-serif;
-}
+
 .markItUpEditor {
     padding:5px;
     clear:both;
     display:block;
     overflow:auto;
 }
+
 .markItUpPreviewFrame {
     padding:5px 0;
     overflow:auto;
@@ -44,6 +44,7 @@
 .markItUpHeader ul .markItUpDropMenu:after {
     content: "\F229";
     font-family: "bootstrap-icons";
+    font-size: 10px;
 }
 
 .markItUpHeader ul .markItUpDropMenu li {
@@ -67,7 +68,7 @@
     font-family: "bootstrap-icons";
 }
 .markItUpHeader ul .markItUpSeparator {
-    margin: 1px 5px;
+    margin: 5px;
     width: 1px;
     height: 20px;
     overflow: hidden;
@@ -162,7 +163,7 @@
 .markItUp .bb-sticker a:after {
     content: "\F229";
     font-family: "bootstrap-icons";
-    font-size: 11px;
+    font-size: 10px;
     margin-left: 3px;
 }
 
