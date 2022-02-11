@@ -33,27 +33,6 @@ class View
     }
 
     /**
-     * @param string $name
-     * @param array  $data
-     *
-     * @return string
-     */
-    public function fetch(string $name, array $data = []): string
-    {
-        return $this->engine->render($name, $data);
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
-    public function exists(string $name): bool
-    {
-        return $this->engine->exists($name);
-    }
-
-    /**
      * @return Engine
      */
     public function getEngine(): Engine

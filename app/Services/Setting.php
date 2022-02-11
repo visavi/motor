@@ -16,12 +16,23 @@ class Setting
     /**
      * Get settings
      *
-     * @param string $key
+     * @return array
+     */
+    public function all(): array
+    {
+        return $this->settings;
+    }
+
+    /**
+     * Get setting by key
+     *
+     * @param string|null $key
+     * @param mixed|null  $default
      *
      * @return mixed
      */
-    public function get(string $key = ''): mixed
+    public function get(?string $key = null, mixed $default = null): mixed
     {
-        return empty($key) ? $this->settings : $this->settings[$key];
+        return $this->settings[$key] ?? $default;
     }
 }

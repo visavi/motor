@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 use App\Handlers\HttpErrorHandler;
+use App\Middleware\StartSession;
 use App\Middleware\TrailingSlashMiddleware;
 use App\Middleware\UserAuthMiddleware;
-use Odan\Session\Middleware\SessionMiddleware;
 use Psr\Container\ContainerInterface;
 use Slim\App;
 
@@ -23,7 +23,7 @@ return function (App $app, ContainerInterface $container) {
     $app->add(UserAuthMiddleware::class);
 
     // Session middleware
-    $app->add(SessionMiddleware::class);
+    $app->add(StartSession::class);
 
     // Define Custom Error Handler
     $errorHandler = new HttpErrorHandler($app->getCallableResolver(), $app->getResponseFactory());

@@ -9,5 +9,8 @@ namespace App\Models;
  */
 class Model extends \MotorORM\Model
 {
-
+    public function __construct()
+    {
+        //$this->view = basePath('/resources/views/app/_paginator.php');
+    }
 }

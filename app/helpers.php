@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 use App\Models\User;
 use App\Services\BBCode;
+use App\Services\Session;
+use App\Services\Setting;
 use DI\Container;
 use DI\ContainerBuilder;
-use Odan\Session\PhpSession;
-use Odan\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Factory\ServerRequestCreatorFactory;
 
@@ -70,24 +70,57 @@ function formatSize(int $bytes, int $precision = 2): string
 }
 
 /**
+ * @param string|null $abstract
+ *
+ * @return mixed|Container
+ */
+function app(?string $abstract = null): mixed
+{
+    $container = require __DIR__ . '/../app/container.php';
+    if ($abstract === null) {
+        return $container;
+    }
+
+    return $container->get($abstract);
+}
+
+/**
  * Get session
  *
- * @return SessionInterface
+ * @return Session
  */
-function session(): SessionInterface
+function session(): Session
 {
     static $session;
 
     if (! $session) {
-        $session = new PhpSession(new ArrayObject($_SESSION ?? []));
+        $session = app(Session::class);
     }
 
     return $session;
 }
 
-function setting()
+/**
+ * @param string|null $key
+ * @param mixed|null  $default
+ *
+ * @return mixed|string|null
+ * @throws \DI\DependencyException
+ * @throws \DI\NotFoundException
+ */
+function settings(?string $key = null, mixed $default = null): mixed
 {
+    static $setting;
 
+    if (! $setting) {
+        $setting = app(Setting::class);
+    }
+
+    if ($key === null) {
+        return $setting->all();
+    }
+
+    return $setting->get($key, $default);
 }
 
 /**
@@ -184,6 +217,18 @@ function uniqueName(string $extension = null): string
 }
 
 /**
+ * Get root path
+ *
+ * @param string $path
+ *
+ * @return string
+ */
+function basePath(string $path = ''): string
+{
+    return dirname(__DIR__) . $path;
+}
+
+/**
  * Get public path
  *
  * @param string $path
@@ -192,7 +237,7 @@ function uniqueName(string $extension = null): string
  */
 function publicPath(string $path = ''): string
 {
-    return dirname(__DIR__) . '/public' . $path;
+    return basePath('/public' . $path);
 }
 
 /**

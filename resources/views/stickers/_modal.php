@@ -7,9 +7,9 @@
             </div>
             <div class="modal-body">
                 <div class="row mb-3">
-                    <?php foreach($stickers as $sticker): ?>
+                    <?php foreach($stickers as $code => $path): ?>
                     <div class="col">
-                        <a href="#" onclick="return pasteSticker(this);"><img src="/uploads/stickers/<?= basename($sticker) ?>" alt="<?= $sticker ?>" class="img-fluid" style="max-width: 50px;"></a>
+                        <a href="#" onclick="return pasteSticker(this);"><img src="<?= $path ?>" alt="<?= $code ?>" class="img-fluid" style="max-width: 50px;"></a>
                     </div>
                     <?php endforeach; ?>
                 </div>

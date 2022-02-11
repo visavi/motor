@@ -16,5 +16,5 @@ namespace App\Models;
  */
 class Guestbook extends Model
 {
-    public string $filePath = __DIR__ . '/../../database/guestbook.csv';
+    protected string $filePath = __DIR__ . '/../../database/guestbook.csv';
 }

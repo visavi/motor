@@ -1,7 +1,7 @@
 <?php $this->layout('layout') ?>
 
-<?php $this->push('title') ?>Гостевая книга (Стр. <?= $paginator->page ?>)<?php $this->stop() ?>
-<?php $this->start('description') ?>Гостевая книга (Стр. <?= $paginator->page ?>)<?php $this->stop() ?>
+<?php $this->push('title') ?>Гостевая книга (Стр. <?= $messages->currentPage() ?>)<?php $this->stop() ?>
+<?php $this->start('description') ?>Гостевая книга (Стр. <?= $messages->currentPage() ?>)<?php $this->stop() ?>
 
 <?php $this->start('breadcrumb') ?>
     <nav>
@@ -12,7 +12,7 @@
     </nav>
 <?php $this->stop() ?>
 
-<?php if ($messages): ?>
+<?php if ($messages->isNotEmpty()): ?>
     <?php foreach ($messages as $message): ?>
         <div class="shadow p-3 mb-3">
             <?php if (isAdmin()): ?>
@@ -39,7 +39,7 @@
         </div>
     <?php endforeach; ?>
 
-    <?= $paginator->links() ?>
+    <?= $messages->links() ?>
 <?php else: ?>
     <div class="alert alert-danger">Сообщений еще нет!</div>
 <?php endif; ?>

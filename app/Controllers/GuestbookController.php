@@ -5,28 +5,36 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Models\Guestbook;
+use App\Repositories\GuestbookRepository;
+use App\Services\Session;
 use App\Services\Validator;
+use App\Services\View;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Throwable;
 
 /**
  * GuestbookController
  */
 class GuestbookController extends Controller
 {
+    public function __construct(
+        protected View $view,
+        protected Session $session,
+        protected GuestbookRepository $guestbookRepository,
+    ) {}
+
     /**
      * Index
      *
      * @param Response $response
      *
      * @return Response
-     * @throws Throwable
      */
     public function index(Response $response): Response
     {
-        $total = Guestbook::query()->count();
-        $paginator = $this->paginator->create($total, $this->settings->get('guestbook')['per_page']);
+/*        $total = Guestbook::query()->count();
+        //$paginator->setView(basePath('/resources/views/app/_paginator.php'));
+        $paginator = $paginator->create($total);
 
         $messages = Guestbook::query()
             ->offset($paginator->offset)
@@ -34,10 +42,15 @@ class GuestbookController extends Controller
             ->orderByDesc('created_at')
             ->get();
 
+        var_dump($paginator->links()); exit;*/
+
+
+        $messages = $this->guestbookRepository->getMessages(settings('guestbook')['per_page']);
+
         return $this->view->render(
             $response,
             'guestbook/index',
-            compact('messages', 'paginator')
+            compact('messages')
         );
     }
 
@@ -63,8 +76,8 @@ class GuestbookController extends Controller
         $validator
             ->required(['title', 'text'])
             ->add('user', fn () => isUser(), 'Необходимо авторизоваться!')
-            ->length('title', $this->settings->get('guestbook')['title_min_length'], $this->settings->get('guestbook')['title_max_length'])
-            ->length('text', $this->settings->get('guestbook')['text_min_length'], $this->settings->get('guestbook')['text_max_length'])
+            ->length('title', settings('guestbook')['title_min_length'], settings('guestbook')['title_max_length'])
+            ->length('text', settings('guestbook')['text_min_length'], settings('guestbook')['text_max_length'])
             ->file('image', [
                 'size_max'   => 5000000,
                 'weight_min' => 100,
@@ -88,7 +101,7 @@ class GuestbookController extends Controller
             $this->session->set('flash', ['errors' => $validator->getErrors(), 'old' => $input]);
         }
 
-        return $response->withHeader('Location', '/guestbook');
+        return $this->redirect($response, '/guestbook');
     }
 
     /**
@@ -158,7 +171,7 @@ class GuestbookController extends Controller
 
         $this->session->set('flash', ['success' => 'Сообщение успешно изменено!']);
 
-        return $response->withHeader('Location', '/guestbook');
+        return $this->redirect($response, '/guestbook');
     }
 
     /**
@@ -187,6 +200,6 @@ class GuestbookController extends Controller
 
         $this->session->set('flash', ['success' => 'Сообщение успешно удалено!']);
 
-        return $response->withHeader('Location', '/guestbook');
+        return $this->redirect($response, '/guestbook');
     }
 }

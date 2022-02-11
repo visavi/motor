@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8807feb3c958184dd391fefc073fbc6e",
+    "content-hash": "f4a51f295ad11d89759081e519d38b39",
     "packages": [
         {
             "name": "fig/http-message-util",
@@ -175,57 +175,6 @@
                 "source": "https://github.com/nikic/FastRoute/tree/master"
             },
             "time": "2018-02-13T20:26:39+00:00"
-        },
-        {
-            "name": "odan/session",
-            "version": "5.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/odan/session.git",
-                "reference": "df95aeee04dec466172d4c4e0e3ac9245e8182b0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/odan/session/zipball/df95aeee04dec466172d4c4e0e3ac9245e8182b0",
-                "reference": "df95aeee04dec466172d4c4e0e3ac9245e8182b0",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.3 || ^8.0",
-                "psr/http-message": "^1.0",
-                "psr/http-server-handler": "^1.0",
-                "psr/http-server-middleware": "^1.0"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2.16",
-                "middlewares/utils": "^3.1",
-                "overtrue/phplint": "^1.1 || ^2.0",
-                "phpstan/phpstan": "0.*",
-                "phpunit/phpunit": "^7 || ^8 || ^9",
-                "slim/psr7": "^1.1",
-                "squizlabs/php_codesniffer": "^3.4"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Odan\\Session\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "A Slim session handler",
-            "homepage": "https://github.com/odan/session",
-            "keywords": [
-                "session",
-                "slim"
-            ],
-            "support": {
-                "issues": "https://github.com/odan/session/issues",
-                "source": "https://github.com/odan/session/tree/5.1.0"
-            },
-            "time": "2020-12-23T18:09:07+00:00"
         },
         {
             "name": "opis/closure",
@@ -1198,16 +1147,16 @@
         },
         {
             "name": "visavi/motor-orm",
-            "version": "v1.0.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/visavi/motor-orm.git",
-                "reference": "161a2f241768acf66a2fc645fbf15fc8153f8968"
+                "reference": "0da3ff6283196646720c4e9c68f02f90ee5bd02a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/visavi/motor-orm/zipball/161a2f241768acf66a2fc645fbf15fc8153f8968",
-                "reference": "161a2f241768acf66a2fc645fbf15fc8153f8968",
+                "url": "https://api.github.com/repos/visavi/motor-orm/zipball/0da3ff6283196646720c4e9c68f02f90ee5bd02a",
+                "reference": "0da3ff6283196646720c4e9c68f02f90ee5bd02a",
                 "shasum": ""
             },
             "require": {
@@ -1216,6 +1165,7 @@
             "require-dev": {
                 "phpunit/phpunit": "^9.5"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -1241,9 +1191,9 @@
             ],
             "support": {
                 "issues": "https://github.com/visavi/motor-orm/issues",
-                "source": "https://github.com/visavi/motor-orm/tree/v1.0.0"
+                "source": "https://github.com/visavi/motor-orm/tree/master"
             },
-            "time": "2022-02-05T22:40:52+00:00"
+            "time": "2022-02-11T22:29:18+00:00"
         }
     ],
     "packages-dev": [
@@ -1563,16 +1513,16 @@
         },
         {
             "name": "phar-io/version",
-            "version": "3.1.0",
+            "version": "3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phar-io/version.git",
-                "reference": "bae7c545bef187884426f042434e561ab1ddb182"
+                "reference": "15a90844ad40f127afd244c0cad228de2a80052a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phar-io/version/zipball/bae7c545bef187884426f042434e561ab1ddb182",
-                "reference": "bae7c545bef187884426f042434e561ab1ddb182",
+                "url": "https://api.github.com/repos/phar-io/version/zipball/15a90844ad40f127afd244c0cad228de2a80052a",
+                "reference": "15a90844ad40f127afd244c0cad228de2a80052a",
                 "shasum": ""
             },
             "require": {
@@ -1608,9 +1558,9 @@
             "description": "Library for handling version information and constraints",
             "support": {
                 "issues": "https://github.com/phar-io/version/issues",
-                "source": "https://github.com/phar-io/version/tree/3.1.0"
+                "source": "https://github.com/phar-io/version/tree/3.1.1"
             },
-            "time": "2021-02-23T14:00:09+00:00"
+            "time": "2022-02-07T21:56:48+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -2219,11 +2169,11 @@
                 }
             },
             "autoload": {
-                "classmap": [
-                    "src/"
-                ],
                 "files": [
                     "src/Framework/Assert/Functions.php"
+                ],
+                "classmap": [
+                    "src/"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -2766,16 +2716,16 @@
         },
         {
             "name": "sebastian/global-state",
-            "version": "5.0.3",
+            "version": "5.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/global-state.git",
-                "reference": "23bd5951f7ff26f12d4e3242864df3e08dec4e49"
+                "reference": "19c519631c5a511b7ed0ad64a6713fdb3fd25fe4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/global-state/zipball/23bd5951f7ff26f12d4e3242864df3e08dec4e49",
-                "reference": "23bd5951f7ff26f12d4e3242864df3e08dec4e49",
+                "url": "https://api.github.com/repos/sebastianbergmann/global-state/zipball/19c519631c5a511b7ed0ad64a6713fdb3fd25fe4",
+                "reference": "19c519631c5a511b7ed0ad64a6713fdb3fd25fe4",
                 "shasum": ""
             },
             "require": {
@@ -2818,7 +2768,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/global-state/issues",
-                "source": "https://github.com/sebastianbergmann/global-state/tree/5.0.3"
+                "source": "https://github.com/sebastianbergmann/global-state/tree/5.0.4"
             },
             "funding": [
                 {
@@ -2826,7 +2776,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-06-11T13:31:12+00:00"
+            "time": "2022-02-10T07:01:19+00:00"
         },
         {
             "name": "sebastian/lines-of-code",
@@ -3417,7 +3367,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "visavi/motor-orm": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

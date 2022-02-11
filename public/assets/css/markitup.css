@@ -21,13 +21,12 @@
 }
 
 .markItUpPreviewFrame {
-    padding:5px 0;
-    overflow:auto;
-    background-color:#FFFFFF;
-    width:99.9%;
-    margin:5px 0;
-    border: 2px solid #ced4da;
-    border-radius: 4px;
+    overflow: auto;
+    background-color: #FFFFFF;
+    width: 100%;
+    margin: 5px 0;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
 }
 
 /***************************************************************************************/

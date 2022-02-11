@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Models\Sticker;
+use App\Services\View;
 use Psr\Http\Message\ResponseInterface as Response;
 
 /**
@@ -11,22 +13,29 @@ use Psr\Http\Message\ResponseInterface as Response;
  */
 class StickerController extends Controller
 {
+    public function __construct(
+        protected View $view,
+    ) {}
+
+    /**
+     * Modal stickers
+     *
+     * @param Response $response
+     *
+     * @return Response
+     */
     public function modal(Response $response): Response
     {
-        $stickers = glob(publicPath('/uploads/stickers/*.{gif,png,jpg,jpeg}'), GLOB_BRACE);
+        $stickers = Sticker::query()->get()->pluck('path', 'code');
 
-        $view = $this->view->fetch(
+        $view = $this->view->getEngine()->render(
             'stickers/_modal',
             compact('stickers')
         );
 
-        $response->getBody()->write(json_encode([
+        return $this->json($response, [
             'success' => true,
             'stickers' => $view,
-        ],
-            JSON_THROW_ON_ERROR
-        ));
-
-        return $response->withHeader('Content-Type', 'application/json');
+        ]);
     }
 }

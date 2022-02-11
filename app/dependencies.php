@@ -3,16 +3,14 @@
 declare(strict_types=1);
 
 use App\Middleware\UserAuthMiddleware;
-use App\Services\Paginator;
+use App\Services\Session;
 use App\Services\Setting;
 use App\Services\View;
 use DI\ContainerBuilder;
+use League\Plates\Engine;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
-use Odan\Session\Middleware\SessionMiddleware;
-use Odan\Session\PhpSession;
-use Odan\Session\SessionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Log\LoggerInterface;
@@ -24,23 +22,31 @@ return function (ContainerBuilder $containerBuilder) {
         // Set view in Container
         View::class => function(ContainerInterface $container) {
             $view = new View(dirname(__DIR__) . '/resources/views');
-            $view->getEngine()->addData(['session' => $container->get(SessionInterface::class)]);
+            //$view->getEngine()->addData(['session' => $container->get(SessionInterface::class)]);
 
             return $view;
         },
 
-        // Set pagination in Container
-        Paginator::class => function(ContainerInterface $container) {
-            return new Paginator($container->get(View::class));
-        },
+        /*Session::class => function (ContainerInterface $container) {
+            $session = $container->get(Session::class);
 
-        SessionInterface::class => function (ContainerInterface $container) {
+            return $session;
+        }*/
+
+/*        Engine::class => function(ContainerInterface $container) {
+            $view = new Engine(dirname(__DIR__) . '/resources/views');
+            $view->addData(['session' => $container->get(SessionInterface::class)]);
+
+            return $view;
+        },*/
+
+        /*SessionInterface::class => function (ContainerInterface $container) {
             $settings = $container->get(Setting::class);
             $session = new PhpSession();
             $session->setOptions($settings->get('session'));
 
             return $session;
-        },
+        },*/
 
         /*SessionMiddleware::class => function (ContainerInterface $container) {
             return new SessionMiddleware($container->get(SessionInterface::class));

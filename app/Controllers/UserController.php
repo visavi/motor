@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Models\User;
+use App\Services\Session;
 use App\Services\Validator;
+use App\Services\View;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -14,6 +16,11 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 class UserController extends Controller
 {
+    public function __construct(
+        protected View $view,
+        protected Session $session,
+    ) {}
+
     /**
      * Login
      *
@@ -136,8 +143,8 @@ class UserController extends Controller
      */
     public function logout(Response $response): Response
     {
-        $this->session->remove('login');
-        $this->session->remove('password');
+        $this->session->delete('login');
+        $this->session->delete('password');
 
         $options = [
             'expires' => strtotime('-1 hour'),

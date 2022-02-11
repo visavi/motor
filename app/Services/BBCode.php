@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Models\Sticker;
+
 /**
  * Класс обработки BB-кодов
  *
@@ -314,15 +316,14 @@ class BBCode
      */
     public function parseStickers(string $source): string
     {
-        static $listStickers;
+        static $stickers;
 
-        if (empty($listStickers)) {
-            $listStickers = [
-                ':D' => '<img src="/uploads/stickers/D.gif" alt="">', // TODO
-            ];
+        if (empty($stickers)) {
+            $stickers = Sticker::query()->get()->pluck('path', 'code');
+            array_walk($stickers, static fn (&$a, $b) => $a = '<img src="' . $a . '" alt="' . $b . '">');
         }
 
-        return strtr($source, $listStickers);
+        return strtr($source, $stickers);
     }
 
     /**
