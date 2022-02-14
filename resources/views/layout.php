@@ -7,7 +7,6 @@
     <meta name="generator" content="Motor CMS">
     <title><?= $this->section('title', 'Motor CMS') ?></title>
 
-    <!-- Bootstrap core CSS -->
     <link href="<?= $this->asset('/assets/css/bootstrap.min.css') ?>" rel="stylesheet">
     <link href="<?= $this->asset('/assets/css/bootstrap-icons.css') ?>" rel="stylesheet">
     <link href="<?= $this->asset('/assets/css/markitup.css') ?>" rel="stylesheet">
@@ -52,6 +51,5 @@
 <script src="<?= $this->asset('/assets/js/markitup-set.js') ?>"></script>
 <script src="<?= $this->asset('/assets/js/prettify.js') ?>"></script>
 <script src="<?= $this->asset('/assets/js/main.js') ?>"></script>
-
 </body>
 </html>
