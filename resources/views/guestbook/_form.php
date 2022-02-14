@@ -1,3 +1,8 @@
+<?php
+use App\Models\Guestbook;
+
+/** @var Guestbook|null $message */
+?>
 <div class="p-3 shadow">
     <form method="post" action="/guestbook/<?= isset($message) ? $message->id . '/edit' : 'create' ?>"  enctype="multipart/form-data">
         <div class="mb-3">

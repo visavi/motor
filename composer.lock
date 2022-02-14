@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f4a51f295ad11d89759081e519d38b39",
+    "content-hash": "4bced37fb7631db205fe26bce2b5d490",
     "packages": [
         {
             "name": "fig/http-message-util",
@@ -903,22 +903,22 @@
         },
         {
             "name": "slim/slim",
-            "version": "4.9.0",
+            "version": "4.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/slimphp/Slim.git",
-                "reference": "44d3c9c0bfcc47e52e42b097b6062689d21b904b"
+                "reference": "c2ac8503c2c294ee95e3e4af58f4a338a2bb8612"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/slimphp/Slim/zipball/44d3c9c0bfcc47e52e42b097b6062689d21b904b",
-                "reference": "44d3c9c0bfcc47e52e42b097b6062689d21b904b",
+                "url": "https://api.github.com/repos/slimphp/Slim/zipball/c2ac8503c2c294ee95e3e4af58f4a338a2bb8612",
+                "reference": "c2ac8503c2c294ee95e3e4af58f4a338a2bb8612",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "nikic/fast-route": "^1.3",
-                "php": "^7.3 || ^8.0",
+                "php": "^7.4 || ^8.0",
                 "psr/container": "^1.0 || ^2.0",
                 "psr/http-factory": "^1.0",
                 "psr/http-message": "^1.0",
@@ -929,13 +929,15 @@
             "require-dev": {
                 "adriansuter/php-autoload-override": "^1.2",
                 "ext-simplexml": "*",
-                "guzzlehttp/psr7": "^2.0",
+                "guzzlehttp/psr7": "^2.1",
+                "httpsoft/http-message": "^1.0",
+                "httpsoft/http-server-request": "^1.0",
                 "laminas/laminas-diactoros": "^2.8",
                 "nyholm/psr7": "^1.4",
                 "nyholm/psr7-server": "^1.0",
-                "phpspec/prophecy": "^1.14",
+                "phpspec/prophecy": "^1.15",
                 "phpspec/prophecy-phpunit": "^2.0",
-                "phpstan/phpstan": "^0.12.99",
+                "phpstan/phpstan": "^1.4",
                 "phpunit/phpunit": "^9.5",
                 "slim/http": "^1.2",
                 "slim/psr7": "^1.5",
@@ -947,6 +949,7 @@
                 "php-di/php-di": "PHP-DI is the recommended container library to be used with Slim",
                 "slim/psr7": "Slim PSR-7 implementation. See https://www.slimframework.com/docs/v4/start/installation.html for more information."
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -1012,7 +1015,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-10-05T03:00:00+00:00"
+            "time": "2022-02-12T00:44:14+00:00"
         },
         {
             "name": "symfony/polyfill-php80",
@@ -1147,16 +1150,16 @@
         },
         {
             "name": "visavi/motor-orm",
-            "version": "dev-master",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/visavi/motor-orm.git",
-                "reference": "0da3ff6283196646720c4e9c68f02f90ee5bd02a"
+                "reference": "773010635b075b473b1052461679a49f26df6d4e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/visavi/motor-orm/zipball/0da3ff6283196646720c4e9c68f02f90ee5bd02a",
-                "reference": "0da3ff6283196646720c4e9c68f02f90ee5bd02a",
+                "url": "https://api.github.com/repos/visavi/motor-orm/zipball/773010635b075b473b1052461679a49f26df6d4e",
+                "reference": "773010635b075b473b1052461679a49f26df6d4e",
                 "shasum": ""
             },
             "require": {
@@ -1165,7 +1168,6 @@
             "require-dev": {
                 "phpunit/phpunit": "^9.5"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -1191,9 +1193,9 @@
             ],
             "support": {
                 "issues": "https://github.com/visavi/motor-orm/issues",
-                "source": "https://github.com/visavi/motor-orm/tree/master"
+                "source": "https://github.com/visavi/motor-orm/tree/v2.0.0"
             },
-            "time": "2022-02-11T22:29:18+00:00"
+            "time": "2022-02-12T23:13:46+00:00"
         }
     ],
     "packages-dev": [
@@ -3368,7 +3370,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "visavi/motor-orm": 20
+        "slim/slim": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

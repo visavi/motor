@@ -4,11 +4,11 @@
     "require": {
         "php": "^8.0",
         "ext-mbstring": "*",
-        "slim/slim": "^4.9",
+        "slim/slim": "4.x-dev",
         "slim/psr7": "^1.5",
         "php-di/slim-bridge": "^3.2",
         "visavi/captcha": "^2.0",
-        "visavi/motor-orm": "dev-master",
+        "visavi/motor-orm": "2.0",
         "league/plates": "^3.4"
     },
     "require-dev": {

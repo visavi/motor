@@ -1,11 +1,12 @@
 <?php
 
+use App\Factories\ContainerFactory;
 use DI\Bridge\Slim\Bridge;
 
 require __DIR__ . '/../vendor/autoload.php';
 
 // Instantiate PHP-DI ContainerBuilder
-$container = require __DIR__ . '/../app/container.php';
+$container = ContainerFactory::createInstance();
 
 // Instantiate App
 $app = Bridge::create($container);

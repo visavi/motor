@@ -8,12 +8,11 @@
     <title><?= $this->section('title', 'Motor CMS') ?></title>
 
     <!-- Bootstrap core CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
-
-    <link href="/assets/css/markitup.css" rel="stylesheet">
-    <link href="/assets/css/prettify.css" rel="stylesheet">
-    <link href="/assets/css/main.css" rel="stylesheet">
+    <link href="<?= $this->asset('/assets/css/bootstrap.min.css') ?>" rel="stylesheet">
+    <link href="<?= $this->asset('/assets/css/bootstrap-icons.css') ?>" rel="stylesheet">
+    <link href="<?= $this->asset('/assets/css/markitup.css') ?>" rel="stylesheet">
+    <link href="<?= $this->asset('/assets/css/prettify.css') ?>" rel="stylesheet">
+    <link href="<?= $this->asset('/assets/css/main.css') ?>" rel="stylesheet">
     <meta name="theme-color" content="#7952b3">
 </head>
 <body>
@@ -46,13 +45,13 @@
     </footer>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-<script src="/assets/js/jquery.caret.min.js"></script>
-<script src="/assets/js/markitup.js"></script>
-<script src="/assets/js/markitup-set.js"></script>
-<script src="/assets/js/prettify.js"></script>
-<script src="/assets/js/main.js"></script>
+<script src="<?= $this->asset('/assets/js/jquery-3.6.0.min.js') ?>"></script>
+<script src="<?= $this->asset('/assets/js/bootstrap.bundle.min.js') ?>"></script>
+<script src="<?= $this->asset('/assets/js/jquery.caret.min.js') ?>"></script>
+<script src="<?= $this->asset('/assets/js/markitup.js') ?>"></script>
+<script src="<?= $this->asset('/assets/js/markitup-set.js') ?>"></script>
+<script src="<?= $this->asset('/assets/js/prettify.js') ?>"></script>
+<script src="<?= $this->asset('/assets/js/main.js') ?>"></script>
 
 </body>
 </html>

@@ -57,7 +57,7 @@ class UserController extends Controller
                     setcookie('login', $user->login, $options);
                     setcookie('password', $user->password, $options);
 
-                    return $response->withHeader('Location', '/guestbook');
+                    return $this->redirect($response, '/guestbook');
                 }
 
                 $validator->addError('login', 'Неверный логин или пароль');
@@ -65,7 +65,7 @@ class UserController extends Controller
 
             $this->session->set('flash', ['errors' => $validator->getErrors(), 'old' => $input]);
 
-            return $response->withHeader('Location', '/login');
+            return $this->redirect($response, '/login');
         }
 
         return $this->view->render(
@@ -120,12 +120,12 @@ class UserController extends Controller
                 $this->session->set('password', $password);
                 $this->session->set('flash', ['success' => 'Вы успешно зарегистрировались!']);
 
-                return $response->withHeader('Location', '/guestbook');
+                return $this->redirect($response, '/guestbook');
             }
 
             $this->session->set('flash', ['errors' => $validator->getErrors(), 'old' => $input]);
 
-            return $response->withHeader('Location', '/register');
+            return $this->redirect($response, '/register');
         }
 
         return $this->view->render(
@@ -158,6 +158,6 @@ class UserController extends Controller
 
         $this->session->set('flash', ['success' => 'Вы успешно вышли!']);
 
-        return $response->withHeader('Location', '/guestbook');
+        return $this->redirect($response, '/guestbook');
     }
 }

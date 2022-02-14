@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use League\Plates\Engine;
+use League\Plates\Extension\Asset;
 use Psr\Http\Message\ResponseInterface;
 
 class View
@@ -14,6 +15,7 @@ class View
     public function __construct(string $directory, string $fileExtension = 'php')
     {
         $this->engine = new Engine($directory, $fileExtension);
+        $this->engine->loadExtension(new Asset(publicPath()));
     }
 
     /**

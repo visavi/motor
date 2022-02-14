@@ -1,3 +1,9 @@
+<?php
+use App\Models\Guestbook;
+use MotorORM\CollectionPaginate;
+
+/** @var CollectionPaginate|Guestbook[] $messages */
+?>
 <?php $this->layout('layout') ?>
 
 <?php $this->push('title') ?>Гостевая книга (Стр. <?= $messages->currentPage() ?>)<?php $this->stop() ?>

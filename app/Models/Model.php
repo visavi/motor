@@ -11,6 +11,7 @@ class Model extends \MotorORM\Model
 {
     public function __construct()
     {
-        //$this->view = basePath('/resources/views/app/_paginator.php');
+        // Override paginate template
+        //$this->paginateView = basePath('/resources/views/app/_paginator.php');
     }
 }

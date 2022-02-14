@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
+use App\Factories\ContainerFactory;
 use App\Models\User;
 use App\Services\BBCode;
 use App\Services\Session;
 use App\Services\Setting;
 use DI\Container;
-use DI\ContainerBuilder;
-use Psr\Http\Message\ResponseInterface;
 use Slim\Factory\ServerRequestCreatorFactory;
 
 /**
@@ -76,7 +75,8 @@ function formatSize(int $bytes, int $precision = 2): string
  */
 function app(?string $abstract = null): mixed
 {
-    $container = require __DIR__ . '/../app/container.php';
+    $container = ContainerFactory::getInstance();
+
     if ($abstract === null) {
         return $container;
     }
@@ -91,13 +91,7 @@ function app(?string $abstract = null): mixed
  */
 function session(): Session
 {
-    static $session;
-
-    if (! $session) {
-        $session = app(Session::class);
-    }
-
-    return $session;
+    return app(Session::class);
 }
 
 /**
@@ -105,16 +99,11 @@ function session(): Session
  * @param mixed|null  $default
  *
  * @return mixed|string|null
- * @throws \DI\DependencyException
- * @throws \DI\NotFoundException
  */
-function settings(?string $key = null, mixed $default = null): mixed
+function setting(?string $key = null, mixed $default = null): mixed
 {
-    static $setting;
-
-    if (! $setting) {
-        $setting = app(Setting::class);
-    }
+    /** @var Setting $setting */
+    $setting = app(Setting::class);
 
     if ($key === null) {
         return $setting->all();
@@ -247,7 +236,6 @@ function publicPath(string $path = ''): string
  * @param string $message
  *
  * @return void
- * @throws \Slim\Exception\HttpException
  */
 function abort(int $code, string $message = ''): void
 {
@@ -257,8 +245,14 @@ function abort(int $code, string $message = ''): void
     throw new \Slim\Exception\HttpException($request, $message, $code);
 }
 
-
-// Old
+/**
+ * Session old
+ *
+ * @param string     $key
+ * @param mixed|null $default
+ *
+ * @return mixed
+ */
 function old(string $key, mixed $default = null): mixed
 {
     if (! isset(session()->get('flash')['old'])) {
@@ -268,7 +262,13 @@ function old(string $key, mixed $default = null): mixed
     return session()->get('flash')['old'][$key] ?? $default;
 }
 
-// HasError
+/**
+ * Session has error
+ *
+ * @param string $field
+ *
+ * @return string
+ */
 function hasError(string $field): string
 {
     if (isset(session()->get('flash')['errors'])) {
@@ -278,7 +278,13 @@ function hasError(string $field): string
     return '';
 }
 
-// Get Error
+/**
+ * Session get error
+ *
+ * @param string $field
+ *
+ * @return string
+ */
 function getError(string $field): string
 {
     return session()->get('flash')['errors'][$field] ?? '';

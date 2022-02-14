@@ -1,3 +1,8 @@
+<?php
+use App\Models\Guestbook;
+
+/** @var Guestbook $message */
+?>
 <?php $this->layout('layout') ?>
 
 <?php $this->start('title') ?>

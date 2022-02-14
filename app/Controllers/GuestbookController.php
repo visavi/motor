@@ -32,20 +32,7 @@ class GuestbookController extends Controller
      */
     public function index(Response $response): Response
     {
-/*        $total = Guestbook::query()->count();
-        //$paginator->setView(basePath('/resources/views/app/_paginator.php'));
-        $paginator = $paginator->create($total);
-
-        $messages = Guestbook::query()
-            ->offset($paginator->offset)
-            ->limit($paginator->limit)
-            ->orderByDesc('created_at')
-            ->get();
-
-        var_dump($paginator->links()); exit;*/
-
-
-        $messages = $this->guestbookRepository->getMessages(settings('guestbook')['per_page']);
+        $messages = $this->guestbookRepository->getMessages(setting('guestbook')['per_page']);
 
         return $this->view->render(
             $response,
@@ -76,8 +63,8 @@ class GuestbookController extends Controller
         $validator
             ->required(['title', 'text'])
             ->add('user', fn () => isUser(), 'Необходимо авторизоваться!')
-            ->length('title', settings('guestbook')['title_min_length'], settings('guestbook')['title_max_length'])
-            ->length('text', settings('guestbook')['text_min_length'], settings('guestbook')['text_max_length'])
+            ->length('title', setting('guestbook')['title_min_length'], setting('guestbook')['title_max_length'])
+            ->length('text', setting('guestbook')['text_min_length'], setting('guestbook')['text_max_length'])
             ->file('image', [
                 'size_max'   => 5000000,
                 'weight_min' => 100,
@@ -118,7 +105,7 @@ class GuestbookController extends Controller
             abort(403, 'Доступ запрещен!');
         }
 
-        $message = Guestbook::query()->find($id);
+        $message = $this->guestbookRepository->getById($id);
         if (! $message) {
             abort(404, 'Сообщение не найдено');
         }
@@ -146,7 +133,7 @@ class GuestbookController extends Controller
             abort(403, 'Доступ запрещен!');
         }
 
-        $message = Guestbook::query()->find($id);
+        $message = $this->guestbookRepository->getById($id);
         if (! $message) {
             abort(404, 'Сообщение не найдено');
         }
@@ -188,8 +175,7 @@ class GuestbookController extends Controller
             abort(403, 'Доступ запрещен!');
         }
 
-        $message = Guestbook::query()->find($id);
-
+        $message = $this->guestbookRepository->getById($id);
         if ($message) {
             $message->delete();
 
