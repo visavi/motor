@@ -1,8 +1,6 @@
 <?php $this->layout('layout') ?>
 
-<?php $this->start('title') ?>
-    Ошибка 500
-<?php $this->stop() ?>
+<?php $this->start('title') ?>Ошибка 500<?php $this->stop() ?>
 
 <?php $this->start('breadcrumb') ?>
     <nav>

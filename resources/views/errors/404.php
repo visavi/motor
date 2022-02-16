@@ -1,8 +1,6 @@
 <?php $this->layout('layout') ?>
 
-<?php $this->start('title') ?>
-    Ошибка 404
-<?php $this->stop() ?>
+<?php $this->start('title') ?>Ошибка 404<?php $this->stop() ?>
 
 <?php $this->start('breadcrumb') ?>
     <nav>

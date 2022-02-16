@@ -6,7 +6,7 @@ use MotorORM\CollectionPaginate;
 ?>
 <?php $this->layout('layout') ?>
 
-<?php $this->push('title') ?>Гостевая книга (Стр. <?= $messages->currentPage() ?>)<?php $this->stop() ?>
+<?php $this->start('title') ?>Гостевая книга (Стр. <?= $messages->currentPage() ?>)<?php $this->stop() ?>
 <?php $this->start('description') ?>Гостевая книга (Стр. <?= $messages->currentPage() ?>)<?php $this->stop() ?>
 
 <?php $this->start('breadcrumb') ?>

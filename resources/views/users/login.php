@@ -1,8 +1,6 @@
 <?php $this->layout('layout') ?>
 
-<?php $this->start('title') ?>
-    Вход
-<?php $this->stop() ?>
+<?php $this->start('title') ?>Вход<?php $this->stop() ?>
 
 <?php $this->start('breadcrumb') ?>
     <nav>

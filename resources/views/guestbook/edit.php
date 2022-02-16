@@ -5,9 +5,7 @@ use App\Models\Guestbook;
 ?>
 <?php $this->layout('layout') ?>
 
-<?php $this->start('title') ?>
-    Редактирование - Гостевая книга
-<?php $this->stop() ?>
+<?php $this->start('title') ?>Редактирование - Гостевая книга<?php $this->stop() ?>
 
 <?php $this->start('breadcrumb') ?>
     <nav>
