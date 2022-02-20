@@ -34,6 +34,16 @@ return function (ContainerBuilder $containerBuilder) {
                     'cookie_samesite' => 'Lax',
                 ],
 
+                'file' => [
+                    'size_max' => 1024 * 1000 * 5, // Максимальный вес 5MB
+                ],
+
+                'image' => [
+                    'resize'     => 1000, // Обрезать изображения px
+                    'weight_max' => null, // Максимальный размер px
+                    'weight_min' => 100,  // Минимальный размер px
+                ],
+
                 'displayErrorDetails' => true, // Should be set to false in production
                 'logError'            => false,
                 'logErrorDetails'     => false,

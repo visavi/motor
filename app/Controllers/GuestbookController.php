@@ -9,6 +9,8 @@ use App\Repositories\GuestbookRepository;
 use App\Services\Session;
 use App\Services\Validator;
 use App\Services\View;
+use Intervention\Image\Constraint;
+use Intervention\Image\ImageManager;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -44,13 +46,19 @@ class GuestbookController extends Controller
     /**
      * Create
      *
-     * @param Request   $request
-     * @param Response  $response
-     * @param Validator $validator
+     * @param Request      $request
+     * @param Response     $response
+     * @param Validator    $validator
+     * @param ImageManager $manager
      *
      * @return Response
      */
-    public function create(Request $request, Response $response, Validator $validator): Response
+    public function create(
+        Request $request,
+        Response $response,
+        Validator $validator,
+        ImageManager $manager,
+    ): Response
     {
         if (! isUser() && ! setting('guestbook')['allow_guests']) {
             abort(403, 'Доступ запрещен!');
@@ -65,15 +73,30 @@ class GuestbookController extends Controller
             ->length('title', setting('guestbook')['title_min_length'], setting('guestbook')['title_max_length'])
             ->length('text', setting('guestbook')['text_min_length'], setting('guestbook')['text_max_length'])
             ->file('image', [
-                'size_max'   => 5000000,
-                'weight_min' => 100,
+                'size_max'   => setting('file')['size_max'],
+                'weight_max' => setting('image')['weight_max'],
+                'weight_min' => setting('image')['weight_min'],
             ]);
+
+        if (! isUser()) {
+            $validator->add(
+                'captcha',
+                fn () => $this->session->get('captcha') === $input['captcha'], 'Не удалось пройти проверку captcha!'
+            );
+        }
 
         if ($validator->isValid($input)) {
             if ($input['image']->getError() === UPLOAD_ERR_OK) {
                 $extension = getExtension($input['image']->getClientFilename());
                 $path = '/uploads/guestbook/' . uniqueName($extension);
-                $input['image']->moveTo(publicPath($path));
+
+                $img = $manager->make($input['image']->getFilePath());
+                $img->resize(setting('image')['resize'], setting('image')['resize'], static function (Constraint $constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
+
+                $img->save(publicPath($path));
             }
 
             $login = isUser() ? $this->session->get('login') : null;
@@ -85,6 +108,8 @@ class GuestbookController extends Controller
                 'image'      => $path ?? null,
                 'created_at' => time(),
             ]);
+
+            $this->session->set('flash', ['success' => 'Сообщение успешно добавлено!']);
         } else {
             $this->session->set('flash', ['errors' => $validator->getErrors(), 'old' => $input]);
         }

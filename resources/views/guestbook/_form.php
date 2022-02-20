@@ -27,6 +27,10 @@ use App\Models\Guestbook;
             <span class="badge bg-info" id="upload-file-info"></span>
         </div>
 
+        <?php if (! isUser()): ?>
+            <?= $this->fetch('app/_captcha') ?>
+        <?php endif; ?>
+
         <button type="submit" class="btn btn-primary"><?= isset($message) ? 'Изменить' : 'Отправить' ?></button>
     </form>
 </div>
