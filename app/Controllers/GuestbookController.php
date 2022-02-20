@@ -58,8 +58,7 @@ class GuestbookController extends Controller
         Response $response,
         Validator $validator,
         ImageManager $manager,
-    ): Response
-    {
+    ): Response {
         if (! isUser() && ! setting('guestbook')['allow_guests']) {
             abort(403, 'Доступ запрещен!');
         }
