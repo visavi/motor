@@ -31,13 +31,13 @@ class User extends Model
      * All group
      */
     public const ALL_GROUP = [
-        self::BOSS,
-        self::ADMIN,
-        self::MODER,
-        self::EDITOR,
-        self::USER,
-        self::PENDED,
-        self::BANNED,
+        self::BOSS   => 'Босс',
+        self::ADMIN  => 'Админ',
+        self::MODER  => 'Модератор',
+        self::EDITOR => 'Редактор',
+        self::USER   => 'Пользователь',
+        self::PENDED => 'Ожидающий',
+        self::BANNED => 'Забаненный',
     ];
 
     /**

@@ -160,4 +160,29 @@ class UserController extends Controller
 
         return $this->redirect($response, '/guestbook');
     }
+
+    /**
+     * User
+     *
+     * @param string   $login
+     * @param Response $response
+     *
+     * @return Response
+     */
+    public function user(string $login, Response $response): Response
+    {
+        $user = User::query()->where('login', $login)->first();
+
+        if (! $user) {
+            abort(404, 'Пользователь не найден!');
+        }
+
+        $roles = User::ALL_GROUP;
+
+        return $this->view->render(
+            $response,
+            'users/user',
+            compact('user', 'roles')
+        );
+    }
 }

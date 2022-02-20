@@ -52,7 +52,7 @@ class GuestbookController extends Controller
      */
     public function create(Request $request, Response $response, Validator $validator): Response
     {
-        if (! isUser()) {
+        if (! isUser() && ! setting('guestbook')['allow_guests']) {
             abort(403, 'Доступ запрещен!');
         }
 
@@ -62,7 +62,6 @@ class GuestbookController extends Controller
 
         $validator
             ->required(['title', 'text'])
-            ->add('user', fn () => isUser(), 'Необходимо авторизоваться!')
             ->length('title', setting('guestbook')['title_min_length'], setting('guestbook')['title_max_length'])
             ->length('text', setting('guestbook')['text_min_length'], setting('guestbook')['text_max_length'])
             ->file('image', [
@@ -77,8 +76,10 @@ class GuestbookController extends Controller
                 $input['image']->moveTo(publicPath($path));
             }
 
+            $login = isUser() ? $this->session->get('login') : null;
+
             Guestbook::query()->insert([
-                'login'      => $this->session->get('login'),
+                'login'      => $login,
                 'title'      => sanitize($input['title']),
                 'text'       => sanitize($input['text']),
                 'image'      => $path ?? null,

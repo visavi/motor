@@ -12,12 +12,17 @@ return function (ContainerBuilder $containerBuilder) {
             return new Setting([
                 'debug' => true,
 
+                'main' => [
+                    'guest_name' => 'Гость',
+                ],
+
                 'guestbook' => [
                     'per_page'         => 10,
                     'title_min_length' => 5,
                     'title_max_length' => 50,
                     'text_min_length'  => 5,
                     'text_max_length'  => 5000,
+                    'allow_guests'     => true,
                 ],
 
                 'session' => [

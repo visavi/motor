@@ -28,7 +28,7 @@ class StickerController extends Controller
     {
         $stickers = Sticker::query()->get()->pluck('path', 'code');
 
-        $view = $this->view->getEngine()->render(
+        $view = $this->view->fetch(
             'stickers/_modal',
             compact('stickers')
         );

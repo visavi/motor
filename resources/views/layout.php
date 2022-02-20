@@ -25,6 +25,7 @@
 
         <nav class="d-inline-flex mt-2 ms-auto">
             <?php if (isUser()): ?>
+                <a class="me-3 py-2 text-dark text-decoration-none" href="/users/<?= getUser('login') ?>"><?= getUser('login') ?></a>
                 <a class="me-3 py-2 text-dark text-decoration-none" href="/logout">Выйти</a>
             <?php else: ?>
                 <a class="me-3 py-2 text-dark text-decoration-none" href="/login">Войти</a>

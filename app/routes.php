@@ -36,4 +36,8 @@ return function (App $app) {
         $group->post('/{id:[0-9]+}/edit', [GuestbookController::class, 'store']);
         $group->get('/{id:[0-9]+}/delete', [GuestbookController::class, 'delete']);
     });
+
+    $app->group('/users', function (Group $group) {
+        $group->get('/{login:[\w\-]+}', [UserController::class, 'user']);
+    });
 };

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4bced37fb7631db205fe26bce2b5d490",
+    "content-hash": "26512255dc1d694ce8efa44ff27ef866",
     "packages": [
         {
             "name": "fig/http-message-util",
@@ -1150,16 +1150,16 @@
         },
         {
             "name": "visavi/motor-orm",
-            "version": "v2.0.0",
+            "version": "v2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/visavi/motor-orm.git",
-                "reference": "773010635b075b473b1052461679a49f26df6d4e"
+                "reference": "6d34f71bf3f28881618dfe2779be10afcd4ebbdc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/visavi/motor-orm/zipball/773010635b075b473b1052461679a49f26df6d4e",
-                "reference": "773010635b075b473b1052461679a49f26df6d4e",
+                "url": "https://api.github.com/repos/visavi/motor-orm/zipball/6d34f71bf3f28881618dfe2779be10afcd4ebbdc",
+                "reference": "6d34f71bf3f28881618dfe2779be10afcd4ebbdc",
                 "shasum": ""
             },
             "require": {
@@ -1193,9 +1193,9 @@
             ],
             "support": {
                 "issues": "https://github.com/visavi/motor-orm/issues",
-                "source": "https://github.com/visavi/motor-orm/tree/v2.0.0"
+                "source": "https://github.com/visavi/motor-orm/tree/v2.1.0"
             },
-            "time": "2022-02-12T23:13:46+00:00"
+            "time": "2022-02-20T01:28:07+00:00"
         }
     ],
     "packages-dev": [
@@ -1793,16 +1793,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "9.2.10",
+            "version": "9.2.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "d5850aaf931743067f4bfc1ae4cbd06468400687"
+                "reference": "665a1ac0a763c51afc30d6d130dac0813092b17f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/d5850aaf931743067f4bfc1ae4cbd06468400687",
-                "reference": "d5850aaf931743067f4bfc1ae4cbd06468400687",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/665a1ac0a763c51afc30d6d130dac0813092b17f",
+                "reference": "665a1ac0a763c51afc30d6d130dac0813092b17f",
                 "shasum": ""
             },
             "require": {
@@ -1858,7 +1858,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.10"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.11"
             },
             "funding": [
                 {
@@ -1866,7 +1866,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-12-05T09:12:13+00:00"
+            "time": "2022-02-18T12:46:09+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -2111,16 +2111,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.5.13",
+            "version": "9.5.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "597cb647654ede35e43b137926dfdfef0fb11743"
+                "reference": "1883687169c017d6ae37c58883ca3994cfc34189"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/597cb647654ede35e43b137926dfdfef0fb11743",
-                "reference": "597cb647654ede35e43b137926dfdfef0fb11743",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/1883687169c017d6ae37c58883ca3994cfc34189",
+                "reference": "1883687169c017d6ae37c58883ca3994cfc34189",
                 "shasum": ""
             },
             "require": {
@@ -2198,7 +2198,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.13"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.14"
             },
             "funding": [
                 {
@@ -2210,7 +2210,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-01-24T07:33:35+00:00"
+            "time": "2022-02-18T12:54:07+00:00"
         },
         {
             "name": "sebastian/cli-parser",
