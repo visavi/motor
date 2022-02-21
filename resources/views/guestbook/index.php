@@ -43,7 +43,7 @@ use MotorORM\CollectionPaginate;
             <?php if ($message->login): ?>
                 <span class="fw-bold"><a href="/users/<?= $this->e($message->login) ?>"><?= $this->e($message->login) ?></a></span>
             <?php else: ?>
-            <span class="fw-bold"><?= setting('main')['guest_name'] ?></span>
+            <span class="fw-bold"><?= setting('main.guest_name') ?></span>
             <?php endif; ?>
 
             <small class="text-muted fst-italic"><?= date('d.m.Y H:i', $message->created_at) ?></small>
@@ -55,7 +55,7 @@ use MotorORM\CollectionPaginate;
     <div class="alert alert-danger">Сообщений еще нет!</div>
 <?php endif; ?>
 
-<?php if (isUser() || setting('guestbook')['allow_guests']): ?>
+<?php if (isUser() || setting('guestbook.allow_guests')): ?>
     <?= $this->fetch('guestbook/_form') ?>
 <?php else: ?>
     <div class="alert alert-danger">Авторизуйтесь для добавления сообщений</div>

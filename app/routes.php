@@ -6,6 +6,7 @@ use App\Controllers\BBCodeController;
 use App\Controllers\CaptchaController;
 use App\Controllers\GuestbookController;
 use App\Controllers\HomeController;
+use App\Controllers\User\ProfileController;
 use App\Controllers\StickerController;
 use App\Controllers\UserController;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -40,4 +41,7 @@ return function (App $app) {
     $app->group('/users', function (Group $group) {
         $group->get('/{login:[\w\-]+}', [UserController::class, 'user']);
     });
+
+    $app->get('/profile', [ProfileController::class, 'index']);
+    $app->post('/profile', [ProfileController::class, 'store']);
 };

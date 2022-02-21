@@ -34,7 +34,7 @@ class GuestbookController extends Controller
      */
     public function index(Response $response): Response
     {
-        $messages = $this->guestbookRepository->getMessages(setting('guestbook')['per_page']);
+        $messages = $this->guestbookRepository->getMessages(setting('guestbook.per_page'));
 
         return $this->view->render(
             $response,
@@ -59,7 +59,7 @@ class GuestbookController extends Controller
         Validator $validator,
         ImageManager $manager,
     ): Response {
-        if (! isUser() && ! setting('guestbook')['allow_guests']) {
+        if (! isUser() && ! setting('guestbook.allow_guests')) {
             abort(403, 'Доступ запрещен!');
         }
 
@@ -69,12 +69,12 @@ class GuestbookController extends Controller
 
         $validator
             ->required(['title', 'text'])
-            ->length('title', setting('guestbook')['title_min_length'], setting('guestbook')['title_max_length'])
-            ->length('text', setting('guestbook')['text_min_length'], setting('guestbook')['text_max_length'])
+            ->length('title', setting('guestbook.title_min_length'), setting('guestbook.title_max_length'))
+            ->length('text', setting('guestbook.text_min_length'), setting('guestbook.text_max_length'))
             ->file('image', [
-                'size_max'   => setting('file')['size_max'],
-                'weight_max' => setting('image')['weight_max'],
-                'weight_min' => setting('image')['weight_min'],
+                'size_max'   => setting('file.size_max'),
+                'weight_max' => setting('image.weight_max'),
+                'weight_min' => setting('image.weight_min'),
             ]);
 
         if (! isUser()) {
@@ -90,7 +90,7 @@ class GuestbookController extends Controller
                 $path = '/uploads/guestbook/' . uniqueName($extension);
 
                 $img = $manager->make($input['image']->getFilePath());
-                $img->resize(setting('image')['resize'], setting('image')['resize'], static function (Constraint $constraint) {
+                $img->resize(setting('image.resize'), setting('image.resize'), static function (Constraint $constraint) {
                     $constraint->aspectRatio();
                     $constraint->upsize();
                 });
@@ -178,7 +178,7 @@ class GuestbookController extends Controller
         } else {
             $this->session->set('flash', ['errors' => $validator->getErrors(), 'old' => $input]);
 
-            return $response->withHeader('Location', '/guestbook/' . $id . '/edit');
+            return $this->redirect($response, '/guestbook/' . $id . '/edit');
         }
 
         $this->session->set('flash', ['success' => 'Сообщение успешно изменено!']);

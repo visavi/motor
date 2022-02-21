@@ -177,12 +177,10 @@ class UserController extends Controller
             abort(404, 'Пользователь не найден!');
         }
 
-        $roles = User::ALL_GROUP;
-
         return $this->view->render(
             $response,
             'users/user',
-            compact('user', 'roles')
+            compact('user')
         );
     }
 }

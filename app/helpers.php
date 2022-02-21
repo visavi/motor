@@ -170,7 +170,7 @@ function getUser(string $key = ''): mixed
  */
 function isAdmin(string $role = User::EDITOR): bool
 {
-    $group = User::ALL_GROUP;
+    $group = array_flip(User::ALL_GROUP);
 
     return isUser()
         && isset($group[$role], $group[getUser('role')])

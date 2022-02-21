@@ -19,7 +19,13 @@ use App\Models\User;
 <div class="p-3 shadow">
     <div>ID: <?= $user->id ?></div>
     <div>Логин: <?= $user->login ?></div>
-    <div>Роль: <?= $roles[$user->role] ?? 'Пользователь' ?></div>
+    <div>Роль: <?= setting('roles.' . $user->role) ?? 'Пользователь' ?></div>
     <div>Имя: <?= $user->name ?></div>
     <div>Дата регистрации: <?= date('d.m.Y', $user->created_at) ?></div>
+
+    <?php if (getUser('id') === $user->id): ?>
+        <div class="mt-3">
+            <i class="bi bi-person"></i> <a href="/profile">Профиль</a>
+        </div>
+    <?php endif; ?>
 </div>

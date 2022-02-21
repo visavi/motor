@@ -33,6 +33,20 @@ class Setting
      */
     public function get(?string $key = null, mixed $default = null): mixed
     {
-        return $this->settings[$key] ?? $default;
+        $array = $this->settings;
+
+        if (! str_contains($key, '.')) {
+            return $array[$key] ?? $default;
+        }
+
+        foreach (explode('.', $key) as $segment) {
+            if (is_array($array) && array_key_exists($segment, $array)) {
+                $array = $array[$segment];
+            } else {
+                return $default;
+            }
+        }
+
+        return $array;
     }
 }

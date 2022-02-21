@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Models\User;
 use App\Services\Setting;
 use DI\ContainerBuilder;
 
@@ -42,6 +43,16 @@ return function (ContainerBuilder $containerBuilder) {
                     'resize'     => 1000, // Обрезать изображения px
                     'weight_max' => null, // Максимальный размер px
                     'weight_min' => 100,  // Минимальный размер px
+                ],
+
+                'roles' => [
+                    User::BOSS   => 'Босс',
+                    User::ADMIN  => 'Админ',
+                    User::MODER  => 'Модератор',
+                    User::EDITOR => 'Редактор',
+                    User::USER   => 'Пользователь',
+                    User::PENDED => 'Ожидающий',
+                    User::BANNED => 'Забаненный',
                 ],
 
                 'displayErrorDetails' => true, // Should be set to false in production
