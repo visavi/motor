@@ -17,6 +17,10 @@ final class StartSession implements Middleware
             session_start();
         }
 
+        if (empty($_SESSION['csrf'])) {
+            $_SESSION['csrf'] = randomString();
+        }
+
         //$request = $request->withAttribute('session', $_SESSION);
 
         return $handler->handle($request);

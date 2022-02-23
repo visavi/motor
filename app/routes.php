@@ -28,14 +28,15 @@ return function (App $app) {
 
     $app->map(['GET', 'POST'], '/login', [UserController::class, 'login']);
     $app->map(['GET', 'POST'], '/register', [UserController::class, 'register']);
-    $app->get('/logout', [UserController::class, 'logout']);
+    $app->post('/logout', [UserController::class, 'logout']);
 
     $app->group('/guestbook', function (Group $group) {
         $group->get('', [GuestbookController::class, 'index']);
-        $group->post('/create', [GuestbookController::class, 'create']);
+        $group->post('', [GuestbookController::class, 'create']);
+        //$group->get('/{id:[0-9]+}', [GuestbookController::class, 'view']);
         $group->get('/{id:[0-9]+}/edit', [GuestbookController::class, 'edit']);
-        $group->post('/{id:[0-9]+}/edit', [GuestbookController::class, 'store']);
-        $group->get('/{id:[0-9]+}/delete', [GuestbookController::class, 'delete']);
+        $group->put('/{id:[0-9]+}', [GuestbookController::class, 'store']);
+        $group->delete('/{id:[0-9]+}', [GuestbookController::class, 'destroy']);
     });
 
     $app->group('/users', function (Group $group) {
@@ -43,5 +44,5 @@ return function (App $app) {
     });
 
     $app->get('/profile', [ProfileController::class, 'index']);
-    $app->post('/profile', [ProfileController::class, 'store']);
+    $app->put('/profile', [ProfileController::class, 'store']);
 };

@@ -16,7 +16,7 @@ if (! in_array('picture', $userHeaders, true)) {
     $migration = new Migration(new User());
 
     try {
-        $migration->column('picture')->after('role')->create();
+        $migration->column('picture')->after('name')->create();
         $migration->column('avatar')->after('picture')->create();
     } catch (Exception $exception) {
         echo $exception->getMessage();

@@ -9,6 +9,7 @@
         "php-di/slim-bridge": "^3.2",
         "visavi/captcha": "^2.0",
         "visavi/motor-orm": "2.2",
+        "visavi/cleanup": "1.5",
         "league/plates": "^3.4",
         "intervention/image": "^2.7"
     },

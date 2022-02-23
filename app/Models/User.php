@@ -13,6 +13,8 @@ namespace App\Models;
  * @property string $email
  * @property string $role
  * @property string $name
+ * @property string $picture
+ * @property string $avatar
  * @property int $created_at
  */
 class User extends Model
@@ -45,4 +47,19 @@ class User extends Model
      */
     public const MALE   = 'male';
     public const FEMALE = 'female';
+
+    public function getAvatar(): string
+    {
+        if (! $this->id) {
+            return '<img src="/assets/images/avatar_default.png" alt="Аватар">';
+        }
+
+        if ($this->avatar && file_exists(publicPath($this->avatar))) {
+            $avatar = '<img src="/assets/images/' . $this->avatar . '" alt="Аватар">';
+        } else {
+            $avatar = '<img src="/assets/images/avatar_default.png" alt="Аватар">';
+        }
+
+        return $avatar;
+    }
 }

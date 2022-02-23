@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 /**
- * Session clas
+ * Session class
  */
 class Session
 {
@@ -19,7 +19,21 @@ class Session
      */
     public function get(string $key, mixed $default = null): mixed
     {
-        return $this->has($key) ? $_SESSION[$key] : $default;
+        $session = $_SESSION;
+
+        if (! str_contains($key, '.')) {
+            return $session[$key] ?? $default;
+        }
+
+        foreach (explode('.', $key) as $segment) {
+            if (is_array($session) && array_key_exists($segment, $session)) {
+                $session = $session[$segment];
+            } else {
+                return $default;
+            }
+        }
+
+        return $session;
     }
 
     /**

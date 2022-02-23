@@ -45,7 +45,10 @@ class HttpErrorHandler extends SlimErrorHandler
             return $response->withStatus($code);
         }
 
-        if ($this->container->get(Setting::class)->get('debug')) {
+        if (
+            class_exists(Run::class)
+            && $this->container->get(Setting::class)->get('debug')
+        ) {
             $handler = Misc::isAjaxRequest() ?
                 new JsonResponseHandler() :
                 new PrettyPageHandler();

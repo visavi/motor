@@ -9,6 +9,7 @@ use App\Services\Session;
 use App\Services\Setting;
 use DI\Container;
 use Slim\Factory\ServerRequestCreatorFactory;
+use Slim\Exception\HttpException;
 
 /**
  * Sanitize
@@ -44,9 +45,8 @@ function bbCode(mixed $text, bool $parse = true): string
     }
 
     $parseText = $bbCode->parse($checkText);
-    $parseText = $bbCode->parseStickers($parseText);
 
-    return $parseText;
+    return $bbCode->parseStickers($parseText);
 }
 
 /**
@@ -87,18 +87,30 @@ function app(?string $abstract = null): mixed
 /**
  * Get session
  *
- * @return Session
- */
-function session(): Session
-{
-    return app(Session::class);
-}
-
-/**
  * @param string|null $key
  * @param mixed|null  $default
  *
- * @return mixed|string|null
+ * @return Session|mixed
+ */
+function session(?string $key = null, mixed $default = null): mixed
+{
+    /** @var Session $session */
+    $session = app(Session::class);
+
+    if ($key === null) {
+        return $session;
+    }
+
+    return $session->get($key, $default);
+}
+
+/**
+ * Get setting
+ *
+ * @param string|null $key
+ * @param mixed|null  $default
+ *
+ * @return Setting|mixed
  */
 function setting(?string $key = null, mixed $default = null): mixed
 {
@@ -106,7 +118,7 @@ function setting(?string $key = null, mixed $default = null): mixed
     $setting = app(Setting::class);
 
     if ($key === null) {
-        return $setting->all();
+        return $setting;
     }
 
     return $setting->get($key, $default);
@@ -119,8 +131,8 @@ function setting(?string $key = null, mixed $default = null): mixed
  */
 function checkAuth(): User|bool
 {
-    $login    = session()->get('login');
-    $password = session()->get('password');
+    $login    = session('login');
+    $password = session('password');
 
     if ($login && $password) {
         $user = User::query()->where('login', $login)->first();
@@ -214,7 +226,7 @@ function uniqueName(string $extension = null): string
  */
 function basePath(string $path = ''): string
 {
-    return dirname(__DIR__) . $path;
+    return dirname(__DIR__) . '/' . ltrim($path, '/');
 }
 
 /**
@@ -226,7 +238,7 @@ function basePath(string $path = ''): string
  */
 function publicPath(string $path = ''): string
 {
-    return basePath('/public' . $path);
+    return basePath('/public/' . ltrim($path, '/'));
 }
 
 /**
@@ -242,7 +254,7 @@ function abort(int $code, string $message = ''): void
     $serverRequestCreator = ServerRequestCreatorFactory::create();
     $request = $serverRequestCreator->createServerRequestFromGlobals();
 
-    throw new \Slim\Exception\HttpException($request, $message, $code);
+    throw new HttpException($request, $message, $code);
 }
 
 /**
@@ -255,11 +267,11 @@ function abort(int $code, string $message = ''): void
  */
 function old(string $key, mixed $default = null): mixed
 {
-    if (! isset(session()->get('flash')['old'])) {
+    if (! session('flash.old')) {
         return $default;
     }
 
-    return session()->get('flash')['old'][$key] ?? $default;
+    return session('flash.old.' . $key, $default);
 }
 
 /**
@@ -271,8 +283,8 @@ function old(string $key, mixed $default = null): mixed
  */
 function hasError(string $field): string
 {
-    if (isset(session()->get('flash')['errors'])) {
-        return isset(session()->get('flash')['errors'][$field]) ? ' is-invalid' : ' is-valid';
+    if (session('flash.errors')) {
+        return session('flash.errors.' . $field) ? ' is-invalid' : ' is-valid';
     }
 
     return '';
@@ -287,5 +299,25 @@ function hasError(string $field): string
  */
 function getError(string $field): string
 {
-    return session()->get('flash')['errors'][$field] ?? '';
+    return session('flash.errors.' . $field, '');
+}
+
+/**
+ * Generate a more truly "random" alpha-numeric string.
+ *
+ * @param  int  $length
+ *
+ * @return string
+ */
+function randomString(int $length = 16): string
+{
+    $string = '';
+
+    while (($len = strlen($string)) < $length) {
+        $size = $length - $len;
+        $bytes = random_bytes($size);
+        $string .= substr(str_replace(['/', '+', '='], '', base64_encode($bytes)), 0, $size);
+    }
+
+    return $string;
 }

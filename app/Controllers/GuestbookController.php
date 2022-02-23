@@ -22,6 +22,7 @@ class GuestbookController extends Controller
     public function __construct(
         protected View $view,
         protected Session $session,
+        protected Validator $validator,
         protected GuestbookRepository $guestbookRepository,
     ) {}
 
@@ -48,7 +49,6 @@ class GuestbookController extends Controller
      *
      * @param Request      $request
      * @param Response     $response
-     * @param Validator    $validator
      * @param ImageManager $manager
      *
      * @return Response
@@ -56,7 +56,6 @@ class GuestbookController extends Controller
     public function create(
         Request $request,
         Response $response,
-        Validator $validator,
         ImageManager $manager,
     ): Response {
         if (! isUser() && ! setting('guestbook.allow_guests')) {
@@ -67,8 +66,9 @@ class GuestbookController extends Controller
         $files = $request->getUploadedFiles();
         $input = array_merge($input, $files);
 
-        $validator
-            ->required(['title', 'text'])
+        $this->validator
+            ->required(['csrf', 'title', 'text'])
+            ->same('csrf', $this->session->get('csrf'), 'Неверный идентификатор сессии, повторите действие!')
             ->length('title', setting('guestbook.title_min_length'), setting('guestbook.title_max_length'))
             ->length('text', setting('guestbook.text_min_length'), setting('guestbook.text_max_length'))
             ->file('image', [
@@ -78,13 +78,12 @@ class GuestbookController extends Controller
             ]);
 
         if (! isUser()) {
-            $validator->add(
-                'captcha',
-                fn () => $this->session->get('captcha') === $input['captcha'], 'Не удалось пройти проверку captcha!'
-            );
+            $this->validator
+                ->required('captcha')
+                ->same('captcha', $this->session->get('captcha'), 'Не удалось пройти проверку captcha!');
         }
 
-        if ($validator->isValid($input)) {
+        if ($this->validator->isValid($input)) {
             if ($input['image']->getError() === UPLOAD_ERR_OK) {
                 $extension = getExtension($input['image']->getClientFilename());
                 $path = '/uploads/guestbook/' . uniqueName($extension);
@@ -110,7 +109,7 @@ class GuestbookController extends Controller
 
             $this->session->set('flash', ['success' => 'Сообщение успешно добавлено!']);
         } else {
-            $this->session->set('flash', ['errors' => $validator->getErrors(), 'old' => $input]);
+            $this->session->set('flash', ['errors' => $this->validator->getErrors(), 'old' => $input]);
         }
 
         return $this->redirect($response, '/guestbook');
@@ -148,11 +147,10 @@ class GuestbookController extends Controller
      * @param int       $id
      * @param Request   $request
      * @param Response  $response
-     * @param Validator $validator
      *
      * @return Response
      */
-    public function store(int $id, Request $request, Response $response, Validator $validator): Response
+    public function store(int $id, Request $request, Response $response): Response
     {
         if (! isAdmin()) {
             abort(403, 'Доступ запрещен!');
@@ -165,18 +163,19 @@ class GuestbookController extends Controller
 
         $input = (array) $request->getParsedBody();
 
-        $validator
-            ->required(['title', 'text'])
+        $this->validator
+            ->required(['csrf', 'title', 'text'])
+            ->same('csrf', $this->session->get('csrf'), 'Неверный идентификатор сессии, повторите действие!')
             ->length('title', 5, 50)
             ->length('text', 5, 5000);
 
-        if ($validator->isValid($input)) {
+        if ($this->validator->isValid($input)) {
             $message->update([
                 'title' => sanitize($input['title']),
                 'text'  => sanitize($input['text']),
             ]);
         } else {
-            $this->session->set('flash', ['errors' => $validator->getErrors(), 'old' => $input]);
+            $this->session->set('flash', ['errors' => $this->validator->getErrors(), 'old' => $input]);
 
             return $this->redirect($response, '/guestbook/' . $id . '/edit');
         }
@@ -187,29 +186,42 @@ class GuestbookController extends Controller
     }
 
     /**
-     * Delete
+     * Destroy
      *
-     * @param int      $id
-     * @param Response $response
+     * @param int       $id
+     * @param Request   $request
+     * @param Response  $response
      *
      * @return Response
      */
-    public function delete(int $id, Response $response): Response
+    public function destroy(int $id, Request $request, Response $response): Response
     {
         if (! isAdmin()) {
             abort(403, 'Доступ запрещен!');
         }
 
         $message = $this->guestbookRepository->getById($id);
-        if ($message) {
+        if (! $message) {
+            abort(404, 'Сообщение не найдено');
+        }
+
+        $input = (array) $request->getParsedBody();
+
+        $this->validator
+            ->required('csrf')
+            ->same('csrf', $this->session->get('csrf'), 'Неверный идентификатор сессии, повторите действие!');
+
+        if ($this->validator->isValid($input)) {
             $message->delete();
 
             if ($message->image && file_exists(publicPath($message->image))) {
                 unlink(publicPath($message->image));
             }
-        }
 
-        $this->session->set('flash', ['success' => 'Сообщение успешно удалено!']);
+            $this->session->set('flash', ['success' => 'Сообщение успешно удалено!']);
+        } else {
+            $this->session->set('flash', ['errors' => $this->validator->getErrors()]);
+        }
 
         return $this->redirect($response, '/guestbook');
     }

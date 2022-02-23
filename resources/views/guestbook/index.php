@@ -24,7 +24,13 @@ use MotorORM\CollectionPaginate;
             <?php if (isAdmin()): ?>
                 <div class="float-end">
                     <a href="/guestbook/<?= $message->id ?>/edit"><i class="bi bi-pencil"></i></a>
-                    <a href="guestbook/<?= $message->id ?>/delete" onclick="return confirm('Подтвердите удаление!')"><i class="bi bi-x-lg"></i></a>
+                    <a href="#" onclick="return (confirm('Подтвердите удаление!')) ? $(this).find('form').submit() : false;">
+                        <i class="bi bi-x-lg"></i>
+                        <form action="/guestbook/<?= $message->id ?>" method="post" style="display:none">
+                            <input type="hidden" name="_METHOD" value="DELETE">
+                            <input type="hidden" name="csrf" value="<?= session()->get('csrf') ?>">
+                        </form>
+                    </a>
                 </div>
             <?php endif; ?>
 
@@ -32,21 +38,31 @@ use MotorORM\CollectionPaginate;
 
             <?php if ($message->image): ?>
                 <div class="media-file">
-                    <img src="<?= $message->image ?>" alt="" class="w-100">
+                    <a href="<?= $message->image ?>" data-fancybox="gallery" data-caption="<?= $message->title ?>">
+                        <img src="<?= $message->image ?>" alt="" class="w-100">
+                    </a>
+
                 </div>
             <?php endif; ?>
 
             <div class="message">
                 <?= bbCode($message->text) ?>
             </div>
+            <div class="section-author">
+                <?php if ($message->login): ?>
+                    <span class="avatar-micro">
+                        <img class="avatar-default rounded-circle" src="/assets/images/avatar_default.png" alt="Аватар">
+                    </span>
+                    <span><a href="/users/<?= $this->e($message->login) ?>"><?= $this->e($message->login) ?></a></span>
+                <?php else: ?>
+                    <span class="avatar-micro">
+                        <img class="avatar-default rounded-circle" src="/assets/images/avatar_default.png" alt="Аватар">
+                    </span>
+                    <span><?= setting('main.guest_name') ?></span>
+                <?php endif; ?>
 
-            <?php if ($message->login): ?>
-                <span class="fw-bold"><a href="/users/<?= $this->e($message->login) ?>"><?= $this->e($message->login) ?></a></span>
-            <?php else: ?>
-            <span class="fw-bold"><?= setting('main.guest_name') ?></span>
-            <?php endif; ?>
-
-            <small class="text-muted fst-italic"><?= date('d.m.Y H:i', $message->created_at) ?></small>
+                <small class="text-muted fst-italic ms-1"><?= date('d.m.Y H:i', $message->created_at) ?></small>
+            </div>
         </div>
     <?php endforeach; ?>
 

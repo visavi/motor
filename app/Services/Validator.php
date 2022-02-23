@@ -37,6 +37,8 @@ use Psr\Http\Message\UploadedFileInterface;
  * @method $this phone(array|string $key, ?string $label = null)
  * @method $this file(string $key, array $rules)
  * @method $this add(string $key, callable $callable, string $label)
+ * @method $this same(string $key, mixed $value, string $label = null)
+ * @method $this notSame(string $key, mixed $value, string $label = null)
  *
  */
 class Validator
@@ -679,11 +681,59 @@ class Validator
      *
      * @return $this
      */
-    private function addRule(string $key, callable $callable, string $label)
+    private function addRule(string $key, callable $callable, string $label): self
     {
         $input = $this->getInput($key);
 
         if (! $callable($input)) {
+            $this->addError($key, $label);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Same rule
+     *
+     * @param string $key
+     * @param mixed  $value
+     * @param string $label
+     *
+     * @return $this
+     */
+    private function sameRule(string $key, mixed $value, string $label): self
+    {
+        $input = $this->getInput($key);
+
+        if (! $this->isRequired($key) && $this->blank($input)) {
+            return $this;
+        }
+
+        if ($input !== $value) {
+            $this->addError($key, $label);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Not same rule
+     *
+     * @param string $key
+     * @param mixed  $value
+     * @param string $label
+     *
+     * @return $this
+     */
+    private function notSameRule(string $key, mixed $value, string $label): self
+    {
+        $input = $this->getInput($key);
+
+        if (! $this->isRequired($key) && $this->blank($input)) {
+            return $this;
+        }
+
+        if ($input === $value) {
             $this->addError($key, $label);
         }
 

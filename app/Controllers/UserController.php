@@ -19,6 +19,7 @@ class UserController extends Controller
     public function __construct(
         protected View $view,
         protected Session $session,
+        protected Validator $validator,
     ) {}
 
     /**
@@ -26,18 +27,17 @@ class UserController extends Controller
      *
      * @param Request   $request
      * @param Response  $response
-     * @param Validator $validator
      *
      * @return Response
      */
-    public function login(Request $request, Response $response, Validator $validator): Response
+    public function login(Request $request, Response $response): Response
     {
         if ($request->getMethod() === 'POST') {
             $input = (array) $request->getParsedBody();
 
-            $validator->required(['login', 'password']);
+            $this->validator->required(['login', 'password']);
 
-            if ($validator->isValid($input)) {
+            if ($this->validator->isValid($input)) {
                 $user = User::query()->where('login', $input['login'])->first();
 
                 if ($user && password_verify($input['password'], $user->password)) {
@@ -60,10 +60,10 @@ class UserController extends Controller
                     return $this->redirect($response, '/guestbook');
                 }
 
-                $validator->addError('login', 'Неверный логин или пароль');
+                $this->validator->addError('login', 'Неверный логин или пароль');
             }
 
-            $this->session->set('flash', ['errors' => $validator->getErrors(), 'old' => $input]);
+            $this->session->set('flash', ['errors' => $this->validator->getErrors(), 'old' => $input]);
 
             return $this->redirect($response, '/login');
         }
@@ -79,17 +79,16 @@ class UserController extends Controller
      *
      * @param Request   $request
      * @param Response  $response
-     * @param Validator $validator
      *
      * @return Response
      */
-    public function register(Request $request, Response $response, Validator $validator): Response
+    public function register(Request $request, Response $response): Response
     {
         if ($request->getMethod() === 'POST') {
             $input = (array) $request->getParsedBody();
 
-            $validator->required(['login', 'password', 'password2', 'email', 'captcha'])
-                ->add('captcha', fn () => $this->session->get('captcha') === $input['captcha'], 'Не удалось пройти проверку captcha!')
+            $this->validator->required(['captcha', 'login', 'password', 'password2', 'email'])
+                ->same('captcha', $this->session->get('captcha'), 'Не удалось пройти проверку captcha!')
                 ->length('login', 3, 20)
                 ->regex('login', '|^[a-z0-9\-]+$|i')
                 ->email('email')
@@ -98,15 +97,15 @@ class UserController extends Controller
 
             $userExists = User::query()->where('login', $input['login'])->first();
             if ($userExists) {
-                $validator->addError('login', 'Данный логин уже занят');
+                $this->validator->addError('login', 'Данный логин уже занят');
             }
 
             $emailExists = User::query()->where('email', $input['email'])->first();
             if ($emailExists) {
-                $validator->addError('email', 'Данный email уже используется');
+                $this->validator->addError('email', 'Данный email уже используется');
             }
 
-            if ($validator->isValid($input)) {
+            if ($this->validator->isValid($input)) {
                 $password = password_hash($input['password'], PASSWORD_BCRYPT);
                 User::query()->insert([
                     'login'      => sanitize($input['login']),
@@ -123,7 +122,7 @@ class UserController extends Controller
                 return $this->redirect($response, '/guestbook');
             }
 
-            $this->session->set('flash', ['errors' => $validator->getErrors(), 'old' => $input]);
+            $this->session->set('flash', ['errors' => $this->validator->getErrors(), 'old' => $input]);
 
             return $this->redirect($response, '/register');
         }
@@ -137,26 +136,37 @@ class UserController extends Controller
     /**
      * Logout
      *
+     * @param Request  $request
      * @param Response $response
      *
      * @return Response
      */
-    public function logout(Response $response): Response
+    public function logout(Request $request, Response $response): Response
     {
-        $this->session->delete('login');
-        $this->session->delete('password');
+        $input = (array) $request->getParsedBody();
 
-        $options = [
-            'expires' => strtotime('-1 hour'),
-            'path' => '/',
-            //'domain' => '.example.com',
-            'secure' => true,
-            'httponly' => true,
-            'samesite' => 'Lax',
-        ];
-        setcookie('password', '', $options);
+        $this->validator
+            ->required('csrf')
+            ->same('csrf', $this->session->get('csrf'), 'Неверный идентификатор сессии, повторите действие!');
 
-        $this->session->set('flash', ['success' => 'Вы успешно вышли!']);
+        if ($this->validator->isValid($input)) {
+            $this->session->delete('login');
+            $this->session->delete('password');
+
+            $options = [
+                'expires' => strtotime('-1 hour'),
+                'path' => '/',
+                //'domain' => '.example.com',
+                'secure' => true,
+                'httponly' => true,
+                'samesite' => 'Lax',
+            ];
+            setcookie('password', '', $options);
+
+            $this->session->set('flash', ['success' => 'Вы успешно вышли!']);
+        } else {
+            $this->session->set('flash', ['errors' => $this->validator->getErrors()]);
+        }
 
         return $this->redirect($response, '/guestbook');
     }

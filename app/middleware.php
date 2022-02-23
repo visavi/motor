@@ -8,6 +8,7 @@ use App\Middleware\TrailingSlashMiddleware;
 use App\Middleware\UserAuthMiddleware;
 use Psr\Container\ContainerInterface;
 use Slim\App;
+use Slim\Middleware\MethodOverrideMiddleware;
 
 return function (App $app, ContainerInterface $container) {
     /**
@@ -15,6 +16,9 @@ return function (App $app, ContainerInterface $container) {
      * Otherwise exceptions thrown from it will not be handled by the middleware
      */
     $app->addRoutingMiddleware();
+
+    // Add MethodOverride middleware
+    $app->add(MethodOverrideMiddleware::class);
 
     // Trailing slash middleware
     $app->add(TrailingSlashMiddleware::class);

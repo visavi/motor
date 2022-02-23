@@ -12,6 +12,8 @@
     <link href="<?= $this->asset('/assets/css/markitup.css') ?>" rel="stylesheet">
     <link href="<?= $this->asset('/assets/css/prettify.css') ?>" rel="stylesheet">
     <link href="<?= $this->asset('/assets/css/main.css') ?>" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" rel="stylesheet">
+    <link href="/favicon.ico" rel="icon" type="image/x-icon" >
     <meta name="theme-color" content="#7952b3">
 </head>
 <body>
@@ -26,7 +28,14 @@
         <nav class="d-inline-flex mt-2 ms-auto">
             <?php if (isUser()): ?>
                 <a class="me-3 py-2 text-dark text-decoration-none" href="/users/<?= getUser('login') ?>"><?= getUser('login') ?></a>
-                <a class="me-3 py-2 text-dark text-decoration-none" href="/logout">Выйти</a>
+                <a class="me-3 py-2 text-dark text-decoration-none" href="#"
+                   onclick="return (confirm('Подтвердите выход!')) ? $(this).find('form').submit() : false;">
+                    Выйти
+                    <form action="/logout" method="post" style="display:none">
+                        <input type="hidden" name="csrf" value="<?= session()->get('csrf') ?>">
+                    </form>
+                </a>
+
             <?php else: ?>
                 <a class="me-3 py-2 text-dark text-decoration-none" href="/login">Войти</a>
                 <a class="me-3 py-2 text-dark text-decoration-none" href="/register">Регистрация</a>
@@ -52,5 +61,6 @@
 <script src="<?= $this->asset('/assets/js/markitup-set.js') ?>"></script>
 <script src="<?= $this->asset('/assets/js/prettify.js') ?>"></script>
 <script src="<?= $this->asset('/assets/js/main.js') ?>"></script>
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
 </body>
 </html>

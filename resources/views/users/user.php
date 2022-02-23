@@ -17,11 +17,23 @@ use App\Models\User;
 <?php $this->stop() ?>
 
 <div class="p-3 shadow">
-    <div>ID: <?= $user->id ?></div>
-    <div>Логин: <?= $user->login ?></div>
-    <div>Роль: <?= setting('roles.' . $user->role) ?? 'Пользователь' ?></div>
-    <div>Имя: <?= $user->name ?></div>
-    <div>Дата регистрации: <?= date('d.m.Y', $user->created_at) ?></div>
+    <div class="row">
+        <div class="col-md-6">
+            <div>ID: <?= $user->id ?></div>
+            <div>Логин: <?= $user->login ?></div>
+            <div>Роль: <?= setting('roles.' . $user->role) ?? 'Пользователь' ?></div>
+            <div>Имя: <?= $user->name ?></div>
+            <div>Дата регистрации: <?= date('d.m.Y', $user->created_at) ?></div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="mb-3">
+                <?php if ($user->picture): ?>
+                    <img src="<?= $user->picture ?>" alt="Фото <?= $user->login ?>" class="img-fluid">
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
 
     <?php if (getUser('id') === $user->id): ?>
         <div class="mt-3">
