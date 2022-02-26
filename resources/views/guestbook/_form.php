@@ -29,7 +29,20 @@ use App\Models\Guestbook;
             <span class="badge bg-info" id="upload-file-info"></span>
         </div>
 
-        <?php if (! isUser()): ?>
+        <?php if (isUser()): ?>
+            <?php if (isset($message) && $message->image): ?>
+                <a href="<?= $message->image ?>" data-fancybox="gallery" data-caption="<?= $message->title ?>">
+                    <img src="<?= $message->image ?>" alt="" class="w-25">
+                </a>
+
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" name="delete_image" value="1" id="deleteImage"<?= old('delete_image') ? ' checked' : '' ?>>
+                    <label class="form-check-label" for="deleteImage">
+                        Удалить фото
+                    </label>
+                </div>
+            <?php endif; ?>
+        <?php else: ?>
             <?= $this->fetch('app/_captcha') ?>
         <?php endif; ?>
 

@@ -41,7 +41,6 @@ use MotorORM\CollectionPaginate;
                     <a href="<?= $message->image ?>" data-fancybox="gallery" data-caption="<?= $message->title ?>">
                         <img src="<?= $message->image ?>" alt="" class="w-100">
                     </a>
-
                 </div>
             <?php endif; ?>
 
@@ -53,7 +52,7 @@ use MotorORM\CollectionPaginate;
                     <span class="avatar-micro">
                         <img class="avatar-default rounded-circle" src="/assets/images/avatar_default.png" alt="Аватар">
                     </span>
-                    <span><a href="/users/<?= $this->e($message->login) ?>"><?= $this->e($message->login) ?></a></span>
+                    <span><a href="/users/<?= $message->login ?>"><?= $message->login ?></a></span>
                 <?php else: ?>
                     <span class="avatar-micro">
                         <img class="avatar-default rounded-circle" src="/assets/images/avatar_default.png" alt="Аватар">

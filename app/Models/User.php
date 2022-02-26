@@ -51,13 +51,13 @@ class User extends Model
     public function getAvatar(): string
     {
         if (! $this->id) {
-            return '<img src="/assets/images/avatar_default.png" alt="Аватар">';
+            return '<img class="avatar-default rounded-circle" src="/assets/images/avatar_guest.png" alt="Аватар">';
         }
 
         if ($this->avatar && file_exists(publicPath($this->avatar))) {
-            $avatar = '<img src="/assets/images/' . $this->avatar . '" alt="Аватар">';
+            $avatar = '<img class="avatar-default rounded-circle" src="' . $this->avatar . '" alt="Аватар">';
         } else {
-            $avatar = '<img src="/assets/images/avatar_default.png" alt="Аватар">';
+            $avatar = '<img class="avatar-default rounded-circle" src="/assets/images/avatar_default.png" alt="Аватар">';
         }
 
         return $avatar;

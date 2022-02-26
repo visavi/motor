@@ -13,6 +13,7 @@ use Intervention\Image\Constraint;
 use Intervention\Image\ImageManager;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\UploadedFileInterface;
 
 /**
  * GuestbookController
@@ -84,7 +85,11 @@ class GuestbookController extends Controller
         }
 
         if ($this->validator->isValid($input)) {
-            if ($input['image']->getError() === UPLOAD_ERR_OK) {
+            if (
+                isset($input['image'])
+                && $input['image'] instanceof UploadedFileInterface
+                && $input['image']->getError() === UPLOAD_ERR_OK
+            ) {
                 $extension = getExtension($input['image']->getClientFilename());
                 $path = '/uploads/guestbook/' . uniqueName($extension);
 
@@ -144,13 +149,19 @@ class GuestbookController extends Controller
     /**
      * Store
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Response  $response
+     * @param int          $id
+     * @param Request      $request
+     * @param Response     $response
+     * @param ImageManager $manager
      *
      * @return Response
      */
-    public function store(int $id, Request $request, Response $response): Response
+    public function store(
+        int $id,
+        Request $request,
+        Response $response,
+        ImageManager $manager,
+    ): Response
     {
         if (! isAdmin()) {
             abort(403, 'Доступ запрещен!');
@@ -162,17 +173,58 @@ class GuestbookController extends Controller
         }
 
         $input = (array) $request->getParsedBody();
+        $files = $request->getUploadedFiles();
+        $input = array_merge($input, $files);
 
         $this->validator
             ->required(['csrf', 'title', 'text'])
             ->same('csrf', $this->session->get('csrf'), 'Неверный идентификатор сессии, повторите действие!')
-            ->length('title', 5, 50)
-            ->length('text', 5, 5000);
+            ->length('title', setting('guestbook.title_min_length'), setting('guestbook.title_max_length'))
+            ->length('text', setting('guestbook.text_min_length'), setting('guestbook.text_max_length'))
+            ->file('image', [
+                'size_max'   => setting('file.size_max'),
+                'weight_max' => setting('image.weight_max'),
+                'weight_min' => setting('image.weight_min'),
+            ]);
 
         if ($this->validator->isValid($input)) {
+            // Удаляем старое фото
+            if (
+                isset($input['delete_image'])
+                && $message->image
+                && file_exists(publicPath($message->image))
+            ) {
+                $path = '';
+                unlink(publicPath($message->image));
+            }
+
+            // Загрузка фото
+            if (
+                isset($input['image'])
+                && $input['image'] instanceof UploadedFileInterface
+                && $input['image']->getError() === UPLOAD_ERR_OK
+            ) {
+                // Удаляем старое фото
+                if ($message->image && file_exists(publicPath($message->image))) {
+                    unlink(publicPath($message->image));
+                }
+
+                $extension = getExtension($input['image']->getClientFilename());
+                $path = '/uploads/guestbook/' . uniqueName($extension);
+
+                $img = $manager->make($input['image']->getFilePath());
+                $img->resize(setting('image.resize'), setting('image.resize'), static function (Constraint $constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
+
+                $img->save(publicPath($path));
+            }
+
             $message->update([
                 'title' => sanitize($input['title']),
                 'text'  => sanitize($input['text']),
+                'image' => $path ?? $message->image,
             ]);
         } else {
             $this->session->set('flash', ['errors' => $this->validator->getErrors(), 'old' => $input]);

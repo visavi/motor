@@ -17,4 +17,13 @@ namespace App\Models;
 class Guestbook extends Model
 {
     protected string $filePath = __DIR__ . '/../../database/guestbook.csv';
+
+
+    /**
+     * Возвращает связь пользователей
+     */
+/*    public function user(): User
+    {
+        return $this->relate(User::class, 'user_id');
+    }*/
 }
