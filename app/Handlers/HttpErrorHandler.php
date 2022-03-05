@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Handlers;
 
-use App\Services\Setting;
 use App\Services\View;
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Exception\HttpException;
 use Slim\Handlers\ErrorHandler as SlimErrorHandler;
@@ -17,8 +15,6 @@ use Whoops\Util\Misc;
 
 class HttpErrorHandler extends SlimErrorHandler
 {
-    protected ContainerInterface $container;
-
     /**
      * @inheritdoc
      */
@@ -26,17 +22,26 @@ class HttpErrorHandler extends SlimErrorHandler
     {
         $response = $this->responseFactory->createResponse();
 
-        if (
-            $this->exception instanceof HttpException
-            || ! $this->container->get(Setting::class)->get('debug')
-        ) {
+        if ($this->exception instanceof HttpException || ! setting('debug')) {
             $code = $this->statusCode;
 
-            if (! $this->container->get(View::class)->exists('errors/' . $code)) {
+            if (strtolower($this->request->getHeaderLine('X-Requested-With')) === 'xmlhttprequest') {
+                $error = [
+                    'error' => [
+                        'code'    => $code,
+                        'message' => $this->exception->getMessage(),
+                    ]
+                ];
+                $response->getBody()->write((string) json_encode($error));
+
+                return $response->withStatus($code)->withHeader('Content-Type', 'application/json');
+            }
+
+            if (! app(View::class)->exists('errors/' . $code)) {
                 $code = 500;
             }
 
-            $response = $this->container->get(View::class)->render(
+            $response = app(View::class)->render(
                 $response,
                 'errors/' . $code,
                 ['message' => $this->exception->getMessage()]
@@ -45,10 +50,7 @@ class HttpErrorHandler extends SlimErrorHandler
             return $response->withStatus($code);
         }
 
-        if (
-            class_exists(Run::class)
-            && $this->container->get(Setting::class)->get('debug')
-        ) {
+        if (class_exists(Run::class) && setting('debug')) {
             $handler = Misc::isAjaxRequest() ?
                 new JsonResponseHandler() :
                 new PrettyPageHandler();
@@ -60,17 +62,5 @@ class HttpErrorHandler extends SlimErrorHandler
         }
 
         return $response;
-
-    }
-
-    /**
-     * Set container
-     *
-     * @param ContainerInterface $container
-     * @return void
-     */
-    public function setContainer(ContainerInterface $container): void
-    {
-        $this->container = $container;
     }
 }

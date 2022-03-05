@@ -1,8 +1,12 @@
 <?php
+
+use App\Models\File;
 use App\Models\Guestbook;
+use MotorORM\Collection;
 use MotorORM\CollectionPaginate;
 
 /** @var CollectionPaginate|Guestbook[] $messages */
+/** @var Collection|File[] $files */
 ?>
 <?php $this->layout('layout') ?>
 
@@ -36,23 +40,15 @@ use MotorORM\CollectionPaginate;
 
             <h5><?= $this->e($message->title) ?></h5>
 
-            <?php if ($message->image): ?>
-                <div class="media-file">
-                    <a href="<?= $message->image ?>" data-fancybox="gallery" data-caption="<?= $message->title ?>">
-                        <img src="<?= $message->image ?>" alt="" class="w-100">
-                    </a>
-                </div>
-            <?php endif; ?>
-
             <div class="message">
                 <?= bbCode($message->text) ?>
             </div>
             <div class="section-author">
-                <?php if ($message->login): ?>
+                <?php if ($message->user()): ?>
                     <span class="avatar-micro">
-                        <img class="avatar-default rounded-circle" src="/assets/images/avatar_default.png" alt="Аватар">
+                        <?= $message->user()->getAvatar() ?>
                     </span>
-                    <span><a href="/users/<?= $message->login ?>"><?= $message->login ?></a></span>
+                    <span><a href="/users/<?= $message->user()->login ?>"><?= $message->user()->login ?></a></span>
                 <?php else: ?>
                     <span class="avatar-micro">
                         <img class="avatar-default rounded-circle" src="/assets/images/avatar_default.png" alt="Аватар">
@@ -71,7 +67,7 @@ use MotorORM\CollectionPaginate;
 <?php endif; ?>
 
 <?php if (isUser() || setting('guestbook.allow_guests')): ?>
-    <?= $this->fetch('guestbook/_form') ?>
+    <?= $this->insert('guestbook/_form', compact('files')) ?>
 <?php else: ?>
     <div class="alert alert-danger">Авторизуйтесь для добавления сообщений</div>
 <?php endif; ?>

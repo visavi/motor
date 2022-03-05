@@ -1,7 +1,11 @@
 <?php
+
+use App\Models\File;
 use App\Models\Guestbook;
+use MotorORM\Collection;
 
 /** @var Guestbook $message */
+/** @var Collection<File> $files */
 ?>
 <?php $this->layout('layout') ?>
 
@@ -17,4 +21,4 @@ use App\Models\Guestbook;
     </nav>
 <?php $this->stop() ?>
 
-<?= $this->fetch('guestbook/_form', compact('message')) ?>
+<?= $this->fetch('guestbook/_form', compact('message', 'files')) ?>

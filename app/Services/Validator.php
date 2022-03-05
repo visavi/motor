@@ -24,6 +24,8 @@ use Psr\Http\Message\UploadedFileInterface;
  * @method $this gte(array|string $key, int|float $num, ?string $label = null)
  * @method $this lt(array|string $key, int|float $num, ?string $label = null)
  * @method $this lte(array|string $key, int|float $num, ?string $label = null)
+ * @method $this same(string $key, mixed $value, string $label = null)
+ * @method $this notSame(string $key, mixed $value, string $label = null)
  * @method $this equal(string $key1, string $key2, ?string $label = null)
  * @method $this notEqual(string $key1, string $key2, ?string $label = null)
  * @method $this empty(array|string $key, ?string $label = null)
@@ -37,8 +39,7 @@ use Psr\Http\Message\UploadedFileInterface;
  * @method $this phone(array|string $key, ?string $label = null)
  * @method $this file(string $key, array $rules)
  * @method $this add(string $key, callable $callable, string $label)
- * @method $this same(string $key, mixed $value, string $label = null)
- * @method $this notSame(string $key, mixed $value, string $label = null)
+ * @method $this custom(bool $compare, string $label)
  *
  */
 class Validator
@@ -62,6 +63,9 @@ class Validator
 
         'equal'         => 'Значения полей %s и %s должны совпадать',
         'notEqual'      => 'Значения полей %s и %s должны различаться',
+        'same'          => 'Значения поля %s должно быть равным %s',
+        'notSame'       => 'Значения поля %s должно быть не равным %s',
+
         'empty'         => 'Значение поля %s должно быть пустым',
         'notEmpty'      => 'Значение поля %s не должно быть пустым',
         'in'            => 'Значение поля %s ошибочно',
@@ -377,6 +381,54 @@ class Validator
     }
 
     /**
+     * Same rule
+     *
+     * @param string      $key
+     * @param mixed       $value
+     * @param string|null $label
+     *
+     * @return $this
+     */
+    private function sameRule(string $key, mixed $value, ?string $label = null): self
+    {
+        $input = $this->getInput($key);
+
+        if (! $this->isRequired($key) && $this->blank($input)) {
+            return $this;
+        }
+
+        if ($input !== $value) {
+            $this->addError($key, sprintf($label ?? $this->data['same'], $key, $value));
+        }
+
+        return $this;
+    }
+
+    /**
+     * Not same rule
+     *
+     * @param string      $key
+     * @param mixed       $value
+     * @param string|null $label
+     *
+     * @return $this
+     */
+    private function notSameRule(string $key, mixed $value, ?string $label = null): self
+    {
+        $input = $this->getInput($key);
+
+        if (! $this->isRequired($key) && $this->blank($input)) {
+            return $this;
+        }
+
+        if ($input === $value) {
+            $this->addError($key, sprintf($label ?? $this->data['notSame'], $key, $value));
+        }
+
+        return $this;
+    }
+
+    /**
      * Equal
      *
      * @param string      $key1
@@ -673,7 +725,7 @@ class Validator
     }
 
     /**
-     * Custom rule
+     * Add rule
      *
      * @param string   $key
      * @param callable $callable
@@ -693,48 +745,17 @@ class Validator
     }
 
     /**
-     * Same rule
+     * Custom rule
      *
-     * @param string $key
-     * @param mixed  $value
+     * @param bool   $compare
      * @param string $label
      *
      * @return $this
      */
-    private function sameRule(string $key, mixed $value, string $label): self
+    private function customRule(bool $compare, string $label): self
     {
-        $input = $this->getInput($key);
-
-        if (! $this->isRequired($key) && $this->blank($input)) {
-            return $this;
-        }
-
-        if ($input !== $value) {
-            $this->addError($key, $label);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Not same rule
-     *
-     * @param string $key
-     * @param mixed  $value
-     * @param string $label
-     *
-     * @return $this
-     */
-    private function notSameRule(string $key, mixed $value, string $label): self
-    {
-        $input = $this->getInput($key);
-
-        if (! $this->isRequired($key) && $this->blank($input)) {
-            return $this;
-        }
-
-        if ($input === $value) {
-            $this->addError($key, $label);
+        if (! $compare) {
+            $this->addError('', $label);
         }
 
         return $this;

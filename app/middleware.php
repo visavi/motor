@@ -31,7 +31,6 @@ return function (App $app, ContainerInterface $container) {
 
     // Define Custom Error Handler
     $errorHandler = new HttpErrorHandler($app->getCallableResolver(), $app->getResponseFactory());
-    $errorHandler->setContainer($container);
 
     /**
      * Add Error Middleware

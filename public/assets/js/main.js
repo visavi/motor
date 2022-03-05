@@ -1,6 +1,12 @@
 $(function () {
     prettyPrint();
 
+    toastr.options = {
+        'toastClass' : 'toastr',
+        'progressBar': true,
+        'positionClass': 'toast-top-full-width'
+    };
+
     $('.markItUp').markItUp(mySettings).on('input', function () {
         var maxlength = $(this).attr('maxlength');
         var text      = $(this).val().replace(/(\r\n|\n|\r)/g, "\r\n");
@@ -45,3 +51,105 @@ $(function () {
         .closest('.markItUpBlock').parent()
         .find('.invalid-feedback').show();
 });
+
+/* Вставка изображения в форму */
+pasteImage = function (el) {
+    var field = $('.markItUpEditor');
+    var paste = '[img]' + $(el).find('img').attr('src') + '[/img]';
+
+    field.focus().caret(paste);
+};
+
+/* Удаление изображения из формы */
+cutImage = function (path) {
+    var field = $('.markItUpEditor');
+    var text  = field.val();
+    var cut   = '[img]' + path + '[/img]';
+
+    field.val(text.replace(cut, ''));
+};
+
+/* Загрузка изображения */
+submitFile = function (el) {
+    var form = new FormData();
+    form.append('file', el.files[0]);
+    form.append('id', $(el).data('id'));
+    form.append('type', $(el).data('type'));
+    form.append('csrf', $(el).data('csrf'));
+
+    $.ajax({
+        data: form,
+        type: 'post',
+        contentType: false,
+        processData: false,
+        dataType: 'json',
+        url: '/upload',
+        beforeSend: function () {
+            $('.js-files').append('<i class="fas fa-spinner fa-spin fa-3x mx-3"></i>');
+        },
+        complete: function () {
+            $('.fa-spinner').remove();
+        },
+        success: function (data) {
+            if (! data.success) {
+                toastr.error(data.message);
+                return false;
+            }
+
+            if (data.success) {
+                if (data.type === 'image') {
+                    var template = $('.js-image-template').clone();
+
+                    template.find('img').attr({
+                        'src': data.path
+                    });
+                } else {
+                    var template = $('.js-file-template').clone();
+
+                    template.find('.js-file-link').attr({
+                        'href': data.path
+                    }).text(data.name);
+
+                    template.find('.js-file-size').text(data.size);
+                }
+
+                template.find('.js-file-delete').attr('data-id', data.id);
+                $('.js-files').append(template.html());
+
+                pasteImage(template);
+            }
+        }
+    });
+
+    return false;
+};
+
+/* Удаление файла */
+deleteFile = function (el) {
+    var form = new FormData();
+    form.append('type', $(el).data('type'));
+    form.append('csrf', $(el).data('csrf'));
+    form.append('_METHOD', 'DELETE');
+
+    $.ajax({
+        data: form,
+        type: 'post',
+        contentType: false,
+        processData: false,
+        dataType: 'json',
+        url: '/upload/' + $(el).data('id'),
+        success: function (data) {
+            if (! data.success) {
+                toastr.error(data.message);
+                return false;
+            }
+
+            if (data.success) {
+                cutImage(data.path);
+                $(el).closest('.js-file').hide('fast');
+            }
+        }
+    });
+
+    return false;
+};

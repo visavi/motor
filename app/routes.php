@@ -6,6 +6,7 @@ use App\Controllers\BBCodeController;
 use App\Controllers\CaptchaController;
 use App\Controllers\GuestbookController;
 use App\Controllers\HomeController;
+use App\Controllers\UploadController;
 use App\Controllers\User\ProfileController;
 use App\Controllers\StickerController;
 use App\Controllers\UserController;
@@ -25,6 +26,11 @@ return function (App $app) {
     $app->get('/captcha', [CaptchaController::class, 'captcha']);
     $app->get('/stickers/modal', [StickerController::class, 'modal']);
     $app->post('/bbcode', [BBCodeController::class, 'bbcode']);
+
+    $app->group('/upload', function (Group $group) {
+        $group->post('', [UploadController::class, 'upload']);
+        $group->delete('/{id:[0-9]+}', [UploadController::class, 'destroy']);
+    });
 
     $app->map(['GET', 'POST'], '/login', [UserController::class, 'login']);
     $app->map(['GET', 'POST'], '/register', [UserController::class, 'register']);

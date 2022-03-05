@@ -1,11 +1,17 @@
 <?php
+
+use App\Models\File;
 use App\Models\Guestbook;
+use MotorORM\Collection;
 
 /** @var Guestbook|null $message */
+/** @var Collection<File> $files */
+
+$message = $message ?? null;
 ?>
 <div class="p-3 shadow">
-    <form method="post" action="/guestbook<?= isset($message) ? '/' . $message->id : '' ?>" enctype="multipart/form-data">
-        <input type="hidden" name="_METHOD" value="<?= isset($message) ? 'PUT' : 'POST' ?>">
+    <form method="post" action="/guestbook<?= $message ? '/' . $message->id : '' ?>">
+        <input type="hidden" name="_METHOD" value="<?= $message ? 'PUT' : 'POST' ?>">
         <input type="hidden" name="csrf" value="<?= session()->get('csrf') ?>">
         <div class="mb-3">
             <label for="title" class="form-label">Заголовок</label>
@@ -15,37 +21,17 @@ use App\Models\Guestbook;
 
         <div class="mb-3">
             <label for="text" class="form-label">Текст</label>
-            <textarea class="form-control markItUp<?= hasError('text') ?>" id="text" rows="5" name="text" maxlength="5000" required><?= old('text', $message->text ?? null) ?></textarea>
+            <textarea class="form-control markItUp<?= hasError('text') ?>" id="text" rows="5" name="text" maxlength="<?= setting('guestbook.text_max_length') ?>" required><?= old('text', $message->text ?? null) ?></textarea>
             <span class="js-textarea-counter"></span>
             <div class="invalid-feedback"><?= getError('text') ?></div>
         </div>
 
-        <div class="mb-3">
-            <label for="image" class="btn btn-sm btn-secondary form-label<?= hasError('image') ?>">
-                <input id="image" type="file" name="image" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
-                Прикрепить фото&hellip;
-            </label>
-            <div class="invalid-feedback"><?= getError('image') ?></div>
-            <span class="badge bg-info" id="upload-file-info"></span>
-        </div>
-
         <?php if (isUser()): ?>
-            <?php if (isset($message) && $message->image): ?>
-                <a href="<?= $message->image ?>" data-fancybox="gallery" data-caption="<?= $message->title ?>">
-                    <img src="<?= $message->image ?>" alt="" class="w-25">
-                </a>
-
-                <div class="form-check mb-3">
-                    <input class="form-check-input" type="checkbox" name="delete_image" value="1" id="deleteImage"<?= old('delete_image') ? ' checked' : '' ?>>
-                    <label class="form-check-label" for="deleteImage">
-                        Удалить фото
-                    </label>
-                </div>
-            <?php endif; ?>
+            <?= $this->fetch('app/_upload', compact('message','files')) ?>
         <?php else: ?>
             <?= $this->fetch('app/_captcha') ?>
         <?php endif; ?>
 
-        <button type="submit" class="btn btn-primary"><?= isset($message) ? 'Изменить' : 'Отправить' ?></button>
+        <button type="submit" class="btn btn-primary"><?= $message ? 'Изменить' : 'Отправить' ?></button>
     </form>
 </div>
