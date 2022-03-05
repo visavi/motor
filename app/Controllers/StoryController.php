@@ -131,11 +131,13 @@ class StoryController extends Controller
             }
 
             $this->session->set('flash', ['success' => 'Статья успешно добавлена!']);
-        } else {
-            $this->session->set('flash', ['errors' => $this->validator->getErrors(), 'old' => $input]);
+
+            return $this->redirect($response, '/' . $postId);
         }
 
-        return $this->redirect($response, '/');
+        $this->session->set('flash', ['errors' => $this->validator->getErrors(), 'old' => $input]);
+
+        return $this->redirect($response, '/create');
     }
 
     /**
@@ -203,15 +205,15 @@ class StoryController extends Controller
                 'title' => sanitize($input['title']),
                 'text'  => sanitize($input['text']),
             ]);
-        } else {
-            $this->session->set('flash', ['errors' => $this->validator->getErrors(), 'old' => $input]);
 
-            return $this->redirect($response, '/' . $id . '/edit');
+            $this->session->set('flash', ['success' => 'Статья успешно изменена!']);
+
+            return $this->redirect($response, '/' . $id);
         }
 
-        $this->session->set('flash', ['success' => 'Статья успешно изменена!']);
+        $this->session->set('flash', ['errors' => $this->validator->getErrors(), 'old' => $input]);
 
-        return $this->redirect($response, '/');
+        return $this->redirect($response, '/' . $id . '/edit');
     }
 
     /**
