@@ -268,10 +268,12 @@ function abort(int $code, string $message = ''): void
 function old(string $key, mixed $default = null): mixed
 {
     if (! session('flash.old')) {
-        return $default;
+        return htmlspecialchars((string) $default);
     }
 
-    return session('flash.old.' . $key, $default);
+    $old = session('flash.old.' . $key, $default);
+
+    return htmlspecialchars((string) $old);
 }
 
 /**

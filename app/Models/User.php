@@ -48,6 +48,21 @@ class User extends Model
     public const MALE   = 'male';
     public const FEMALE = 'female';
 
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName(): string
+    {
+        return htmlspecialchars($this->name ?? $this->login);
+    }
+
+    /**
+     * Get avatar
+     *
+     * @return string
+     */
     public function getAvatar(): string
     {
         if (! $this->id) {

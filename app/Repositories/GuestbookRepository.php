@@ -28,7 +28,7 @@ class GuestbookRepository implements RepositoryInterface
     {
         return Guestbook::query()
             ->orderByDesc('created_at')
-            ->with(['user', 'files'])
+            ->with('user')
             ->paginate($perPage);
     }
 }

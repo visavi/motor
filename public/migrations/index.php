@@ -104,5 +104,19 @@ if (! in_array('ext', $fileHeaders, true)) {
     echo 'Добавлены поля name, ext и size в таблицу files<br>';
 }
 
+// Добавляет поле name и удаляет title
+$guestbookHeaders = Guestbook::query()->headers();
+if (! in_array('name', $guestbookHeaders, true)) {
+    $migration = new Migration(new Guestbook());
+
+    try {
+        $migration->column('name')->after('text')->create();
+        $migration->column('title')->delete();
+    } catch (Exception $exception) {
+        echo $exception->getMessage();
+    }
+
+    echo 'Добавлено поле name и удалено title из таблицы guestbook<br>';
+}
 
 echo 'Все миграции выполнены успешно!<br>';

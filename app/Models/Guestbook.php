@@ -9,9 +9,8 @@ namespace App\Models;
  *
  * @property int $id
  * @property string $user_id
- * @property string $title
  * @property string $text
- * @property int $file_id
+ * @property string $name
  * @property int $created_at
  */
 class Guestbook extends Model
@@ -24,29 +23,5 @@ class Guestbook extends Model
     public function user(): mixed
     {
         return $this->hasOne(User::class, 'user_id');
-    }
-
-    /**
-     * Возвращает связь файлов
-     *
-     * @return mixed
-     */
-    public function files(): mixed
-    {
-        return $this->hasMany(File::class, 'id', 'post_id');
-    }
-
-    /**
-     * Delete message
-     *
-     * @return int
-     */
-    public function delete(): int
-    {
-        foreach ($this->files() as $file) {
-            $file->delete();
-        }
-
-        return parent::delete();
     }
 }

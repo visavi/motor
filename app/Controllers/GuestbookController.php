@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Models\File;
 use App\Models\Guestbook;
-use App\Repositories\FileRepository;
 use App\Repositories\GuestbookRepository;
 use App\Services\Session;
 use App\Services\Validator;
@@ -23,7 +21,6 @@ class GuestbookController extends Controller
         protected View $view,
         protected Session $session,
         protected Validator $validator,
-        protected FileRepository $fileRepository,
         protected GuestbookRepository $guestbookRepository,
     ) {}
 
@@ -37,24 +34,23 @@ class GuestbookController extends Controller
     public function index(Response $response): Response
     {
         $messages = $this->guestbookRepository->getMessages(setting('guestbook.per_page'));
-        $files    = $this->fileRepository->getFiles(getUser('id'), 0);
 
         return $this->view->render(
             $response,
             'guestbook/index',
-            compact('messages', 'files')
+            compact('messages')
         );
     }
 
     /**
-     * Create
+     * Store
      *
      * @param Request      $request
      * @param Response     $response
      *
      * @return Response
      */
-    public function create(
+    public function store(
         Request $request,
         Response $response,
     ): Response {
@@ -67,31 +63,28 @@ class GuestbookController extends Controller
         $input = (array) $request->getParsedBody();
 
         $this->validator
-            ->required(['csrf', 'title', 'text'])
+            ->required(['csrf', 'text'])
             ->same('csrf', $this->session->get('csrf'), 'Неверный идентификатор сессии, повторите действие!')
-            ->length('title', setting('guestbook.title_min_length'), setting('guestbook.title_max_length'))
             ->length('text', setting('guestbook.text_min_length'), setting('guestbook.text_max_length'));
 
         if (! $user) {
             $this->validator
                 ->required('captcha')
+                ->length('name', setting('guestbook.name_min_length'), setting('guestbook.name_max_length'))
                 ->same('captcha', $this->session->get('captcha'), 'Не удалось пройти проверку captcha!');
         }
 
         if ($this->validator->isValid($input)) {
-            $messageId = Guestbook::query()->insert([
+            if (! $user) {
+                $name = isset($input['name']) ? sanitize($input['name']) : setting('main.guest_name');
+            }
+
+            Guestbook::query()->insert([
                 'user_id'    => $user->id ?? null,
-                'title'      => sanitize($input['title']),
                 'text'       => sanitize($input['text']),
+                'name'       => $name ?? null,
                 'created_at' => time(),
             ]);
-
-            if ($user) {
-                File::query()
-                    ->where('post_id', 0)
-                    ->where('user_id', $user->id)
-                    ->update(['post_id' => $messageId]);
-            }
 
             $this->session->set('flash', ['success' => 'Сообщение успешно добавлено!']);
         } else {
@@ -120,12 +113,10 @@ class GuestbookController extends Controller
             abort(404, 'Сообщение не найдено');
         }
 
-        $files = $this->fileRepository->getFilesByPostId($message->id);
-
         return $this->view->render(
             $response,
             'guestbook/edit',
-            compact('message', 'files')
+            compact('message')
         );
     }
 
@@ -138,7 +129,7 @@ class GuestbookController extends Controller
      *
      * @return Response
      */
-    public function store(
+    public function update(
         int $id,
         Request $request,
         Response $response,
@@ -156,15 +147,15 @@ class GuestbookController extends Controller
         $input = (array) $request->getParsedBody();
 
         $this->validator
-            ->required(['csrf', 'title', 'text'])
+            ->required(['csrf', 'text'])
             ->same('csrf', $this->session->get('csrf'), 'Неверный идентификатор сессии, повторите действие!')
-            ->length('title', setting('guestbook.title_min_length'), setting('guestbook.title_max_length'))
-            ->length('text', setting('guestbook.text_min_length'), setting('guestbook.text_max_length'));
+            ->length('text', setting('guestbook.text_min_length'), setting('guestbook.text_max_length'))
+            ->length('name', setting('guestbook.name_min_length'), setting('guestbook.name_max_length'));
 
         if ($this->validator->isValid($input)) {
             $message->update([
-                'title' => sanitize($input['title']),
-                'text'  => sanitize($input['text']),
+                'text' => sanitize($input['text']),
+                'name' => sanitize($input['name']),
             ]);
         } else {
             $this->session->set('flash', ['errors' => $this->validator->getErrors(), 'old' => $input]);

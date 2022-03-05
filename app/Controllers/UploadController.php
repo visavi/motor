@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Models\File;
-use App\Models\Guestbook;
+use App\Models\Story;
 use App\Services\Session;
 use App\Services\Validator;
 use Intervention\Image\Constraint;
@@ -42,7 +42,7 @@ class UploadController extends Controller
         $id = $input['id'] ?? 0;
 
         if ($id) {
-            $model = Guestbook::query()->find($id);
+            $model = Story::query()->find($id);
 
             if (! $model) {
                 return $this->json($response, [
@@ -55,6 +55,8 @@ class UploadController extends Controller
                 $model->user_id === $user->id || isAdmin(),
                 'Вы не являетесь автором данной записи!'
             );
+        } else {
+            $model = new Story();
         }
 
         $this->validator
@@ -80,7 +82,7 @@ class UploadController extends Controller
             $file      = $input['file'];
             $filename  = sanitize($file->getClientFilename());
             $extension = getExtension($filename);
-            $path      = '/uploads/guestbook/' . uniqueName($extension);
+            $path      = $model->uploadPath . '/' . uniqueName($extension);
 
             $img = $this->imageManager->make($file->getFilePath());
             $img->resize(setting('image.resize'), setting('image.resize'), static function (Constraint $constraint) {

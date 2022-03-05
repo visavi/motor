@@ -1,12 +1,9 @@
 <?php
 
-use App\Models\File;
 use App\Models\Guestbook;
-use MotorORM\Collection;
 use MotorORM\CollectionPaginate;
 
-/** @var CollectionPaginate|Guestbook[] $messages */
-/** @var Collection|File[] $files */
+/** @var CollectionPaginate|<Guestbook[] $messages */
 ?>
 <?php $this->layout('layout') ?>
 
@@ -28,7 +25,7 @@ use MotorORM\CollectionPaginate;
             <?php if (isAdmin()): ?>
                 <div class="float-end">
                     <a href="/guestbook/<?= $message->id ?>/edit"><i class="bi bi-pencil"></i></a>
-                    <a href="#" onclick="return (confirm('Подтвердите удаление!')) ? $(this).find('form').submit() : false;">
+                    <a href="" onclick="return (confirm('Подтвердите удаление!')) ? $(this).find('form').submit() : false;">
                         <i class="bi bi-x-lg"></i>
                         <form action="/guestbook/<?= $message->id ?>" method="post" style="display:none">
                             <input type="hidden" name="_METHOD" value="DELETE">
@@ -38,8 +35,6 @@ use MotorORM\CollectionPaginate;
                 </div>
             <?php endif; ?>
 
-            <h5><?= $this->e($message->title) ?></h5>
-
             <div class="message">
                 <?= bbCode($message->text) ?>
             </div>
@@ -48,12 +43,12 @@ use MotorORM\CollectionPaginate;
                     <span class="avatar-micro">
                         <?= $message->user()->getAvatar() ?>
                     </span>
-                    <span><a href="/users/<?= $message->user()->login ?>"><?= $message->user()->login ?></a></span>
+                    <span><a href="/users/<?= $message->user()->login ?>"><?= $message->user()->getName() ?></a></span>
                 <?php else: ?>
                     <span class="avatar-micro">
                         <img class="avatar-default rounded-circle" src="/assets/images/avatar_default.png" alt="Аватар">
                     </span>
-                    <span><?= setting('main.guest_name') ?></span>
+                    <span><?= $message->name ?? setting('main.guest_name') ?></span>
                 <?php endif; ?>
 
                 <small class="text-muted fst-italic ms-1"><?= date('d.m.Y H:i', $message->created_at) ?></small>
@@ -67,7 +62,7 @@ use MotorORM\CollectionPaginate;
 <?php endif; ?>
 
 <?php if (isUser() || setting('guestbook.allow_guests')): ?>
-    <?= $this->insert('guestbook/_form', compact('files')) ?>
+    <?= $this->insert('guestbook/_form') ?>
 <?php else: ?>
     <div class="alert alert-danger">Авторизуйтесь для добавления сообщений</div>
 <?php endif; ?>

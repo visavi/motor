@@ -14,15 +14,25 @@ return function (ContainerBuilder $containerBuilder) {
                 'debug' => true,
 
                 'main' => [
-                    'guest_name' => 'Гость',
+                    'title'       => 'Добро пожаловать',
+                    'guest_name'  => 'Гость',
+                    'delete_name' => 'Удаленный',
                 ],
 
-                'guestbook' => [
+                'story' => [
                     'per_page'         => 10,
                     'title_min_length' => 5,
                     'title_max_length' => 50,
                     'text_min_length'  => 5,
                     'text_max_length'  => 5000,
+                ],
+
+                'guestbook' => [
+                    'per_page'         => 10,
+                    'text_min_length'  => 5,
+                    'text_max_length'  => 1000,
+                    'name_min_length'  => 3,
+                    'name_max_length'  => 20,
                     'allow_guests'     => true,
                 ],
 

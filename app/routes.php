@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Controllers\BBCodeController;
+use App\Controllers\StoryController;
 use App\Controllers\CaptchaController;
 use App\Controllers\GuestbookController;
 use App\Controllers\HomeController;
@@ -21,7 +22,17 @@ return function (App $app) {
         return $response;
     });*/
 
-    $app->get('/', [HomeController::class, 'home']);
+    //$app->get('/', [HomeController::class, 'home']);
+
+    $app->group('', function (Group $group) {
+        $group->get('/', [StoryController::class, 'index']);
+        $group->get('/create', [StoryController::class, 'create']);
+        $group->post('/', [StoryController::class, 'store']);
+        $group->get('/{id:[0-9]+}', [StoryController::class, 'view']);
+        $group->get('/{id:[0-9]+}/edit', [StoryController::class, 'edit']);
+        $group->put('/{id:[0-9]+}', [StoryController::class, 'update']);
+        $group->delete('/{id:[0-9]+}', [StoryController::class, 'destroy']);
+    });
 
     $app->get('/captcha', [CaptchaController::class, 'captcha']);
     $app->get('/stickers/modal', [StickerController::class, 'modal']);
@@ -38,10 +49,9 @@ return function (App $app) {
 
     $app->group('/guestbook', function (Group $group) {
         $group->get('', [GuestbookController::class, 'index']);
-        $group->post('', [GuestbookController::class, 'create']);
-        //$group->get('/{id:[0-9]+}', [GuestbookController::class, 'view']);
+        $group->post('', [GuestbookController::class, 'store']);
         $group->get('/{id:[0-9]+}/edit', [GuestbookController::class, 'edit']);
-        $group->put('/{id:[0-9]+}', [GuestbookController::class, 'store']);
+        $group->put('/{id:[0-9]+}', [GuestbookController::class, 'update']);
         $group->delete('/{id:[0-9]+}', [GuestbookController::class, 'destroy']);
     });
 

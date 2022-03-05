@@ -1,11 +1,8 @@
 <?php
 
-use App\Models\File;
 use App\Models\Guestbook;
-use MotorORM\Collection;
 
 /** @var Guestbook|null $message */
-/** @var Collection<File> $files */
 
 $message = $message ?? null;
 ?>
@@ -13,11 +10,14 @@ $message = $message ?? null;
     <form method="post" action="/guestbook<?= $message ? '/' . $message->id : '' ?>">
         <input type="hidden" name="_METHOD" value="<?= $message ? 'PUT' : 'POST' ?>">
         <input type="hidden" name="csrf" value="<?= session()->get('csrf') ?>">
-        <div class="mb-3">
-            <label for="title" class="form-label">Заголовок</label>
-            <input type="text" class="form-control<?= hasError('title') ?>" id="title" name="title" value="<?= old('title', $message->title ?? null) ?>" required>
-            <div class="invalid-feedback"><?= getError('title') ?></div>
-        </div>
+
+        <?php if (! isUser() || ($message && isAdmin())): ?>
+            <div class="mb-3">
+                <label for="name" class="form-label">Имя</label>
+                <input type="text" class="form-control<?= hasError('name') ?>" id="name" name="name" value="<?= old('name', $message->name ?? null) ?>" required>
+                <div class="invalid-feedback"><?= getError('name') ?></div>
+            </div>
+        <?php endif; ?>
 
         <div class="mb-3">
             <label for="text" class="form-label">Текст</label>
@@ -26,9 +26,7 @@ $message = $message ?? null;
             <div class="invalid-feedback"><?= getError('text') ?></div>
         </div>
 
-        <?php if (isUser()): ?>
-            <?= $this->fetch('app/_upload', compact('message','files')) ?>
-        <?php else: ?>
+        <?php if (! isUser()): ?>
             <?= $this->fetch('app/_captcha') ?>
         <?php endif; ?>
 
