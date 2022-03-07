@@ -8,7 +8,6 @@ use App\Models\Poll;
 use App\Models\Story;
 use App\Services\Session;
 use App\Services\Validator;
-use Intervention\Image\ImageManager;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -20,7 +19,6 @@ class RatingController extends Controller
     public function __construct(
         protected Session $session,
         protected Validator $validator,
-        protected ImageManager $imageManager,
     ) {}
 
     /**
