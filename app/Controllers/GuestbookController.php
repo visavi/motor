@@ -149,13 +149,11 @@ class GuestbookController extends Controller
         $this->validator
             ->required(['csrf', 'text'])
             ->same('csrf', $this->session->get('csrf'), 'Неверный идентификатор сессии, повторите действие!')
-            ->length('text', setting('guestbook.text_min_length'), setting('guestbook.text_max_length'))
-            ->length('name', setting('guestbook.name_min_length'), setting('guestbook.name_max_length'));
+            ->length('text', setting('guestbook.text_min_length'), setting('guestbook.text_max_length'));
 
         if ($this->validator->isValid($input)) {
             $message->update([
                 'text' => sanitize($input['text']),
-                'name' => sanitize($input['name']),
             ]);
         } else {
             $this->session->set('flash', ['errors' => $this->validator->getErrors(), 'old' => $input]);

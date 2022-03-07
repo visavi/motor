@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Services\BBCode;
 use App\Services\Session;
 use App\Services\Setting;
+use App\Services\Str;
 use DI\Container;
 use Slim\Factory\ServerRequestCreatorFactory;
 use Slim\Exception\HttpException;
@@ -47,6 +48,25 @@ function bbCode(mixed $text, bool $parse = true): string
     $parseText = $bbCode->parse($checkText);
 
     return $bbCode->parseStickers($parseText);
+}
+
+/**
+ * Возвращает обрезанный текст с закрытием тегов
+ *
+ * @param string $text
+ * @param int    $words
+ * @param string $end
+ *
+ * @return string
+ */
+function bbCodeTruncate(string $text, int $words = 20, string $end = '...'): string
+{
+    $bbCode = new BBCode();
+
+    $text = Str::words($text, $words, $end);
+    $text = bbCode($bbCode->closeTags($text));
+
+    return preg_replace('/\[(.*?)]/', '', $text);
 }
 
 /**
@@ -302,24 +322,4 @@ function hasError(string $field): string
 function getError(string $field): string
 {
     return session('flash.errors.' . $field, '');
-}
-
-/**
- * Generate a more truly "random" alpha-numeric string.
- *
- * @param  int  $length
- *
- * @return string
- */
-function randomString(int $length = 16): string
-{
-    $string = '';
-
-    while (($len = strlen($string)) < $length) {
-        $size = $length - $len;
-        $bytes = random_bytes($size);
-        $string .= substr(str_replace(['/', '+', '='], '', base64_encode($bytes)), 0, $size);
-    }
-
-    return $string;
 }

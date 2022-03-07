@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Services\Str;
+use App\Services\View;
+
 /**
  * Class Story
  *
@@ -21,10 +24,8 @@ class Story extends Model
 
     /**
      * Директория загрузки файлов
-     *
-     * @var string
      */
-    public $uploadPath = '/uploads/stories';
+    public string $uploadPath = '/uploads/stories';
 
     /**
      * Возвращает связь пользователей
@@ -45,7 +46,7 @@ class Story extends Model
     }
 
     /**
-     * Delete message
+     * Delete post
      *
      * @return int
      */
@@ -56,5 +57,25 @@ class Story extends Model
         }
 
         return parent::delete();
+    }
+
+    /**
+     * Возвращает сокращенный текст статьи
+     *
+     * @param int $words
+     *
+     * @return string
+     */
+    public function shortText(int $words = 100): string
+    {
+        $more = app(View::class)->fetch('app/_more', ['link' => '/' . $this->id]);
+
+        if (str_contains($this->text, '[cut]')) {
+            $this->text = bbCode(current(explode('[cut]', $this->text))) . $more;
+        } elseif (Str::wordCount($this->text) > $words) {
+            $this->text = bbCodeTruncate($this->text, $words) . $more;
+        }
+
+        return $this->text;
     }
 }

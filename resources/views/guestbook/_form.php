@@ -11,7 +11,7 @@ $message = $message ?? null;
         <input type="hidden" name="_METHOD" value="<?= $message ? 'PUT' : 'POST' ?>">
         <input type="hidden" name="csrf" value="<?= session()->get('csrf') ?>">
 
-        <?php if (! isUser() || ($message && isAdmin())): ?>
+        <?php if (! isUser()): ?>
             <div class="mb-3">
                 <label for="name" class="form-label">Имя</label>
                 <input type="text" class="form-control<?= hasError('name') ?>" id="name" name="name" value="<?= old('name', $message->name ?? null) ?>" required>

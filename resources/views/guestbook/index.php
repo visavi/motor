@@ -25,7 +25,7 @@ use MotorORM\CollectionPaginate;
             <?php if (isAdmin()): ?>
                 <div class="float-end">
                     <a href="/guestbook/<?= $message->id ?>/edit"><i class="bi bi-pencil"></i></a>
-                    <a href="" onclick="return (confirm('Подтвердите удаление!')) ? $(this).find('form').submit() : false;">
+                    <a href="#" onclick="return submitForm(this);">
                         <i class="bi bi-x-lg"></i>
                         <form action="/guestbook/<?= $message->id ?>" method="post" style="display:none">
                             <input type="hidden" name="_METHOD" value="DELETE">

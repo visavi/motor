@@ -52,6 +52,17 @@ $(function () {
         .find('.invalid-feedback').show();
 });
 
+/* Отправляет скрытую форму */
+submitForm = function (el, conf) {
+    if(! confirm(conf ?? 'Вы подтверждаете действие?')) {
+        return false;
+    }
+
+    $(el).find('form').submit();
+
+    return false;
+};
+
 /* Вставка изображения в форму */
 pasteImage = function (el) {
     var field = $('.markItUpEditor');

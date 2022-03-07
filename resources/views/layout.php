@@ -30,7 +30,7 @@
             <?php if (isUser()): ?>
                 <a class="me-3 py-2 text-dark text-decoration-none" href="/users/<?= getUser('login') ?>"><?= getUser('login') ?></a>
                 <a class="me-3 py-2 text-dark text-decoration-none" href="#"
-                   onclick="return (confirm('Подтвердите выход!')) ? $(this).find('form').submit() : false;">
+                   onclick="return submitForm(this, 'Вы подтверждаете выход?');">
                     Выйти
                     <form action="/logout" method="post" style="display:none">
                         <input type="hidden" name="csrf" value="<?= session()->get('csrf') ?>">

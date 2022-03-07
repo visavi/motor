@@ -25,6 +25,7 @@ return function (ContainerBuilder $containerBuilder) {
                     'title_max_length' => 50,
                     'text_min_length'  => 5,
                     'text_max_length'  => 5000,
+                    'short_words'      => 100, // Количество слов в сокращенной статье
                 ],
 
                 'guestbook' => [
@@ -33,7 +34,7 @@ return function (ContainerBuilder $containerBuilder) {
                     'text_max_length'  => 1000,
                     'name_min_length'  => 3,
                     'name_max_length'  => 20,
-                    'allow_guests'     => true,
+                    'allow_guests'     => true, // Разрешить гостям писать
                 ],
 
                 'session' => [

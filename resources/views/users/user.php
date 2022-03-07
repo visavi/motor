@@ -22,7 +22,7 @@ use App\Models\User;
             <div>ID: <?= $user->id ?></div>
             <div>Логин: <?= $user->login ?></div>
             <div>Роль: <?= setting('roles.' . $user->role) ?? 'Пользователь' ?></div>
-            <div>Имя: <?= $user->name ?></div>
+            <div>Имя: <?= $this->e($user->name) ?></div>
             <div>Дата регистрации: <?= date('d.m.Y', $user->created_at) ?></div>
         </div>
 

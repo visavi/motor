@@ -163,7 +163,7 @@ class BBCode
      */
     public function clear(string $source): string
     {
-        return preg_replace('/\[(.*?)\]/', '', $source);
+        return preg_replace('/\[(.*?)]/', '', $source);
     }
 
     /**
@@ -381,6 +381,35 @@ class BBCode
     public function getParsers(): array
     {
         return self::$parsers;
+    }
+
+    /**
+     * Закрывает bb-теги
+     *
+     * @param string $text
+     *
+     * @return string
+     */
+    public function closeTags(string $text): string
+    {
+        preg_match_all('#\[([a-z]+)(?:=.*)?(?<![/])]#iU', $text, $result);
+        $openTags = $result[1];
+
+        preg_match_all('#\[/([a-z]+)]#iU', $text, $result);
+        $closedTags = $result[1];
+
+        if ($openTags === $closedTags) {
+            return $text;
+        }
+
+        $diff = array_diff_assoc($openTags, $closedTags);
+        $tags = array_reverse($diff);
+
+        foreach ($tags as $value) {
+            $text .= '[/' . $value . ']';
+        }
+
+        return $text;
     }
 
     /**

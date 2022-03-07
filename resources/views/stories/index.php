@@ -27,7 +27,7 @@ use MotorORM\CollectionPaginate;
             <?php if (isAdmin()): ?>
                 <div class="float-end">
                     <a href="/<?= $post->id ?>/edit"><i class="bi bi-pencil"></i></a>
-                    <a href="#" onclick="return (confirm('Подтвердите удаление!')) ? $(this).find('form').submit() : false;">
+                    <a href="#" onclick="return submitForm(this);">
                         <i class="bi bi-x-lg"></i>
                         <form action="/<?= $post->id ?>" method="post" style="display:none">
                             <input type="hidden" name="_METHOD" value="DELETE">
@@ -40,7 +40,7 @@ use MotorORM\CollectionPaginate;
             <h5><a href="/<?= $post->id ?>"><?= $this->e($post->title) ?></a></h5>
 
             <div class="message">
-                <?= bbCode($post->text) ?>
+                <?= $post->shortText(setting('story.short_words')) ?>
             </div>
             <div class="section-author">
                 <?php if ($post->user()): ?>
