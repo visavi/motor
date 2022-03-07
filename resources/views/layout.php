@@ -28,18 +28,18 @@
 
         <nav class="d-inline-flex mt-2 ms-auto">
             <?php if (isUser()): ?>
-                <a class="me-3 py-2 text-dark text-decoration-none" href="/users/<?= getUser('login') ?>"><?= getUser('login') ?></a>
-                <a class="me-3 py-2 text-dark text-decoration-none" href="#"
+                <a class="me-3 py-2 text-dark" href="/users/<?= getUser('login') ?>"><?= getUser('login') ?></a>
+                <a class="me-3 py-2 text-dark" href="#"
                    onclick="return submitForm(this, 'Вы подтверждаете выход?');">
                     Выйти
                     <form action="/logout" method="post" style="display:none">
-                        <input type="hidden" name="csrf" value="<?= session()->get('csrf') ?>">
+                        <input type="hidden" name="csrf" value="<?= session('csrf') ?>">
                     </form>
                 </a>
 
             <?php else: ?>
-                <a class="me-3 py-2 text-dark text-decoration-none" href="/login">Войти</a>
-                <a class="me-3 py-2 text-dark text-decoration-none" href="/register">Регистрация</a>
+                <a class="me-3 py-2 text-dark" href="/login">Войти</a>
+                <a class="me-3 py-2 text-dark" href="/register">Регистрация</a>
             <?php endif; ?>
         </nav>
     </header>

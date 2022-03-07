@@ -20,7 +20,7 @@ use App\Models\User;
 <div class="p-3 shadow">
     <form method="post" action="/profile" enctype="multipart/form-data">
         <input type="hidden" name="_METHOD" value="PUT">
-        <input type="hidden" name="csrf" value="<?= session()->get('csrf') ?>">
+        <input type="hidden" name="csrf" value="<?= session('csrf') ?>">
         <div class="row">
             <div class="col-md-6">
                 <div class="mb-3">

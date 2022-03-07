@@ -1,5 +1,5 @@
 <?php if (session()->has('flash')): ?>
-    <?php $flash = session()->get('flash'); ?>
+    <?php $flash = session('flash'); ?>
     <?php if (isset($flash['errors'])): ?>
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <?php foreach ($flash['errors'] as $error): ?>

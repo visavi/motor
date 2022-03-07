@@ -2,6 +2,7 @@
 
 use App\Models\File;
 use App\Models\Guestbook;
+use App\Models\Story;
 use App\Models\User;
 use MotorORM\Migration;
 
@@ -104,7 +105,7 @@ if (! in_array('ext', $fileHeaders, true)) {
     echo 'Добавлены поля name, ext и size в таблицу files<br>';
 }
 
-// Добавляет поле name и удаляет title
+// Добавляет поле name и удаляет title из guestbook
 $guestbookHeaders = Guestbook::query()->headers();
 if (! in_array('name', $guestbookHeaders, true)) {
     $migration = new Migration(new Guestbook());
@@ -117,6 +118,20 @@ if (! in_array('name', $guestbookHeaders, true)) {
     }
 
     echo 'Добавлено поле name и удалено title из таблицы guestbook<br>';
+}
+
+// Добавляет поле rating в stories
+$storyHeaders = Story::query()->headers();
+if (! in_array('rating', $storyHeaders, true)) {
+    $migration = new Migration(new Story());
+
+    try {
+        $migration->column('rating')->after('tags')->default(0)->create();
+    } catch (Exception $exception) {
+        echo $exception->getMessage();
+    }
+
+    echo 'Добавлено поле rating в таблицы stories<br>';
 }
 
 echo 'Все миграции выполнены успешно!<br>';

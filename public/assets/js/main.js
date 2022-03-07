@@ -164,3 +164,37 @@ deleteFile = function (el) {
 
     return false;
 };
+
+/* Изменение рейтинга */
+changeRating = function (el) {
+    $.ajax({
+        data: {
+            //type: $(el).data('type'),
+            vote: $(el).data('vote'),
+            csrf: $(el).data('csrf')
+        },
+        dataType: 'json',
+        type: 'post',
+        url: '/rating/' + $(el).data('id'),
+        success: function (data) {
+            if (data.success) {
+                const rating = $(el).closest('.js-rating').find('b');
+
+                $(el).closest('.js-rating').find('a').removeClass('active');
+
+                if (! data.cancel) {
+                    $(el).addClass('active');
+                }
+
+                rating.html($(data.rating));
+            } else {
+                if (data.message) {
+                    toastr.error(data.message);
+                }
+                return false;
+            }
+        }
+    });
+
+    return false;
+};

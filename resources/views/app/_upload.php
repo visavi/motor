@@ -22,7 +22,7 @@ $pointer = empty($paste)  ? null : 'cursor-pointer';
                     <?= formatSize($file->size) ?>
                 <?php endif; ?>
 
-                <a href="#" onclick="return deleteFile(this);" data-id="<?= $file->id ?>" data-type="image" data-csrf="<?= session()->get('csrf') ?>" class="js-file-delete"><i class="bi bi-x-lg"></i></a>
+                <a href="#" onclick="return deleteFile(this);" data-id="<?= $file->id ?>" data-type="image" data-csrf="<?= session('csrf') ?>" class="js-file-delete"><i class="bi bi-x-lg"></i></a>
                 <?= $file->isImage() ? '' : '<br>' ?>
             </span>
         <?php endforeach; ?>
@@ -32,14 +32,14 @@ $pointer = empty($paste)  ? null : 'cursor-pointer';
 <div class="js-file-template d-none">
     <span class="js-file">
         <a href="#" class="js-file-link"></a> <span class="js-file-size"></span>
-        <a href="#" onclick="return deleteFile(this);" data-type="file" data-csrf="<?= session()->get('csrf') ?>" class="js-file-delete"><i class="bi bi-x-lg"></i></a>
+        <a href="#" onclick="return deleteFile(this);" data-type="file" data-csrf="<?= session('csrf') ?>" class="js-file-delete"><i class="bi bi-x-lg"></i></a>
     </span>
 </div>
 
 <div class="js-image-template d-none">
     <span class="js-file">
         <span onclick="<?= $click ?>" class="<?= $pointer ?>"><img src="#" width="100" alt="" class="img-fluid"></span>
-        <a href="#" onclick="return deleteFile(this);" data-type="image" data-csrf="<?= session()->get('csrf') ?>" class="js-file-delete"><i class="bi bi-x-lg"></i></a>
+        <a href="#" onclick="return deleteFile(this);" data-type="image" data-csrf="<?= session('csrf') ?>" class="js-file-delete"><i class="bi bi-x-lg"></i></a>
     </span>
 </div>
 

@@ -29,7 +29,7 @@ use MotorORM\CollectionPaginate;
                         <i class="bi bi-x-lg"></i>
                         <form action="/guestbook/<?= $message->id ?>" method="post" style="display:none">
                             <input type="hidden" name="_METHOD" value="DELETE">
-                            <input type="hidden" name="csrf" value="<?= session()->get('csrf') ?>">
+                            <input type="hidden" name="csrf" value="<?= session('csrf') ?>">
                         </form>
                     </a>
                 </div>

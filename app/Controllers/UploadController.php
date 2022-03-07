@@ -47,7 +47,7 @@ class UploadController extends Controller
             if (! $model) {
                 return $this->json($response, [
                     'success' => false,
-                    'message' => 'Модель не найдена!',
+                    'message' => 'Запись не найдена!',
                 ]);
             }
 

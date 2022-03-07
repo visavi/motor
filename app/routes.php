@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Controllers\BBCodeController;
+use App\Controllers\RatingController;
 use App\Controllers\StoryController;
 use App\Controllers\CaptchaController;
 use App\Controllers\GuestbookController;
@@ -34,6 +35,8 @@ return function (App $app) {
         $group->delete('/{id:[0-9]+}', [StoryController::class, 'destroy']);
     });
 
+    $app->post('/rating/{id:[0-9]+}', [RatingController::class, 'change']);
+
     $app->get('/captcha', [CaptchaController::class, 'captcha']);
     $app->get('/stickers/modal', [StickerController::class, 'modal']);
     $app->post('/bbcode', [BBCodeController::class, 'bbcode']);
@@ -41,7 +44,7 @@ return function (App $app) {
     $app->group('/upload', function (Group $group) {
         $group->post('', [UploadController::class, 'upload']);
         $group->delete('/{id:[0-9]+}', [UploadController::class, 'destroy']);
-    })->add(new CheckUserMiddleware());
+    })->add(CheckUserMiddleware::class);
 
     $app->map(['GET', 'POST'], '/login', [UserController::class, 'login']);
     $app->map(['GET', 'POST'], '/register', [UserController::class, 'register']);
