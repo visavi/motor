@@ -6,11 +6,11 @@ use App\Controllers\BBCodeController;
 use App\Controllers\StoryController;
 use App\Controllers\CaptchaController;
 use App\Controllers\GuestbookController;
-use App\Controllers\HomeController;
 use App\Controllers\UploadController;
 use App\Controllers\User\ProfileController;
 use App\Controllers\StickerController;
 use App\Controllers\UserController;
+use App\Middleware\CheckUserMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
@@ -41,7 +41,7 @@ return function (App $app) {
     $app->group('/upload', function (Group $group) {
         $group->post('', [UploadController::class, 'upload']);
         $group->delete('/{id:[0-9]+}', [UploadController::class, 'destroy']);
-    });
+    })->add(new CheckUserMiddleware());
 
     $app->map(['GET', 'POST'], '/login', [UserController::class, 'login']);
     $app->map(['GET', 'POST'], '/register', [UserController::class, 'register']);

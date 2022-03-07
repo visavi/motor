@@ -2,18 +2,18 @@
 
 namespace App\Middleware;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
-use Psr\Http\Message\RequestInterface;
-use Slim\Psr7\Response;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Server\MiddlewareInterface as Middleware;
+use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
+use Slim\Psr7\Response as PsrResponse;
 
-final class TrailingSlashMiddleware implements MiddlewareInterface
+final class TrailingSlashMiddleware implements Middleware
 {
     public function process(
-        RequestInterface $request,
-        RequestHandlerInterface $handler
-    ): ResponseInterface {
+        Request $request,
+        RequestHandler $handler
+    ): Response {
         $uri = $request->getUri();
         $path = $uri->getPath();
 
@@ -25,7 +25,7 @@ final class TrailingSlashMiddleware implements MiddlewareInterface
             $uri = $uri->withPath($path);
 
             if ($request->getMethod() === 'GET') {
-                $response = new Response();
+                $response = new PsrResponse();
                 return $response
                     ->withHeader('Location', (string) $uri)
                     ->withStatus(301);
