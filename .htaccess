@@ -9,8 +9,8 @@ deny from all
   # Redirect to the public folder
   RewriteEngine On
   # RewriteBase /
-  RewriteRule ^$ public/ [L]
-  RewriteRule (.*) public/$1 [L]
+  RewriteCond %{REQUEST_URI} !^public
+  RewriteRule ^(.*)$ public/$1 [L]
 
   # Redirect to HTTPS
   # RewriteEngine On
