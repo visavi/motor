@@ -29,14 +29,7 @@
         <nav class="d-inline-flex mt-2 ms-auto">
             <?php if (isUser()): ?>
                 <a class="me-3 py-2 text-dark" href="/users/<?= getUser('login') ?>"><?= getUser('login') ?></a>
-                <a class="me-3 py-2 text-dark" href="#"
-                   onclick="return submitForm(this, 'Вы подтверждаете выход?');">
-                    Выйти
-                    <form action="/logout" method="post" style="display:none">
-                        <input type="hidden" name="csrf" value="<?= session('csrf') ?>">
-                    </form>
-                </a>
-
+                <a class="me-3 py-2 text-dark" href="/logout" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-confirm="Вы подтверждаете выход?">Выйти</a>
             <?php else: ?>
                 <a class="me-3 py-2 text-dark" href="/login">Войти</a>
                 <a class="me-3 py-2 text-dark" href="/register">Регистрация</a>
@@ -45,6 +38,8 @@
     </header>
 
     <main>
+        <?= $this->fetch('app/_flash') ?>
+
         <div class="app-title">
             <?php if ($this->section('header')): ?>
                 <?= $this->section('header') ?>
@@ -55,7 +50,6 @@
             <?= $this->section('breadcrumb') ?>
         </div>
 
-        <?= $this->fetch('app/_flash') ?>
         <?= $this->section('content') ?>
     </main>
 

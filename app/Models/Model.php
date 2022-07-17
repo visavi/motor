@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use MotorORM\Builder;
+
 /**
  * Base model
  */
-class Model extends \MotorORM\Model
+class Model extends Builder
 {
     public function __construct()
     {

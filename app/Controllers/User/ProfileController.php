@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controllers\User;
 
 use App\Controllers\Controller;
+use App\Models\User;
 use App\Services\Session;
 use App\Services\Validator;
 use App\Services\View;
@@ -18,10 +19,15 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 class ProfileController extends Controller
 {
+    protected User $user;
+
     public function __construct(
         protected View $view,
         protected Session $session,
-    ) {}
+        protected Validator $validator,
+    ) {
+        $this->user = getUser();
+    }
 
     /**
      * Profile
@@ -32,14 +38,10 @@ class ProfileController extends Controller
      */
     public function index(Response $response): Response
     {
-        if (! $user = getUser()) {
-            abort(403, 'Для выполнения действия необходимо авторизоваться!');
-        }
-
         return $this->view->render(
             $response,
             'profile/profile',
-            compact('user'),
+            ['user' => $this->user],
         );
     }
 
@@ -48,7 +50,6 @@ class ProfileController extends Controller
      *
      * @param Request      $request
      * @param Response     $response
-     * @param Validator    $validator
      * @param ImageManager $manager
      *
      * @return Response
@@ -56,18 +57,13 @@ class ProfileController extends Controller
     public function store(
         Request $request,
         Response $response,
-        Validator $validator,
         ImageManager $manager,
     ): Response {
-        if (! $user = getUser()) {
-            abort(403, 'Для выполнения действия необходимо авторизоваться!');
-        }
-
         $input = (array) $request->getParsedBody();
         $files = $request->getUploadedFiles();
         $input = array_merge($input, $files);
 
-        $validator
+        $this->validator
             ->required(['csrf', 'email'])
             ->same('csrf', $this->session->get('csrf'), 'Неверный идентификатор сессии, повторите действие!')
             ->length('email', 5, 100)
@@ -79,15 +75,15 @@ class ProfileController extends Controller
                 'weight_min' => setting('image.weight_min'),
             ]);
 
-        if ($validator->isValid($input)) {
+        if ($this->validator->isValid($input)) {
             if ($input['picture']->getError() === UPLOAD_ERR_OK) {
                 // Удаляем старое фото
-                if ($user->picture && file_exists(publicPath($user->picture))) {
-                    unlink(publicPath($user->picture));
+                if ($this->user->picture && file_exists(publicPath($this->user->picture))) {
+                    unlink(publicPath($this->user->picture));
                 }
 
-                if ($user->avatar && file_exists(publicPath($user->avatar))) {
-                    unlink(publicPath($user->avatar));
+                if ($this->user->avatar && file_exists(publicPath($this->user->avatar))) {
+                    unlink(publicPath($this->user->avatar));
                 }
 
                 $extension = getExtension($input['picture']->getClientFilename());
@@ -106,20 +102,57 @@ class ProfileController extends Controller
                 $img->fit(64);
                 $img->save(publicPath($avatarPath));
 
-                $user->update([
+                $this->user->update([
                     'picture' => $picturePath,
                     'avatar'  => $avatarPath,
                 ]);
             }
 
-            $user->update([
+            $this->user->update([
                 'email' => sanitize($input['email']),
                 'name'  => sanitize($input['name']),
             ]);
 
             $this->session->set('flash', ['success' => 'Данные успешно изменены!']);
         } else {
-            $this->session->set('flash', ['errors' => $validator->getErrors(), 'old' => $input]);
+            $this->session->set('flash', ['errors' => $this->validator->getErrors(), 'old' => $input]);
+        }
+
+        return $this->redirect($response, '/profile');
+    }
+
+    /**
+     * Delete photo
+     *
+     * @param Request  $request
+     * @param Response $response
+     * @return Response
+     */
+    public function deletePhoto(Request $request, Response $response): Response
+    {
+        $input = (array) $request->getParsedBody();
+        $this->validator
+            ->required('csrf')
+            ->same('csrf', $this->session->get('csrf'), 'Неверный идентификатор сессии, повторите действие!');
+
+        if ($this->validator->isValid($input)) {
+            // Удаляем старое фото
+            if ($this->user->picture && file_exists(publicPath($this->user->picture))) {
+                unlink(publicPath($this->user->picture));
+            }
+
+            if ($this->user->avatar && file_exists(publicPath($this->user->avatar))) {
+                unlink(publicPath($this->user->avatar));
+            }
+
+            $this->user->update([
+                'picture' => '',
+                'avatar'  => '',
+            ]);
+
+            $this->session->set('flash', ['success' => 'Фото успешно удалено!']);
+        } else {
+            $this->session->set('flash', ['errors' => $this->validator->getErrors()]);
         }
 
         return $this->redirect($response, '/profile');

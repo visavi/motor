@@ -26,13 +26,13 @@ use MotorORM\CollectionPaginate;
         <article class="shadow p-3 mb-3">
             <div class="float-end js-rating">
                 <?php if (getUser() && getUser('id') !== $post->user_id): ?>
-                    <a href="#" class="post-rating-up" onclick="return changeRating(this);" data-id="<?= $post->id ?>" data-vote="+" data-csrf="<?= session('csrf') ?>"><i class="bi bi-arrow-up"></i></a>
+                    <a href="#" class="post-rating-up<?= $post->poll()->vote === '+' ? ' active': '' ?>" onclick="return changeRating(this);" data-id="<?= $post->id ?>" data-vote="+" data-csrf="<?= session('csrf') ?>"><i class="bi bi-arrow-up"></i></a>
                 <?php endif; ?>
 
                 <b><?= $post->getRating() ?></b>
 
                 <?php if (getUser() && getUser('id') !== $post->user_id): ?>
-                    <a href="#" class="post-rating-down" onclick="return changeRating(this);" data-id="<?= $post->id ?>" data-vote="-" data-csrf="<?= session('csrf') ?>"><i class="bi bi-arrow-down"></i></a>
+                    <a href="#" class="post-rating-down<?= $post->poll()->vote === '-' ? ' active': '' ?>" onclick="return changeRating(this);" data-id="<?= $post->id ?>" data-vote="-" data-csrf="<?= session('csrf') ?>"><i class="bi bi-arrow-down"></i></a>
                 <?php endif; ?>
             </div>
 
@@ -62,13 +62,7 @@ use MotorORM\CollectionPaginate;
                         <!--<i class="bi bi-three-dots-vertical"></i>-->
 
                         <a href="/<?= $post->id ?>/edit"><i class="bi bi-pencil"></i></a>
-                        <a href="#" onclick="return submitForm(this);">
-                            <i class="bi bi-x-lg"></i>
-                            <form action="/<?= $post->id ?>" method="post" style="display:none">
-                                <input type="hidden" name="_METHOD" value="DELETE">
-                                <input type="hidden" name="csrf" value="<?= session('csrf') ?>">
-                            </form>
-                        </a>
+                        <a href="/<?= $post->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg"></i></a>
                     </div>
                 <?php endif; ?>
             </div>

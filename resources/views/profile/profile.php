@@ -42,7 +42,7 @@ use App\Models\User;
                         <img src="<?= $user->picture ?>" alt="Фото <?= $user->login ?>" class="img-fluid">
 
                         <div class="float-end mt-3">
-                            <a href="/">Удалить фото</a>
+                            <a href="/profile/photo" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete">Удалить фото</a>
                         </div>
                     <?php else: ?>
                         <img src="/assets/images/photo.png" alt="Нет фото" class="img-fluid">

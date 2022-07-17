@@ -53,13 +53,7 @@ use App\Models\Story;
         <?php if (isAdmin()): ?>
             <div class="float-end">
                 <a href="/<?= $post->id ?>/edit"><i class="bi bi-pencil"></i></a>
-                <a href="#" onclick="return submitForm(this);">
-                    <i class="bi bi-x-lg"></i>
-                    <form action="/<?= $post->id ?>" method="post" style="display:none">
-                        <input type="hidden" name="_METHOD" value="DELETE">
-                        <input type="hidden" name="csrf" value="<?= session('csrf') ?>">
-                    </form>
-                </a>
+                <a href="/<?= $post->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg"></i></a>
             </div>
         <?php endif; ?>
     </div>

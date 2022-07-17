@@ -62,6 +62,9 @@ return function (App $app) {
         $group->get('/{login:[\w\-]+}', [UserController::class, 'user']);
     });
 
-    $app->get('/profile', [ProfileController::class, 'index']);
-    $app->put('/profile', [ProfileController::class, 'store']);
+    $app->group('/profile', function (Group $group) {
+        $group->get('', [ProfileController::class, 'index']);
+        $group->put('', [ProfileController::class, 'store']);
+        $group->delete('/photo', [ProfileController::class, 'deletePhoto']);
+    })->add(CheckUserMiddleware::class);
 };

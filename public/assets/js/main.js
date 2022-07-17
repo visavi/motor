@@ -53,12 +53,19 @@ $(function () {
 });
 
 /* Отправляет скрытую форму */
-submitForm = function (el, conf) {
-    if(! confirm(conf ?? 'Вы подтверждаете действие?')) {
+submitForm = function (el) {
+    if(! confirm($(el).data('confirm')  ?? 'Вы подтверждаете действие?')) {
         return false;
     }
 
-    $(el).find('form').submit();
+    var form = $('<form action="' + $(el).attr('href') + '" method="POST"></form>')
+    form.append('<input type="hidden" name="csrf" value="' + $(el).data('csrf') + '">');
+
+    if ($(el).data('method')) {
+        form.append('<input type="hidden" name="_METHOD" value="' + $(el).data('method').toUpperCase() + '">');
+    }
+
+    form.appendTo('body').submit();
 
     return false;
 };

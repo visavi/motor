@@ -11,7 +11,7 @@ use App\Services\View;
  * Class Story
  *
  * @property int $id
- * @property string $user_id
+ * @property int $user_id
  * @property string $slug
  * @property string $title
  * @property string $text
@@ -33,16 +33,18 @@ class Story extends Model
      */
     public function user(): mixed
     {
-        return $this->hasOne(User::class, 'user_id');
+        return $this->relation(User::class, 'user_id')->first();
     }
 
     /**
      * Возвращает связь пользователей
      */
-/*    public function poll(): mixed
+    public function poll(): mixed
     {
-        return $this->hasOne(Poll::class, 'id', 'post_id');
-    }*/
+        return $this->relation(Poll::class, 'id', 'post_id')
+            ->where('user_id', getUser('id'))
+            ->first();
+    }
 
     /**
      * Возвращает связь файлов
@@ -51,7 +53,7 @@ class Story extends Model
      */
     public function files(): mixed
     {
-        return $this->hasMany(File::class, 'id', 'post_id');
+        return $this->relation(File::class, 'id', 'post_id')->get();
     }
 
     /**

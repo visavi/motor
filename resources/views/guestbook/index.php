@@ -25,13 +25,7 @@ use MotorORM\CollectionPaginate;
             <?php if (isAdmin()): ?>
                 <div class="float-end">
                     <a href="/guestbook/<?= $message->id ?>/edit"><i class="bi bi-pencil"></i></a>
-                    <a href="#" onclick="return submitForm(this);">
-                        <i class="bi bi-x-lg"></i>
-                        <form action="/guestbook/<?= $message->id ?>" method="post" style="display:none">
-                            <input type="hidden" name="_METHOD" value="DELETE">
-                            <input type="hidden" name="csrf" value="<?= session('csrf') ?>">
-                        </form>
-                    </a>
+                    <a href="/guestbook/<?= $message->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg"></i></a>
                 </div>
             <?php endif; ?>
 

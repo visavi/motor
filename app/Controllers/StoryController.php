@@ -123,12 +123,10 @@ class StoryController extends Controller
                 'created_at' => time(),
             ]);
 
-            if ($user) {
-                File::query()
-                    ->where('post_id', 0)
-                    ->where('user_id', $user->id)
-                    ->update(['post_id' => $postId]);
-            }
+            File::query()
+                ->where('post_id', 0)
+                ->where('user_id', $user->id)
+                ->update(['post_id' => $postId]);
 
             $this->session->set('flash', ['success' => 'Статья успешно добавлена!']);
 

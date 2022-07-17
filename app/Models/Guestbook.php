@@ -22,6 +22,6 @@ class Guestbook extends Model
      */
     public function user(): mixed
     {
-        return $this->hasOne(User::class, 'user_id');
+        return $this->relation(User::class, 'user_id')->first();
     }
 }
