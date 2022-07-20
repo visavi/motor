@@ -7,7 +7,7 @@ use MotorORM\Collection;
 /** @var Story|null $post */
 /** @var Collection<File> $files */
 ?>
-<div class="p-3 shadow cut">
+<div class="section p-3 shadow cut">
     <form method="post" action="/<?=  $post->id ?? '' ?>">
         <input type="hidden" name="_METHOD" value="<?= $post ? 'PUT' : 'POST' ?>">
         <input type="hidden" name="csrf" value="<?= session('csrf') ?>">
@@ -25,6 +25,15 @@ use MotorORM\Collection;
         </div>
 
         <?= $this->fetch('app/_upload', compact('post','files')) ?>
+
+        <div class="mb-3">
+            <label for="tags" class="form-label">Теги</label>
+            <input type="text" class="form-control<?= hasError('tags') ?>" id="tags" name="tags" value="<?= old('tags', $post->tags ?? null) ?>" required>
+            <div class="form-text">
+                Через запятую
+            </div>
+            <div class="invalid-feedback"><?= getError('tags') ?></div>
+        </div>
 
         <button type="submit" class="btn btn-primary"><?= $post ? 'Изменить' : 'Отправить' ?></button>
     </form>

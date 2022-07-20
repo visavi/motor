@@ -11,7 +11,7 @@
     </nav>
 <?php $this->stop() ?>
 
-<div class="p-3 shadow">
+<div class="section p-3 shadow">
     <form method="post">
         <div class="mb-3">
             <label for="login" class="form-label">Логин</label>

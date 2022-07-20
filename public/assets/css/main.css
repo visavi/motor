@@ -3,6 +3,14 @@ a {
     text-decoration: none;
 }
 
+.body {
+
+}
+
+.app {
+    background-color: #f9f9fb;
+}
+
 .app-title {
     padding-bottom: 1rem;
 }
@@ -11,6 +19,12 @@ a {
     margin: 0;
     font-size: 24px;
     font-weight: 400;
+}
+
+.section {
+    border: 1px solid #f3f3f3;
+    background: #fff;
+    border-radius: 5px;
 }
 
 .message {

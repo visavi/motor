@@ -23,7 +23,7 @@ use MotorORM\CollectionPaginate;
 
 <?php if ($posts->isNotEmpty()): ?>
     <?php foreach ($posts as $post): ?>
-        <article class="shadow p-3 mb-3">
+        <article class="section shadow p-3 mb-3">
             <div class="float-end js-rating">
                 <?php if (getUser() && getUser('id') !== $post->user_id): ?>
                     <a href="#" class="post-rating-up<?= $post->poll()->vote === '+' ? ' active': '' ?>" onclick="return changeRating(this);" data-id="<?= $post->id ?>" data-vote="+" data-csrf="<?= session('csrf') ?>"><i class="bi bi-arrow-up"></i></a>
@@ -36,26 +36,23 @@ use MotorORM\CollectionPaginate;
                 <?php endif; ?>
             </div>
 
-            <h5><a href="/<?= $post->id ?>"><?= $this->e($post->title) ?></a></h5>
+            <h5><a href="/<?= $post->getLink() ?>"><?= $this->e($post->title) ?></a></h5>
 
             <div class="message">
                 <?= $post->shortText(setting('story.short_words')) ?>
             </div>
 
             <div class="section-author">
-                <?php if ($post->user()): ?>
-                    <span class="avatar-micro">
-                        <?= $post->user()->getAvatar() ?>
-                    </span>
-                    <span><a href="/users/<?= $post->user()->login ?>"><?= $post->user()->getName() ?></a></span>
-                <?php else: ?>
-                    <span class="avatar-micro">
-                        <img class="avatar-default rounded-circle" src="/assets/images/avatar_default.png" alt="Аватар">
-                    </span>
-                    <span><?= setting('main.delete_name') ?></span>
-                <?php endif; ?>
+                <span class="avatar-micro">
+                    <?= $post->user()->getAvatar() ?>
+                </span>
+                <span><?= $post->user()->getProfile() ?></span>
 
                 <small class="text-muted fst-italic ms-1"><?= date('d.m.Y H:i', $post->created_at) ?></small>
+            </div>
+
+            <div class="my-3 fst-italic">
+                <i class="bi bi-tags"></i> <?= $post->getTags() ?>
 
                 <?php if (isAdmin()): ?>
                     <div class="float-end ms-3">

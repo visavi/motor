@@ -27,9 +27,11 @@ return function (App $app) {
 
     $app->group('', function (Group $group) {
         $group->get('/', [StoryController::class, 'index']);
-        $group->get('/create', [StoryController::class, 'create']);
         $group->post('/', [StoryController::class, 'store']);
-        $group->get('/{id:[0-9]+}', [StoryController::class, 'view']);
+        $group->get('/tags', [StoryController::class, 'tags']);
+        $group->get('/tags/{tag:.+}', [StoryController::class, 'searchTags']);
+        $group->get('/create', [StoryController::class, 'create']);
+        $group->get('/{slug:[\w\-]+\-[\d]+}', [StoryController::class, 'view']);
         $group->get('/{id:[0-9]+}/edit', [StoryController::class, 'edit']);
         $group->put('/{id:[0-9]+}', [StoryController::class, 'update']);
         $group->delete('/{id:[0-9]+}', [StoryController::class, 'destroy']);

@@ -16,7 +16,7 @@ use App\Models\User;
     </nav>
 <?php $this->stop() ?>
 
-<div class="p-3 shadow">
+<div class="section p-3 shadow">
     <div class="row">
         <div class="col-md-6">
             <div>ID: <?= $user->id ?></div>

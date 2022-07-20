@@ -31,19 +31,19 @@ class Story extends Model
     /**
      * Возвращает связь пользователей
      */
-    public function user(): mixed
+    public function user(): User
     {
-        return $this->relation(User::class, 'user_id')->first();
+        return $this->relation(User::class, 'user_id')->first() ?? new User();
     }
 
     /**
      * Возвращает связь пользователей
      */
-    public function poll(): mixed
+    public function poll(): Poll
     {
         return $this->relation(Poll::class, 'id', 'post_id')
             ->where('user_id', getUser('id'))
-            ->first();
+            ->first() ?? new Poll();
     }
 
     /**
@@ -108,5 +108,26 @@ class Story extends Model
         }
 
         return $rating;
+    }
+
+    public function getTags(): string
+    {
+        if (! $this->tags) {
+            return '';
+        }
+
+        $tags = explode(',', $this->tags);
+
+        $tagList = [];
+        foreach ($tags as $value) {
+            $tagList[] = '<a href="/tags/' . urlencode(htmlspecialchars($value)) . '">' . htmlspecialchars($value) . '</a>';
+        }
+
+        return implode(', ', $tagList);
+    }
+
+    public function getLink(): string
+    {
+         return sprintf('%s-%d', $this->slug, $this->id);
     }
 }

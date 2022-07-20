@@ -17,7 +17,7 @@ use App\Models\User;
     </nav>
 <?php $this->stop() ?>
 
-<div class="p-3 shadow">
+<div class="section p-3 shadow">
     <form method="post" action="/profile" enctype="multipart/form-data">
         <input type="hidden" name="_METHOD" value="PUT">
         <input type="hidden" name="csrf" value="<?= session('csrf') ?>">

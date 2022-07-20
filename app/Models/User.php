@@ -55,7 +55,25 @@ class User extends Model
      */
     public function getName(): string
     {
+        if (! $this->id) {
+            return setting('main.delete_name');
+        }
+
         return htmlspecialchars($this->name ?? $this->login);
+    }
+
+    /**
+     * Get profile link
+     *
+     * @return string
+     */
+    public function getProfile(): string
+    {
+        if (! $this->id) {
+            return setting('main.delete_name');
+        }
+
+        return '<a href="/users/' . $this->login . '">' . $this->getName() . '</a>';
     }
 
     /**

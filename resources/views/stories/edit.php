@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\File;
+use App\Models\Story;
 use MotorORM\Collection;
 
 /** @var Story $post */
@@ -14,7 +15,7 @@ use MotorORM\Collection;
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="bi bi-house-door"></i></a></li>
-            <li class="breadcrumb-item"><a href="/<?= $post->id ?>"><?= $this->e($post->title) ?></a></li>
+            <li class="breadcrumb-item"><a href="/<?= $post->slug ?>-<?= $post->id ?>"><?= $this->e($post->title) ?></a></li>
             <li class="breadcrumb-item active">Редактирование</li>
         </ol>
     </nav>

@@ -21,7 +21,7 @@ use MotorORM\CollectionPaginate;
 
 <?php if ($messages->isNotEmpty()): ?>
     <?php foreach ($messages as $message): ?>
-        <div class="shadow p-3 mb-3">
+        <div class="section shadow p-3 mb-3">
             <?php if (isAdmin()): ?>
                 <div class="float-end">
                     <a href="/guestbook/<?= $message->id ?>/edit"><i class="bi bi-pencil"></i></a>

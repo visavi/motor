@@ -9,6 +9,8 @@ use App\Models\Story;
 use App\Repositories\FileRepository;
 use App\Repositories\StoryRepository;
 use App\Services\Session;
+use App\Services\Slug;
+use App\Services\Str;
 use App\Services\Validator;
 use App\Services\View;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -48,14 +50,14 @@ class StoryController extends Controller
     /**
      * View
      *
-     * @param int      $id
+     * @param string   $slug
      * @param Response $response
      *
      * @return Response
      */
-    public function view(int $id, Response $response): Response
+    public function view(string $slug, Response $response): Response
     {
-        $post = $this->storyRepository->getById($id);
+        $post = $this->storyRepository->getBySlug($slug);
         if (! $post) {
             abort(404, 'Статья не найдена!');
         }
@@ -66,6 +68,67 @@ class StoryController extends Controller
             $response,
             'stories/view',
             compact('post', 'files')
+        );
+    }
+
+    /**
+     * By tags
+     *
+     * @param string   $tag
+     * @param Response $response
+     *
+     * @return Response
+     */
+    public function searchTags(string $tag, Response $response): Response
+    {
+        $posts = $this->storyRepository->getPostsByTag(urldecode($tag), setting('story.per_page'));
+
+        return $this->view->render(
+            $response,
+            'stories/index',
+            compact('posts')
+        );
+    }
+
+    /**
+     * Tags
+     *
+     * @param Response $response
+     *
+     * @return Response
+     */
+    public function tags(Response $response): Response
+    {
+        $tags = $this->storyRepository->getAllPosts()->pluck('tags', 'id');
+
+        $allTags   = implode(',', $tags);
+        $clearTags = preg_split('/\s*,\s*/', $allTags, -1, PREG_SPLIT_NO_EMPTY);
+        $tags      = array_count_values($clearTags);
+
+        array_splice($tags, 100);
+
+        $max     = max($tags);
+        $highest = $max / 30;
+
+        $links = [];
+
+        $i = 0;
+        foreach ($tags as $tag => $count) {
+            $size = round($count / $highest);
+
+            if ($i & 1) {
+                $links[$tag] = $size;
+            } else {
+                $links = [$tag => $size] + $links;
+            }
+
+            $i++;
+        }
+
+        return $this->view->render(
+            $response,
+            'stories/tags',
+            compact('links')
         );
     }
 
@@ -102,6 +165,7 @@ class StoryController extends Controller
     public function store(
         Request $request,
         Response $response,
+        Slug $slug,
     ): Response {
         if (! $user = getUser()) {
             abort(403, 'Доступ запрещен!');
@@ -113,13 +177,18 @@ class StoryController extends Controller
             ->required(['csrf', 'title', 'text'])
             ->same('csrf', $this->session->get('csrf'), 'Неверный идентификатор сессии, повторите действие!')
             ->length('title', setting('story.title_min_length'), setting('story.title_max_length'))
-            ->length('text', setting('story.text_min_length'), setting('story.text_max_length'));
+            ->length('text', setting('story.text_min_length'), setting('story.text_max_length'))
+            ->length('tags', 2, 50);
 
         if ($this->validator->isValid($input)) {
+            $slugify = $slug->slugify($input['title']);
+
             $postId = Story::query()->insert([
                 'user_id'    => $user->id,
                 'title'      => sanitize($input['title']),
+                'slug'       => $slugify,
                 'text'       => sanitize($input['text']),
+                'tags'       => preg_replace('/\s*,+\s*/', ',', Str::lower(sanitize(trim($input['tags'])))),
                 'created_at' => time(),
             ]);
 
@@ -130,7 +199,7 @@ class StoryController extends Controller
 
             $this->session->set('flash', ['success' => 'Статья успешно добавлена!']);
 
-            return $this->redirect($response, '/' . $postId);
+            return $this->redirect($response, '/' . $slugify . '-' . $postId);
         }
 
         $this->session->set('flash', ['errors' => $this->validator->getErrors(), 'old' => $input]);
@@ -172,6 +241,7 @@ class StoryController extends Controller
      * @param int      $id
      * @param Request  $request
      * @param Response $response
+     * @param Slug     $slug
      *
      * @return Response
      */
@@ -179,6 +249,7 @@ class StoryController extends Controller
         int $id,
         Request $request,
         Response $response,
+        Slug $slug,
     ): Response
     {
         if (! isAdmin()) {
@@ -196,17 +267,22 @@ class StoryController extends Controller
             ->required(['csrf', 'title', 'text'])
             ->same('csrf', $this->session->get('csrf'), 'Неверный идентификатор сессии, повторите действие!')
             ->length('title', setting('story.title_min_length'), setting('story.title_max_length'))
-            ->length('text', setting('story.text_min_length'), setting('story.text_max_length'));
+            ->length('text', setting('story.text_min_length'), setting('story.text_max_length'))
+            ->length('tags', 2, 50);
 
         if ($this->validator->isValid($input)) {
+            $slugify = $slug->slugify($input['title']);
+
             $post->update([
                 'title' => sanitize($input['title']),
+                'slug'  => $slugify,
                 'text'  => sanitize($input['text']),
+                'tags'  => preg_replace('/\s*,+\s*/', ',', Str::lower(sanitize(trim($input['tags'])))),
             ]);
 
             $this->session->set('flash', ['success' => 'Статья успешно изменена!']);
 
-            return $this->redirect($response, '/' . $id);
+            return $this->redirect($response, '/' . $slugify . '-' . $id);
         }
 
         $this->session->set('flash', ['errors' => $this->validator->getErrors(), 'old' => $input]);
