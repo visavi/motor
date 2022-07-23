@@ -6,6 +6,8 @@ namespace App\Models;
 
 use App\Services\Str;
 use App\Services\View;
+use MotorORM\Builder;
+use MotorORM\Collection;
 
 /**
  * Class Story
@@ -18,6 +20,11 @@ use App\Services\View;
  * @property string $tags
  * @property int $rating
  * @property int $created_at
+ *
+ * @property-read User $user
+ * @property-read Poll $poll
+ * @property-read Collection<File> $files
+ * @property-read Collection<Comment> $comments
  */
 class Story extends Model
 {
@@ -29,31 +36,44 @@ class Story extends Model
     public string $uploadPath = '/uploads/stories';
 
     /**
-     * Возвращает связь пользователей
+     * Возвращает связь пользователя
+     *
+     * @return Builder
      */
-    public function user(): User
+    public function user(): Builder
     {
-        return $this->relation(User::class, 'user_id')->first() ?? new User();
+        return $this->hasOne(User::class, 'user_id');
     }
 
     /**
      * Возвращает связь пользователей
+     *
+     * @return Builder
      */
-    public function poll(): Poll
+    public function poll(): Builder
     {
-        return $this->relation(Poll::class, 'id', 'post_id')
-            ->where('user_id', getUser('id'))
-            ->first() ?? new Poll();
+        return $this->hasOne(Poll::class, 'id', 'post_id')
+            ->where('user_id', getUser('id'));
     }
 
     /**
      * Возвращает связь файлов
      *
-     * @return mixed
+     * @return Builder
      */
-    public function files(): mixed
+    public function files(): Builder
     {
-        return $this->relation(File::class, 'id', 'post_id')->get();
+        return $this->hasMany(File::class, 'id', 'post_id');
+    }
+
+    /**
+     * Возвращает связь комментариев
+     *
+     * @return Builder
+     */
+    public function comments(): Builder
+    {
+        return $this->hasMany(Comment::class, 'id', 'post_id');
     }
 
     /**

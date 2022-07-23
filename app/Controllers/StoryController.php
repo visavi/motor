@@ -159,6 +159,7 @@ class StoryController extends Controller
      *
      * @param Request  $request
      * @param Response $response
+     * @param Slug     $slug
      *
      * @return Response
      */
@@ -178,28 +179,30 @@ class StoryController extends Controller
             ->same('csrf', $this->session->get('csrf'), 'Неверный идентификатор сессии, повторите действие!')
             ->length('title', setting('story.title_min_length'), setting('story.title_max_length'))
             ->length('text', setting('story.text_min_length'), setting('story.text_max_length'))
-            ->length('tags', 2, 50);
+            ->length('tags', setting('story.tags_min_length'), setting('story.tags_max_length'));
 
         if ($this->validator->isValid($input)) {
             $slugify = $slug->slugify($input['title']);
 
-            $postId = Story::query()->insert([
+            $post = Story::query()->insert([
                 'user_id'    => $user->id,
                 'title'      => sanitize($input['title']),
                 'slug'       => $slugify,
                 'text'       => sanitize($input['text']),
                 'tags'       => preg_replace('/\s*,+\s*/', ',', Str::lower(sanitize(trim($input['tags'])))),
+                'rating'     => 0,
+                'views'      => 0,
                 'created_at' => time(),
             ]);
 
             File::query()
                 ->where('post_id', 0)
                 ->where('user_id', $user->id)
-                ->update(['post_id' => $postId]);
+                ->update(['post_id' => $post->id]);
 
             $this->session->set('flash', ['success' => 'Статья успешно добавлена!']);
 
-            return $this->redirect($response, '/' . $slugify . '-' . $postId);
+            return $this->redirect($response, '/' . $post->getLink());
         }
 
         $this->session->set('flash', ['errors' => $this->validator->getErrors(), 'old' => $input]);
@@ -236,7 +239,7 @@ class StoryController extends Controller
     }
 
     /**
-     * Store
+     * Update
      *
      * @param int      $id
      * @param Request  $request
@@ -268,7 +271,7 @@ class StoryController extends Controller
             ->same('csrf', $this->session->get('csrf'), 'Неверный идентификатор сессии, повторите действие!')
             ->length('title', setting('story.title_min_length'), setting('story.title_max_length'))
             ->length('text', setting('story.text_min_length'), setting('story.text_max_length'))
-            ->length('tags', 2, 50);
+            ->length('tags', setting('story.tags_min_length'), setting('story.tags_max_length'));
 
         if ($this->validator->isValid($input)) {
             $slugify = $slug->slugify($input['title']);

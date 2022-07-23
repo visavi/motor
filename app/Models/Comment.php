@@ -11,23 +11,23 @@ use MotorORM\Builder;
  *
  * @property int $id
  * @property string $user_id
+ * @property string $post_id
  * @property string $text
- * @property string $name
  * @property int $created_at
  *
  * @property-read User $user
  */
-class Guestbook extends Model
+class Comment extends Model
 {
-    protected string $filePath = __DIR__ . '/../../database/guestbook.csv';
+    protected string $filePath = __DIR__ . '/../../database/comments.csv';
 
     /**
-     * Возвращает связь пользователей
+     * Возвращает связь пользователя
      *
-     * @return Builder
+     * return Builder
      */
     public function user(): Builder
     {
-        return $this->hasOne(User::class, 'user_id');
+        return $this->HasOne(User::class, 'user_id');
     }
 }

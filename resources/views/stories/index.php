@@ -1,12 +1,9 @@
 <?php
 
-use App\Models\File;
 use App\Models\Story;
-use MotorORM\Collection;
 use MotorORM\CollectionPaginate;
 
 /** @var CollectionPaginate|Story[] $posts */
-/** @var Collection|File[] $files */
 ?>
 <?php $this->layout('layout') ?>
 
@@ -26,13 +23,13 @@ use MotorORM\CollectionPaginate;
         <article class="section shadow p-3 mb-3">
             <div class="float-end js-rating">
                 <?php if (getUser() && getUser('id') !== $post->user_id): ?>
-                    <a href="#" class="post-rating-up<?= $post->poll()->vote === '+' ? ' active': '' ?>" onclick="return changeRating(this);" data-id="<?= $post->id ?>" data-vote="+" data-csrf="<?= session('csrf') ?>"><i class="bi bi-arrow-up"></i></a>
+                    <a href="#" class="post-rating-up<?= $post->poll->vote === '+' ? ' active': '' ?>" onclick="return changeRating(this);" data-id="<?= $post->id ?>" data-vote="+" data-csrf="<?= session('csrf') ?>"><i class="bi bi-arrow-up"></i></a>
                 <?php endif; ?>
 
                 <b><?= $post->getRating() ?></b>
 
                 <?php if (getUser() && getUser('id') !== $post->user_id): ?>
-                    <a href="#" class="post-rating-down<?= $post->poll()->vote === '-' ? ' active': '' ?>" onclick="return changeRating(this);" data-id="<?= $post->id ?>" data-vote="-" data-csrf="<?= session('csrf') ?>"><i class="bi bi-arrow-down"></i></a>
+                    <a href="#" class="post-rating-down<?= $post->poll->vote === '-' ? ' active': '' ?>" onclick="return changeRating(this);" data-id="<?= $post->id ?>" data-vote="-" data-csrf="<?= session('csrf') ?>"><i class="bi bi-arrow-down"></i></a>
                 <?php endif; ?>
             </div>
 
@@ -44,9 +41,9 @@ use MotorORM\CollectionPaginate;
 
             <div class="section-author">
                 <span class="avatar-micro">
-                    <?= $post->user()->getAvatar() ?>
+                    <?= $post->user->getAvatar() ?>
                 </span>
-                <span><?= $post->user()->getProfile() ?></span>
+                <span><?= $post->user->getProfile() ?></span>
 
                 <small class="text-muted fst-italic ms-1"><?= date('d.m.Y H:i', $post->created_at) ?></small>
             </div>
@@ -63,6 +60,11 @@ use MotorORM\CollectionPaginate;
                     </div>
                 <?php endif; ?>
             </div>
+
+            <small class="fw-bold">
+                <i class="bi bi-chat"></i>
+                <a href="/<?= $post->getLink() ?>#comments">Комментарии: <?= $post->comments()->count() ?></a>
+            </small>
         </article>
     <?php endforeach; ?>
 

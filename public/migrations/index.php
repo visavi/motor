@@ -134,4 +134,18 @@ if (! in_array('rating', $storyHeaders, true)) {
     echo 'Добавлено поле rating в таблицы stories<br>';
 }
 
+// Добавляет поле views в stories
+$storyHeaders = Story::query()->headers();
+if (! in_array('views', $storyHeaders, true)) {
+    $migration = new Migration(new Story());
+
+    try {
+        $migration->column('views')->after('rating')->default(0)->create();
+    } catch (Exception $exception) {
+        echo $exception->getMessage();
+    }
+
+    echo 'Добавлено поле views в таблицы stories<br>';
+}
+
 echo 'Все миграции выполнены успешно!<br>';

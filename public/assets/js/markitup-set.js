@@ -13,11 +13,11 @@ mySettings = {
         {title: 'Зачеркнутый текст', name: '<i class="bi bi-type-strikethrough"></i>', className: 'bb-strike', key: 'S', openWith: '[s]', closeWith: '[/s]'},
 
         {separator: '---------------'},
-        {title: 'Ссылка', name: '<i class="bi bi-link"></i>', className: 'bb-link', key: 'L', openWith: '[url=[![' + 'Ссылка' + ':!:http://]!]]', closeWith: '[/url]', placeHolder: 'Текст ссылки...'},
+        {title: 'Ссылка', name: '<i class="bi bi-link"></i>', className: 'bb-link', key: 'L', openWith: '[url=[![' + 'Ссылка' + ':!:https://]!]]', closeWith: '[/url]', placeHolder: 'Текст ссылки...'},
 
-        {title: 'Изображение', name: '<i class="bi bi-image"></i>', className: 'bb-image', openWith: '[img][![' + 'URL изображения' + ':!:http://]!]', closeWith: '[/img]'},
+        {title: 'Изображение', name: '<i class="bi bi-image"></i>', className: 'bb-image', openWith: '[img][![' + 'URL изображения' + ':!:https://]!]', closeWith: '[/img]'},
 
-        {title: 'Видео', name: '<i class="bi bi-play-btn"></i>', className: 'bb-youtube', openWith: '[youtube][![' + 'Ссылка на видео с youtube' + ']!]', closeWith: '[/youtube]'},
+        {title: 'Видео', name: '<i class="bi bi-play-btn"></i>', className: 'bb-youtube', openWith: '[youtube][![' + 'Ссылка на видео с youtube' + ':!:https://]!]', closeWith: '[/youtube]'},
         {title: 'Цвет', name: '<i class="bi bi-palette"></i>', className: 'bb-color', openWith: '[color=[![' + 'Код цвета' + ']!]]', closeWith: '[/color]',
         dropMenu: [
             {name: 'Yellow', openWith: '[color=#ffd700]', closeWith: '[/color]', className: 'col1-1'},

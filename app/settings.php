@@ -26,6 +26,13 @@ return function (ContainerBuilder $containerBuilder) {
                     'text_min_length'  => 5,
                     'text_max_length'  => 5000,
                     'short_words'      => 100, // Количество слов в сокращенной статье
+                    'tags_min_length'  => 2,
+                    'tags_max_length'  => 50,
+                ],
+
+                'comment' => [
+                    'text_min_length'  => 5,
+                    'text_max_length'  => 1000,
                 ],
 
                 'guestbook' => [

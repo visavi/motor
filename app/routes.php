@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Controllers\BBCodeController;
+use App\Controllers\CommentController;
 use App\Controllers\RatingController;
 use App\Controllers\StoryController;
 use App\Controllers\CaptchaController;
@@ -35,6 +36,11 @@ return function (App $app) {
         $group->get('/{id:[0-9]+}/edit', [StoryController::class, 'edit']);
         $group->put('/{id:[0-9]+}', [StoryController::class, 'update']);
         $group->delete('/{id:[0-9]+}', [StoryController::class, 'destroy']);
+
+        $group->post('/{id:[0-9]+}/comments', [CommentController::class, 'store']);
+        //$group->get('/{id:[0-9]+}/comments/{cid:[0-9]+}/edit', [CommentController::class, 'edit']);
+        $group->post('/{id:[0-9]+}/comments/{cid:[0-9]+}/edit', [CommentController::class, 'update']);
+        $group->delete('/{id:[0-9]+}/comments/{cid:[0-9]+}', [CommentController::class, 'destroy']);
     });
 
     $app->post('/rating/{id:[0-9]+}', [RatingController::class, 'change']);

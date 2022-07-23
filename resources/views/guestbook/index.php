@@ -33,11 +33,11 @@ use MotorORM\CollectionPaginate;
                 <?= bbCode($message->text) ?>
             </div>
             <div class="section-author">
-                <?php if ($message->user()): ?>
+                <?php if ($message->user): ?>
                     <span class="avatar-micro">
-                        <?= $message->user()->getAvatar() ?>
+                        <?= $message->user->getAvatar() ?>
                     </span>
-                    <span><a href="/users/<?= $message->user()->login ?>"><?= $message->user()->getName() ?></a></span>
+                    <span><a href="/users/<?= $message->user->login ?>"><?= $message->user->getName() ?></a></span>
                 <?php else: ?>
                     <span class="avatar-micro">
                         <img class="avatar-default rounded-circle" src="/assets/images/avatar_default.png" alt="Аватар">
