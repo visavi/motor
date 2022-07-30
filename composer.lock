@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a01c83fa809c807e559675414b7087c4",
+    "content-hash": "664e747e1e2ccdfe086c47869de04585",
     "packages": [
         {
             "name": "fig/http-message-util",
@@ -1387,16 +1387,16 @@
         },
         {
             "name": "visavi/motor-orm",
-            "version": "dev-master",
+            "version": "v3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/visavi/motor-orm.git",
-                "reference": "0b26445fa79fdc1e12cef766cbf15f7e8401f2de"
+                "reference": "e3881cb897a3c4d86708d33c0745cbd68161fad4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/visavi/motor-orm/zipball/0b26445fa79fdc1e12cef766cbf15f7e8401f2de",
-                "reference": "0b26445fa79fdc1e12cef766cbf15f7e8401f2de",
+                "url": "https://api.github.com/repos/visavi/motor-orm/zipball/e3881cb897a3c4d86708d33c0745cbd68161fad4",
+                "reference": "e3881cb897a3c4d86708d33c0745cbd68161fad4",
                 "shasum": ""
             },
             "require": {
@@ -1405,7 +1405,6 @@
             "require-dev": {
                 "phpunit/phpunit": "^9.5"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -1431,9 +1430,9 @@
             ],
             "support": {
                 "issues": "https://github.com/visavi/motor-orm/issues",
-                "source": "https://github.com/visavi/motor-orm/tree/master"
+                "source": "https://github.com/visavi/motor-orm/tree/v3.0.0"
             },
-            "time": "2022-07-23T15:12:56+00:00"
+            "time": "2022-07-30T21:28:13+00:00"
         }
     ],
     "packages-dev": [
@@ -3500,16 +3499,16 @@
         },
         {
             "name": "symfony/var-dumper",
-            "version": "v6.0.9",
+            "version": "v6.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "ac81072464221e73ee994d12f0b8a2af4a9ed798"
+                "reference": "2672bdc01c1971e3d8879ce153ec4c3621be5f07"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/ac81072464221e73ee994d12f0b8a2af4a9ed798",
-                "reference": "ac81072464221e73ee994d12f0b8a2af4a9ed798",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/2672bdc01c1971e3d8879ce153ec4c3621be5f07",
+                "reference": "2672bdc01c1971e3d8879ce153ec4c3621be5f07",
                 "shasum": ""
             },
             "require": {
@@ -3568,7 +3567,7 @@
                 "dump"
             ],
             "support": {
-                "source": "https://github.com/symfony/var-dumper/tree/v6.0.9"
+                "source": "https://github.com/symfony/var-dumper/tree/v6.0.11"
             },
             "funding": [
                 {
@@ -3584,7 +3583,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-05-21T13:33:31+00:00"
+            "time": "2022-07-20T13:45:53+00:00"
         },
         {
             "name": "theseer/tokenizer",
@@ -3697,9 +3696,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "visavi/motor-orm": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
