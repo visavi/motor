@@ -11,6 +11,7 @@ use App\Repositories\StoryRepository;
 use App\Services\Session;
 use App\Services\Slug;
 use App\Services\Str;
+use App\Services\TagCloud;
 use App\Services\Validator;
 use App\Services\View;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -97,7 +98,7 @@ class StoryController extends Controller
      *
      * @return Response
      */
-    public function tags(Response $response): Response
+    public function tags(Response $response, TagCloud $tagCloud): Response
     {
         $tags = $this->storyRepository->getAllPosts()->pluck('tags', 'id');
 
@@ -105,30 +106,15 @@ class StoryController extends Controller
         $clearTags = preg_split('/\s*,\s*/', $allTags, -1, PREG_SPLIT_NO_EMPTY);
         $tags      = array_count_values($clearTags);
 
+        arsort($tags);
         array_splice($tags, 100);
 
-        $max     = max($tags);
-        $highest = $max / 30;
-
-        $links = [];
-
-        $i = 0;
-        foreach ($tags as $tag => $count) {
-            $size = round($count / $highest);
-
-            if ($i & 1) {
-                $links[$tag] = $size;
-            } else {
-                $links = [$tag => $size] + $links;
-            }
-
-            $i++;
-        }
+        $tags = $tagCloud->generate($tags);
 
         return $this->view->render(
             $response,
             'stories/tags',
-            compact('links')
+            compact('tags')
         );
     }
 

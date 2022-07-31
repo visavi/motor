@@ -24,7 +24,7 @@ use MotorORM\Collection;
             <div class="invalid-feedback"><?= getError('text') ?></div>
         </div>
 
-        <?= $this->fetch('app/_upload', compact('post','files')) ?>
+        <?= $this->fetch('app/_upload', compact('post', 'files')) ?>
 
         <div class="mb-3">
             <label for="tags" class="form-label">Теги</label>

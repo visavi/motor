@@ -1,5 +1,5 @@
 <?php
-/** @var array<string, int> $links */
+/** @var array<string, int> $tags */
 ?>
 <?php $this->layout('layout') ?>
 
@@ -14,6 +14,6 @@
     </nav>
 <?php $this->stop() ?>
 
-<?php foreach ($links as $link => $size): ?>
-    <a href="/tags/<?= $link ?>"><span style="font-size:<?= $size ?>pt"><?= $link ?></span></a>
+<?php foreach ($tags as $tag => $size): ?>
+    <a href="/tags/<?= $tag ?>"><span style="font-size:<?= $size ?>pt"><?= $tag ?></span></a>
 <?php endforeach; ?>
