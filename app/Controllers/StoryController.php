@@ -7,6 +7,7 @@ namespace App\Controllers;
 use App\Models\File;
 use App\Models\Story;
 use App\Repositories\FileRepository;
+use App\Repositories\ReadRepository;
 use App\Repositories\StoryRepository;
 use App\Services\Session;
 use App\Services\Slug;
@@ -28,6 +29,7 @@ class StoryController extends Controller
         protected Validator $validator,
         protected FileRepository $fileRepository,
         protected StoryRepository $storyRepository,
+        protected ReadRepository $readRepository,
     ) {}
 
     /**
@@ -52,16 +54,20 @@ class StoryController extends Controller
      * View
      *
      * @param string   $slug
+     * @param Request  $request
      * @param Response $response
      *
      * @return Response
      */
-    public function view(string $slug, Response $response): Response
+    public function view(string $slug, Request $request, Response $response): Response
     {
         $post = $this->storyRepository->getBySlug($slug);
         if (! $post) {
             abort(404, 'Статья не найдена!');
         }
+
+        // Count reads
+        $this->readRepository->createRead($post, $request->getAttribute('ip'));
 
         $files = $this->fileRepository->getFilesByPostId($post->id);
 
@@ -95,6 +101,7 @@ class StoryController extends Controller
      * Tags
      *
      * @param Response $response
+     * @param TagCloud $tagCloud
      *
      * @return Response
      */

@@ -19,6 +19,7 @@ use MotorORM\Collection;
  * @property string $text
  * @property string $tags
  * @property int $rating
+ * @property int $reads
  * @property int $created_at
  *
  * @property-read User $user
@@ -99,7 +100,7 @@ class Story extends Model
      */
     public function shortText(int $words = 100): string
     {
-        $more = app(View::class)->fetch('app/_more', ['link' => '/' . $this->id]);
+        $more = app(View::class)->fetch('app/_more', ['link' => '/' . $this->getLink()]);
 
         if (str_contains($this->text, '[cut]')) {
             return bbCode(current(explode('[cut]', $this->text))) . $more;

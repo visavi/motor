@@ -10,7 +10,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\MiddlewareInterface as Middleware;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 
-final class StartSession implements Middleware
+final class StartSessionMiddleware implements Middleware
 {
     public function process(
         Request $request,

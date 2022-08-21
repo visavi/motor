@@ -3,7 +3,8 @@
 declare(strict_types=1);
 
 use App\Handlers\HttpErrorHandler;
-use App\Middleware\StartSession;
+use App\Middleware\IpAddressMiddleware;
+use App\Middleware\StartSessionMiddleware;
 use App\Middleware\TrailingSlashMiddleware;
 use App\Middleware\UserAuthMiddleware;
 use Psr\Container\ContainerInterface;
@@ -27,7 +28,10 @@ return function (App $app, ContainerInterface $container) {
     $app->add(UserAuthMiddleware::class);
 
     // Session middleware
-    $app->add(StartSession::class);
+    $app->add(StartSessionMiddleware::class);
+
+    // Ip address middleware
+    $app->add(IpAddressMiddleware::class);
 
     // Define Custom Error Handler
     $errorHandler = new HttpErrorHandler($app->getCallableResolver(), $app->getResponseFactory());

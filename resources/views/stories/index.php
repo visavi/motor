@@ -50,21 +50,23 @@ use MotorORM\CollectionPaginate;
 
             <div class="my-3 fst-italic">
                 <i class="bi bi-tags"></i> <?= $post->getTags() ?>
-
-                <?php if (isAdmin()): ?>
-                    <div class="float-end ms-3">
-                        <!--<i class="bi bi-three-dots-vertical"></i>-->
-
-                        <a href="/<?= $post->id ?>/edit"><i class="bi bi-pencil"></i></a>
-                        <a href="/<?= $post->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg"></i></a>
-                    </div>
-                <?php endif; ?>
             </div>
 
             <small class="fw-bold">
                 <i class="bi bi-chat"></i>
-                <a href="/<?= $post->getLink() ?>#comments">Комментарии: <?= $post->comments()->count() ?></a>
+                <a href="/<?= $post->getLink() ?>#comments" class="me-3">Комментарии: <?= $post->comments()->count() ?></a>
+
+                <i class="bi bi-eye"></i> Просмотры: <?= $post->reads ?>
             </small>
+
+            <?php if (isAdmin()): ?>
+                <div class="float-end ms-3">
+                    <!--<i class="bi bi-three-dots-vertical"></i>-->
+
+                    <a href="/<?= $post->id ?>/edit"><i class="bi bi-pencil"></i></a>
+                    <a href="/<?= $post->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg"></i></a>
+                </div>
+            <?php endif; ?>
         </article>
     <?php endforeach; ?>
 

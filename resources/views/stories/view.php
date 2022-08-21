@@ -46,17 +46,21 @@ use App\Models\Story;
 
     <div class="my-3 fst-italic">
         <i class="bi bi-tags"></i> <?= $post->getTags() ?>
-
-        <?php if (isAdmin()): ?>
-            <div class="float-end">
-                <a href="/<?= $post->id ?>/edit"><i class="bi bi-pencil"></i></a>
-                <a href="/<?= $post->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg"></i></a>
-            </div>
-        <?php endif; ?>
     </div>
+
+    <small class="fw-bold">
+        <i class="bi bi-eye"></i> Просмотры: <?= $post->reads ?>
+    </small>
+
+    <?php if (isAdmin()): ?>
+        <div class="float-end">
+            <a href="/<?= $post->id ?>/edit"><i class="bi bi-pencil"></i></a>
+            <a href="/<?= $post->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg"></i></a>
+        </div>
+    <?php endif; ?>
 </div>
 
-<div class="section shadow p-3 mb-3">
+<div class="section shadow p-3 mb-3" id="comments">
     <h5>Комментарии</h5>
 
     <?php if ($post->comments->isNotEmpty()): ?>
