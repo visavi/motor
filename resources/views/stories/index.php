@@ -72,5 +72,8 @@ use MotorORM\CollectionPaginate;
 
     <?= $posts->links() ?>
 <?php else: ?>
-    <div class="alert alert-danger">Статей еще нет!</div>
+    <div class="alert alert-danger">
+        <i class="bi bi-exclamation-circle-fill text-danger"></i>
+        Статей еще нет!
+    </div>
 <?php endif; ?>

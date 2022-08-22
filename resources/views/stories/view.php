@@ -88,22 +88,32 @@ use App\Models\Story;
             </div>
         <?php endforeach; ?>
     <?php else: ?>
-        Комментариев еще нет!
+        <div class="alert alert-danger">
+            <i class="bi bi-exclamation-circle-fill text-danger"></i>
+            Комментариев еще нет!
+        </div>
     <?php endif; ?>
 
-    <div class="section shadow p-3 mt-3">
-        <form method="post" action="/<?= $post->id ?>/comments">
-            <input type="hidden" name="_METHOD" value="POST">
-            <input type="hidden" name="csrf" value="<?= session('csrf') ?>">
+    <?php if (isUser()): ?>
+        <div class="mt-3">
+            <form method="post" action="/<?= $post->id ?>/comments">
+                <input type="hidden" name="_METHOD" value="POST">
+                <input type="hidden" name="csrf" value="<?= session('csrf') ?>">
 
-            <div class="mb-3">
-                <label for="text" class="form-label">Текст</label>
-                <textarea class="form-control markItUp<?= hasError('text') ?>" id="text" rows="5" name="text" maxlength="<?= setting('comment.text_max_length') ?>" required><?= old('text') ?></textarea>
-                <span class="js-textarea-counter"></span>
-                <div class="invalid-feedback"><?= getError('text') ?></div>
-            </div>
+                <div class="mb-3">
+                    <label for="text" class="form-label">Текст</label>
+                    <textarea class="form-control markItUp<?= hasError('text') ?>" id="text" rows="5" name="text" maxlength="<?= setting('comment.text_max_length') ?>" required><?= old('text') ?></textarea>
+                    <span class="js-textarea-counter"></span>
+                    <div class="invalid-feedback"><?= getError('text') ?></div>
+                </div>
 
-            <button type="submit" class="btn btn-primary">Отправить</button>
-        </form>
-    </div>
+                <button type="submit" class="btn btn-primary">Отправить</button>
+            </form>
+        </div>
+    <?php else: ?>
+        <div class="alert alert-danger">
+            <i class="bi bi-exclamation-circle-fill text-danger"></i>
+            Для выполнения действия необходимо авторизоваться!
+        </div>
+    <?php endif; ?>
 </div>

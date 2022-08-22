@@ -52,11 +52,17 @@ use MotorORM\CollectionPaginate;
 
     <?= $messages->links() ?>
 <?php else: ?>
-    <div class="alert alert-danger">Сообщений еще нет!</div>
+    <div class="alert alert-danger">
+        <i class="bi bi-exclamation-circle-fill text-danger"></i>
+        Сообщений еще нет!
+    </div>
 <?php endif; ?>
 
 <?php if (isUser() || setting('guestbook.allow_guests')): ?>
     <?= $this->insert('guestbook/_form') ?>
 <?php else: ?>
-    <div class="alert alert-danger">Авторизуйтесь для добавления сообщений</div>
+    <div class="alert alert-danger">
+        <i class="bi bi-exclamation-circle-fill text-danger"></i>
+        Для выполнения действия необходимо авторизоваться!
+    </div>
 <?php endif; ?>
