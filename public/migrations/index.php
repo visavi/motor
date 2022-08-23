@@ -1,7 +1,10 @@
 <?php
 
+use App\Models\Comment;
 use App\Models\File;
 use App\Models\Guestbook;
+use App\Models\Poll;
+use App\Models\Read;
 use App\Models\Story;
 use App\Models\User;
 use MotorORM\Migration;
@@ -134,9 +137,9 @@ if (! in_array('rating', $storyHeaders, true)) {
     echo 'Добавлено поле rating в таблицы stories<br>';
 }
 
-// Переименовывает поле views на reads в stories
+// Переименовывает поле views в reads в stories
 $storyHeaders = Story::query()->headers();
-if (! in_array('reads', $storyHeaders, true)) {
+if (in_array('views', $storyHeaders, true)) {
     $migration = new Migration(new Story());
 
     try {
@@ -146,6 +149,62 @@ if (! in_array('reads', $storyHeaders, true)) {
     }
 
     echo 'Переименовано поле views на reads в таблицы stories<br>';
+}
+
+// Переименовывает поле post_id в story_id в comments
+$commentHeaders = Comment::query()->headers();
+if (in_array('post_id', $commentHeaders, true)) {
+    $migration = new Migration(new Comment());
+
+    try {
+        $migration->column('post_id')->to('story_id')->rename();
+    } catch (Exception $exception) {
+        echo $exception->getMessage();
+    }
+
+    echo 'Переименовано поле post_id в story_id в таблицы comments<br>';
+}
+
+// Переименовывает поле post_id в story_id в files
+$fileHeaders = File::query()->headers();
+if (in_array('post_id', $fileHeaders, true)) {
+    $migration = new Migration(new File());
+
+    try {
+        $migration->column('post_id')->to('story_id')->rename();
+    } catch (Exception $exception) {
+        echo $exception->getMessage();
+    }
+
+    echo 'Переименовано поле post_id в story_id в таблицы files<br>';
+}
+
+// Переименовывает поле post_id в story_id в polls
+$pollHeaders = Poll::query()->headers();
+if (in_array('post_id', $pollHeaders, true)) {
+    $migration = new Migration(new Poll());
+
+    try {
+        $migration->column('post_id')->to('story_id')->rename();
+    } catch (Exception $exception) {
+        echo $exception->getMessage();
+    }
+
+    echo 'Переименовано поле post_id в story_id в таблицы polls<br>';
+}
+
+// Переименовывает поле post_id в story_id в reads
+$readHeaders = Read::query()->headers();
+if (in_array('post_id', $readHeaders, true)) {
+    $migration = new Migration(new Read());
+
+    try {
+        $migration->column('post_id')->to('story_id')->rename();
+    } catch (Exception $exception) {
+        echo $exception->getMessage();
+    }
+
+    echo 'Переименовано поле post_id в story_id в таблицы reads<br>';
 }
 
 

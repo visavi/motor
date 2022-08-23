@@ -9,7 +9,7 @@ namespace App\Models;
  *
  * @property int $id
  * @property int $user_id
- * @property int $post_id
+ * @property int $story_id
  * @property string $vote
  * @property int $created_at
  */

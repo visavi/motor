@@ -44,8 +44,8 @@ class CommentController extends Controller
             abort(403, 'Доступ запрещен!');
         }
 
-        $post = $this->storyRepository->getById($id);
-        if (! $post) {
+        $story = $this->storyRepository->getById($id);
+        if (! $story) {
             abort(404, 'Статья не найдена!');
         }
 
@@ -58,7 +58,7 @@ class CommentController extends Controller
 
         if ($this->validator->isValid($input)) {
             Comment::query()->insert([
-                'post_id'    => $post->id,
+                'story_id'   => $story->id,
                 'user_id'    => $user->id,
                 'text'       => sanitize($input['text']),
                 'rating'     => 0,
@@ -70,7 +70,7 @@ class CommentController extends Controller
             $this->session->set('flash', ['errors' => $this->validator->getErrors(), 'old' => $input]);
         }
 
-        return $this->redirect($response, '/' . $post->slug . '-' . $post->id);
+        return $this->redirect($response, $story->getLink());
     }
 
     /**
@@ -88,8 +88,8 @@ class CommentController extends Controller
             abort(403, 'Доступ запрещен!');
         }
 
-        $post = $this->storyRepository->getById($id);
-        if (! $post) {
+        $story = $this->storyRepository->getById($id);
+        if (! $story) {
             abort(404, 'Статья не найдена!');
         }
 
@@ -126,8 +126,8 @@ class CommentController extends Controller
             abort(403, 'Доступ запрещен!');
         }
 
-        $post = $this->storyRepository->getById($id);
-        if (! $post) {
+        $story = $this->storyRepository->getById($id);
+        if (! $story) {
             abort(404, 'Статья не найдена!');
         }
 
@@ -150,7 +150,7 @@ class CommentController extends Controller
 
             $this->session->set('flash', ['success' => 'Комментарий успешно изменен!']);
 
-            return $this->redirect($response, '/' . $post->slug . '-' . $post->id);
+            return $this->redirect($response, '/' . $story->slug . '-' . $story->id);
         }
 
         $this->session->set('flash', ['errors' => $this->validator->getErrors(), 'old' => $input]);
@@ -174,8 +174,8 @@ class CommentController extends Controller
             abort(403, 'Доступ запрещен!');
         }
 
-        $post = $this->storyRepository->getById($id);
-        if (! $post) {
+        $story = $this->storyRepository->getById($id);
+        if (! $story) {
             abort(404, 'Статья не найдена!');
         }
 
@@ -198,6 +198,6 @@ class CommentController extends Controller
             $this->session->set('flash', ['errors' => $this->validator->getErrors()]);
         }
 
-        return $this->redirect($response, '/' . $post->slug . '-' . $post->id);
+        return $this->redirect($response, $story->getLink());
     }
 }

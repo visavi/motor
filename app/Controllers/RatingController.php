@@ -52,7 +52,7 @@ class RatingController extends Controller
         if ($this->validator->isValid($input)) {
 
             $poll = Poll::query()
-                ->where('post_id', $id)
+                ->where('story_id', $id)
                 ->where('user_id', getUser('id'))
                 ->first();
 
@@ -70,7 +70,7 @@ class RatingController extends Controller
             } else {
                 Poll::query()->insert([
                     'user_id'     => getUser('id'),
-                    'post_id'     => $id,
+                    'story_id'    => $id,
                     'vote'        => $input['vote'],
                     'created_at'  => time(),
                 ]);

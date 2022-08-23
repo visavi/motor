@@ -12,36 +12,36 @@ class ReadRepository implements RepositoryInterface
     /**
      * Exists read
      *
-     * @param int    $postId
+     * @param int    $storyId
      * @param string $ip
      *
      * @return bool
      */
-    public function existsRead(int $postId, string $ip): bool
+    public function existsRead(int $storyId, string $ip): bool
     {
-        return Read::query()->where('post_id', $postId)->where('ip', $ip)->exists();
+        return Read::query()->where('story_id', $storyId)->where('ip', $ip)->exists();
     }
 
     /**
      * Create read
      *
-     * @param Story  $post
+     * @param Story  $story
      * @param string $ip
      *
      * @return void
      */
-    public function createRead(Story $post, string $ip): void
+    public function createRead(Story $story, string $ip): void
     {
-        if ($this->existsRead($post->id, $ip)) {
+        if ($this->existsRead($story->id, $ip)) {
             return;
         }
 
-        $post->update([
-            'reads' => $post->reads + 1,
+        $story->update([
+            'reads' => $story->reads + 1,
         ]);
 
         Read::query()->insert([
-            'post_id'    => $post->id,
+            'story_id'   => $story->id,
             'ip'         => $ip,
             'created_at' => time(),
         ]);

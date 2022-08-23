@@ -26,6 +26,8 @@ use MotorORM\Collection;
  * @property-read Poll $poll
  * @property-read Collection<File> $files
  * @property-read Collection<Comment> $comments
+ * @property-read Collection<Read> $storyReads
+ * @property-read Collection<Poll> $storyPolls
  */
 class Story extends Model
 {
@@ -47,14 +49,35 @@ class Story extends Model
     }
 
     /**
-     * Возвращает связь голосований
+     * Возвращает связь голосования пользователя
      *
      * @return Builder
      */
     public function poll(): Builder
     {
-        return $this->hasOne(Poll::class, 'id', 'post_id')
+        return $this->hasOne(Poll::class, 'id', 'story_id')
             ->where('user_id', getUser('id'));
+    }
+
+    /**
+     * Возвращает связь голосований
+     *
+     * @return Builder
+     */
+    public function storyPolls(): Builder
+    {
+        return $this->hasMany(Poll::class, 'id', 'story_id');
+    }
+
+
+    /**
+     * Возвращает связь просмотров
+     *
+     * @return Builder
+     */
+    public function storyReads(): Builder
+    {
+        return $this->hasMany(Read::class, 'id', 'story_id');
     }
 
     /**
@@ -64,7 +87,7 @@ class Story extends Model
      */
     public function files(): Builder
     {
-        return $this->hasMany(File::class, 'id', 'post_id');
+        return $this->hasMany(File::class, 'id', 'story_id');
     }
 
     /**
@@ -74,18 +97,34 @@ class Story extends Model
      */
     public function comments(): Builder
     {
-        return $this->hasMany(Comment::class, 'id', 'post_id');
+        return $this->hasMany(Comment::class, 'id', 'story_id');
     }
 
     /**
-     * Delete post
+     * Delete story
      *
      * @return int
      */
     public function delete(): int
     {
-        foreach ($this->files() as $file) {
+        // delete files
+        foreach ($this->files as $file) {
             $file->delete();
+        }
+
+        // delete comments
+        foreach ($this->comments as $comment) {
+            $comment->delete();
+        }
+
+        // delete reads
+        foreach ($this->storyReads as $read) {
+            $read->delete();
+        }
+
+        // delete polls
+        foreach ($this->storyPolls as $poll) {
+            $poll->delete();
         }
 
         return parent::delete();
@@ -131,6 +170,11 @@ class Story extends Model
         return $rating;
     }
 
+    /**
+     * Get tags
+     *
+     * @return string
+     */
     public function getTags(): string
     {
         if (! $this->tags) {
@@ -147,6 +191,11 @@ class Story extends Model
         return implode(', ', $tagList);
     }
 
+    /**
+     * Get link
+     *
+     * @return string
+     */
     public function getLink(): string
     {
          return sprintf('/%s-%d', $this->slug, $this->id);

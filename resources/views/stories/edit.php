@@ -4,7 +4,7 @@ use App\Models\File;
 use App\Models\Story;
 use MotorORM\Collection;
 
-/** @var Story $post */
+/** @var Story $story */
 /** @var Collection<File> $files */
 ?>
 <?php $this->layout('layout') ?>
@@ -15,10 +15,10 @@ use MotorORM\Collection;
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="bi bi-house-door"></i></a></li>
-            <li class="breadcrumb-item"><a href="/<?= $post->slug ?>-<?= $post->id ?>"><?= $this->e($post->title) ?></a></li>
+            <li class="breadcrumb-item"><a href="<?= $story->getLink() ?>"><?= $this->e($story->title) ?></a></li>
             <li class="breadcrumb-item active">Редактирование</li>
         </ol>
     </nav>
 <?php $this->stop() ?>
 
-<?= $this->fetch('stories/_form', compact('post', 'files')) ?>
+<?= $this->fetch('stories/_form', compact('story', 'files')) ?>

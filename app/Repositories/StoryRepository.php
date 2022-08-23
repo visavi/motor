@@ -37,13 +37,13 @@ class StoryRepository implements RepositoryInterface
     }
 
     /**
-     * Get posts
+     * Get stories
      *
      * @param int $perPage
      *
      * @return CollectionPaginate<Story>
      */
-    public function getPosts(int $perPage): CollectionPaginate
+    public function getStories(int $perPage): CollectionPaginate
     {
         return Story::query()
             ->orderByDesc('created_at')
@@ -52,24 +52,24 @@ class StoryRepository implements RepositoryInterface
     }
 
     /**
-     * Get all posts
+     * Get all stories
      *
      * @return CollectionPaginate<Story>
      */
-    public function getAllPosts(): Collection
+    public function getAllStories(): Collection
     {
         return Story::query()->get();
     }
 
     /**
-     * Get posts by tag
+     * Get stories by tag
      *
      * @param string $tag
      * @param int    $perPage
      *
      * @return CollectionPaginate<Story>
      */
-    public function getPostsByTag(string $tag, int $perPage): CollectionPaginate
+    public function getStoriesByTag(string $tag, int $perPage): CollectionPaginate
     {
         return Story::query()
             ->where('tags', 'like', $tag)
@@ -86,7 +86,7 @@ class StoryRepository implements RepositoryInterface
      */
     public function getPopularTags(int $count = 15): array
     {
-        $tags = $this->getAllPosts()->pluck('tags', 'id');
+        $tags = $this->getAllStories()->pluck('tags', 'id');
 
         $allTags   = implode(',', $tags);
         $clearTags = preg_split('/\s*,\s*/', $allTags, -1, PREG_SPLIT_NO_EMPTY);

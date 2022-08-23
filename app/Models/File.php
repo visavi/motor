@@ -9,7 +9,7 @@ namespace App\Models;
  *
  * @property int $id
  * @property int $user_id
- * @property int $post_id
+ * @property int $story_id
  * @property string $path
  * @property string $name
  * @property string $ext

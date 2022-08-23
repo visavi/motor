@@ -8,7 +8,7 @@ namespace App\Models;
  * Class Read
  *
  * @property int $id
- * @property int $post_id
+ * @property int $story_id
  * @property string $ip
  * @property int $created_at
  */

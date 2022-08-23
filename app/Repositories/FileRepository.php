@@ -22,27 +22,27 @@ class FileRepository implements RepositoryInterface
 
     /**
      * @param int $userId
-     * @param int $postId
+     * @param int $storyId
      *
      * @return Collection<File>
      */
-    public function getFiles(int $userId, int $postId): Collection
+    public function getFiles(int $userId, int $storyId): Collection
     {
         return File::query()
             ->where('user_id', $userId)
-            ->where('post_id', $postId)
+            ->where('story_id', $storyId)
             ->get();
     }
 
     /**
-     * @param int $postId
+     * @param int $storyId
      *
      * @return Collection<File>
      */
-    public function getFilesByPostId(int $postId): Collection
+    public function getFilesByStoryId(int $storyId): Collection
     {
         return File::query()
-            ->where('post_id', $postId)
+            ->where('story_id', $storyId)
             ->get();
     }
 }

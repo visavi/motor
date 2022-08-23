@@ -70,7 +70,7 @@ class UploadController extends Controller
 
         $countFiles = File::query()
             ->where('user_id', getUser('id'))
-            ->where('post_id', $id)
+            ->where('story_id', $id)
             ->count();
 
         $this->validator->custom(
@@ -94,7 +94,7 @@ class UploadController extends Controller
 
             $fileId = File::query()->insert([
                 'user_id'    => $user->id,
-                'post_id'    => $id,
+                'story_id'   => $id,
                 'path'       => $path,
                 'name'       => $filename,
                 'ext'        => $extension,

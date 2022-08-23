@@ -4,7 +4,7 @@ use App\Models\File;
 use App\Models\Story;
 use MotorORM\Collection;
 
-/** @var Story|null $post */
+/** @var Story|null $story */
 /** @var Collection<File> $files */
 
 $paste = true;
@@ -45,7 +45,7 @@ $pointer = empty($paste)  ? null : 'cursor-pointer';
 
 <div class="mb-3">
     <label class="btn btn-sm btn-secondary mb-1" for="file">
-        <input id="file" type="file" name="file" onchange="return submitFile(this);" data-id="<?= $post->id ?? 0 ?>" data-type="image" data-csrf="<?= session()->get('csrf') ?>" hidden>
+        <input id="file" type="file" name="file" onchange="return submitFile(this);" data-id="<?= $story->id ?? 0 ?>" data-type="image" data-csrf="<?= session()->get('csrf') ?>" hidden>
         Прикрепить фото&hellip;
     </label>
 </div>

@@ -22,13 +22,13 @@ use App\Repositories\StoryRepository;
             </div>
 
             <div class="section-post">
-                <?= bbCode($comment->text) ?>
+                <?= $comment->shortText() ?>
                 <small class="text-muted fst-italic ms-1"><?= date('d.m.Y H:i', $comment->created_at) ?></small>
             </div>
 
             <div>
 
-                <a href="<?= $comment->post->getLink() ?>"><i class="bi bi-sticky"></i> <?= $comment->post->title ?></a>
+                <a href="<?= $comment->story->getLink() ?>"><i class="bi bi-sticky"></i> <?= $this->e($comment->story->title) ?></a>
             </div>
         </div>
     <?php endforeach; ?>

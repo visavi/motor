@@ -41,12 +41,12 @@ class StoryController extends Controller
      */
     public function index(Response $response): Response
     {
-        $posts = $this->storyRepository->getPosts(setting('story.per_page'));
+        $stories = $this->storyRepository->getStories(setting('story.per_page'));
 
         return $this->view->render(
             $response,
             'stories/index',
-            compact('posts')
+            compact('stories')
         );
     }
 
@@ -61,20 +61,20 @@ class StoryController extends Controller
      */
     public function view(string $slug, Request $request, Response $response): Response
     {
-        $post = $this->storyRepository->getBySlug($slug);
-        if (! $post) {
+        $story = $this->storyRepository->getBySlug($slug);
+        if (! $story) {
             abort(404, 'Статья не найдена!');
         }
 
         // Count reads
-        $this->readRepository->createRead($post, $request->getAttribute('ip'));
+        $this->readRepository->createRead($story, $request->getAttribute('ip'));
 
-        $files = $this->fileRepository->getFilesByPostId($post->id);
+        $files = $this->fileRepository->getFilesByStoryId($story->id);
 
         return $this->view->render(
             $response,
             'stories/view',
-            compact('post', 'files')
+            compact('story', 'files')
         );
     }
 
@@ -88,12 +88,12 @@ class StoryController extends Controller
      */
     public function searchTags(string $tag, Response $response): Response
     {
-        $posts = $this->storyRepository->getPostsByTag(urldecode($tag), setting('story.per_page'));
+        $stories = $this->storyRepository->getStoriesByTag(urldecode($tag), setting('story.per_page'));
 
         return $this->view->render(
             $response,
             'stories/index',
-            compact('posts')
+            compact('stories')
         );
     }
 
@@ -170,7 +170,7 @@ class StoryController extends Controller
         if ($this->validator->isValid($input)) {
             $slugify = $slug->slugify($input['title']);
 
-            $post = Story::query()->insert([
+            $story = Story::query()->insert([
                 'user_id'    => $user->id,
                 'title'      => sanitize($input['title']),
                 'slug'       => $slugify,
@@ -182,13 +182,13 @@ class StoryController extends Controller
             ]);
 
             File::query()
-                ->where('post_id', 0)
+                ->where('story_id', 0)
                 ->where('user_id', $user->id)
-                ->update(['post_id' => $post->id]);
+                ->update(['story_id' => $story->id]);
 
             $this->session->set('flash', ['success' => 'Статья успешно добавлена!']);
 
-            return $this->redirect($response, $post->getLink());
+            return $this->redirect($response, $story->getLink());
         }
 
         $this->session->set('flash', ['errors' => $this->validator->getErrors(), 'old' => $input]);
@@ -210,17 +210,17 @@ class StoryController extends Controller
             abort(403, 'Доступ запрещен!');
         }
 
-        $post = $this->storyRepository->getById($id);
-        if (! $post) {
+        $story = $this->storyRepository->getById($id);
+        if (! $story) {
             abort(404, 'Статья не найдена!');
         }
 
-        $files = $this->fileRepository->getFilesByPostId($post->id);
+        $files = $this->fileRepository->getFilesByStoryId($story->id);
 
         return $this->view->render(
             $response,
             'stories/edit',
-            compact('post', 'files')
+            compact('story', 'files')
         );
     }
 
@@ -245,8 +245,8 @@ class StoryController extends Controller
             abort(403, 'Доступ запрещен!');
         }
 
-        $post = $this->storyRepository->getById($id);
-        if (! $post) {
+        $story = $this->storyRepository->getById($id);
+        if (! $story) {
             abort(404, 'Статья не найдена!');
         }
 
@@ -262,7 +262,7 @@ class StoryController extends Controller
         if ($this->validator->isValid($input)) {
             $slugify = $slug->slugify($input['title']);
 
-            $post->update([
+            $story->update([
                 'title' => sanitize($input['title']),
                 'slug'  => $slugify,
                 'text'  => sanitize($input['text']),
@@ -294,8 +294,8 @@ class StoryController extends Controller
             abort(403, 'Доступ запрещен!');
         }
 
-        $post = $this->storyRepository->getById($id);
-        if (! $post) {
+        $story = $this->storyRepository->getById($id);
+        if (! $story) {
             abort(404, 'Статья не найдена');
         }
 
@@ -306,7 +306,7 @@ class StoryController extends Controller
             ->same('csrf', $this->session->get('csrf'), 'Неверный идентификатор сессии, повторите действие!');
 
         if ($this->validator->isValid($input)) {
-            $post->delete();
+            $story->delete();
 
             $this->session->set('flash', ['success' => 'Статья успешно удалена!']);
         } else {

@@ -31,7 +31,7 @@ class CommentRepository implements RepositoryInterface
         return Comment::query()
             ->orderByDesc('created_at')
             ->limit($count)
-            ->with('post')
+            ->with('story')
             ->get();
     }
 }

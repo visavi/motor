@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Services\Str;
 use MotorORM\Builder;
 
 /**
@@ -11,12 +12,12 @@ use MotorORM\Builder;
  *
  * @property int $id
  * @property string $user_id
- * @property string $post_id
+ * @property string $story_id
  * @property string $text
  * @property int $created_at
  *
  * @property-read User $user
- * @property-read Story $post
+ * @property-read Story $story
  */
 class Comment extends Model
 {
@@ -37,8 +38,24 @@ class Comment extends Model
      *
      * return Builder
      */
-    public function post(): Builder
+    public function story(): Builder
     {
-        return $this->HasOne(Story::class, 'post_id');
+        return $this->HasOne(Story::class, 'story_id');
+    }
+
+    /**
+     * Возвращает сокращенный текст комментария
+     *
+     * @param int $words
+     *
+     * @return string
+     */
+    public function shortText(int $words = 30): string
+    {
+        if (Str::wordCount($this->text) > $words) {
+            return bbCodeTruncate($this->text, $words);
+        }
+
+        return bbCode($this->text);
     }
 }

@@ -2,60 +2,60 @@
 
 use App\Models\Story;
 
-/** @var Story $post */
+/** @var Story $story */
 ?>
 <?php $this->layout('layout') ?>
 
-<?php $this->start('title') ?><?= $this->e($post->title) ?><?php $this->stop() ?>
-<?php $this->start('description') ?><?= $this->e($post->title) ?><?php $this->stop() ?>
+<?php $this->start('title') ?><?= $this->e($story->title) ?><?php $this->stop() ?>
+<?php $this->start('description') ?><?= $this->e($story->title) ?><?php $this->stop() ?>
 
 <?php $this->start('breadcrumb') ?>
 <nav>
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/"><i class="bi bi-house-door"></i></a></li>
-        <li class="breadcrumb-item active"><?= $this->e($post->title) ?></li>
+        <li class="breadcrumb-item active"><?= $this->e($story->title) ?></li>
     </ol>
 </nav>
 <?php $this->stop() ?>
 
 <div class="section shadow p-3 mb-3">
     <div class="float-end js-rating">
-        <?php if (getUser() && getUser('id') !== $post->user_id): ?>
-            <a href="#" class="post-rating-up<?= $post->poll->vote === '+' ? ' active': '' ?>" onclick="return changeRating(this);" data-id="<?= $post->id ?>" data-vote="+" data-csrf="<?= session('csrf') ?>"><i class="bi bi-arrow-up"></i></a>
+        <?php if (getUser() && getUser('id') !== $story->user_id): ?>
+            <a href="#" class="post-rating-up<?= $story->poll->vote === '+' ? ' active': '' ?>" onclick="return changeRating(this);" data-id="<?= $story->id ?>" data-vote="+" data-csrf="<?= session('csrf') ?>"><i class="bi bi-arrow-up"></i></a>
         <?php endif; ?>
 
-        <b><?= $post->getRating() ?></b>
+        <b><?= $story->getRating() ?></b>
 
-        <?php if (getUser() && getUser('id') !== $post->user_id): ?>
-            <a href="#" class="post-rating-down<?= $post->poll->vote === '-' ? ' active': '' ?>" onclick="return changeRating(this);" data-id="<?= $post->id ?>" data-vote="-" data-csrf="<?= session('csrf') ?>"><i class="bi bi-arrow-down"></i></a>
+        <?php if (getUser() && getUser('id') !== $story->user_id): ?>
+            <a href="#" class="post-rating-down<?= $story->poll->vote === '-' ? ' active': '' ?>" onclick="return changeRating(this);" data-id="<?= $story->id ?>" data-vote="-" data-csrf="<?= session('csrf') ?>"><i class="bi bi-arrow-down"></i></a>
         <?php endif; ?>
     </div>
 
     <div class="message">
-        <?= bbCode($post->text) ?>
+        <?= bbCode($story->text) ?>
     </div>
 
     <div class="section-author">
         <span class="avatar-micro">
-            <?= $post->user->getAvatar() ?>
+            <?= $story->user->getAvatar() ?>
         </span>
-        <span><?= $post->user->getProfile() ?></span>
+        <span><?= $story->user->getProfile() ?></span>
 
-        <small class="text-muted fst-italic ms-1"><?= date('d.m.Y H:i', $post->created_at) ?></small>
+        <small class="text-muted fst-italic ms-1"><?= date('d.m.Y H:i', $story->created_at) ?></small>
     </div>
 
     <div class="my-3 fst-italic">
-        <i class="bi bi-tags"></i> <?= $post->getTags() ?>
+        <i class="bi bi-tags"></i> <?= $story->getTags() ?>
     </div>
 
     <small class="fw-bold">
-        <i class="bi bi-eye"></i> Просмотры: <?= $post->reads ?>
+        <i class="bi bi-eye"></i> Просмотры: <?= $story->reads ?>
     </small>
 
     <?php if (isAdmin()): ?>
         <div class="float-end">
-            <a href="/<?= $post->id ?>/edit"><i class="bi bi-pencil"></i></a>
-            <a href="/<?= $post->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg"></i></a>
+            <a href="/<?= $story->id ?>/edit"><i class="bi bi-pencil"></i></a>
+            <a href="/<?= $story->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg"></i></a>
         </div>
     <?php endif; ?>
 </div>
@@ -63,8 +63,8 @@ use App\Models\Story;
 <div class="section shadow p-3 mb-3" id="comments">
     <h5>Комментарии</h5>
 
-    <?php if ($post->comments->isNotEmpty()): ?>
-        <?php foreach ($post->comments as $comment): ?>
+    <?php if ($story->comments->isNotEmpty()): ?>
+        <?php foreach ($story->comments as $comment): ?>
             <div class="mb-3">
                 <div class="section-author">
                     <span class="avatar-micro">
@@ -80,8 +80,8 @@ use App\Models\Story;
 
                     <?php if (isAdmin()): ?>
                         <div class="float-end">
-                            <a href="/<?= $post->id ?>/comments/<?= $comment->id ?>/edit"><i class="bi bi-pencil"></i></a>
-                            <a href="/<?= $post->id ?>/comments/<?= $comment->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg"></i></a>
+                            <a href="/<?= $story->id ?>/comments/<?= $comment->id ?>/edit"><i class="bi bi-pencil"></i></a>
+                            <a href="/<?= $story->id ?>/comments/<?= $comment->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg"></i></a>
                         </div>
                     <?php endif; ?>
                 </div>
@@ -96,7 +96,7 @@ use App\Models\Story;
 
     <?php if (isUser()): ?>
         <div class="mt-3">
-            <form method="post" action="/<?= $post->id ?>/comments">
+            <form method="post" action="/<?= $story->id ?>/comments">
                 <input type="hidden" name="_METHOD" value="POST">
                 <input type="hidden" name="csrf" value="<?= session('csrf') ?>">
 
