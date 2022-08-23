@@ -100,7 +100,7 @@ class Story extends Model
      */
     public function shortText(int $words = 100): string
     {
-        $more = app(View::class)->fetch('app/_more', ['link' => '/' . $this->getLink()]);
+        $more = app(View::class)->fetch('app/_more', ['link' => $this->getLink()]);
 
         if (str_contains($this->text, '[cut]')) {
             return bbCode(current(explode('[cut]', $this->text))) . $more;
@@ -149,6 +149,6 @@ class Story extends Model
 
     public function getLink(): string
     {
-         return sprintf('%s-%d', $this->slug, $this->id);
+         return sprintf('/%s-%d', $this->slug, $this->id);
     }
 }

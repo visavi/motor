@@ -76,4 +76,25 @@ class StoryRepository implements RepositoryInterface
             ->orderByDesc('created_at')
             ->paginate($perPage);
     }
+
+    /**
+     * Get popular tags
+     *
+     * @param int $count
+     *
+     * @return array
+     */
+    public function getPopularTags(int $count = 15): array
+    {
+        $tags = $this->getAllPosts()->pluck('tags', 'id');
+
+        $allTags   = implode(',', $tags);
+        $clearTags = preg_split('/\s*,\s*/', $allTags, -1, PREG_SPLIT_NO_EMPTY);
+        $tags      = array_count_values($clearTags);
+
+        arsort($tags);
+        array_splice($tags, $count);
+
+        return $tags;
+    }
 }

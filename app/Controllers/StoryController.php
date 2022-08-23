@@ -107,14 +107,7 @@ class StoryController extends Controller
      */
     public function tags(Response $response, TagCloud $tagCloud): Response
     {
-        $tags = $this->storyRepository->getAllPosts()->pluck('tags', 'id');
-
-        $allTags   = implode(',', $tags);
-        $clearTags = preg_split('/\s*,\s*/', $allTags, -1, PREG_SPLIT_NO_EMPTY);
-        $tags      = array_count_values($clearTags);
-
-        arsort($tags);
-        array_splice($tags, 100);
+        $tags = $this->storyRepository->getPopularTags(100);
 
         $tags = $tagCloud->generate($tags);
 
@@ -195,7 +188,7 @@ class StoryController extends Controller
 
             $this->session->set('flash', ['success' => 'Статья успешно добавлена!']);
 
-            return $this->redirect($response, '/' . $post->getLink());
+            return $this->redirect($response, $post->getLink());
         }
 
         $this->session->set('flash', ['errors' => $this->validator->getErrors(), 'old' => $input]);

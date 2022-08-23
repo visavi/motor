@@ -16,6 +16,7 @@ use MotorORM\Builder;
  * @property int $created_at
  *
  * @property-read User $user
+ * @property-read Story $post
  */
 class Comment extends Model
 {
@@ -29,5 +30,15 @@ class Comment extends Model
     public function user(): Builder
     {
         return $this->HasOne(User::class, 'user_id');
+    }
+
+    /**
+     * Возвращает связь статьи
+     *
+     * return Builder
+     */
+    public function post(): Builder
+    {
+        return $this->HasOne(Story::class, 'post_id');
     }
 }

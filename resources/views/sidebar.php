@@ -1,11 +1,45 @@
+<?php
+
+use App\Models\Comment;
+use App\Repositories\CommentRepository;
+use App\Repositories\StoryRepository;
+
+/** @var Comment $comment */
+?>
+
 <div class="section shadow p-3 mb-3">
-    <h6>Рейтинг пользователей</h6>
+    <h5>Активность</h5>
+
+    <?php $commentRepository = new CommentRepository(); ?>
+
+    <?php foreach ($commentRepository->getLastComments() as $comment): ?>
+        <div class="mb-3 border-bottom">
+            <div class="section-author">
+                    <span class="avatar-micro">
+                        <?= $comment->user->getAvatar() ?>
+                    </span>
+                <span><?= $comment->user->getName() ?></span>
+            </div>
+
+            <div class="section-post">
+                <?= bbCode($comment->text) ?>
+                <small class="text-muted fst-italic ms-1"><?= date('d.m.Y H:i', $comment->created_at) ?></small>
+            </div>
+
+            <div>
+
+                <a href="<?= $comment->post->getLink() ?>"><i class="bi bi-sticky"></i> <?= $comment->post->title ?></a>
+            </div>
+        </div>
+    <?php endforeach; ?>
 </div>
 
 <div class="section shadow p-3 mb-3">
-    <h6>Активность</h6>
-</div>
+    <h5>Теги</h5>
 
-<div class="section shadow p-3 mb-3">
-    <h6>Теги</h6>
+    <?php $storyRepository = new StoryRepository(); ?>
+
+    <?php foreach ($storyRepository->getPopularTags() as $tag => $count): ?>
+        <a href="/tags/<?= $tag ?>" class="badge bg-primary"><?= $tag ?></a>
+    <?php endforeach; ?>
 </div>

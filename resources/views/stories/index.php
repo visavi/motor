@@ -33,7 +33,7 @@ use MotorORM\CollectionPaginate;
                 <?php endif; ?>
             </div>
 
-            <h5><a href="/<?= $post->getLink() ?>"><?= $this->e($post->title) ?></a></h5>
+            <h5><a href="<?= $post->getLink() ?>"><?= $this->e($post->title) ?></a></h5>
 
             <div class="message">
                 <?= $post->shortText(setting('story.short_words')) ?>
@@ -54,7 +54,7 @@ use MotorORM\CollectionPaginate;
 
             <small class="fw-bold">
                 <i class="bi bi-chat"></i>
-                <a href="/<?= $post->getLink() ?>#comments" class="me-3">Комментарии: <?= $post->comments()->count() ?></a>
+                <a href="<?= $post->getLink() ?>#comments" class="me-3">Комментарии: <?= $post->comments()->count() ?></a>
 
                 <i class="bi bi-eye"></i> Просмотры: <?= $post->reads ?>
             </small>
