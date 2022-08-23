@@ -184,7 +184,7 @@ class StoryController extends Controller
                 'text'       => sanitize($input['text']),
                 'tags'       => preg_replace('/\s*,+\s*/', ',', Str::lower(sanitize(trim($input['tags'])))),
                 'rating'     => 0,
-                'views'      => 0,
+                'reads'      => 0,
                 'created_at' => time(),
             ]);
 
