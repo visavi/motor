@@ -38,8 +38,8 @@ return function (App $app) {
         $group->delete('/{id:[0-9]+}', [StoryController::class, 'destroy']);
 
         $group->post('/{id:[0-9]+}/comments', [CommentController::class, 'store']);
-        //$group->get('/{id:[0-9]+}/comments/{cid:[0-9]+}/edit', [CommentController::class, 'edit']);
-        $group->post('/{id:[0-9]+}/comments/{cid:[0-9]+}/edit', [CommentController::class, 'update']);
+        $group->get('/{id:[0-9]+}/comments/{cid:[0-9]+}/edit', [CommentController::class, 'edit']);
+        $group->put('/{id:[0-9]+}/comments/{cid:[0-9]+}', [CommentController::class, 'update']);
         $group->delete('/{id:[0-9]+}/comments/{cid:[0-9]+}', [CommentController::class, 'destroy']);
     });
 

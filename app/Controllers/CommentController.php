@@ -82,7 +82,7 @@ class CommentController extends Controller
      *
      * @return Response
      */
-/*    public function edit(int $id, int $cid, Response $response): Response
+    public function edit(int $id, int $cid, Response $response): Response
     {
         if (! isAdmin()) {
             abort(403, 'Доступ запрещен!');
@@ -101,9 +101,9 @@ class CommentController extends Controller
         return $this->view->render(
             $response,
             'comments/edit',
-            compact('comment')
+            compact('story', 'comment')
         );
-    }*/
+    }
 
     /**
      * Store
@@ -150,12 +150,12 @@ class CommentController extends Controller
 
             $this->session->set('flash', ['success' => 'Комментарий успешно изменен!']);
 
-            return $this->redirect($response, '/' . $story->slug . '-' . $story->id);
+            return $this->redirect($response, $story->getLink());
         }
 
         $this->session->set('flash', ['errors' => $this->validator->getErrors(), 'old' => $input]);
 
-        return $this->redirect($response, '/' . $id . '/comment/' . $cid . '/edit');
+        return $this->redirect($response, '/' . $id . '/comments/' . $cid . '/edit');
     }
 
     /**

@@ -4,7 +4,7 @@ use App\Models\Guestbook;
 
 /** @var Guestbook|null $message */
 
-$message = $message ?? null;
+$message ??= null;
 ?>
 <div class="section p-3 shadow">
     <form method="post" action="/guestbook<?= $message ? '/' . $message->id : '' ?>">

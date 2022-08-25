@@ -6,6 +6,8 @@ use MotorORM\Collection;
 
 /** @var Story|null $story */
 /** @var Collection<File> $files */
+
+$story ??= null;
 ?>
 <div class="section p-3 shadow cut">
     <form method="post" action="/<?=  $story->id ?? '' ?>">

@@ -27,7 +27,6 @@ use App\Repositories\StoryRepository;
             </div>
 
             <div>
-
                 <a href="<?= $comment->story->getLink() ?>"><i class="bi bi-sticky"></i> <?= $this->e($comment->story->title) ?></a>
             </div>
         </div>
@@ -40,6 +39,10 @@ use App\Repositories\StoryRepository;
     <?php $storyRepository = new StoryRepository(); ?>
 
     <?php foreach ($storyRepository->getPopularTags() as $tag => $count): ?>
-        <a href="/tags/<?= $tag ?>" class="badge bg-primary"><?= $tag ?></a>
+        <a href="/tags/<?= $tag ?>" class="badge bg-secondary"><?= $tag ?></a>
     <?php endforeach; ?>
+
+    <div class="mt-3">
+        <a href="/tags">Показать все теги</a>
+    </div>
 </div>
