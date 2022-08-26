@@ -34,4 +34,20 @@ class CommentRepository implements RepositoryInterface
             ->with('story')
             ->get();
     }
+
+    /**
+     * Get best comments
+     *
+     * @param int $count
+     *
+     * @return Collection<Comment>
+     */
+    public function getBestComments(int $count = 5): Collection
+    {
+        return Comment::query()
+            ->orderByDesc('rating')
+            ->limit($count)
+            ->with('story')
+            ->get();
+    }
 }
