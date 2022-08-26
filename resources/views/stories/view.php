@@ -32,11 +32,11 @@ use App\Models\Story;
         <?php endif; ?>
     </div>
 
-    <div class="message">
+    <div class="post-message">
         <?= bbCode($story->text) ?>
     </div>
 
-    <div class="section-author">
+    <div class="post-author mt-3">
         <span class="avatar-micro">
             <?= $story->user->getAvatar() ?>
         </span>
@@ -49,9 +49,9 @@ use App\Models\Story;
         <i class="bi bi-tags"></i> <?= $story->getTags() ?>
     </div>
 
-    <small class="fw-bold">
-        <i class="bi bi-eye"></i> Просмотры: <?= $story->reads ?>
-    </small>
+    <div class="d-inline fw-bold fs-6 me-3" title="Просмотры" data-bs-toggle="tooltip">
+        <i class="bi bi-eye"></i> <?= $story->reads ?>
+    </div>
 
     <?php if (isAdmin()): ?>
         <div class="float-end">
@@ -62,43 +62,51 @@ use App\Models\Story;
 </div>
 
 <div class="section shadow p-3 mb-3" id="comments">
-    <h5>Комментарии</h5>
+    <h5>Комментарии <small><?= $story->comments()->count() ?></small></h5>
 
     <?php if ($story->comments->isNotEmpty()): ?>
         <?php /** @var Comment $comment */ ?>
         <?php foreach ($story->comments as $comment): ?>
-            <div class="mb-3">
-                <div class="float-end js-rating">
+            <div class="post mb-3">
+                <div class="float-end">
                     <?php if (getUser() && getUser('id') !== $comment->user_id): ?>
-                        <a href="#" class="post-rating-down<?= $comment->poll->vote === '-' ? ' active': '' ?>" onclick="return changeRating(this);" data-id="<?= $comment->id ?>" data-vote="-" data-type="comment" data-csrf="<?= session('csrf') ?>"><i class="bi bi-arrow-down"></i></a>
+                        <a href="#" onclick="return postReply(this)" data-bs-toggle="tooltip" title="Ответить">
+                            <i class="bi bi-reply text-muted"></i>
+                        </a>
+                        <a href="#" onclick="return postQuote(this)" data-bs-toggle="tooltip" title="Цитировать">
+                            <i class="bi bi-chat-quote text-muted"></i>
+                        </a>
                     <?php endif; ?>
 
-                    <b><?= $comment->getRating() ?></b>
-
-                    <?php if (getUser() && getUser('id') !== $comment->user_id): ?>
-                        <a href="#" class="post-rating-up<?= $comment->poll->vote === '+' ? ' active': '' ?>" onclick="return changeRating(this);" data-id="<?= $comment->id ?>" data-vote="+" data-type="comment" data-csrf="<?= session('csrf') ?>"><i class="bi bi-arrow-up"></i></a>
+                    <?php if (isAdmin()): ?>
+                        <a href="/<?= $story->id ?>/comments/<?= $comment->id ?>/edit"><i class="bi bi-pencil"></i></a>
+                        <a href="/<?= $story->id ?>/comments/<?= $comment->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg"></i></a>
                     <?php endif; ?>
+
+                    <div class="js-rating text-end">
+                        <?php if (getUser() && getUser('id') !== $comment->user_id): ?>
+                            <a href="#" class="post-rating-down<?= $comment->poll->vote === '-' ? ' active': '' ?>" onclick="return changeRating(this);" data-id="<?= $comment->id ?>" data-vote="-" data-type="comment" data-csrf="<?= session('csrf') ?>"><i class="bi bi-arrow-down"></i></a>
+                        <?php endif; ?>
+
+                        <b><?= $comment->getRating() ?></b>
+
+                        <?php if (getUser() && getUser('id') !== $comment->user_id): ?>
+                            <a href="#" class="post-rating-up<?= $comment->poll->vote === '+' ? ' active': '' ?>" onclick="return changeRating(this);" data-id="<?= $comment->id ?>" data-vote="+" data-type="comment" data-csrf="<?= session('csrf') ?>"><i class="bi bi-arrow-up"></i></a>
+                        <?php endif; ?>
+                    </div>
                 </div>
 
-                <div class="section-author">
+                <div class="post-author" data-login="@<?= $comment->user->getName() ?>">
                     <span class="avatar-micro">
                         <?= $comment->user->getAvatar() ?>
                     </span>
                     <span><?= $comment->user->getProfile() ?></span>
                 </div>
 
-                <div class="section-post">
+                <div class="post-message">
                     <?= bbCode($comment->text) ?>
-                    <small class="text-muted fst-italic ms-1"><?= date('d.m.Y H:i', $comment->created_at) ?></small>
-
-
-                    <?php if (isAdmin()): ?>
-                        <div class="float-end">
-                            <a href="/<?= $story->id ?>/comments/<?= $comment->id ?>/edit"><i class="bi bi-pencil"></i></a>
-                            <a href="/<?= $story->id ?>/comments/<?= $comment->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg"></i></a>
-                        </div>
-                    <?php endif; ?>
                 </div>
+                <small class="post-date text-muted fst-italic"><?= date('d.m.Y H:i', $comment->created_at) ?></small>
             </div>
         <?php endforeach; ?>
     <?php else: ?>

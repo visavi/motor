@@ -52,6 +52,54 @@ $(function () {
         .find('.invalid-feedback').show();
 });
 
+/* Переход к форме ввода */
+postJump = function () {
+    $('html, body').animate({
+        scrollTop: ($('.post').offset().top)
+    }, 100);
+};
+
+/* Ответ на сообщение */
+postReply = function (el) {
+    postJump();
+
+    var field  = $('.markItUpEditor');
+    var post   = $(el).closest('.post');
+    var author = post.find('.post-author').data('login');
+
+    var $lastSymbol = field.val().slice(field.val().length - 1);
+    var separ = $.inArray($lastSymbol, ['', '\n']) !== -1 ? '' : '\n';
+
+    field.focus().val(field.val() + separ + author + ', ');
+
+    return false;
+};
+
+/* Цитирование сообщения */
+postQuote = function (el) {
+    postJump();
+
+    var field   = $('.markItUpEditor');
+    var post    = $(el).closest('.post');
+    var author  = post.find('.post-author').data('login');
+    var date    = post.find('.post-date').text();
+    var text    = post.find('.post-message').clone();
+    var message = $.trim(text.find('blockquote').remove().end().text());
+
+    var $lastSymbol = field.val().slice(field.val().length - 1);
+    var separ = $.inArray($lastSymbol, ['', '\n']) !== -1 ? '' : '\n';
+
+    if (!message) {
+        field.focus().val(field.val() + separ + author + ', ');
+
+        return false;
+    }
+
+    field.focus().val(field.val() + separ + '[quote=' + author + ' ' + date + ']' + message + '[/quote]\n');
+
+    return false;
+};
+
 /* Отправляет скрытую форму */
 submitForm = function (el) {
     if(! confirm($(el).data('confirm')  ?? 'Вы подтверждаете действие?')) {

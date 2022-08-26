@@ -9,7 +9,7 @@ use App\Models\Story;
 $comment ??= null;
 ?>
 
-<div class="mt-3">
+<div class="post-form mt-3">
     <form method="post" action="/<?= $story->id ?>/comments<?= $comment ? '/' . $comment->id : '' ?>">
         <input type="hidden" name="_METHOD" value="<?= $comment ? 'PUT' : 'POST' ?>">
         <input type="hidden" name="csrf" value="<?= session('csrf') ?>">

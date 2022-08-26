@@ -14,7 +14,7 @@ use App\Repositories\StoryRepository;
 
     <?php foreach ($commentRepository->getLastComments() as $comment): ?>
         <div class="mb-3 border-bottom">
-            <div class="section-author">
+            <div class="post-author">
                     <span class="avatar-micro">
                         <?= $comment->user->getAvatar() ?>
                     </span>

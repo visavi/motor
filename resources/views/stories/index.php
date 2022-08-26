@@ -39,7 +39,7 @@ use MotorORM\CollectionPaginate;
                 <?= $story->shortText(setting('story.short_words')) ?>
             </div>
 
-            <div class="section-author">
+            <div class="post-author mt-3">
                 <span class="avatar-micro">
                     <?= $story->user->getAvatar() ?>
                 </span>
@@ -52,12 +52,14 @@ use MotorORM\CollectionPaginate;
                 <i class="bi bi-tags"></i> <?= $story->getTags() ?>
             </div>
 
-            <small class="fw-bold">
+            <div class="d-inline fw-bold fs-6 me-3" title="Комментарии" data-bs-toggle="tooltip">
                 <i class="bi bi-chat"></i>
-                <a href="<?= $story->getLink() ?>#comments" class="me-3">Комментарии: <?= $story->comments()->count() ?></a>
+                <a href="<?= $story->getLink() ?>#comments"> <?= $story->comments()->count() ?></a>
+            </div>
 
-                <i class="bi bi-eye"></i> Просмотры: <?= $story->reads ?>
-            </small>
+            <div class="d-inline fw-bold fs-6 me-3" title="Просмотры" data-bs-toggle="tooltip">
+                <i class="bi bi-eye"></i> <?= $story->reads ?>
+            </div>
 
             <?php if (isAdmin()): ?>
                 <div class="float-end ms-3">
