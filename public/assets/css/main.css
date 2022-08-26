@@ -11,6 +11,12 @@ a {
     background-color: #f9f9fb;
 }
 
+@media (max-width: 768px) {
+    .app {
+        padding: 10px !important;
+    }
+}
+
 .app-title {
     padding-bottom: 1rem;
 }
@@ -25,6 +31,13 @@ a {
     border: 1px solid #f3f3f3;
     background: #fff;
     border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+    .section {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
 }
 
 .message {

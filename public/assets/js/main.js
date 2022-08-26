@@ -55,7 +55,7 @@ $(function () {
 /* Переход к форме ввода */
 postJump = function () {
     $('html, body').animate({
-        scrollTop: ($('.post').offset().top)
+        scrollTop: ($('.post-form').offset().top)
     }, 100);
 };
 

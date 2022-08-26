@@ -55,8 +55,8 @@ use App\Models\Story;
 
     <?php if (isAdmin()): ?>
         <div class="float-end">
-            <a href="/<?= $story->id ?>/edit"><i class="bi bi-pencil"></i></a>
-            <a href="/<?= $story->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg"></i></a>
+            <a href="/<?= $story->id ?>/edit"><i class="bi bi-pencil text-muted"></i></a>
+            <a href="/<?= $story->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg text-muted"></i></a>
         </div>
     <?php endif; ?>
 </div>
@@ -79,8 +79,8 @@ use App\Models\Story;
                     <?php endif; ?>
 
                     <?php if (isAdmin()): ?>
-                        <a href="/<?= $story->id ?>/comments/<?= $comment->id ?>/edit"><i class="bi bi-pencil"></i></a>
-                        <a href="/<?= $story->id ?>/comments/<?= $comment->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg"></i></a>
+                        <a href="/<?= $story->id ?>/comments/<?= $comment->id ?>/edit"><i class="bi bi-pencil text-muted"></i></a>
+                        <a href="/<?= $story->id ?>/comments/<?= $comment->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg text-muted"></i></a>
                     <?php endif; ?>
 
                     <div class="js-rating text-end">
@@ -96,7 +96,7 @@ use App\Models\Story;
                     </div>
                 </div>
 
-                <div class="post-author" data-login="@<?= $comment->user->getName() ?>">
+                <div class="post-author" data-login="<?= $comment->user->getName() ?>">
                     <span class="avatar-micro">
                         <?= $comment->user->getAvatar() ?>
                     </span>

@@ -65,8 +65,8 @@ use MotorORM\CollectionPaginate;
                 <div class="float-end ms-3">
                     <!-- <i class="bi bi-three-dots-vertical"></i> -->
 
-                    <a href="/<?= $story->id ?>/edit"><i class="bi bi-pencil"></i></a>
-                    <a href="/<?= $story->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg"></i></a>
+                    <a href="/<?= $story->id ?>/edit"><i class="bi bi-pencil text-muted"></i></a>
+                    <a href="/<?= $story->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg text-muted"></i></a>
                 </div>
             <?php endif; ?>
         </article>
