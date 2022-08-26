@@ -12,6 +12,7 @@ use App\Controllers\UploadController;
 use App\Controllers\User\ProfileController;
 use App\Controllers\StickerController;
 use App\Controllers\UserController;
+use App\Middleware\CheckAdminMiddleware;
 use App\Middleware\CheckUserMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -31,19 +32,25 @@ return function (App $app) {
         $group->post('/', [StoryController::class, 'store']);
         $group->get('/tags', [StoryController::class, 'tags']);
         $group->get('/tags/{tag:.+}', [StoryController::class, 'searchTags']);
-        $group->get('/create', [StoryController::class, 'create']);
         $group->get('/{slug:[\w\-]+\-[\d]+}', [StoryController::class, 'view']);
+
+        $group->get('/create', [StoryController::class, 'create']);
         $group->get('/{id:[0-9]+}/edit', [StoryController::class, 'edit']);
         $group->put('/{id:[0-9]+}', [StoryController::class, 'update']);
         $group->delete('/{id:[0-9]+}', [StoryController::class, 'destroy']);
-
         $group->post('/{id:[0-9]+}/comments', [CommentController::class, 'store']);
-        $group->get('/{id:[0-9]+}/comments/{cid:[0-9]+}/edit', [CommentController::class, 'edit']);
-        $group->put('/{id:[0-9]+}/comments/{cid:[0-9]+}', [CommentController::class, 'update']);
-        $group->delete('/{id:[0-9]+}/comments/{cid:[0-9]+}', [CommentController::class, 'destroy']);
+
+        // Edit and delete comment (for admin)
+        $group->group('/{id:[0-9]+}/comments/{cid:[0-9]+}', function (Group $group) {
+            $group->get('/edit', [CommentController::class, 'edit']);
+            $group->put('', [CommentController::class, 'update']);
+            $group->delete('', [CommentController::class, 'destroy']);
+        })->add(CheckAdminMiddleware::class);
     });
 
-    $app->post('/rating/{id:[0-9]+}', [RatingController::class, 'change']);
+    // Change rating
+    $app->post('/rating/{id:[0-9]+}', [RatingController::class, 'change'])
+        ->add(CheckUserMiddleware::class);
 
     $app->get('/captcha', [CaptchaController::class, 'captcha']);
     $app->get('/stickers/modal', [StickerController::class, 'modal']);
@@ -70,6 +77,7 @@ return function (App $app) {
         $group->get('/{login:[\w\-]+}', [UserController::class, 'user']);
     });
 
+    // Profile (for user)
     $app->group('/profile', function (Group $group) {
         $group->get('', [ProfileController::class, 'index']);
         $group->put('', [ProfileController::class, 'store']);

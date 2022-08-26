@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Models\Comment;
 use App\Models\Poll;
 use App\Models\Story;
 use App\Services\Session;
@@ -34,7 +35,16 @@ class RatingController extends Controller
     {
         $input = (array) $request->getParsedBody();
 
-        $model = Story::query()->find($id);
+        $modelName = $this->getModelByType($input['type']);
+
+        if (! $modelName) {
+            return $this->json($response, [
+                'success' => false,
+                'message' => 'Неверный тип записи!',
+            ]);
+        }
+
+        $model = $modelName::query()->find($id);
 
         if (! $model) {
             return $this->json($response, [
@@ -52,7 +62,8 @@ class RatingController extends Controller
         if ($this->validator->isValid($input)) {
 
             $poll = Poll::query()
-                ->where('story_id', $id)
+                ->where('entity_id', $id)
+                ->where('entity_name', $input['type'])
                 ->where('user_id', getUser('id'))
                 ->first();
 
@@ -70,7 +81,8 @@ class RatingController extends Controller
             } else {
                 Poll::query()->insert([
                     'user_id'     => getUser('id'),
-                    'story_id'    => $id,
+                    'entity_id'    => $id,
+                    'entity_name' => $input['type'],
                     'vote'        => $input['vote'],
                     'created_at'  => time(),
                 ]);
@@ -86,7 +98,7 @@ class RatingController extends Controller
                 'rating' => $rating,
             ]);
 
-            $model = Story::query()->find($id);
+            $model = $modelName::query()->find($id);
 
             return $this->json($response, [
                 'success' => true,
@@ -99,5 +111,30 @@ class RatingController extends Controller
             'success' => false,
             'message' => current($this->validator->getErrors()),
         ]);
+    }
+
+    /**
+     * Get map types
+     *
+     * @return string[]
+     */
+    private function getMapTypes(): array
+    {
+        return [
+            'story'   => Story::class,
+            'comment' => Comment::class,
+        ];
+    }
+
+    /**
+     * Get model by type
+     *
+     * @param string $type
+     *
+     * @return string|null
+     */
+    private function getModelByType(string $type): ?string
+    {
+        return $this->getMapTypes()[$type] ?? null;
     }
 }

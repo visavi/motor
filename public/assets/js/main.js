@@ -176,7 +176,7 @@ deleteFile = function (el) {
 changeRating = function (el) {
     $.ajax({
         data: {
-            //type: $(el).data('type'),
+            type: $(el).data('type'),
             vote: $(el).data('vote'),
             csrf: $(el).data('csrf')
         },

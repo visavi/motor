@@ -55,8 +55,9 @@ class Story extends Model
      */
     public function poll(): Builder
     {
-        return $this->hasOne(Poll::class, 'id', 'story_id')
-            ->where('user_id', getUser('id'));
+        return $this->hasOne(Poll::class, 'id', 'entity_id')
+            ->where('user_id', getUser('id'))
+            ->where('entity_name', 'story');
     }
 
     /**
@@ -66,7 +67,8 @@ class Story extends Model
      */
     public function storyPolls(): Builder
     {
-        return $this->hasMany(Poll::class, 'id', 'story_id');
+        return $this->hasMany(Poll::class, 'id', 'entity_id')
+            ->where('entity_name', 'story');
     }
 
 

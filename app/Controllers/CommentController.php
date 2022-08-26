@@ -84,10 +84,6 @@ class CommentController extends Controller
      */
     public function edit(int $id, int $cid, Response $response): Response
     {
-        if (! isAdmin()) {
-            abort(403, 'Доступ запрещен!');
-        }
-
         $story = $this->storyRepository->getById($id);
         if (! $story) {
             abort(404, 'Статья не найдена!');
@@ -122,10 +118,6 @@ class CommentController extends Controller
         Response $response,
     ): Response
     {
-        if (! isAdmin()) {
-            abort(403, 'Доступ запрещен!');
-        }
-
         $story = $this->storyRepository->getById($id);
         if (! $story) {
             abort(404, 'Статья не найдена!');
@@ -170,10 +162,6 @@ class CommentController extends Controller
      */
     public function destroy(int $id, int $cid, Request $request, Response $response): Response
     {
-        if (! isAdmin()) {
-            abort(403, 'Доступ запрещен!');
-        }
-
         $story = $this->storyRepository->getById($id);
         if (! $story) {
             abort(404, 'Статья не найдена!');

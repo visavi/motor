@@ -207,5 +207,33 @@ if (in_array('post_id', $readHeaders, true)) {
     echo 'Переименовано поле post_id в story_id в таблицы reads<br>';
 }
 
+// Переименовывает поле story_id в entity_id в polls
+$pollHeaders = Poll::query()->headers();
+if (in_array('story_id', $pollHeaders, true)) {
+    $migration = new Migration(new Poll());
+
+    try {
+        $migration->column('story_id')->to('entity_id')->rename();
+    } catch (Exception $exception) {
+        echo $exception->getMessage();
+    }
+
+    echo 'Переименовано поле story_id в entity_id в таблицы polls<br>';
+}
+
+// Добавляет поле entity_name в polls
+$pollHeaders = Poll::query()->headers();
+if (! in_array('entity_name', $pollHeaders, true)) {
+    $migration = new Migration(new Poll());
+
+    try {
+        $migration->column('entity_name')->after('entity_id')->default('story')->create();
+    } catch (Exception $exception) {
+        echo $exception->getMessage();
+    }
+
+    echo 'Добавлено поле entity_name в таблицы polls<br>';
+}
+
 
 echo 'Все миграции выполнены успешно!<br>';
