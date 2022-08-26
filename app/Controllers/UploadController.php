@@ -92,7 +92,7 @@ class UploadController extends Controller
 
             $img->save(publicPath($path));
 
-            $fileId = File::query()->insert([
+            $file = File::query()->insert([
                 'user_id'    => $user->id,
                 'story_id'   => $id,
                 'path'       => $path,
@@ -104,7 +104,7 @@ class UploadController extends Controller
 
             return $this->json($response, [
                 'success' => true,
-                'id'      => $fileId,
+                'id'      => $file->id,
                 'path'    => $path,
                 'name'    => $filename,
                 'type'    => 'image',
