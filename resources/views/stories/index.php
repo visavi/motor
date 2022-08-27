@@ -33,7 +33,12 @@ use MotorORM\CollectionPaginate;
                 <?php endif; ?>
             </div>
 
-            <h5><a href="<?= $story->getLink() ?>"><?= $this->e($story->title) ?></a></h5>
+            <h5>
+                <a href="<?= $story->getLink() ?>"><?= $this->e($story->title) ?></a>
+                <?php if ($story->locked): ?>
+                    <small><i class="bi bi-pin-angle"></i></small>
+                <?php endif; ?>
+            </h5>
 
             <div class="post-message">
                 <?= $story->shortText(setting('story.short_words')) ?>
