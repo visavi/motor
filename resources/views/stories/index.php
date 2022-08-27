@@ -66,7 +66,7 @@ use MotorORM\CollectionPaginate;
                     <i class="bi bi-eye"></i> <?= $story->reads ?>
                 </div>
 
-                <?php if (isAdmin()): ?>
+                <?php if ($story->user_id === getUser('id') || isAdmin()): ?>
                     <div class="float-end ms-3">
                         <!-- <i class="bi bi-three-dots-vertical"></i> -->
 

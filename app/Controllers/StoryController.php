@@ -17,6 +17,7 @@ use App\Services\Validator;
 use App\Services\View;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use function DI\get;
 
 /**
  * StoryController
@@ -127,10 +128,7 @@ class StoryController extends Controller
      */
     public function create(Response $response): Response
     {
-        if (! $user = getUser()) {
-            abort(403, 'Авторизуйтесь для добавления статей!');
-        }
-
+        $user  = getUser();
         $files = $this->fileRepository->getFiles($user->id, 0);
 
         return $this->view->render(
@@ -154,10 +152,7 @@ class StoryController extends Controller
         Response $response,
         Slug $slug,
     ): Response {
-        if (! $user = getUser()) {
-            abort(403, 'Доступ запрещен!');
-        }
-
+        $user  = getUser();
         $input = (array) $request->getParsedBody();
 
         $this->validator
@@ -208,13 +203,15 @@ class StoryController extends Controller
      */
     public function edit(int $id, Response $response): Response
     {
-        if (! isAdmin()) {
-            abort(403, 'Доступ запрещен!');
-        }
+        $user = getUser();
 
         $story = $this->storyRepository->getById($id);
         if (! $story) {
             abort(404, 'Статья не найдена!');
+        }
+
+        if ($story->user_id !== $user->id && ! isAdmin()) {
+            abort(403, 'Вы не являетесь автором данной записи!');
         }
 
         $files = $this->fileRepository->getFilesByStoryId($story->id);
@@ -243,13 +240,15 @@ class StoryController extends Controller
         Slug $slug,
     ): Response
     {
-        if (! isAdmin()) {
-            abort(403, 'Доступ запрещен!');
-        }
+        $user = getUser();
 
         $story = $this->storyRepository->getById($id);
         if (! $story) {
             abort(404, 'Статья не найдена!');
+        }
+
+        if ($story->user_id !== $user->id && ! isAdmin()) {
+            abort(403, 'Вы не являетесь автором данной записи!');
         }
 
         $input = (array) $request->getParsedBody();
@@ -270,7 +269,7 @@ class StoryController extends Controller
                 'slug'   => $slugify,
                 'text'   => sanitize($input['text']),
                 'tags'   => preg_replace('/\s*,+\s*/', ',', Str::lower(sanitize(trim($input['tags'])))),
-                'locked' => $input['locked'] ?? $story->locked,
+                'locked' => isAdmin() ? $input['locked'] ?? $story->locked : $story->locked,
             ]);
 
             $this->session->set('flash', ['success' => 'Статья успешно изменена!']);
@@ -294,13 +293,15 @@ class StoryController extends Controller
      */
     public function destroy(int $id, Request $request, Response $response): Response
     {
-        if (! isAdmin()) {
-            abort(403, 'Доступ запрещен!');
-        }
+        $user = getUser();
 
         $story = $this->storyRepository->getById($id);
         if (! $story) {
             abort(404, 'Статья не найдена');
+        }
+
+        if ($story->user_id !== $user->id && ! isAdmin()) {
+            abort(403, 'Вы не являетесь автором данной записи!');
         }
 
         $input = (array) $request->getParsedBody();

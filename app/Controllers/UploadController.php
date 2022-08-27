@@ -34,7 +34,7 @@ class UploadController extends Controller
      */
     public function upload(Request $request, Response $response): Response
     {
-        $user = getUser();
+        $user  = getUser();
         $input = (array) $request->getParsedBody();
         $files = $request->getUploadedFiles();
         $input = array_merge($input, $files);
@@ -128,7 +128,7 @@ class UploadController extends Controller
      */
     public function destroy(int $id, Request $request, Response $response): Response
     {
-        $user = getUser();
+        $user  = getUser();
         $input = (array) $request->getParsedBody();
 
         $file = File::query()->find($id);

@@ -29,16 +29,19 @@ return function (App $app) {
 
     $app->group('', function (Group $group) {
         $group->get('/', [StoryController::class, 'index']);
-        $group->post('/', [StoryController::class, 'store']);
         $group->get('/tags', [StoryController::class, 'tags']);
         $group->get('/tags/{tag:.+}', [StoryController::class, 'searchTags']);
         $group->get('/{slug:[\w\-]+\-[\d]+}', [StoryController::class, 'view']);
 
-        $group->get('/create', [StoryController::class, 'create']);
-        $group->get('/{id:[0-9]+}/edit', [StoryController::class, 'edit']);
-        $group->put('/{id:[0-9]+}', [StoryController::class, 'update']);
-        $group->delete('/{id:[0-9]+}', [StoryController::class, 'destroy']);
-        $group->post('/{id:[0-9]+}/comments', [CommentController::class, 'store']);
+        // For user
+        $group->group('', function (Group $group) {
+            $group->post('/', [StoryController::class, 'store']);
+            $group->get('/create', [StoryController::class, 'create']);
+            $group->get('/{id:[0-9]+}/edit', [StoryController::class, 'edit']);
+            $group->put('/{id:[0-9]+}', [StoryController::class, 'update']);
+            $group->delete('/{id:[0-9]+}', [StoryController::class, 'destroy']);
+            $group->post('/{id:[0-9]+}/comments', [CommentController::class, 'store']);
+        })->add(CheckUserMiddleware::class);
 
         // Edit and delete comment (for admin)
         $group->group('/{id:[0-9]+}/comments/{cid:[0-9]+}', function (Group $group) {
@@ -48,7 +51,7 @@ return function (App $app) {
         })->add(CheckAdminMiddleware::class);
     });
 
-    // Change rating
+    // Change rating (for user)
     $app->post('/rating/{id:[0-9]+}', [RatingController::class, 'change'])
         ->add(CheckUserMiddleware::class);
 

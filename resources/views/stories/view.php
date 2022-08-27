@@ -54,7 +54,7 @@ use App\Models\Story;
             <i class="bi bi-eye"></i> <?= $story->reads ?>
         </div>
 
-        <?php if (isAdmin()): ?>
+        <?php if ($story->user_id === getUser('id') || isAdmin()): ?>
             <div class="float-end">
                 <a href="/<?= $story->id ?>/edit"><i class="bi bi-pencil text-muted"></i></a>
                 <a href="/<?= $story->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg text-muted"></i></a>

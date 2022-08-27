@@ -40,10 +40,7 @@ class CommentController extends Controller
         Request $request,
         Response $response,
     ): Response {
-        if (! $user = getUser()) {
-            abort(403, 'Доступ запрещен!');
-        }
-
+        $user = getUser();
         $story = $this->storyRepository->getById($id);
         if (! $story) {
             abort(404, 'Статья не найдена!');
