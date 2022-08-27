@@ -49,16 +49,18 @@ use App\Models\Story;
         <i class="bi bi-tags"></i> <?= $story->getTags() ?>
     </div>
 
-    <div class="d-inline fw-bold fs-6 me-3" title="Просмотры" data-bs-toggle="tooltip">
-        <i class="bi bi-eye"></i> <?= $story->reads ?>
-    </div>
-
-    <?php if (isAdmin()): ?>
-        <div class="float-end">
-            <a href="/<?= $story->id ?>/edit"><i class="bi bi-pencil text-muted"></i></a>
-            <a href="/<?= $story->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg text-muted"></i></a>
+    <div class="border rounded p-2">
+        <div class="d-inline fw-bold fs-6 me-3" title="Просмотры" data-bs-toggle="tooltip">
+            <i class="bi bi-eye"></i> <?= $story->reads ?>
         </div>
-    <?php endif; ?>
+
+        <?php if (isAdmin()): ?>
+            <div class="float-end">
+                <a href="/<?= $story->id ?>/edit"><i class="bi bi-pencil text-muted"></i></a>
+                <a href="/<?= $story->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg text-muted"></i></a>
+            </div>
+        <?php endif; ?>
+    </div>
 </div>
 
 <div class="section shadow p-3 mb-3" id="comments">

@@ -13,9 +13,9 @@ use MotorORM\Collection;
         </div>
 
         <div class="post-author">
-                    <span class="avatar-micro">
-                        <?= $comment->user->getAvatar() ?>
-                    </span>
+            <span class="avatar-micro">
+                <?= $comment->user->getAvatar() ?>
+            </span>
             <span><?= $comment->user->getName() ?></span>
         </div>
 

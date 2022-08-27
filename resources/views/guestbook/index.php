@@ -29,7 +29,7 @@ use MotorORM\CollectionPaginate;
                 </div>
             <?php endif; ?>
 
-            <div class="message">
+            <div class="post-message">
                 <?= bbCode($message->text) ?>
             </div>
             <div class="post-author">

@@ -16,7 +16,7 @@ use App\Repositories\StoryRepository;
             <button class="nav-link active" id="last-comment-tab" data-bs-toggle="tab" data-bs-target="#last-comment-tab-pane" type="button" role="tab" aria-controls="last-comment-tab-pane" aria-selected="true">Последние</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="best-comment-tab" data-bs-toggle="tab" data-bs-target="#best-comment-tab-pane" type="button" role="tab" aria-controls="best-comment-tab-pane" aria-selected="false">Лучшие</button>
+            <button class="nav-link" id="best-comment-tab" data-bs-toggle="tab" data-bs-target="#best-comment-tab-pane" type="button" role="tab" aria-controls="best-comment-tab-pane" aria-selected="false">Популярные</button>
         </li>
     </ul>
     <div class="tab-content" id="commentsTabContent">
@@ -35,7 +35,7 @@ use App\Repositories\StoryRepository;
     <?php $storyRepository = new StoryRepository(); ?>
 
     <?php foreach ($storyRepository->getPopularTags() as $tag => $count): ?>
-        <a href="/tags/<?= $tag ?>" class="badge bg-secondary"><?= $tag ?></a>
+        <a href="/tags/<?= $tag ?>" class="badge text-bg-secondary"><?= $tag ?></a>
     <?php endforeach; ?>
 
     <div class="mt-3">

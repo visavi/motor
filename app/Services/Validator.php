@@ -37,6 +37,7 @@ use Psr\Http\Message\UploadedFileInterface;
  * @method $this email(array|string $key, ?string $label = null)
  * @method $this ip(array|string $key, ?string $label = null)
  * @method $this phone(array|string $key, ?string $label = null)
+ * @method $this boolean(array|string $key, ?string $label = null)
  * @method $this file(string $key, array $rules)
  * @method $this add(string $key, callable $callable, string $label)
  * @method $this custom(bool $compare, string $label)
@@ -83,6 +84,7 @@ class Validator
             'weight_max'   => 'Размер изображения в поле %s не должен быть больше %s px',
             'weight_empty' => 'Размер изображения в поле %s слишком маленький!',
         ],
+        'boolean'          => 'Поле %s должно быть логического типа',
     ];
 
     /**
@@ -718,6 +720,33 @@ class Validator
 
             if (! preg_match('#^\d{8,13}$#', $input)) {
                 $this->addError($field, sprintf($label ?? $this->data['phone'], $field));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Boolean rule
+     *
+     * @param array|string $key
+     * @param string|null  $label
+     *
+     * @return $this
+     */
+    private function booleanRule(array|string $key, ?string $label = null): self
+    {
+        $key = (array) $key;
+
+        foreach ($key as $field) {
+            $input = $this->getInput($field);
+
+            if (! $this->isRequired($field) && $this->blank($input)) {
+                return $this;
+            }
+
+            if (! in_array($input, [1, '1', 0, '0', true, false], true)) {
+                $this->addError($field, sprintf($label ?? $this->data['boolean'], $field));
             }
         }
 

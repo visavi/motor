@@ -134,7 +134,7 @@ if (! in_array('rating', $storyHeaders, true)) {
         echo $exception->getMessage();
     }
 
-    echo 'Добавлено поле rating в таблицы stories<br>';
+    echo 'Добавлено поле rating в таблицу stories<br>';
 }
 
 // Переименовывает поле views в reads в stories
@@ -148,7 +148,7 @@ if (in_array('views', $storyHeaders, true)) {
         echo $exception->getMessage();
     }
 
-    echo 'Переименовано поле views на reads в таблицы stories<br>';
+    echo 'Переименовано поле views на reads в таблице stories<br>';
 }
 
 // Переименовывает поле post_id в story_id в comments
@@ -162,7 +162,7 @@ if (in_array('post_id', $commentHeaders, true)) {
         echo $exception->getMessage();
     }
 
-    echo 'Переименовано поле post_id в story_id в таблицы comments<br>';
+    echo 'Переименовано поле post_id в story_id в таблице comments<br>';
 }
 
 // Переименовывает поле post_id в story_id в files
@@ -176,7 +176,7 @@ if (in_array('post_id', $fileHeaders, true)) {
         echo $exception->getMessage();
     }
 
-    echo 'Переименовано поле post_id в story_id в таблицы files<br>';
+    echo 'Переименовано поле post_id в story_id в таблице files<br>';
 }
 
 // Переименовывает поле post_id в story_id в polls
@@ -190,7 +190,7 @@ if (in_array('post_id', $pollHeaders, true)) {
         echo $exception->getMessage();
     }
 
-    echo 'Переименовано поле post_id в story_id в таблицы polls<br>';
+    echo 'Переименовано поле post_id в story_id в таблице polls<br>';
 }
 
 // Переименовывает поле post_id в story_id в reads
@@ -204,7 +204,7 @@ if (in_array('post_id', $readHeaders, true)) {
         echo $exception->getMessage();
     }
 
-    echo 'Переименовано поле post_id в story_id в таблицы reads<br>';
+    echo 'Переименовано поле post_id в story_id в таблице reads<br>';
 }
 
 // Переименовывает поле story_id в entity_id в polls
@@ -218,7 +218,7 @@ if (in_array('story_id', $pollHeaders, true)) {
         echo $exception->getMessage();
     }
 
-    echo 'Переименовано поле story_id в entity_id в таблицы polls<br>';
+    echo 'Переименовано поле story_id в entity_id в таблице polls<br>';
 }
 
 // Добавляет поле entity_name в polls
@@ -232,7 +232,21 @@ if (! in_array('entity_name', $pollHeaders, true)) {
         echo $exception->getMessage();
     }
 
-    echo 'Добавлено поле entity_name в таблицы polls<br>';
+    echo 'Добавлено поле entity_name в таблицу polls<br>';
+}
+
+// Добавляет поле locked в stories
+$storyHeaders = Story::query()->headers();
+if (! in_array('locked', $storyHeaders, true)) {
+    $migration = new Migration(new Story());
+
+    try {
+        $migration->column('locked')->after('reads')->default(0)->create();
+    } catch (Exception $exception) {
+        echo $exception->getMessage();
+    }
+
+    echo 'Добавлено поле locked в таблицу stories<br>';
 }
 
 

@@ -161,11 +161,12 @@ class StoryController extends Controller
         $input = (array) $request->getParsedBody();
 
         $this->validator
-            ->required(['csrf', 'title', 'text'])
+            ->required(['csrf', 'title', 'text', 'tags'])
             ->same('csrf', $this->session->get('csrf'), 'Неверный идентификатор сессии, повторите действие!')
             ->length('title', setting('story.title_min_length'), setting('story.title_max_length'))
             ->length('text', setting('story.text_min_length'), setting('story.text_max_length'))
-            ->length('tags', setting('story.tags_min_length'), setting('story.tags_max_length'));
+            ->length('tags', setting('story.tags_min_length'), setting('story.tags_max_length'))
+            ->boolean('locked');
 
         if ($this->validator->isValid($input)) {
             $slugify = $slug->slugify($input['title']);
@@ -178,6 +179,7 @@ class StoryController extends Controller
                 'tags'       => preg_replace('/\s*,+\s*/', ',', Str::lower(sanitize(trim($input['tags'])))),
                 'rating'     => 0,
                 'reads'      => 0,
+                'locked'     => isAdmin() ? $input['locked'] ?? 0 : 0,
                 'created_at' => time(),
             ]);
 
@@ -253,20 +255,22 @@ class StoryController extends Controller
         $input = (array) $request->getParsedBody();
 
         $this->validator
-            ->required(['csrf', 'title', 'text'])
+            ->required(['csrf', 'title', 'text', 'tags'])
             ->same('csrf', $this->session->get('csrf'), 'Неверный идентификатор сессии, повторите действие!')
             ->length('title', setting('story.title_min_length'), setting('story.title_max_length'))
             ->length('text', setting('story.text_min_length'), setting('story.text_max_length'))
-            ->length('tags', setting('story.tags_min_length'), setting('story.tags_max_length'));
+            ->length('tags', setting('story.tags_min_length'), setting('story.tags_max_length'))
+            ->boolean('locked');
 
         if ($this->validator->isValid($input)) {
             $slugify = $slug->slugify($input['title']);
 
             $story->update([
-                'title' => sanitize($input['title']),
-                'slug'  => $slugify,
-                'text'  => sanitize($input['text']),
-                'tags'  => preg_replace('/\s*,+\s*/', ',', Str::lower(sanitize(trim($input['tags'])))),
+                'title'  => sanitize($input['title']),
+                'slug'   => $slugify,
+                'text'   => sanitize($input['text']),
+                'tags'   => preg_replace('/\s*,+\s*/', ',', Str::lower(sanitize(trim($input['tags'])))),
+                'locked' => $input['locked'] ?? $story->locked,
             ]);
 
             $this->session->set('flash', ['success' => 'Статья успешно изменена!']);

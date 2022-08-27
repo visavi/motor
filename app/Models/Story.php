@@ -20,6 +20,7 @@ use MotorORM\Collection;
  * @property string $tags
  * @property int $rating
  * @property int $reads
+ * @property int $locked
  * @property int $created_at
  *
  * @property-read User $user

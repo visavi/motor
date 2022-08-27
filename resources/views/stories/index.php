@@ -35,7 +35,7 @@ use MotorORM\CollectionPaginate;
 
             <h5><a href="<?= $story->getLink() ?>"><?= $this->e($story->title) ?></a></h5>
 
-            <div class="message">
+            <div class="post-message">
                 <?= $story->shortText(setting('story.short_words')) ?>
             </div>
 
@@ -52,23 +52,24 @@ use MotorORM\CollectionPaginate;
                 <i class="bi bi-tags"></i> <?= $story->getTags() ?>
             </div>
 
-            <div class="d-inline fw-bold fs-6 me-3" title="Комментарии" data-bs-toggle="tooltip">
-                <i class="bi bi-chat"></i>
-                <a href="<?= $story->getLink() ?>#comments"> <?= $story->comments()->count() ?></a>
-            </div>
-
-            <div class="d-inline fw-bold fs-6 me-3" title="Просмотры" data-bs-toggle="tooltip">
-                <i class="bi bi-eye"></i> <?= $story->reads ?>
-            </div>
-
-            <?php if (isAdmin()): ?>
-                <div class="float-end ms-3">
-                    <!-- <i class="bi bi-three-dots-vertical"></i> -->
-
-                    <a href="/<?= $story->id ?>/edit"><i class="bi bi-pencil text-muted"></i></a>
-                    <a href="/<?= $story->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg text-muted"></i></a>
+            <div class="border rounded p-2">
+                <div class="d-inline fw-bold fs-6 me-3" title="Комментарии" data-bs-toggle="tooltip">
+                    <a href="<?= $story->getLink() ?>#comments"><i class="bi bi-chat"></i> <?= $story->comments()->count() ?></a>
                 </div>
-            <?php endif; ?>
+
+                <div class="d-inline fw-bold fs-6 me-3" title="Просмотры" data-bs-toggle="tooltip">
+                    <i class="bi bi-eye"></i> <?= $story->reads ?>
+                </div>
+
+                <?php if (isAdmin()): ?>
+                    <div class="float-end ms-3">
+                        <!-- <i class="bi bi-three-dots-vertical"></i> -->
+
+                        <a href="/<?= $story->id ?>/edit"><i class="bi bi-pencil text-muted"></i></a>
+                        <a href="/<?= $story->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg text-muted"></i></a>
+                    </div>
+                <?php endif; ?>
+            </div>
         </article>
     <?php endforeach; ?>
 

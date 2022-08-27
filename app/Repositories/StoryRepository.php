@@ -46,6 +46,7 @@ class StoryRepository implements RepositoryInterface
     public function getStories(int $perPage): CollectionPaginate
     {
         return Story::query()
+            ->orderByDesc('locked')
             ->orderByDesc('created_at')
             ->with(['user', 'poll'])
             ->paginate($perPage);

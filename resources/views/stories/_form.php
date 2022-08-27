@@ -37,6 +37,14 @@ $story ??= null;
             <div class="invalid-feedback"><?= getError('tags') ?></div>
         </div>
 
+        <?php if (isAdmin()): ?>
+            <div class="form-check">
+                <input type="hidden" value="0" name="locked">
+                <input type="checkbox" class="form-check-input" value="1" name="locked" id="locked"<?= old('locked', $story->locked ?? null) ? ' checked' : '' ?>>
+                <label for="locked" class="form-check-label">Закрепить статью</label>
+            </div>
+        <?php endif; ?>
+
         <button type="submit" class="btn btn-primary"><?= $story ? 'Изменить' : 'Отправить' ?></button>
     </form>
 </div>
