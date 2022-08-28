@@ -17,6 +17,7 @@ final class StartSessionMiddleware implements Middleware
         RequestHandler $handler
     ): Response {
         if (session_status() === PHP_SESSION_NONE) {
+            session_name(setting('session.cookie_name'));
             session_start();
         }
 
@@ -24,7 +25,7 @@ final class StartSessionMiddleware implements Middleware
             $_SESSION['csrf'] = Str::random();
         }
 
-        //$request = $request->withAttribute('session', $_SESSION);
+        $request = $request->withAttribute('session', $_SESSION);
 
         return $handler->handle($request);
     }

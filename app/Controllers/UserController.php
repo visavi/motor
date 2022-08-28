@@ -47,12 +47,12 @@ class UserController extends Controller
 
                     // @TODO remember
                     $options = [
-                        'expires' => strtotime('+1 year'),
-                        'path' => '/',
-                        //'domain' => '.example.com',
-                        'secure' => true,
-                        'httponly' => true,
-                        'samesite' => 'Lax',
+                        'expires'  => strtotime('+1 year'),
+                        'path'     => '/',
+                        'domain'   => setting('session.cookie_domain'),
+                        'secure'   => setting('session.cookie_secure'),
+                        'httponly' => setting('session.cookie_httponly'),
+                        'samesite' => setting('session.cookie_samesite'),
                     ];
                     setcookie('login', $user->login, $options);
                     setcookie('password', $user->password, $options);
@@ -156,10 +156,10 @@ class UserController extends Controller
             $options = [
                 'expires' => strtotime('-1 hour'),
                 'path' => '/',
-                //'domain' => '.example.com',
-                'secure' => true,
-                'httponly' => true,
-                'samesite' => 'Lax',
+                'domain'   => setting('session.cookie_domain'),
+                'secure'   => setting('session.cookie_secure'),
+                'httponly' => setting('session.cookie_httponly'),
+                'samesite' => setting('session.cookie_samesite'),
             ];
             setcookie('password', '', $options);
 

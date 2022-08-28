@@ -14,6 +14,13 @@
     </nav>
 <?php $this->stop() ?>
 
-<?php foreach ($tags as $tag => $size): ?>
-    <a href="/tags/<?= $tag ?>"><span style="font-size:<?= $size ?>pt"><?= $tag ?></span></a>
-<?php endforeach; ?>
+<?php if ($tags): ?>
+    <?php foreach ($tags as $tag => $size): ?>
+        <a href="/tags/<?= $tag ?>"><span style="font-size:<?= $size ?>pt"><?= $tag ?></span></a>
+    <?php endforeach; ?>
+<?php else: ?>
+    <div class="alert alert-danger">
+        <i class="bi bi-exclamation-circle-fill text-danger"></i>
+        Тегов еще нет!
+    </div>
+<?php endif; ?>

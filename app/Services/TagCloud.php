@@ -15,6 +15,10 @@ class TagCloud
      */
     public function generate(array $tags): array
     {
+        if (! $tags) {
+            return [];
+        }
+
         $min = min($tags);
         $max = max($tags);
 

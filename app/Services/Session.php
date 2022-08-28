@@ -75,7 +75,7 @@ class Session
      *
      * @return $this
      */
-    public function delete($key): static
+    public function delete(string $key): static
     {
         if ($this->has($key)) {
             unset($_SESSION[$key]);
@@ -127,21 +127,25 @@ class Session
     /**
      * Destroy the session.
      */
-    public function destroy()
+    public function destroy(): void
     {
         if ($this->id()) {
             session_unset();
             session_destroy();
             session_write_close();
 
-            /*if (ini_get('session.use_cookies')) {
-                Cookie::set(
-                    session_name(),
-                    '',
-                    time() - 4200,
-                    session_get_cookie_params()
-                );
-            }*/
+            if (ini_get('session.use_cookies')) {
+                $options = [
+                    'expires' => strtotime('-1 hour'),
+                    'path' => '/',
+                    'domain'   => setting('session.cookie_domain'),
+                    'secure'   => setting('session.cookie_secure'),
+                    'httponly' => setting('session.cookie_httponly'),
+                    'samesite' => setting('session.cookie_samesite'),
+                ];
+
+                setcookie(session_name(), '', $options);
+            }
         }
     }
 }

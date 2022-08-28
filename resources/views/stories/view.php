@@ -70,7 +70,7 @@ use App\Models\Story;
         <?php /** @var Comment $comment */ ?>
         <?php foreach ($story->comments as $comment): ?>
             <div class="post mb-3">
-                <div class="float-end">
+                <div class="float-end text-end">
                     <?php if (getUser() && getUser('id') !== $comment->user_id): ?>
                         <a href="#" onclick="return postReply(this)" data-bs-toggle="tooltip" title="Ответить">
                             <i class="bi bi-reply text-muted"></i>
@@ -85,7 +85,7 @@ use App\Models\Story;
                         <a href="/<?= $story->id ?>/comments/<?= $comment->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg text-muted"></i></a>
                     <?php endif; ?>
 
-                    <div class="js-rating text-end">
+                    <div class="js-rating">
                         <?php if (getUser() && getUser('id') !== $comment->user_id): ?>
                             <a href="#" class="post-rating-down<?= $comment->poll->vote === '-' ? ' active': '' ?>" onclick="return changeRating(this);" data-id="<?= $comment->id ?>" data-vote="-" data-type="comment" data-csrf="<?= session('csrf') ?>"><i class="bi bi-arrow-down"></i></a>
                         <?php endif; ?>

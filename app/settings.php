@@ -45,11 +45,10 @@ return function (ContainerBuilder $containerBuilder) {
                 ],
 
                 'session' => [
-                    'name'            => 'motor_session',
+                    'cookie_name'     => 'motor_session',
+                    'cookie_domain'   => false,
                     'cookie_secure'   => true,
                     'cookie_httponly' => true,
-                    'cookie_lifetime' => 3600,
-                    'gc_maxlifetime'  => 3600,
                     'cookie_samesite' => 'Lax',
                 ],
 

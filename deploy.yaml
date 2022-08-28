@@ -1,0 +1,26 @@
+import:
+  - recipe/common.php
+
+config:
+  repository: 'git@github.com:visavi/motor.git'
+  shared_files:
+    - .env
+  shared_dirs:
+    - database
+    - public/uploads
+  writable_dirs:
+    - public/uploads/*
+
+hosts:
+  motorcms.ru:
+    remote_user: www-data
+    deploy_path: '/var/www/motorcms.ru'
+
+tasks:
+  deploy:
+    - deploy:prepare
+    - deploy:vendors
+    - deploy:publish
+
+after:
+  deploy:failed: deploy:unlock
