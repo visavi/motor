@@ -33,7 +33,7 @@ use MotorORM\CollectionPaginate;
                 <?= bbCode($message->text) ?>
             </div>
             <div class="post-author">
-                <?php if ($message->user): ?>
+                <?php if ($message->user->id): ?>
                     <span class="avatar-micro">
                         <?= $message->user->getAvatar() ?>
                     </span>
