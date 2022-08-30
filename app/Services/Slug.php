@@ -25,7 +25,7 @@ class Slug
         'ÿ' => 'y',
 
         // Latin symbols
-        '©' => '(c)',
+        '©' => 'C', '®' => 'R',
 
         // Greek
         'Α' => 'A', 'Β' => 'B', 'Γ' => 'G', 'Δ' => 'D', 'Ε' => 'E', 'Ζ' => 'Z', 'Η' => 'H', 'Θ' => '8',
@@ -108,7 +108,7 @@ class Slug
      *
      * @return string
      */
-    public function slugify($string)
+    public function slugify($string): string
     {
         // Make sure string is in UTF-8 and strip invalid UTF-8 characters
         $string = mb_convert_encoding((string) $string, 'UTF-8', mb_list_encodings());

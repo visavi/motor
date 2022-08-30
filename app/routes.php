@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Controllers\BBCodeController;
 use App\Controllers\CommentController;
+use App\Controllers\FavoriteController;
 use App\Controllers\RatingController;
 use App\Controllers\StoryController;
 use App\Controllers\CaptchaController;
@@ -51,18 +52,31 @@ return function (App $app) {
         })->add(CheckAdminMiddleware::class);
     });
 
-    // Change rating (for user)
-    $app->post('/rating/{id:[0-9]+}', [RatingController::class, 'change'])
-        ->add(CheckUserMiddleware::class);
+    // For user group
+    $app->group('', function (Group $group) {
+        // Upload
+        $group->group('/upload', function (Group $group) {
+            $group->post('', [UploadController::class, 'upload']);
+            $group->delete('/{id:[0-9]+}', [UploadController::class, 'destroy']);
+        });
+
+        // Profile
+        $group->group('/profile', function (Group $group) {
+            $group->get('', [ProfileController::class, 'index']);
+            $group->put('', [ProfileController::class, 'store']);
+            $group->delete('/photo', [ProfileController::class, 'deletePhoto']);
+        });
+
+        // Change rating
+        $group->post('/rating/{id:[0-9]+}', [RatingController::class, 'change']);
+
+        // Add/delete to favorite
+        $group->post('/favorite/{id:[0-9]+}', [FavoriteController::class, 'change']);
+    })->add(CheckUserMiddleware::class);
 
     $app->get('/captcha', [CaptchaController::class, 'captcha']);
     $app->get('/stickers/modal', [StickerController::class, 'modal']);
     $app->post('/bbcode', [BBCodeController::class, 'bbcode']);
-
-    $app->group('/upload', function (Group $group) {
-        $group->post('', [UploadController::class, 'upload']);
-        $group->delete('/{id:[0-9]+}', [UploadController::class, 'destroy']);
-    })->add(CheckUserMiddleware::class);
 
     $app->map(['GET', 'POST'], '/login', [UserController::class, 'login']);
     $app->map(['GET', 'POST'], '/register', [UserController::class, 'register']);
@@ -79,11 +93,4 @@ return function (App $app) {
     $app->group('/users', function (Group $group) {
         $group->get('/{login:[\w\-]+}', [UserController::class, 'user']);
     });
-
-    // Profile (for user)
-    $app->group('/profile', function (Group $group) {
-        $group->get('', [ProfileController::class, 'index']);
-        $group->put('', [ProfileController::class, 'store']);
-        $group->delete('/photo', [ProfileController::class, 'deletePhoto']);
-    })->add(CheckUserMiddleware::class);
 };

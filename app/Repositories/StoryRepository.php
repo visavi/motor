@@ -48,7 +48,7 @@ class StoryRepository implements RepositoryInterface
         return Story::query()
             ->orderByDesc('locked')
             ->orderByDesc('created_at')
-            ->with(['user', 'poll'])
+            ->with(['user', 'poll', 'comments', 'favorite', 'favorites'])
             ->paginate($perPage);
     }
 

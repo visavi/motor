@@ -25,10 +25,12 @@ use MotorORM\Collection;
  *
  * @property-read User $user
  * @property-read Poll $poll
+ * @property-read Favorite $favorite
  * @property-read Collection<File> $files
  * @property-read Collection<Comment> $comments
  * @property-read Collection<Read> $storyReads
- * @property-read Collection<Poll> $storyPolls
+ * @property-read Collection<Poll> $polls
+ * @property-read Collection<Favorite> $favorites
  */
 class Story extends Model
 {
@@ -66,12 +68,11 @@ class Story extends Model
      *
      * @return Builder
      */
-    public function storyPolls(): Builder
+    public function polls(): Builder
     {
         return $this->hasMany(Poll::class, 'id', 'entity_id')
             ->where('entity_name', 'story');
     }
-
 
     /**
      * Возвращает связь просмотров
@@ -104,6 +105,27 @@ class Story extends Model
     }
 
     /**
+     * Возвращает связь избранного пользователя
+     *
+     * @return Builder
+     */
+    public function favorite(): Builder
+    {
+        return $this->hasOne(Favorite::class, 'id', 'story_id')
+            ->where('user_id', getUser('id'));
+    }
+
+    /**
+     * Возвращает связь с избранным
+     *
+     * @return Builder
+     */
+    public function favorites(): Builder
+    {
+        return $this->hasMany(Favorite::class, 'id', 'story_id');
+    }
+
+    /**
      * Delete story
      *
      * @return int
@@ -126,8 +148,13 @@ class Story extends Model
         }
 
         // delete polls
-        foreach ($this->storyPolls as $poll) {
+        foreach ($this->polls as $poll) {
             $poll->delete();
+        }
+
+        // delete favorites
+        foreach ($this->favorites as $favorite) {
+            $favorite->delete();
         }
 
         return parent::delete();

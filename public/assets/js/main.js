@@ -253,3 +253,40 @@ changeRating = function (el) {
 
     return false;
 };
+
+/* Добавление / удаление из избранного */
+addFavorite = function (el) {
+    $.ajax({
+        data: {
+            csrf: $(el).data('csrf')
+        },
+        dataType: 'json',
+        type: 'post',
+        url: '/favorite/' + $(el).data('id'),
+        success: function (data) {
+
+            if (! data.success) {
+                toastr.error(data.message);
+                return false;
+            }
+
+            if (data.success) {
+                if (data.type === 'add') {
+                    toastr.success(data.message);
+                    const icon = '<i class="bi bi-heart-fill"></i>';
+                    const countFavorites = parseInt($(el).text()) + 1;
+                    $(el).html(icon + ' ' + countFavorites);
+                }
+
+                if (data.type === 'delete') {
+                    toastr.success(data.message);
+                    const icon = '<i class="bi bi-heart"></i>';
+                    const countFavorites = parseInt($(el).text()) - 1;
+                    $(el).html(icon + ' ' + countFavorites);
+                }
+            }
+        }
+    });
+
+    return false;
+};

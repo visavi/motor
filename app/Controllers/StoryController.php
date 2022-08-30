@@ -17,7 +17,6 @@ use App\Services\Validator;
 use App\Services\View;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use function DI\get;
 
 /**
  * StoryController
