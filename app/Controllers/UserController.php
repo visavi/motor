@@ -107,7 +107,7 @@ class UserController extends Controller
 
             if ($this->validator->isValid($input)) {
                 $password = password_hash($input['password'], PASSWORD_BCRYPT);
-                User::query()->insert([
+                User::query()->create([
                     'login'      => sanitize($input['login']),
                     'password'   => $password,
                     'email'      => sanitize($input['email']),

@@ -17,7 +17,7 @@ use MotorORM\Collection;
  * @property string $slug
  * @property string $title
  * @property string $text
- * @property string $tags
+ * @property string|int $tags
  * @property int $rating
  * @property int $reads
  * @property int $locked

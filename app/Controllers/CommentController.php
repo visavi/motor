@@ -54,7 +54,7 @@ class CommentController extends Controller
             ->length('text', setting('comment.text_min_length'), setting('comment.text_max_length'));
 
         if ($this->validator->isValid($input)) {
-            Comment::query()->insert([
+            Comment::query()->create([
                 'story_id'   => $story->id,
                 'user_id'    => $user->id,
                 'text'       => sanitize($input['text']),

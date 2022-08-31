@@ -64,7 +64,7 @@ class FavoriteController extends Controller
                 ]);
             }
 
-            Favorite::query()->insert([
+            Favorite::query()->create([
                 'user_id'     => getUser('id'),
                 'story_id'    => $id,
                 'created_at'  => time(),

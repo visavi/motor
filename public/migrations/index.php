@@ -66,7 +66,7 @@ if (in_array('image', $guestbookHeaders, true)) {
                 continue;
             }
 
-            File::query()->insert([
+            File::query()->create([
                 'user_id'    => $message->user_id,
                 'post_id'    => $message->id,
                 'path'       => $message->image,

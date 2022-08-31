@@ -40,7 +40,7 @@ class ReadRepository implements RepositoryInterface
             'reads' => $story->reads + 1,
         ]);
 
-        Read::query()->insert([
+        Read::query()->create([
             'story_id'   => $story->id,
             'ip'         => $ip,
             'created_at' => time(),

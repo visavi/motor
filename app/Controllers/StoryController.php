@@ -165,7 +165,7 @@ class StoryController extends Controller
         if ($this->validator->isValid($input)) {
             $slugify = $slug->slugify($input['title']);
 
-            $story = Story::query()->insert([
+            $story = Story::query()->create([
                 'user_id'    => $user->id,
                 'title'      => sanitize($input['title']),
                 'slug'       => $slugify,

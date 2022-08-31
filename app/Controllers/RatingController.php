@@ -79,9 +79,9 @@ class RatingController extends Controller
                 $poll->delete();
                 $cancel = true;
             } else {
-                Poll::query()->insert([
+                Poll::query()->create([
                     'user_id'     => getUser('id'),
-                    'entity_id'    => $id,
+                    'entity_id'   => $id,
                     'entity_name' => $input['type'],
                     'vote'        => $input['vote'],
                     'created_at'  => time(),
@@ -94,11 +94,8 @@ class RatingController extends Controller
                 $rating = $model->rating - 1;
             }
 
-            $model->update([
-                'rating' => $rating,
-            ]);
-
-            $model = $modelName::query()->find($id);
+            $model->rating = $rating;
+            $model->save();
 
             return $this->json($response, [
                 'success' => true,

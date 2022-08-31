@@ -79,7 +79,7 @@ class GuestbookController extends Controller
                 $name = isset($input['name']) ? sanitize($input['name']) : setting('main.guest_name');
             }
 
-            Guestbook::query()->insert([
+            Guestbook::query()->create([
                 'user_id'    => $user->id ?? null,
                 'text'       => sanitize($input['text']),
                 'name'       => $name ?? null,
