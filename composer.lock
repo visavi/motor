@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a70338dc4236f5fd8354d812f2de976f",
+    "content-hash": "3d61403f8592fbe46fa9e707523c1076",
     "packages": [
         {
             "name": "fig/http-message-util",
@@ -1392,16 +1392,16 @@
         },
         {
             "name": "visavi/motor-orm",
-            "version": "v3.1.0",
+            "version": "v3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/visavi/motor-orm.git",
-                "reference": "c28f8a68949236cc8d6085a4739a64962ca27584"
+                "reference": "d71dc9ac976ba409373175ae25ed15ee6ad16cdf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/visavi/motor-orm/zipball/c28f8a68949236cc8d6085a4739a64962ca27584",
-                "reference": "c28f8a68949236cc8d6085a4739a64962ca27584",
+                "url": "https://api.github.com/repos/visavi/motor-orm/zipball/d71dc9ac976ba409373175ae25ed15ee6ad16cdf",
+                "reference": "d71dc9ac976ba409373175ae25ed15ee6ad16cdf",
                 "shasum": ""
             },
             "require": {
@@ -1435,9 +1435,9 @@
             ],
             "support": {
                 "issues": "https://github.com/visavi/motor-orm/issues",
-                "source": "https://github.com/visavi/motor-orm/tree/v3.1.0"
+                "source": "https://github.com/visavi/motor-orm/tree/v3.2.0"
             },
-            "time": "2022-08-31T14:24:11+00:00"
+            "time": "2022-09-02T00:49:11+00:00"
         }
     ],
     "packages-dev": [

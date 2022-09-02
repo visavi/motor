@@ -42,6 +42,16 @@ class Story extends Model
     public string $uploadPath = '/uploads/stories';
 
     /**
+     * The attributes that should be cast.
+     */
+    protected array $casts = [
+        'slug'  => 'string',
+        'title' => 'string',
+        'text'  => 'string',
+        'tags'  => 'string',
+    ];
+
+    /**
      * Возвращает связь пользователя
      *
      * @return Builder

@@ -28,6 +28,13 @@ class Comment extends Model
     protected string $filePath = __DIR__ . '/../../database/comments.csv';
 
     /**
+     * The attributes that should be cast.
+     */
+    protected array $casts = [
+        'text' => 'string',
+    ];
+
+    /**
      * Возвращает связь пользователя
      *
      * return Builder
