@@ -18,6 +18,13 @@ namespace App\Models;
  */
 class File extends Model
 {
+    /**
+     * The attributes that should be cast.
+     */
+    protected array $casts = [
+        'size' => 'int',
+    ];
+
     protected string $filePath = __DIR__ . '/../../database/files.csv';
 
     /**

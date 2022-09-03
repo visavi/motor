@@ -21,7 +21,7 @@ use MotorORM\Collection;
  * @property-read User $user
  * @property-read Story $story
  * @property-read Poll $poll
- * @property-read Collection<Poll> $commentPolls
+ * @property-read Collection<Poll> $polls
  */
 class Comment extends Model
 {
@@ -31,7 +31,7 @@ class Comment extends Model
      * The attributes that should be cast.
      */
     protected array $casts = [
-        'text' => 'string',
+        'rating' => 'int',
     ];
 
     /**
@@ -71,7 +71,7 @@ class Comment extends Model
      *
      * @return Builder
      */
-    public function commentPolls(): Builder
+    public function polls(): Builder
     {
         return $this->hasMany(Poll::class, 'id', 'entity_id')
             ->where('entity_name', 'comment');
@@ -119,7 +119,7 @@ class Comment extends Model
     public function delete(): int
     {
         // delete polls
-        foreach ($this->commentPolls as $poll) {
+        foreach ($this->polls as $poll) {
             $poll->delete();
         }
 

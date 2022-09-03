@@ -22,14 +22,6 @@ class Guestbook extends Model
     protected string $filePath = __DIR__ . '/../../database/guestbook.csv';
 
     /**
-     * The attributes that should be cast.
-     */
-    protected array $casts = [
-        'text' => 'string',
-        'name' => 'string',
-    ];
-
-    /**
      * Возвращает связь пользователей
      *
      * @return Builder

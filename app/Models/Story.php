@@ -17,10 +17,10 @@ use MotorORM\Collection;
  * @property string $slug
  * @property string $title
  * @property string $text
- * @property string|int $tags
+ * @property string $tags
  * @property int $rating
  * @property int $reads
- * @property int $locked
+ * @property bool $locked
  * @property int $created_at
  *
  * @property-read User $user
@@ -45,10 +45,9 @@ class Story extends Model
      * The attributes that should be cast.
      */
     protected array $casts = [
-        'slug'  => 'string',
-        'title' => 'string',
-        'text'  => 'string',
-        'tags'  => 'string',
+        'rating'  => 'int',
+        'reads'   => 'int',
+        'locked'  => 'bool',
     ];
 
     /**

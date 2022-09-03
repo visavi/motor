@@ -28,11 +28,11 @@
 
         <nav class="d-inline-flex mt-2 ms-auto">
             <?php if (isUser()): ?>
-                <a class="me-3 py-2 text-dark" href="/users/<?= getUser('login') ?>"><?= getUser()->getName() ?></a>
-                <a class="me-3 py-2 text-dark" href="/logout" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-confirm="Вы подтверждаете выход?">Выйти</a>
+                <a class="me-2 py-2 text-dark" href="/users/<?= getUser('login') ?>"><?= getUser()->getName() ?></a>
+                <a class="me-2 py-2 text-dark" href="/logout" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-confirm="Вы подтверждаете выход?">Выйти</a>
             <?php else: ?>
-                <a class="me-3 py-2 text-dark" href="/login">Войти</a>
-                <a class="me-3 py-2 text-dark" href="/register">Регистрация</a>
+                <a class="me-2 py-2 text-dark" href="/login">Войти</a>
+                <a class="me-2 py-2 text-dark" href="/register">Регистрация</a>
             <?php endif; ?>
         </nav>
     </header>

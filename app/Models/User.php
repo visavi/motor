@@ -49,13 +49,6 @@ class User extends Model
     public const FEMALE = 'female';
 
     /**
-     * The attributes that should be cast.
-     */
-    protected array $casts = [
-        'name' => 'string',
-    ];
-
-    /**
      * Get name
      *
      * @return string
