@@ -11,11 +11,13 @@ use MotorORM\CollectionPaginate;
 <?php $this->start('description') ?>Статьи (Стр. <?= $stories->currentPage() ?>)<?php $this->stop() ?>
 
 <?php $this->start('header') ?>
-    <?php if (isUser()): ?>
-        <div class="float-end"><a class="btn btn-success" href="/create">Добавить</a></div>
+    <?php if (isset($search)): ?>
+        <h1>Поиск по тексту: <?= $this->e($search) ?></h1>
+    <?php elseif (isset($tag)): ?>
+        <h1>Поиск по тегу: <?= $this->e($tag) ?></h1>
+    <?php else: ?>
+        <h1><?= setting('main.title') ?></h1>
     <?php endif; ?>
-
-    <h1><?= setting('main.title') ?></h1>
 <?php $this->stop() ?>
 
 <?php if ($stories->isNotEmpty()): ?>

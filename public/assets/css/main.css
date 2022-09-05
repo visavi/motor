@@ -150,6 +150,12 @@ textarea.form-control {
     width: 64px;
 }
 
+.avatar-medium>.avatar-default {
+    font-size: 22px;
+    height: 32px;
+    width: 32px;
+}
+
 .avatar-micro>.avatar-default {
     font-size: 14px;
     height: 20px;

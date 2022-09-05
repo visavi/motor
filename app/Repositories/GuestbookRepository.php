@@ -20,6 +20,16 @@ class GuestbookRepository implements RepositoryInterface
     }
 
     /**
+     * Get count messages
+     *
+     * @return int
+     */
+    public function getCount(): int
+    {
+        return Guestbook::query()->count();
+    }
+
+    /**
      * @param int $perPage
      *
      * @return CollectionPaginate<Guestbook>

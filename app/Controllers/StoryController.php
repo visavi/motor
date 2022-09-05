@@ -88,12 +88,13 @@ class StoryController extends Controller
      */
     public function searchTags(string $tag, Response $response): Response
     {
-        $stories = $this->storyRepository->getStoriesByTag(urldecode($tag), setting('story.per_page'));
+        $tag     = urldecode($tag);
+        $stories = $this->storyRepository->getStoriesByTag($tag, setting('story.per_page'));
 
         return $this->view->render(
             $response,
             'stories/index',
-            compact('stories')
+            compact('stories', 'tag')
         );
     }
 

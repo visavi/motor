@@ -98,4 +98,20 @@ class StoryRepository implements RepositoryInterface
 
         return $tags;
     }
+
+    /**
+     * Get stories by tag
+     *
+     * @param string $search
+     * @param int    $perPage
+     *
+     * @return CollectionPaginate<Story>
+     */
+    public function getStoriesBySearch(string $search, int $perPage): CollectionPaginate
+    {
+        return Story::query()
+            ->where('text', 'like', $search)
+            ->orderByDesc('created_at')
+            ->paginate($perPage);
+    }
 }

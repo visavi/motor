@@ -6,6 +6,7 @@ use App\Controllers\BBCodeController;
 use App\Controllers\CommentController;
 use App\Controllers\FavoriteController;
 use App\Controllers\RatingController;
+use App\Controllers\SearchController;
 use App\Controllers\StoryController;
 use App\Controllers\CaptchaController;
 use App\Controllers\GuestbookController;
@@ -92,5 +93,9 @@ return function (App $app) {
 
     $app->group('/users', function (Group $group) {
         $group->get('/{login:[\w\-]+}', [UserController::class, 'user']);
+    });
+
+    $app->group('/search', function (Group $group) {
+        $group->get('', [SearchController::class, 'index']);
     });
 };

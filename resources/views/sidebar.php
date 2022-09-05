@@ -2,10 +2,16 @@
 
 use App\Models\Comment;
 use App\Repositories\CommentRepository;
+use App\Repositories\GuestbookRepository;
 use App\Repositories\StoryRepository;
 
 /** @var Comment $comment */
 ?>
+
+<div class="list-group shadow mb-3">
+    <?php $guestbookRepository = new GuestbookRepository(); ?>
+    <a href="/guestbook" class="list-group-item list-group-item-action">Гостевая книга <span class="badge bg-primary rounded-pill float-end"><?= $guestbookRepository->getCount() ?></span></a>
+</div>
 
 <div class="section shadow p-3 mb-3">
     <h5>Активность</h5>
