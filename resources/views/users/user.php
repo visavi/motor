@@ -5,13 +5,13 @@ use App\Models\User;
 ?>
 <?php $this->layout('layout') ?>
 
-<?php $this->start('title') ?><?= $user->login ?><?php $this->stop() ?>
+<?php $this->start('title') ?><?= $user->getName() ?><?php $this->stop() ?>
 
 <?php $this->start('breadcrumb') ?>
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="bi bi-house-door"></i></a></li>
-            <li class="breadcrumb-item active"><?= $user->login ?></li>
+            <li class="breadcrumb-item active"><?= $user->getName() ?></li>
         </ol>
     </nav>
 <?php $this->stop() ?>
@@ -24,6 +24,8 @@ use App\Models\User;
             <div>Роль: <?= setting('roles.' . $user->role) ?? 'Пользователь' ?></div>
             <div>Имя: <?= $this->e($user->name) ?></div>
             <div>Дата регистрации: <?= date('d.m.Y', $user->created_at) ?></div>
+
+            <div><i class="bi bi-card-heading"></i> <a href="/stories/<?= $user->login ?>">Все статьи <?= $user->getName() ?></a></div>
         </div>
 
         <div class="col-md-6">

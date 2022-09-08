@@ -53,6 +53,24 @@ class StoryRepository implements RepositoryInterface
     }
 
     /**
+     * Get user stories
+     *
+     * @param int $userId
+     * @param int $perPage
+     *
+     * @return CollectionPaginate
+     */
+    public function getStoriesByUserId(int $userId, int $perPage): CollectionPaginate
+    {
+        return Story::query()
+            ->where('user_id', $userId)
+            ->orderByDesc('locked')
+            ->orderByDesc('created_at')
+            ->with(['user', 'poll', 'comments', 'favorite', 'favorites'])
+            ->paginate($perPage);
+    }
+
+    /**
      * Get all stories
      *
      * @return CollectionPaginate<Story>

@@ -14,6 +14,7 @@ use App\Controllers\UploadController;
 use App\Controllers\User\ProfileController;
 use App\Controllers\StickerController;
 use App\Controllers\UserController;
+use App\Controllers\UserStoryController;
 use App\Middleware\CheckAdminMiddleware;
 use App\Middleware\CheckUserMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -31,9 +32,11 @@ return function (App $app) {
 
     $app->group('', function (Group $group) {
         $group->get('/', [StoryController::class, 'index']);
+        $group->get('/stories', [StoryController::class, 'index']);
         $group->get('/tags', [StoryController::class, 'tags']);
         $group->get('/tags/{tag:.+}', [StoryController::class, 'searchTags']);
         $group->get('/{slug:[\w\-]+\-[\d]+}', [StoryController::class, 'view']);
+        $group->get('/stories/{login:[\w\-]+}', [UserStoryController::class, 'index']);
 
         // For user
         $group->group('', function (Group $group) {
@@ -71,8 +74,12 @@ return function (App $app) {
         // Change rating
         $group->post('/rating/{id:[0-9]+}', [RatingController::class, 'change']);
 
-        // Add/delete to favorite
-        $group->post('/favorite/{id:[0-9]+}', [FavoriteController::class, 'change']);
+        // Favorites
+        $group->group('/favorites', function (Group $group) {
+            $group->get('', [FavoriteController::class, 'index']);
+            // Add/delete to favorite
+            $group->post('/{id:[0-9]+}', [FavoriteController::class, 'change']);
+        });
     })->add(CheckUserMiddleware::class);
 
     $app->get('/captcha', [CaptchaController::class, 'captcha']);

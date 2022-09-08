@@ -7,8 +7,14 @@ namespace App\Controllers;
 use App\Models\Favorite;
 use App\Models\Poll;
 use App\Models\Story;
+use App\Models\User;
+use App\Repositories\FavoriteRepository;
 use App\Services\Session;
 use App\Services\Validator;
+use App\Services\View;
+use MotorORM\Collection;
+use MotorORM\CollectionPaginate;
+use MotorORM\Pagination;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -18,9 +24,37 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 class FavoriteController extends Controller
 {
     public function __construct(
+        protected View $view,
         protected Session $session,
         protected Validator $validator,
+        protected FavoriteRepository $favoriteRepository,
     ) {}
+
+    /**
+     * Favorites
+     *
+     * @param Response $response
+     *
+     * @return Response
+     */
+    public function index(Response $response): Response
+    {
+        $favorites = $this->favoriteRepository->getFavorites(setting('story.per_page'));
+
+        foreach ($favorites as $key => $favorite) {
+            $favorites->remove($key);
+            $favorites->add($favorite->story);
+        }
+
+        $stories = $favorites;
+        $title = 'Избранные статьи';
+
+        return $this->view->render(
+            $response,
+            'stories/index',
+            compact('stories', 'title')
+        );
+    }
 
     /**
      * Add/delete to favorite

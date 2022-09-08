@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use MotorORM\Builder;
+
 /**
  * Class Favorite
  *
@@ -11,8 +13,20 @@ namespace App\Models;
  * @property string $user_id
  * @property string $story_id
  * @property int $created_at
+ *
+ * @property-read Story $story
  */
 class Favorite extends Model
 {
     protected string $filePath = __DIR__ . '/../../database/favorites.csv';
+
+    /**
+     * Возвращает связь статьи
+     *
+     * @return Builder
+     */
+    public function story(): Builder
+    {
+        return $this->hasOne(Story::class, 'story_id');
+    }
 }

@@ -22,6 +22,7 @@ class SearchController extends Controller
     /**
      * Modal stickers
      *
+     * @param Request  $request
      * @param Response $response
      *
      * @return Response
@@ -29,14 +30,15 @@ class SearchController extends Controller
     public function index(Request $request, Response $response): Response
     {
         $query  = $request->getQueryParams();
-        $search = urldecode($query['search'] ?? '');
+        $search = htmlspecialchars(urldecode($query['search'] ?? ''));
+        $title = 'Поиск по тексту: ' . $search;
 
         $stories = $this->storyRepository->getStoriesBySearch($search, setting('story.per_page'));
 
         return $this->view->render(
             $response,
             'stories/index',
-            compact('stories', 'search')
+            compact('stories', 'title')
         );
     }
 }

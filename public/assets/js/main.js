@@ -262,7 +262,7 @@ addFavorite = function (el) {
         },
         dataType: 'json',
         type: 'post',
-        url: '/favorite/' + $(el).data('id'),
+        url: '/favorites/' + $(el).data('id'),
         success: function (data) {
 
             if (! data.success) {

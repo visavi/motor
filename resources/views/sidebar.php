@@ -10,7 +10,18 @@ use App\Repositories\StoryRepository;
 
 <div class="list-group shadow mb-3">
     <?php $guestbookRepository = new GuestbookRepository(); ?>
-    <a href="/guestbook" class="list-group-item list-group-item-action">Гостевая книга <span class="badge bg-primary rounded-pill float-end"><?= $guestbookRepository->getCount() ?></span></a>
+    <a href="/guestbook" class="list-group-item list-group-item-action fw-bold">
+        <i class="bi bi-chat-square-text-fill"></i>
+        Гостевая книга <span class="badge bg-primary rounded-pill float-end"><?= $guestbookRepository->getCount() ?></span>
+    </a>
+
+    <a href="https://github.com/visavi/motor" class="list-group-item list-group-item-action fw-bold">
+        <i class="bi bi-github"></i> Motor
+    </a>
+
+    <a href="https://github.com/visavi/motor-orm" class="list-group-item list-group-item-action fw-bold">
+        <i class="bi bi-github"></i> Motor ORM
+    </a>
 </div>
 
 <div class="section shadow p-3 mb-3">
