@@ -17,7 +17,7 @@ use MotorORM\Collection;
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="bi bi-house-door"></i></a></li>
-            <li class="breadcrumb-item"><a href="<?= $story->getLink() ?>"><?= $this->e($story->title) ?></a></li>
+            <li class="breadcrumb-item"><a href="<?= $story->getLink() ?>"><?= escape($story->title) ?></a></li>
             <li class="breadcrumb-item active">Редактирование</li>
         </ol>
     </nav>

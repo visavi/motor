@@ -1,4 +1,4 @@
-<header class="p-3 mb-3 border-bottom shadow" style="background-color: #712cf9">
+<header class="p-3 mb-3 border-bottom shadow" style="background-color: #2e8cc2">
     <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
             <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
@@ -24,7 +24,7 @@
                 </div>
 
                 <div class="dropdown text-end">
-                    <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="avatar-medium"><?= getUser()->getAvatar() ?></span>
                     </a>
 
@@ -39,8 +39,8 @@
                     </ul>
                 </div>
             <?php else: ?>
-                <a class="me-2 py-2 text-dark" href="/login">Войти</a>
-                <a class="me-2 py-2 text-dark" href="/register">Регистрация</a>
+                <a class="me-2 py-2 text-light" href="/login">Войти</a>
+                <a class="me-2 py-2 text-light" href="/register">Регистрация</a>
             <?php endif; ?>
         </div>
     </div>

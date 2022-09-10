@@ -30,7 +30,7 @@ class SearchController extends Controller
     public function index(Request $request, Response $response): Response
     {
         $query  = $request->getQueryParams();
-        $search = htmlspecialchars(urldecode($query['search'] ?? ''));
+        $search = escape(urldecode($query['search']));
         $title = 'Поиск по тексту: ' . $search;
 
         $stories = $this->storyRepository->getStoriesBySearch($search, setting('story.per_page'));

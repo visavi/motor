@@ -88,7 +88,7 @@ class StoryController extends Controller
      */
     public function searchTags(string $tag, Response $response): Response
     {
-        $tag   = htmlspecialchars(urldecode($tag));
+        $tag   = escape(urldecode($tag));
         $title = 'Поиск по тегу: ' . $tag;
 
         $stories = $this->storyRepository->getStoriesByTag($tag, setting('story.per_page'));

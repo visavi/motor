@@ -25,7 +25,7 @@ use MotorORM\Collection;
         </div>
 
         <div>
-            <a href="<?= $comment->story->getLink() ?>" class="small"><i class="bi bi-sticky"></i> <?= $this->e($comment->story->title) ?></a>
+            <a href="<?= $comment->story->getLink() ?>" class="small"><i class="bi bi-sticky"></i> <?= escape($comment->story->title) ?></a>
         </div>
     </div>
 <?php endforeach; ?>

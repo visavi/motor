@@ -59,7 +59,7 @@ class User extends Model
             return setting('main.delete_name');
         }
 
-        return htmlspecialchars($this->name ?? $this->login);
+        return escape($this->name ?? $this->login);
     }
 
     /**

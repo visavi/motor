@@ -13,6 +13,21 @@ use Slim\Factory\ServerRequestCreatorFactory;
 use Slim\Exception\HttpException;
 
 /**
+ * Escape string
+ *
+ * @param mixed $string
+ *
+ * @return string
+ */
+function escape(mixed $string): string
+{
+    $flags = ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401;
+
+    return htmlspecialchars((string) $string, $flags, 'UTF-8');
+}
+
+
+/**
  * Sanitize
  *
  * @param string $str
@@ -39,7 +54,7 @@ function sanitize(string $str): string
 function bbCode(mixed $text, bool $parse = true): string
 {
     $bbCode = new BBCode();
-    $checkText = htmlspecialchars((string) $text);
+    $checkText = escape($text);
 
     if (! $parse) {
         return $bbCode->clear($checkText);
@@ -288,12 +303,12 @@ function abort(int $code, string $message = ''): void
 function old(string $key, mixed $default = null): mixed
 {
     if (! session('flash.old')) {
-        return htmlspecialchars((string) $default);
+        return escape($default);
     }
 
     $old = session('flash.old.' . $key, $default);
 
-    return htmlspecialchars((string) $old);
+    return escape($old);
 }
 
 /**

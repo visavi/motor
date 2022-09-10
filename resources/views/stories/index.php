@@ -34,7 +34,7 @@ use MotorORM\CollectionPaginate;
             </div>
 
             <h5>
-                <a href="<?= $story->getLink() ?>"><?= $this->e($story->title) ?></a>
+                <a href="<?= $story->getLink() ?>"><?= escape($story->title) ?></a>
                 <?php if ($story->locked): ?>
                     <small><i class="bi bi-pin-angle"></i></small>
                 <?php endif; ?>

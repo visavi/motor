@@ -224,7 +224,7 @@ class Story extends Model
 
         $tagList = [];
         foreach ($tags as $value) {
-            $tagList[] = '<a href="/tags/' . urlencode(htmlspecialchars($value)) . '">' . htmlspecialchars($value) . '</a>';
+            $tagList[] = '<a href="/tags/' . urlencode(escape($value)) . '">' . escape($value) . '</a>';
         }
 
         return implode(', ', $tagList);

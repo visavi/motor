@@ -177,7 +177,7 @@ class Validator
                 return $this;
             }
 
-            if (mb_strlen((string) $input, 'utf-8') < $min || mb_strlen((string) $input, 'utf-8') > $max) {
+            if (mb_strlen((string) $input, 'UTF-8') < $min || mb_strlen((string) $input, 'UTF-8') > $max) {
                 $this->addError($field, sprintf($label ?? $this->data['length']['between'], $field, $min, $max));
             }
         }
@@ -205,7 +205,7 @@ class Validator
                 return $this;
             }
 
-            if (mb_strlen((string) $input, 'utf-8') < $length) {
+            if (mb_strlen((string) $input, 'UTF-8') < $length) {
                 $this->addError($field, sprintf($label ?? $this->data['length']['min'], $field, $length));
             }
         }
@@ -233,7 +233,7 @@ class Validator
                 return $this;
             }
 
-            if (mb_strlen((string) $input, 'utf-8') > $length) {
+            if (mb_strlen((string) $input, 'UTF-8') > $length) {
                 $this->addError($field, sprintf($label ?? $this->data['length']['max'], $field, $length));
             }
         }
