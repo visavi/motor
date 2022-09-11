@@ -79,49 +79,6 @@ class StoryController extends Controller
     }
 
     /**
-     * By tags
-     *
-     * @param string   $tag
-     * @param Response $response
-     *
-     * @return Response
-     */
-    public function searchTags(string $tag, Response $response): Response
-    {
-        $tag   = escape(urldecode($tag));
-        $title = 'Поиск по тегу: ' . $tag;
-
-        $stories = $this->storyRepository->getStoriesByTag($tag, setting('story.per_page'));
-
-        return $this->view->render(
-            $response,
-            'stories/index',
-            compact('stories', 'title')
-        );
-    }
-
-    /**
-     * Tags
-     *
-     * @param Response $response
-     * @param TagCloud $tagCloud
-     *
-     * @return Response
-     */
-    public function tags(Response $response, TagCloud $tagCloud): Response
-    {
-        $tags = $this->storyRepository->getPopularTags(100);
-
-        $tags = $tagCloud->generate($tags);
-
-        return $this->view->render(
-            $response,
-            'stories/tags',
-            compact('tags')
-        );
-    }
-
-    /**
      * Create
      *
      * @param Response $response
@@ -130,6 +87,10 @@ class StoryController extends Controller
      */
     public function create(Response $response): Response
     {
+        if (! setting('story.allow_posting') && ! isAdmin()) {
+            abort(403, 'Публикация статей запрещена администратором!');
+        }
+
         $user  = getUser();
         $files = $this->fileRepository->getFiles($user->id, 0);
 

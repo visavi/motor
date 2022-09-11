@@ -18,4 +18,11 @@ use MotorORM\Collection;
     </nav>
 <?php $this->stop() ?>
 
-<?= $this->fetch('stories/_form', compact('files')) ?>
+<?php if(setting('story.allow_posting') || isAdmin()): ?>
+    <?= $this->fetch('stories/_form', compact('files')) ?>
+<?php else: ?>
+    <div class="alert alert-danger">
+        <i class="bi bi-exclamation-circle-fill text-danger"></i>
+        Публикация статей запрещена администратором!
+    </div>
+<?php endif; ?>

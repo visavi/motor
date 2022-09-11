@@ -19,9 +19,11 @@
             </div>-->
 
             <?php if (isUser()): ?>
-                <div class="me-3" style="font-size: 2rem; color: #fff" title="Добавить статью" data-bs-toggle="tooltip">
-                    <a href="/create"><i class="bi bi-plus-circle text-light"></i></a>
-                </div>
+                <?php if(setting('story.allow_posting') || isAdmin()): ?>
+                    <div class="me-3" style="font-size: 2rem; color: #fff" title="Добавить статью" data-bs-toggle="tooltip">
+                        <a href="/create"><i class="bi bi-plus-circle text-light"></i></a>
+                    </div>
+                <?php endif; ?>
 
                 <div class="dropdown text-end">
                     <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">

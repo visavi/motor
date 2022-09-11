@@ -10,6 +10,7 @@ use App\Controllers\SearchController;
 use App\Controllers\StoryController;
 use App\Controllers\CaptchaController;
 use App\Controllers\GuestbookController;
+use App\Controllers\TagController;
 use App\Controllers\UploadController;
 use App\Controllers\User\ProfileController;
 use App\Controllers\StickerController;
@@ -33,10 +34,11 @@ return function (App $app) {
     $app->group('', function (Group $group) {
         $group->get('/', [StoryController::class, 'index']);
         $group->get('/stories', [StoryController::class, 'index']);
-        $group->get('/tags', [StoryController::class, 'tags']);
-        $group->get('/tags/{tag:.+}', [StoryController::class, 'searchTags']);
         $group->get('/{slug:[\w\-]+\-[\d]+}', [StoryController::class, 'view']);
         $group->get('/stories/{login:[\w\-]+}', [UserStoryController::class, 'index']);
+
+        $group->get('/tags', [TagController::class, 'index']);
+        $group->get('/tags/{tag:.+}', [TagController::class, 'search']);
 
         // For user
         $group->group('', function (Group $group) {

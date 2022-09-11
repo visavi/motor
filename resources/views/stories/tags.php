@@ -15,9 +15,11 @@
 <?php $this->stop() ?>
 
 <?php if ($tags): ?>
-    <?php foreach ($tags as $tag => $size): ?>
-        <a href="/tags/<?= $tag ?>"><span style="font-size:<?= $size ?>pt"><?= $tag ?></span></a>
-    <?php endforeach; ?>
+    <div class="section shadow p-3 mb-3">
+        <?php foreach ($tags as $tag => $size): ?>
+            <a href="/tags/<?= $tag ?>"><span style="font-size:<?= $size ?>pt"><?= $tag ?></span></a>
+        <?php endforeach; ?>
+    </div>
 <?php else: ?>
     <div class="alert alert-danger">
         <i class="bi bi-exclamation-circle-fill text-danger"></i>

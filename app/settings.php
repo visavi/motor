@@ -6,7 +6,7 @@ use App\Models\User;
 use App\Services\Setting;
 use DI\ContainerBuilder;
 
-return function (ContainerBuilder $containerBuilder) {
+return static function (ContainerBuilder $containerBuilder) {
     // Global Settings Object
     $containerBuilder->addDefinitions([
         Setting::class => function () {
@@ -20,6 +20,7 @@ return function (ContainerBuilder $containerBuilder) {
                 ],
 
                 'story' => [
+                    'allow_posting'    => true, // Разрешать пользователям публиковать статьи
                     'per_page'         => 10,
                     'title_min_length' => 5,
                     'title_max_length' => 50,
