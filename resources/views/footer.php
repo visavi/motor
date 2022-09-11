@@ -6,8 +6,8 @@
         </div>
 
         <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
-            <li class="ms-3"><a class="text-muted" href="#"><i class="bi bi-twitter"></i></li>
-            <li class="ms-3"><a class="text-muted" href="#"><i class="bi bi-facebook"></i></a></li>
+            <li class="ms-3"><a class="text-muted" href="https://telegram.me/visavinet"><i class="bi bi-telegram"></i></li>
+            <li class="ms-3"><a class="text-muted" href="https://vk.com/visavinet"><i class="bi bi-vimeo"></i></a></li>
             <li class="ms-3"><a class="text-muted" href="https://github.com/visavi/motor"><i class="bi bi-github"></i></a></li>
         </ul>
     </footer>
