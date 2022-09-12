@@ -116,6 +116,7 @@ use App\Models\Story;
                 <div class="post-message">
                     <?= bbCode($comment->text) ?>
                 </div>
+
                 <small class="post-date text-muted fst-italic"><?= date('d.m.Y H:i', $comment->created_at) ?></small>
             </div>
         <?php endforeach; ?>
