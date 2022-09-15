@@ -1392,16 +1392,16 @@
         },
         {
             "name": "visavi/motor-orm",
-            "version": "v3.3.4",
+            "version": "v3.3.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/visavi/motor-orm.git",
-                "reference": "afc756fa1558a8aee11a7d04211b001867e6a6d5"
+                "reference": "6cd2d26bcdc0e377d6044f0590acd400d3b23f94"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/visavi/motor-orm/zipball/afc756fa1558a8aee11a7d04211b001867e6a6d5",
-                "reference": "afc756fa1558a8aee11a7d04211b001867e6a6d5",
+                "url": "https://api.github.com/repos/visavi/motor-orm/zipball/6cd2d26bcdc0e377d6044f0590acd400d3b23f94",
+                "reference": "6cd2d26bcdc0e377d6044f0590acd400d3b23f94",
                 "shasum": ""
             },
             "require": {
@@ -1436,9 +1436,9 @@
             ],
             "support": {
                 "issues": "https://github.com/visavi/motor-orm/issues",
-                "source": "https://github.com/visavi/motor-orm/tree/v3.3.4"
+                "source": "https://github.com/visavi/motor-orm/tree/v3.3.5"
             },
-            "time": "2022-09-10T22:15:54+00:00"
+            "time": "2022-09-13T21:48:37+00:00"
         }
     ],
     "packages-dev": [
@@ -3125,16 +3125,16 @@
         },
         {
             "name": "sebastian/type",
-            "version": "3.1.0",
+            "version": "3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/type.git",
-                "reference": "fb44e1cc6e557418387ad815780360057e40753e"
+                "reference": "fb3fe09c5f0bae6bc27ef3ce933a1e0ed9464b6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/type/zipball/fb44e1cc6e557418387ad815780360057e40753e",
-                "reference": "fb44e1cc6e557418387ad815780360057e40753e",
+                "url": "https://api.github.com/repos/sebastianbergmann/type/zipball/fb3fe09c5f0bae6bc27ef3ce933a1e0ed9464b6e",
+                "reference": "fb3fe09c5f0bae6bc27ef3ce933a1e0ed9464b6e",
                 "shasum": ""
             },
             "require": {
@@ -3146,7 +3146,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.1-dev"
+                    "dev-master": "3.2-dev"
                 }
             },
             "autoload": {
@@ -3169,7 +3169,7 @@
             "homepage": "https://github.com/sebastianbergmann/type",
             "support": {
                 "issues": "https://github.com/sebastianbergmann/type/issues",
-                "source": "https://github.com/sebastianbergmann/type/tree/3.1.0"
+                "source": "https://github.com/sebastianbergmann/type/tree/3.2.0"
             },
             "funding": [
                 {
@@ -3177,7 +3177,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-08-29T06:55:37+00:00"
+            "time": "2022-09-12T14:47:03+00:00"
         },
         {
             "name": "sebastian/version",

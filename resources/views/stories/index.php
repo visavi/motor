@@ -18,6 +18,20 @@ use MotorORM\CollectionPaginate;
     <?php endif; ?>
 <?php $this->stop() ?>
 
+<?php if (isset($search)): ?>
+    <div class="mb-3">
+        <form class="row row-cols-sm-auto g-3" action="/search" method="get"  role="search">
+            <div class="col-sm-10">
+                <input type="text" name="search" class="form-control" placeholder="Поиск..." aria-label="Search" value="<?= $search ?>" required>
+            </div>
+
+            <div class="col-sm-2 d-sm-grid">
+                <button type="submit" class="btn btn-primary">Поиск</button>
+            </div>
+        </form>
+    </div>
+<?php endif; ?>
+
 <?php if ($stories->isNotEmpty()): ?>
     <?php foreach ($stories as $story): ?>
         <article class="section shadow p-3 mb-3">

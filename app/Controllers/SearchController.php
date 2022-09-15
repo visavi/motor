@@ -30,7 +30,7 @@ class SearchController extends Controller
     public function index(Request $request, Response $response): Response
     {
         $query  = $request->getQueryParams();
-        $search = escape(urldecode($query['search']));
+        $search = urldecode(escape($query['search'] ?? ''));
         $title = 'Поиск по тексту: ' . $search;
 
         $stories = $this->storyRepository->getStoriesBySearch($search, setting('story.per_page'));
@@ -38,7 +38,7 @@ class SearchController extends Controller
         return $this->view->render(
             $response,
             'stories/index',
-            compact('stories', 'title')
+            compact('stories', 'title', 'search')
         );
     }
 }

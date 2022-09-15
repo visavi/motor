@@ -50,7 +50,7 @@ class TagController extends Controller
      */
     public function search(string $tag, Response $response): Response
     {
-        $tag   = escape(urldecode($tag));
+        $tag   = urldecode(escape($tag));
         $title = 'Поиск по тегу: ' . $tag;
 
         $stories = $this->storyRepository->getStoriesByTag($tag, setting('story.per_page'));

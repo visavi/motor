@@ -45,9 +45,9 @@ class Story extends Model
      * The attributes that should be cast.
      */
     protected array $casts = [
-        'rating'  => 'int',
-        'reads'   => 'int',
-        'locked'  => 'bool',
+        'rating' => 'int',
+        'reads'  => 'int',
+        'locked' => 'bool',
     ];
 
     /**

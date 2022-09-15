@@ -175,3 +175,22 @@ textarea.form-control {
         line-height: 1.5;
     }
 }
+
+.app-search {
+    position: relative;
+}
+
+.app-search-input {
+    background-color: hsla(0,0%,100%,.8);
+    padding: 5px 30px 5px 10px;
+    transition: background-color .3s ease;
+}
+
+.app-search-button {
+    background: 0 0;
+    border: 0;
+    padding: 0 10px;
+    position: absolute;
+    right: 0;
+    top: 7px;
+}
