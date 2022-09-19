@@ -15,7 +15,7 @@ $comment ??= null;
         <input type="hidden" name="csrf" value="<?= session('csrf') ?>">
 
         <div class="mb-3">
-            <label for="text" class="form-label">Текст</label>
+            <label for="text" class="form-label">Сообщение</label>
             <textarea class="form-control markItUp<?= hasError('text') ?>" id="text" rows="5" name="text" maxlength="<?= setting('comment.text_max_length') ?>" required><?= old('text', $comment->text ?? null) ?></textarea>
             <span class="js-textarea-counter"></span>
             <div class="invalid-feedback"><?= getError('text') ?></div>

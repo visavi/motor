@@ -72,7 +72,7 @@ use App\Models\Story;
 </div>
 
 <div class="section shadow p-3 mb-3" id="comments">
-    <h5>Комментарии <small><?= $story->comments()->count() ?></small></h5>
+    <h3>Комментарии <small><?= $story->comments()->count() ?></small></h3>
 
     <?php if ($story->comments->isNotEmpty()): ?>
         <?php /** @var Comment $comment */ ?>

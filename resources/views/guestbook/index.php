@@ -34,14 +34,6 @@ use MotorORM\CollectionPaginate;
                 <?php endif; ?>
             </div>
 
-            <?php if (isAdmin()): ?>
-                <div class="float-end">
-                    <a href="/guestbook/<?= $message->id ?>/edit"><i class="bi bi-pencil"></i></a>
-                    <a href="/guestbook/<?= $message->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg"></i></a>
-                </div>
-            <?php endif; ?>
-
-
             <?php if ($message->user->id): ?>
                 <div class="post-author" data-login="<?= $message->user->getName() ?>">
                     <span class="avatar-micro">
@@ -63,6 +55,13 @@ use MotorORM\CollectionPaginate;
             </div>
 
             <small class="post-date text-muted fst-italic ms-1"><?= date('d.m.Y H:i', $message->created_at) ?></small>
+
+            <?php if (isAdmin()): ?>
+                <div class="float-end">
+                    <a href="/guestbook/<?= $message->id ?>/edit"><i class="bi bi-pencil"></i></a>
+                    <a href="/guestbook/<?= $message->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg"></i></a>
+                </div>
+            <?php endif; ?>
         </div>
     <?php endforeach; ?>
 

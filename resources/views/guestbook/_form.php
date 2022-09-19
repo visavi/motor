@@ -6,7 +6,7 @@ use App\Models\Guestbook;
 
 $message ??= null;
 ?>
-<div class="post-form mt-3">
+<div class="post-form p-3 mt-3 shadow">
     <form method="post" action="/guestbook<?= $message ? '/' . $message->id : '' ?>">
         <input type="hidden" name="_METHOD" value="<?= $message ? 'PUT' : 'POST' ?>">
         <input type="hidden" name="csrf" value="<?= session('csrf') ?>">
@@ -20,7 +20,7 @@ $message ??= null;
         <?php endif; ?>
 
         <div class="mb-3">
-            <label for="text" class="form-label">Текст</label>
+            <label for="text" class="form-label">Сообщение</label>
             <textarea class="form-control markItUp<?= hasError('text') ?>" id="text" rows="5" name="text" maxlength="<?= setting('guestbook.text_max_length') ?>" required><?= old('text', $message->text ?? null) ?></textarea>
             <span class="js-textarea-counter"></span>
             <div class="invalid-feedback"><?= getError('text') ?></div>

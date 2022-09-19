@@ -29,7 +29,7 @@ a {
 
 .app-title h1 {
     margin: 0;
-    font-size: 24px;
+    font-size: 28px;
     font-weight: 400;
 }
 
@@ -44,6 +44,10 @@ a {
         padding-left: 10px !important;
         padding-right: 10px !important;
     }
+}
+
+.post-author {
+    font-weight: bold;
 }
 
 .post-message {
