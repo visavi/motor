@@ -2,7 +2,7 @@
     "name": "visavi/motor",
     "description": "cms",
     "require": {
-        "php": "^8.0",
+        "php": "^8.0.2",
         "ext-mbstring": "*",
         "slim/slim": "^4.10",
         "slim/psr7": "^1.5",
@@ -31,6 +31,14 @@
         "psr-4": {
             "Tests\\": "tests/"
         }
+    },
+    "config": {
+        "platform": {
+            "php": "8.0.2"
+        },
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
     },
     "license": "GPL-3.0-only"
 }

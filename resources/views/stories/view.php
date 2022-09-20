@@ -36,14 +36,16 @@ use App\Models\Story;
         <?= bbCode($story->text) ?>
     </div>
 
-    <div class="post-author mt-3">
+    <div class="post-author d-inline-block mt-3">
         <span class="avatar-micro">
             <?= $story->user->getAvatar() ?>
         </span>
         <span><?= $story->user->getProfile() ?></span>
-
-        <small class="text-muted fst-italic ms-1"><?= date('d.m.Y H:i', $story->created_at) ?></small>
     </div>
+
+    <small class="post-date text-muted fst-italic ms-1">
+        <?= date('d.m.Y H:i', $story->created_at) ?>
+    </small>
 
     <div class="my-3 fst-italic">
         <i class="bi bi-tags"></i> <?= $story->getTags() ?>
@@ -106,7 +108,7 @@ use App\Models\Story;
                     </div>
                 </div>
 
-                <div class="post-author" data-login="<?= $comment->user->getName() ?>">
+                <div class="post-author mb-1" data-login="<?= $comment->user->getName() ?>">
                     <span class="avatar-micro">
                         <?= $comment->user->getAvatar() ?>
                     </span>

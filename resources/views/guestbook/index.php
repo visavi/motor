@@ -54,7 +54,7 @@ use MotorORM\CollectionPaginate;
                 <?= bbCode($message->text) ?>
             </div>
 
-            <small class="post-date text-muted fst-italic ms-1"><?= date('d.m.Y H:i', $message->created_at) ?></small>
+            <small class="post-date text-muted fst-italic"><?= date('d.m.Y H:i', $message->created_at) ?></small>
 
             <?php if (isAdmin()): ?>
                 <div class="float-end">

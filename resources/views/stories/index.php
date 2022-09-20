@@ -58,14 +58,16 @@ use MotorORM\CollectionPaginate;
                 <?= $story->shortText(setting('story.short_words')) ?>
             </div>
 
-            <div class="post-author mt-3">
+            <div class="post-author d-inline-block mt-3">
                 <span class="avatar-micro">
                     <?= $story->user->getAvatar() ?>
                 </span>
                 <span><?= $story->user->getProfile() ?></span>
-
-                <small class="text-muted fst-italic ms-1"><?= date('d.m.Y H:i', $story->created_at) ?></small>
             </div>
+
+            <small class="post-date text-muted fst-italic ms-1">
+                <?= date('d.m.Y H:i', $story->created_at) ?>
+            </small>
 
             <div class="my-3 fst-italic">
                 <i class="bi bi-tags"></i> <?= $story->getTags() ?>
