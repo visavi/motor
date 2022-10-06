@@ -11,6 +11,7 @@ use App\Models\User;
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="bi bi-house-door"></i></a></li>
+            <li class="breadcrumb-item"><a href="/users">Пользователи</a></li>
             <li class="breadcrumb-item active"><?= $user->getName() ?></li>
         </ol>
     </nav>
@@ -21,11 +22,11 @@ use App\Models\User;
         <div class="col-md-6">
             <div>ID: <?= $user->id ?></div>
             <div>Логин: <?= $user->login ?></div>
-            <div>Роль: <?= setting('roles.' . $user->role) ?? 'Пользователь' ?></div>
+            <div>Роль: <?= $user->getRole() ?></div>
             <div>Имя: <?= escape($user->name) ?></div>
-            <div>Дата регистрации: <?= date('d.m.Y', $user->created_at) ?></div>
+            <div>Регистрация: <?= date('d.m.Y', $user->created_at) ?></div>
 
-            <div><i class="bi bi-card-heading"></i> <a href="/stories/<?= $user->login ?>">Все статьи <?= $user->getName() ?></a></div>
+            <div class="mt-3"><i class="bi bi-card-heading"></i> <a href="/stories/<?= $user->login ?>">Все статьи <?= $user->getName() ?></a></div>
         </div>
 
         <div class="col-md-6">

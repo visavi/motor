@@ -95,4 +95,18 @@ class User extends Model
 
         return $avatar;
     }
+
+    /**
+     * Get role
+     *
+     * @return string
+     */
+    public function getRole(): string
+    {
+        if (! $this->id) {
+            return setting('roles.user');
+        }
+
+        return setting('roles.' . $this->role);
+    }
 }

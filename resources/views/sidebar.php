@@ -4,6 +4,7 @@ use App\Models\Comment;
 use App\Repositories\CommentRepository;
 use App\Repositories\GuestbookRepository;
 use App\Repositories\StoryRepository;
+use App\Repositories\UserRepository;
 
 /** @var Comment $comment */
 ?>
@@ -13,6 +14,12 @@ use App\Repositories\StoryRepository;
     <a href="/guestbook" class="list-group-item list-group-item-action fw-bold">
         <i class="bi bi-chat-square-text-fill"></i>
         Гостевая книга <span class="badge bg-primary rounded-pill float-end"><?= $guestbookRepository->getCount() ?></span>
+    </a>
+
+    <?php $userRepository = new UserRepository(); ?>
+    <a href="/users" class="list-group-item list-group-item-action fw-bold">
+        <i class="bi bi-people-fill"></i>
+        Пользователи <span class="badge bg-primary rounded-pill float-end"><?= $userRepository->getCount() ?></span>
     </a>
 
     <a href="https://github.com/visavi/motor" class="list-group-item list-group-item-action fw-bold">

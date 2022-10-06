@@ -74,6 +74,10 @@ return static function (ContainerBuilder $containerBuilder) {
                     User::BANNED => 'Забаненный',
                 ],
 
+                'user' => [
+                    'per_page' => 10,
+                ],
+
                 'displayErrorDetails' => true, // Should be set to false in production
                 'logError'            => false,
                 'logErrorDetails'     => false,

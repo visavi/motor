@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Models\User;
+use App\Repositories\UserRepository;
 use App\Services\Session;
 use App\Services\Validator;
 use App\Services\View;
@@ -20,7 +21,27 @@ class UserController extends Controller
         protected View $view,
         protected Session $session,
         protected Validator $validator,
+        protected UserRepository $userRepository,
     ) {}
+
+    /**
+     * Login
+     *
+     * @param Request   $request
+     * @param Response  $response
+     *
+     * @return Response
+     */
+    public function index(Request $request, Response $response): Response
+    {
+        $users = $this->userRepository->getUsers(setting('user.per_page'));
+
+        return $this->view->render(
+            $response,
+            'users/index',
+            compact('users')
+        );
+    }
 
     /**
      * Login

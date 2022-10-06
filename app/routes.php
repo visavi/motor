@@ -101,6 +101,7 @@ return function (App $app) {
     });
 
     $app->group('/users', function (Group $group) {
+        $group->get('', [UserController::class, 'index']);
         $group->get('/{login:[\w\-]+}', [UserController::class, 'user']);
     });
 
