@@ -26,7 +26,7 @@ use App\Models\User;
             <div>Имя: <?= escape($user->name) ?></div>
             <div>Регистрация: <?= date('d.m.Y', $user->created_at) ?></div>
 
-            <div class="mt-3"><i class="bi bi-card-heading"></i> <a href="/stories/<?= $user->login ?>">Все статьи <?= $user->getName() ?></a></div>
+            <div class="mt-3"><i class="bi bi-card-heading"></i> <a href="/users/<?= $user->login ?>/stories">Все статьи <?= $user->getName() ?></a></div>
         </div>
 
         <div class="col-md-6">

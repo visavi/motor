@@ -35,7 +35,6 @@ return function (App $app) {
         $group->get('/', [StoryController::class, 'index']);
         $group->get('/stories', [StoryController::class, 'index']);
         $group->get('/{slug:[\w\-]+\-[\d]+}', [StoryController::class, 'view']);
-        $group->get('/stories/{login:[\w\-]+}', [UserStoryController::class, 'index']);
 
         $group->get('/tags', [TagController::class, 'index']);
         $group->get('/tags/{tag:.+}', [TagController::class, 'search']);
@@ -103,6 +102,7 @@ return function (App $app) {
     $app->group('/users', function (Group $group) {
         $group->get('', [UserController::class, 'index']);
         $group->get('/{login:[\w\-]+}', [UserController::class, 'user']);
+        $group->get('/{login:[\w\-]+}/stories', [UserStoryController::class, 'index']);
     });
 
     $app->group('/search', function (Group $group) {
