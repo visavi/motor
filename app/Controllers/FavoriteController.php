@@ -46,13 +46,13 @@ class FavoriteController extends Controller
             $favorites->add($favorite->story);
         }
 
+        $user    = getUser();
         $stories = $favorites;
-        $title = 'Избранные статьи';
 
         return $this->view->render(
             $response,
-            'stories/index',
-            compact('stories', 'title')
+            'users/favorite',
+            compact('stories', 'user')
         );
     }
 

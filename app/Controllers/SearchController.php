@@ -31,14 +31,13 @@ class SearchController extends Controller
     {
         $query  = $request->getQueryParams();
         $search = urldecode(escape($query['search'] ?? ''));
-        $title = 'Поиск по тексту: ' . $search;
 
         $stories = $this->storyRepository->getStoriesBySearch($search, setting('story.per_page'));
 
         return $this->view->render(
             $response,
-            'stories/index',
-            compact('stories', 'title', 'search')
+            'search/index',
+            compact('stories', 'search')
         );
     }
 }

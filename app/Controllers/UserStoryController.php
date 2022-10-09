@@ -43,13 +43,12 @@ class UserStoryController extends Controller
             abort(404, 'Пользователь не найден!');
         }
 
-        $title = 'Статьи ' . $user->getName();
         $stories = $this->storyRepository->getStoriesByUserId($user->id, setting('story.per_page'));
 
         return $this->view->render(
             $response,
-            'stories/index',
-            compact('stories', 'title')
+            'users/story',
+            compact('stories', 'user')
         );
     }
 }

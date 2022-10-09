@@ -35,8 +35,8 @@
                     <ul class="dropdown-menu text-small" style="">
                         <li><a class="dropdown-item" href="/users/<?= getUser('login') ?>">Профиль</a></li>
 
-                        <li><a class="dropdown-item" href="/stories/<?= getUser('login') ?>">Мои статьи</a></li>
-                        <li><a class="dropdown-item" href="/favorites">Избранное</a></li>
+                        <li><a class="dropdown-item" href="/users/<?= getUser('login') ?>/stories">Мои статьи</a></li>
+                        <li><a class="dropdown-item" href="/users/<?= getUser('login') ?>/favorites">Избранное</a></li>
 
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="/logout" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-confirm="Вы подтверждаете выход?">Выход</a></li>

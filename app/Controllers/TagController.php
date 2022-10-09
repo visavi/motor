@@ -35,7 +35,7 @@ class TagController extends Controller
 
         return $this->view->render(
             $response,
-            'stories/tags',
+            'tags/tags',
             compact('tags')
         );
     }
@@ -50,15 +50,14 @@ class TagController extends Controller
      */
     public function search(string $tag, Response $response): Response
     {
-        $tag   = urldecode(escape($tag));
-        $title = 'Поиск по тегу: ' . $tag;
+        $tag = urldecode(escape($tag));
 
         $stories = $this->storyRepository->getStoriesByTag($tag, setting('story.per_page'));
 
         return $this->view->render(
             $response,
-            'stories/index',
-            compact('stories', 'title')
+            'tags/index',
+            compact('stories', 'tag')
         );
     }
 }
