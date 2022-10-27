@@ -36,6 +36,7 @@ return function (App $app) {
         $group->get('/stories', [StoryController::class, 'index']);
         $group->get('/{slug:[\w\-]+\-[\d]+}', [StoryController::class, 'view']);
 
+        $group->get('/tag', [TagController::class, 'tag']);
         $group->get('/tags', [TagController::class, 'index']);
         $group->get('/tags/{tag:.+}', [TagController::class, 'search']);
 

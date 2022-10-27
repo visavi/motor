@@ -12,7 +12,6 @@ use App\Repositories\StoryRepository;
 use App\Services\Session;
 use App\Services\Slug;
 use App\Services\Str;
-use App\Services\TagCloud;
 use App\Services\Validator;
 use App\Services\View;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -117,14 +116,22 @@ class StoryController extends Controller
     ): Response {
         $user  = getUser();
         $input = (array) $request->getParsedBody();
+        $tags = array_map('sanitize', $input['tags'] ?? []);
 
         $this->validator
             ->required(['csrf', 'title', 'text', 'tags'])
             ->same('csrf', $this->session->get('csrf'), 'Неверный идентификатор сессии, повторите действие!')
             ->length('title', setting('story.title_min_length'), setting('story.title_max_length'))
             ->length('text', setting('story.text_min_length'), setting('story.text_max_length'))
-            ->length('tags', setting('story.tags_min_length'), setting('story.tags_max_length'))
+            ->custom(count($tags) <= setting('story.tags_max'), ['tags' => 'Превышено максимальное количество тегов'])
             ->boolean('locked');
+
+            foreach ($tags as $tag) {
+                $this->validator->custom(
+                    Str::length($tag) >= setting('story.tags_min_length') && Str::length($tag) <= setting('story.tags_max_length'),
+                    ['tags' => sprintf('Длина тегов должна быть от %d до %d символов!', setting('story.tags_min_length'), setting('story.tags_max_length'))]
+                );
+            }
 
         if ($this->validator->isValid($input)) {
             $slugify = $slug->slugify($input['title']);
@@ -134,7 +141,7 @@ class StoryController extends Controller
                 'title'      => sanitize($input['title']),
                 'slug'       => $slugify,
                 'text'       => sanitize($input['text']),
-                'tags'       => preg_replace('/\s*,+\s*/', ',', Str::lower(sanitize(trim($input['tags'])))),
+                'tags'       => Str::lower(implode(',', $input['tags'])),
                 'rating'     => 0,
                 'reads'      => 0,
                 'locked'     => isAdmin() ? $input['locked'] ?? 0 : 0,
@@ -215,14 +222,22 @@ class StoryController extends Controller
         }
 
         $input = (array) $request->getParsedBody();
+        $tags = array_map('sanitize', $input['tags'] ?? []);
 
         $this->validator
             ->required(['csrf', 'title', 'text', 'tags'])
             ->same('csrf', $this->session->get('csrf'), 'Неверный идентификатор сессии, повторите действие!')
             ->length('title', setting('story.title_min_length'), setting('story.title_max_length'))
             ->length('text', setting('story.text_min_length'), setting('story.text_max_length'))
-            ->length('tags', setting('story.tags_min_length'), setting('story.tags_max_length'))
+            ->custom(count($tags) <= setting('story.tags_max'), ['tags' => 'Превышено максимальное количество тегов'])
             ->boolean('locked');
+
+        foreach ($tags as $tag) {
+            $this->validator->custom(
+                Str::length($tag) >= setting('story.tags_min_length') && Str::length($tag) <= setting('story.tags_max_length'),
+                ['tags' => sprintf('Длина тегов должна быть от %d до %d символов!', setting('story.tags_min_length'), setting('story.tags_max_length'))]
+            );
+        }
 
         if ($this->validator->isValid($input)) {
             $slugify = $slug->slugify($input['title']);
@@ -231,7 +246,7 @@ class StoryController extends Controller
                 'title'  => sanitize($input['title']),
                 'slug'   => $slugify,
                 'text'   => sanitize($input['text']),
-                'tags'   => preg_replace('/\s*,+\s*/', ',', Str::lower(sanitize(trim($input['tags'])))),
+                'tags'   => Str::lower(implode(',', $input['tags'])),
                 'locked' => isAdmin() ? $input['locked'] ?? $story->locked : $story->locked,
             ]);
 

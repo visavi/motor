@@ -7,6 +7,7 @@ namespace App\Services;
 use BadMethodCallException;
 use Countable;
 use Psr\Http\Message\UploadedFileInterface;
+use function DI\value;
 
 /**
  * Class Validation data
@@ -40,7 +41,7 @@ use Psr\Http\Message\UploadedFileInterface;
  * @method $this boolean(array|string $key, ?string $label = null)
  * @method $this file(string $key, array $rules)
  * @method $this add(string $key, callable $callable, string $label)
- * @method $this custom(bool $compare, string $label)
+ * @method $this custom(bool $compare, array|string $label)
  *
  */
 class Validator
@@ -776,15 +777,22 @@ class Validator
     /**
      * Custom rule
      *
-     * @param bool   $compare
-     * @param string $label
+     * @param bool         $compare
+     * @param array|string $label
      *
      * @return $this
      */
-    private function customRule(bool $compare, string $label): self
+    private function customRule(bool $compare, array|string $label): self
     {
+        $key = '';
+
+        if (is_array($label)) {
+            $key = key($label);
+            $label = $label[$key];
+        }
+
         if (! $compare) {
-            $this->addError('', $label);
+            $this->addError($key, $label);
         }
 
         return $this;

@@ -13,17 +13,26 @@ use Slim\Factory\ServerRequestCreatorFactory;
 use Slim\Exception\HttpException;
 
 /**
- * Escape string
+ * Escape data
  *
- * @param mixed $string
+ * @param mixed $value
+ * @param bool  $doubleEncode
  *
- * @return string
+ * @return array|string
  */
-function escape(mixed $string): string
+function escape(mixed $value, bool $doubleEncode = true): mixed
 {
     $flags = ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401;
 
-    return htmlspecialchars((string) $string, $flags, 'UTF-8');
+    if (is_array($value)) {
+        foreach ($value as $key => $val) {
+            $value[$key] = escape($val, $doubleEncode);
+        }
+    } else {
+        $value = htmlspecialchars((string) $value, $flags, 'UTF-8', $doubleEncode);
+    }
+
+    return $value;
 }
 
 

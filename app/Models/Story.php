@@ -210,17 +210,27 @@ class Story extends Model
     }
 
     /**
+     * Get array tags
+     *
+     * @return array
+     */
+    public function getArrayTags(): array
+    {
+        if (! $this->tags) {
+            return [];
+        }
+
+        return explode(',', $this->tags);
+    }
+
+    /**
      * Get tags
      *
      * @return string
      */
     public function getTags(): string
     {
-        if (! $this->tags) {
-            return '';
-        }
-
-        $tags = explode(',', $this->tags);
+        $tags = $this->getArrayTags();
 
         $tagList = [];
         foreach ($tags as $value) {

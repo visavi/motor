@@ -13,6 +13,7 @@
     <link href="<?= $this->asset('/assets/css/prettify.css') ?>" rel="stylesheet">
     <link href="<?= $this->asset('/assets/css/toastr.min.css') ?>" rel="stylesheet">
     <link href="<?= $this->asset('/assets/css/fancybox.css') ?>" rel="stylesheet">
+    <link href="<?= $this->asset('/assets/css/bootstrap-tags.css') ?>" rel="stylesheet">
     <link href="<?= $this->asset('/assets/css/main.css') ?>" rel="stylesheet">
     <link href="/favicon.ico" rel="icon" type="image/x-icon" >
     <meta name="theme-color" content="#7952b3">
@@ -57,5 +58,19 @@
 <script src="<?= $this->asset('/assets/js/toastr.min.js') ?>"></script>
 <script src="<?= $this->asset('/assets/js/fancybox.umd.js') ?>"></script>
 <script src="<?= $this->asset('/assets/js/main.js') ?>"></script>
+
+<script type="module">
+    import Tags from "<?= $this->asset('/assets/js/bootstrap-tags.js') ?>"
+    Tags.init(".input-tag", {
+        allowNew: true,
+        server: "/tag",
+        liveServer: true,
+        clearEnd: true,
+        allowClear: true,
+        suggestionsThreshold: 2,
+        max: <?= setting('story.tags_max') ?>,
+    });
+</script>
+
 </body>
 </html>

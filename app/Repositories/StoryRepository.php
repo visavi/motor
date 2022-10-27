@@ -118,7 +118,19 @@ class StoryRepository implements RepositoryInterface
     }
 
     /**
-     * Get stories by tag
+     * Get all tags
+     *
+     * @return array
+     */
+    public function getAllTags(): array
+    {
+        $tags = $this->getAllStories()->pluck('tags', 'id');
+
+        return array_unique($tags);
+    }
+
+    /**
+     * Get stories by search
      *
      * @param string $search
      * @param int    $perPage

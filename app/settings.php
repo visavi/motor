@@ -21,14 +21,15 @@ return static function (ContainerBuilder $containerBuilder) {
 
                 'story' => [
                     'allow_posting'    => true, // Разрешать пользователям публиковать статьи
-                    'per_page'         => 10,
-                    'title_min_length' => 5,
-                    'title_max_length' => 50,
-                    'text_min_length'  => 5,
-                    'text_max_length'  => 5000,
-                    'short_words'      => 100, // Количество слов в сокращенной статье
-                    'tags_min_length'  => 2,
-                    'tags_max_length'  => 50,
+                    'per_page'         => 10,   // Количество статей на страницу
+                    'title_min_length' => 5,    // Минимальная длина статьи
+                    'title_max_length' => 50,   // Максимальная длина заголовка
+                    'text_min_length'  => 5,    // Минимальная длина статьи
+                    'text_max_length'  => 5000, // Максимальная длина статьи
+                    'short_words'      => 100,  // Количество слов в сокращенной статье
+                    'tags_max'         => 5,    // Максимальное количество тегов
+                    'tags_min_length'  => 2,    // Минимальное количество символов в теге
+                    'tags_max_length'  => 20,   // Максимальное количество символов в теге
                 ],
 
                 'comment' => [

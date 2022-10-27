@@ -30,10 +30,14 @@ $story ??= null;
 
         <div class="mb-3">
             <label for="tags" class="form-label">Теги</label>
-            <input type="text" class="form-control<?= hasError('tags') ?>" id="tags" name="tags" value="<?= old('tags', $story->tags ?? null) ?>" required>
-            <div class="form-text">
-                Через запятую
-            </div>
+
+            <?php $tags = old('tags', $story ? $story->getArrayTags() : []); ?>
+            <select class="form-select input-tag<?= hasError('tags') ?>" id="tags" name="tags[]" multiple>
+                <option disabled value="">Выберите тег...</option>
+                <?php foreach ($tags as $key => $tag): ?>
+                <option value="<?= $tag ?>" selected="selected"><?= $tag ?></option>
+                <?php endforeach; ?>
+            </select>
             <div class="invalid-feedback"><?= getError('tags') ?></div>
         </div>
 
