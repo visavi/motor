@@ -4,11 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
-use App\Models\Favorite;
-use App\Models\Story;
 use App\Models\Tag;
-use MotorORM\Collection;
-use MotorORM\CollectionPaginate;
 
 class TagRepository implements RepositoryInterface
 {
@@ -25,6 +21,6 @@ class TagRepository implements RepositoryInterface
         $tags = array_count_values($tags);
 
         arsort($tags);
-        return array_slice($tags, $count, preserve_keys: true);
+        return array_slice($tags, 0, $count, true);
     }
 }
