@@ -6,6 +6,7 @@ use App\Models\Guestbook;
 use App\Models\Poll;
 use App\Models\Read;
 use App\Models\Story;
+use App\Models\Tag;
 use App\Models\User;
 use MotorORM\Migration;
 
@@ -247,6 +248,38 @@ if (! in_array('locked', $storyHeaders, true)) {
     }
 
     echo 'Добавлено поле locked в таблицу stories<br>';
+}
+
+// Удаляет поле tags в stories
+$storyHeaders = Story::query()->headers();
+if (in_array('tags', $storyHeaders, true)) {
+    $migration = new Migration(new Story());
+
+    try {
+        $migration->column('tags')->to('tags_old')->rename();
+
+        $stories = Story::query()->get();
+        foreach ($stories as $story) {
+            $tags = explode(',', $story->tags_old);
+
+            foreach ($tags as $tag) {
+                if (! $tag) {
+                    continue;
+                }
+
+                Tag::query()->create([
+                    'story_id' => $story->id,
+                    'tag'      => $tag,
+                ]);
+            }
+        }
+
+        $migration->column('tags_old')->delete();
+    } catch (Exception $exception) {
+        echo $exception->getMessage();
+    }
+
+    echo 'Удалено поле tags из таблицы stories<br>';
 }
 
 

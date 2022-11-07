@@ -25,8 +25,6 @@ class TagRepository implements RepositoryInterface
         $tags = array_count_values($tags);
 
         arsort($tags);
-        array_splice($tags, $count);
-
-        return $tags;
+        return array_slice($tags, $count, preserve_keys: true);
     }
 }
