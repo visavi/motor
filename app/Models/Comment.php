@@ -41,7 +41,7 @@ class Comment extends Model
      */
     public function user(): Builder
     {
-        return $this->HasOne(User::class, 'user_id');
+        return $this->HasOne(User::class, 'id', 'user_id');
     }
 
     /**
@@ -51,7 +51,7 @@ class Comment extends Model
      */
     public function story(): Builder
     {
-        return $this->HasOne(Story::class, 'story_id');
+        return $this->HasOne(Story::class, 'id', 'story_id');
     }
 
     /**
@@ -61,7 +61,7 @@ class Comment extends Model
      */
     public function poll(): Builder
     {
-        return $this->hasOne(Poll::class, 'id', 'entity_id')
+        return $this->hasOne(Poll::class, 'entity_id')
             ->where('user_id', getUser('id'))
             ->where('entity_name', 'comment');
     }
@@ -73,7 +73,7 @@ class Comment extends Model
      */
     public function polls(): Builder
     {
-        return $this->hasMany(Poll::class, 'id', 'entity_id')
+        return $this->hasMany(Poll::class, 'entity_id')
             ->where('entity_name', 'comment');
     }
 

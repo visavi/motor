@@ -6,6 +6,8 @@ namespace App\Controllers;
 
 use App\Models\File;
 use App\Models\Story;
+use App\Models\StoryTag;
+use App\Models\Tag;
 use App\Repositories\FileRepository;
 use App\Repositories\ReadRepository;
 use App\Repositories\StoryRepository;
@@ -141,12 +143,18 @@ class StoryController extends Controller
                 'title'      => sanitize($input['title']),
                 'slug'       => $slugify,
                 'text'       => sanitize($input['text']),
-                'tags'       => Str::lower(implode(',', $input['tags'])),
                 'rating'     => 0,
                 'reads'      => 0,
                 'locked'     => isAdmin() ? $input['locked'] ?? 0 : 0,
                 'created_at' => time(),
             ]);
+
+            foreach ($tags as $value) {
+                Tag::query()->create([
+                    'story_id' => $story->id,
+                    'tag'      => Str::lower($value),
+                ]);
+            }
 
             File::query()
                 ->where('story_id', 0)
@@ -239,6 +247,15 @@ class StoryController extends Controller
             );
         }
 
+        Tag::query()->where('story_id', $story->id)->delete();
+
+        foreach ($tags as $value) {
+            Tag::query()->create([
+                'story_id' => $story->id,
+                'tag'      => Str::lower($value),
+            ]);
+        }
+
         if ($this->validator->isValid($input)) {
             $slugify = $slug->slugify($input['title']);
 
@@ -246,7 +263,6 @@ class StoryController extends Controller
                 'title'  => sanitize($input['title']),
                 'slug'   => $slugify,
                 'text'   => sanitize($input['text']),
-                'tags'   => Str::lower(implode(',', $input['tags'])),
                 'locked' => isAdmin() ? $input['locked'] ?? $story->locked : $story->locked,
             ]);
 

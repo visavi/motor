@@ -97,14 +97,14 @@ return function (App $app) {
         $group->get('', [UserController::class, 'index']);
         $group->get('/{login:[\w\-]+}', [UserController::class, 'user']);
         $group->get('/{login:[\w\-]+}/stories', [UserStoryController::class, 'index']);
-
-        // Favorites
-        $group->group('/{login:[\w\-]+}/favorites', function (Group $group) {
-            $group->get('', [FavoriteController::class, 'index']);
-            // Add/delete to favorite
-            $group->post('/{id:[0-9]+}', [FavoriteController::class, 'change']);
-        })->add(CheckUserMiddleware::class);
     });
+
+    // Favorites
+    $app->group('/favorites', function (Group $group) {
+        $group->get('', [FavoriteController::class, 'index']);
+        // Add/delete to favorite
+        $group->post('/{id:[0-9]+}', [FavoriteController::class, 'change']);
+    })->add(CheckUserMiddleware::class);
 
     $app->group('/search', function (Group $group) {
         $group->get('', [SearchController::class, 'index']);

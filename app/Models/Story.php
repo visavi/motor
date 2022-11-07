@@ -17,7 +17,6 @@ use MotorORM\Collection;
  * @property string $slug
  * @property string $title
  * @property string $text
- * @property string $tags
  * @property int $rating
  * @property int $reads
  * @property bool $locked
@@ -26,6 +25,7 @@ use MotorORM\Collection;
  * @property-read User $user
  * @property-read Poll $poll
  * @property-read Favorite $favorite
+ * @property-read Collection<Tag> $tags
  * @property-read Collection<File> $files
  * @property-read Collection<Comment> $comments
  * @property-read Collection<Read> $storyReads
@@ -57,7 +57,7 @@ class Story extends Model
      */
     public function user(): Builder
     {
-        return $this->hasOne(User::class, 'user_id');
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 
     /**
@@ -67,7 +67,7 @@ class Story extends Model
      */
     public function poll(): Builder
     {
-        return $this->hasOne(Poll::class, 'id', 'entity_id')
+        return $this->hasOne(Poll::class, 'entity_id')
             ->where('user_id', getUser('id'))
             ->where('entity_name', 'story');
     }
@@ -79,7 +79,7 @@ class Story extends Model
      */
     public function polls(): Builder
     {
-        return $this->hasMany(Poll::class, 'id', 'entity_id')
+        return $this->hasMany(Poll::class, 'entity_id')
             ->where('entity_name', 'story');
     }
 
@@ -90,7 +90,7 @@ class Story extends Model
      */
     public function storyReads(): Builder
     {
-        return $this->hasMany(Read::class, 'id', 'story_id');
+        return $this->hasMany(Read::class);
     }
 
     /**
@@ -100,7 +100,7 @@ class Story extends Model
      */
     public function files(): Builder
     {
-        return $this->hasMany(File::class, 'id', 'story_id');
+        return $this->hasMany(File::class);
     }
 
     /**
@@ -110,7 +110,7 @@ class Story extends Model
      */
     public function comments(): Builder
     {
-        return $this->hasMany(Comment::class, 'id', 'story_id');
+        return $this->hasMany(Comment::class);
     }
 
     /**
@@ -120,7 +120,7 @@ class Story extends Model
      */
     public function favorite(): Builder
     {
-        return $this->hasOne(Favorite::class, 'id', 'story_id')
+        return $this->hasOne(Favorite::class, 'story_id')
             ->where('user_id', getUser('id'));
     }
 
@@ -131,7 +131,17 @@ class Story extends Model
      */
     public function favorites(): Builder
     {
-        return $this->hasMany(Favorite::class, 'id', 'story_id');
+        return $this->hasMany(Favorite::class);
+    }
+
+    /**
+     * Возвращает связь с тегами
+     *
+     * @return Builder
+     */
+    public function tags(): Builder
+    {
+        return $this->hasMany(Tag::class);
     }
 
     /**
@@ -164,6 +174,11 @@ class Story extends Model
         // delete favorites
         foreach ($this->favorites as $favorite) {
             $favorite->delete();
+        }
+
+        // delete tags
+        foreach ($this->tags as $tag) {
+            $tag->delete();
         }
 
         return parent::delete();
@@ -210,31 +225,15 @@ class Story extends Model
     }
 
     /**
-     * Get array tags
-     *
-     * @return array
-     */
-    public function getArrayTags(): array
-    {
-        if (! $this->tags) {
-            return [];
-        }
-
-        return explode(',', $this->tags);
-    }
-
-    /**
      * Get tags
      *
      * @return string
      */
     public function getTags(): string
     {
-        $tags = $this->getArrayTags();
-
         $tagList = [];
-        foreach ($tags as $value) {
-            $tagList[] = '<a href="/tags/' . urlencode(escape($value)) . '">' . escape($value) . '</a>';
+        foreach ($this->tags as $tag) {
+            $tagList[] = '<a href="/tags/' . urlencode(escape($tag->tag)) . '">' . escape($tag->tag) . '</a>';
         }
 
         return implode(', ', $tagList);

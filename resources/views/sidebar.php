@@ -3,7 +3,7 @@
 use App\Models\Comment;
 use App\Repositories\CommentRepository;
 use App\Repositories\GuestbookRepository;
-use App\Repositories\StoryRepository;
+use App\Repositories\TagRepository;
 use App\Repositories\UserRepository;
 
 /** @var Comment $comment */
@@ -56,10 +56,10 @@ use App\Repositories\UserRepository;
 <div class="section shadow p-3 mb-3">
     <h5>Теги</h5>
 
-    <?php $storyRepository = new StoryRepository(); ?>
+    <?php $tagRepository = new TagRepository(); ?>
 
-    <?php foreach ($storyRepository->getPopularTags() as $tag => $count): ?>
-        <a href="/tags/<?= $tag ?>" class="badge text-bg-secondary"><?= $tag ?></a>
+    <?php foreach ($tagRepository->getPopularTags() as $tag => $count): ?>
+        <a href="/tags/<?= $tag ?>" class="badge text-bg-primary"><?= $tag ?></a>
     <?php endforeach; ?>
 
     <div class="mt-3">

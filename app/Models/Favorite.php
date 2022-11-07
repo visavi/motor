@@ -27,6 +27,6 @@ class Favorite extends Model
      */
     public function story(): Builder
     {
-        return $this->hasOne(Story::class, 'story_id');
+        return $this->hasOne(Story::class, 'id', 'story_id');
     }
 }

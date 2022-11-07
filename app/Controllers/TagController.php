@@ -6,6 +6,7 @@ namespace App\Controllers;
 
 use App\Models\Tag;
 use App\Repositories\StoryRepository;
+use App\Repositories\TagRepository;
 use App\Services\TagCloud;
 use App\Services\View;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -18,6 +19,7 @@ class TagController extends Controller
 {
     public function __construct(
         protected View $view,
+        protected TagRepository $tagRepository,
         protected StoryRepository $storyRepository,
     ) {}
 
@@ -31,7 +33,7 @@ class TagController extends Controller
      */
     public function index(Response $response, TagCloud $tagCloud): Response
     {
-        $tags = $this->storyRepository->getPopularTags(100);
+        $tags = $this->tagRepository->getPopularTags(100);
 
         $tags = $tagCloud->generate($tags);
 
@@ -71,7 +73,7 @@ class TagController extends Controller
      *
      * @return Response
      */
-        public function tag(Request $request, Response $response): Response
+/*        public function tag(Request $request, Response $response): Response
         {
             $query  = $request->getQueryParams();
             $search = urldecode(escape($query['query'] ?? ''));
@@ -103,7 +105,7 @@ class TagController extends Controller
             }
 
             return $this->json($response, $namedTags);
-        }
+        }*/
 
     /**
      * Search by tag
@@ -113,7 +115,7 @@ class TagController extends Controller
      *
      * @return Response
      */
-/*    public function tag(Request $request, Response $response): Response
+    public function tag(Request $request, Response $response): Response
     {
         $query  = $request->getQueryParams();
         $search = urldecode(escape($query['query'] ?? ''));
@@ -122,13 +124,14 @@ class TagController extends Controller
             return $this->json($response, []);
         }
 
-        $tags = Tag::query()->where('value', 'like', $search . '%')->limit(10)->get();
+        $tags = Tag::query()->where('tag', 'like', $search . '%')->limit(10)->get();
+        $tags = array_unique($tags->pluck('tag'));
 
         $namedTags = [];
         foreach ($tags as $tag) {
-            $namedTags[] = ['value' => $tag->value, 'label' => $tag->value];
+            $namedTags[] = ['value' => $tag, 'label' => $tag];
         }
 
         return $this->json($response, $namedTags);
-    }*/
+    }
 }
