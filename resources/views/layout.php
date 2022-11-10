@@ -60,7 +60,7 @@
 <script src="<?= $this->asset('/assets/js/main.js') ?>"></script>
 
 <script type="module">
-    import Tags from "<?= $this->asset('/assets/js/bootstrap-tags.js') ?>"
+    import Tags from "<?= $this->asset('/assets/js/bootstrap-tags.min.js') ?>"
     Tags.init(".input-tag", {
         allowNew: true,
         server: "/tag",
@@ -69,6 +69,8 @@
         allowClear: true,
         suggestionsThreshold: 2,
         max: <?= setting('story.tags_max') ?>,
+        separator: ',',
+        addOnBlur: true,
     });
 </script>
 
