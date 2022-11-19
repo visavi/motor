@@ -141,7 +141,7 @@ cutImage = function (path) {
     field.val(text.replace(cut, ''));
 };
 
-/* Загрузка изображения */
+/* Загрузка файла */
 submitFile = function (el) {
     var form = new FormData();
     form.append('file', el.files[0]);
@@ -175,6 +175,8 @@ submitFile = function (el) {
                     template.find('img').attr({
                         'src': data.path
                     });
+
+                    pasteImage(template);
                 } else {
                     var template = $('.js-file-template').clone();
 
@@ -187,8 +189,6 @@ submitFile = function (el) {
 
                 template.find('.js-file-delete').attr('data-id', data.id);
                 $('.js-files').append(template.html());
-
-                pasteImage(template);
             }
         }
     });

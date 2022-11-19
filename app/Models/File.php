@@ -19,6 +19,16 @@ namespace App\Models;
 class File extends Model
 {
     /**
+     * Audio extensions
+     */
+    public const AUDIO = ['mp3'];
+
+    /**
+     * Image extensions
+     */
+    public const IMAGES = ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'webp'];
+
+    /**
      * The attributes that should be cast.
      */
     protected array $casts = [
@@ -34,7 +44,7 @@ class File extends Model
      */
     public function isImage(): bool
     {
-        return in_array($this->ext, ['jpg', 'jpeg', 'gif', 'png'], true);
+        return in_array($this->ext, self::IMAGES, true);
     }
 
     /**
@@ -44,7 +54,7 @@ class File extends Model
      */
     public function isAudio(): bool
     {
-        return $this->ext === 'mp3';
+        return in_array($this->ext, self::AUDIO, true);
     }
 
     /**

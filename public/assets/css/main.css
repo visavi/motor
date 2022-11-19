@@ -72,6 +72,16 @@ a {
     margin: 1rem 0;
 }
 
+.upload-file {
+    margin-right: 0.25rem;
+    background-color: #f5f5f5;
+    padding: 1rem 0.5rem;
+    display: inline;
+    border: 1px solid #dee2e6;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
 .spoiler {
     margin-bottom: 5px;
 }

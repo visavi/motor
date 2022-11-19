@@ -88,6 +88,8 @@ class Validator
         'boolean'          => 'Поле %s должно быть логического типа',
     ];
 
+    private array $images = ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'webp'];
+
     /**
      * Call
      *
@@ -825,7 +827,7 @@ class Validator
         }
 
         if (empty($rules['extensions'])) {
-            $rules['extensions'] = ['jpg', 'jpeg', 'gif', 'png'];
+            $rules['extensions'] = $this->images;
         }
 
         $extension = strtolower(pathinfo($input->getClientFilename(), PATHINFO_EXTENSION));
@@ -837,7 +839,7 @@ class Validator
             $this->addError($key, sprintf($this->data['file']['size_max'], $key, formatSize($rules['size_max'])));
         }
 
-        if (in_array($extension, ['jpg', 'jpeg', 'gif', 'png'], true)) {
+        if (in_array($extension, $this->images, true)) {
             [$width, $height] = getimagesize($input->getFilePath());
 
             if (isset($rules['weight_max'])) {

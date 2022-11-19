@@ -84,13 +84,17 @@ class UploadController extends Controller
             $extension = getExtension($filename);
             $path      = $model->uploadPath . '/' . uniqueName($extension);
 
-            $img = $this->imageManager->make($file->getFilePath());
-            $img->resize(setting('image.resize'), setting('image.resize'), static function (Constraint $constraint) {
-                $constraint->aspectRatio();
-                $constraint->upsize();
-            });
+            if (in_array($extension, File::IMAGES, true)) {
+                $img = $this->imageManager->make($file->getFilePath());
+                $img->resize(setting('image.resize'), setting('image.resize'), static function (Constraint $constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
 
-            $img->save(publicPath($path));
+                $img->save(publicPath($path));
+            } else {
+                $file->moveTo(publicPath($path));
+            }
 
             $file = File::query()->create([
                 'user_id'    => $user->id,
@@ -105,9 +109,10 @@ class UploadController extends Controller
             return $this->json($response, [
                 'success' => true,
                 'id'      => $file->id,
-                'path'    => $path,
-                'name'    => $filename,
-                'type'    => 'image',
+                'path'    => $file->path,
+                'name'    => $file->name,
+                'size'    => formatSize($file->size),
+                'type'    => $file->isImage() ? 'image' : 'file',
             ]);
         }
 
