@@ -193,6 +193,8 @@ submitFile = function (el) {
         }
     });
 
+    el.value = ''
+
     return false;
 };
 
