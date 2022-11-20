@@ -24,6 +24,11 @@ class File extends Model
     public const AUDIO = ['mp3'];
 
     /**
+     * Video extensions
+     */
+    public const VIDEO = ['mp4'];
+
+    /**
      * Image extensions
      */
     public const IMAGES = ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'webp'];
@@ -55,6 +60,16 @@ class File extends Model
     public function isAudio(): bool
     {
         return in_array($this->ext, self::AUDIO, true);
+    }
+
+    /**
+     * Является ли файл видео
+     *
+     * @return bool
+     */
+    public function isVideo(): bool
+    {
+        return in_array($this->ext, self::VIDEO, true);
     }
 
     /**

@@ -51,9 +51,17 @@ use App\Models\Story;
         <?php if ($story->files->isNotEmpty()): ?>
             <?php foreach ($story->files as $file): ?>
                 <?php if (! $file->isImage()): ?>
-                    <i class="bi bi-download"></i>
-                    <a href="<?= $file->path ?>"><?= $file->name ?></a>
-                    <?= formatSize($file->size) ?><br>
+                    <div class="media-file">
+                    <?php if ($file->isAudio()): ?>
+                        <audio src="<?= $file->path ?>" style="max-width:100%;" preload="metadata" controls></audio>
+                    <?php elseif ($file->isVideo()): ?>
+                        <video src="<?= $file->path ?>" style="max-width:100%;" preload="metadata" controls playsinline></video>
+                    <?php else: ?>
+                        <i class="bi bi-download"></i>
+                        <a href="<?= $file->path ?>"><?= $file->name ?></a>
+                        <?= formatSize($file->size) ?>
+                    <?php endif; ?>
+                    </div>
                 <?php endif; ?>
             <?php endforeach; ?>
         <?php endif; ?>
