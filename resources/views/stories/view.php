@@ -47,6 +47,18 @@ use App\Models\Story;
         <?= date('d.m.Y H:i', $story->created_at) ?>
     </small>
 
+    <div class="my-3">
+        <?php if ($story->files->isNotEmpty()): ?>
+            <?php foreach ($story->files as $file): ?>
+                <?php if (! $file->isImage()): ?>
+                    <i class="bi bi-download"></i>
+                    <a href="<?= $file->path ?>"><?= $file->name ?></a>
+                    <?= formatSize($file->size) ?><br>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
+
     <div class="my-3 fst-italic">
         <i class="bi bi-tags"></i> <?= $story->getTags() ?>
     </div>

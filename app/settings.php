@@ -55,8 +55,9 @@ return static function (ContainerBuilder $containerBuilder) {
                 ],
 
                 'file' => [
-                    'size_max'  => 1024 * 1000 * 5, // Максимальный вес 5MB
-                    'total_max' => 5, // Максимальное количество загружаемых файлов
+                    'size_max'   => 1024 * 1000 * 5, // Максимальный вес 5MB
+                    'total_max'  => 5, // Максимальное количество загружаемых файлов
+                    'extensions' => ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'webp'],
                 ],
 
                 'image' => [

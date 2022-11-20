@@ -64,6 +64,7 @@ class UploadController extends Controller
             ->same('csrf', $this->session->get('csrf'), 'Неверный идентификатор сессии, повторите действие!')
             ->file('file', [
                 'size_max'   => setting('file.size_max'),
+                'extensions' => setting('file.extensions'),
                 'weight_max' => setting('image.weight_max'),
                 'weight_min' => setting('image.weight_min'),
             ]);
