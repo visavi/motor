@@ -15,12 +15,15 @@ use MotorORM\Collection;
  * @property int $id
  * @property int $user_id
  * @property string $slug
+ * @property bool $active
  * @property string $title
  * @property string $text
  * @property int $rating
  * @property int $reads
  * @property bool $locked
  * @property int $created_at
+ *
+ * @method $this active()
  *
  * @property-read User $user
  * @property-read Poll $poll
@@ -45,6 +48,7 @@ class Story extends Model
      * The attributes that should be cast.
      */
     protected array $casts = [
+        'active' => 'bool',
         'rating' => 'int',
         'reads'  => 'int',
         'locked' => 'bool',
@@ -142,6 +146,11 @@ class Story extends Model
     public function tags(): Builder
     {
         return $this->hasMany(Tag::class);
+    }
+
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('active', true);
     }
 
     /**

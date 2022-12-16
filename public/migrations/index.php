@@ -282,5 +282,18 @@ if (in_array('tags', $storyHeaders, true)) {
     echo 'Удалено поле tags из таблицы stories<br>';
 }
 
+// Добавляет поле active в stories
+$storyHeaders = Story::query()->headers();
+if (! in_array('active', $storyHeaders, true)) {
+    $migration = new Migration(new Story());
+
+    try {
+        $migration->column('active')->after('reads')->default(1)->create();
+    } catch (Exception $exception) {
+        echo $exception->getMessage();
+    }
+
+    echo 'Добавлено поле active в таблицу stories<br>';
+}
 
 echo 'Все миграции выполнены успешно!<br>';

@@ -6,8 +6,8 @@ namespace App\Repositories;
 
 use App\Models\Story;
 use App\Models\Tag;
-use MotorORM\Collection;
 use MotorORM\CollectionPaginate;
+use function DI\value;
 
 class StoryRepository implements RepositoryInterface
 {
@@ -47,6 +47,9 @@ class StoryRepository implements RepositoryInterface
     public function getStories(int $perPage): CollectionPaginate
     {
         return Story::query()
+            ->when(! isAdmin(), function (Story $query) {
+                $query->active();
+            })
             ->orderByDesc('locked')
             ->orderByDesc('created_at')
             ->with(['user', 'poll', 'comments', 'favorite', 'favorites'])

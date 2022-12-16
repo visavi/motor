@@ -7,7 +7,6 @@ namespace App\Services;
 use BadMethodCallException;
 use Countable;
 use Psr\Http\Message\UploadedFileInterface;
-use function DI\value;
 
 /**
  * Class Validation data

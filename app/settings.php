@@ -20,6 +20,7 @@ return static function (ContainerBuilder $containerBuilder) {
                 ],
 
                 'story' => [
+                    'active'           => true, // Публиковать посты без модерации
                     'allow_posting'    => true, // Разрешать пользователям публиковать статьи
                     'per_page'         => 10,   // Количество статей на страницу
                     'title_min_length' => 5,    // Минимальная длина статьи

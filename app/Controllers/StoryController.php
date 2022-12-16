@@ -6,7 +6,6 @@ namespace App\Controllers;
 
 use App\Models\File;
 use App\Models\Story;
-use App\Models\StoryTag;
 use App\Models\Tag;
 use App\Repositories\FileRepository;
 use App\Repositories\ReadRepository;
@@ -145,7 +144,8 @@ class StoryController extends Controller
                 'text'       => sanitize($input['text']),
                 'rating'     => 0,
                 'reads'      => 0,
-                'locked'     => isAdmin() ? $input['locked'] ?? 0 : 0,
+                'active'     => isAdmin() ? $input['active'] ?? true : setting('story.active'),
+                'locked'     => isAdmin() ? $input['locked'] ?? false : false,
                 'created_at' => time(),
             ]);
 
@@ -263,6 +263,7 @@ class StoryController extends Controller
                 'title'  => sanitize($input['title']),
                 'slug'   => $slugify,
                 'text'   => sanitize($input['text']),
+                'active' => isAdmin() ? $input['active'] ?? $story->active : $story->active,
                 'locked' => isAdmin() ? $input['locked'] ?? $story->locked : $story->locked,
             ]);
 

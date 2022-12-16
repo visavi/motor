@@ -43,6 +43,12 @@ $story ??= null;
 
         <?php if (isAdmin()): ?>
             <div class="form-check">
+                <input type="hidden" value="0" name="active">
+                <input type="checkbox" class="form-check-input" value="1" name="active" id="active"<?= old('active', $story->active ?? true) ? ' checked' : '' ?>>
+                <label for="active" class="form-check-label">Опубликовать статью</label>
+            </div>
+
+            <div class="form-check">
                 <input type="hidden" value="0" name="locked">
                 <input type="checkbox" class="form-check-input" value="1" name="locked" id="locked"<?= old('locked', $story->locked ?? null) ? ' checked' : '' ?>>
                 <label for="locked" class="form-check-label">Закрепить статью</label>
