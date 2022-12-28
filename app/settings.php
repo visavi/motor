@@ -81,6 +81,11 @@ return static function (ContainerBuilder $containerBuilder) {
                     'per_page' => 10,
                 ],
 
+                'captcha' => [
+                    'length'  => 5,            // Количество символов
+                    'symbols' => '0123456789', // Список допустимых символов
+                ],
+
                 'displayErrorDetails' => true, // Should be set to false in production
                 'logError'            => false,
                 'logErrorDetails'     => false,

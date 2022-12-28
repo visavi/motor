@@ -66,6 +66,10 @@ class StoryController extends Controller
             abort(404, 'Статья не найдена!');
         }
 
+        if (! $story->active && $story->user_id !== getUser('id')) {
+            abort(403, 'Статья еще не опубликована!');
+        }
+
         // Count reads
         $this->readRepository->createRead($story, $request->getAttribute('ip'));
 

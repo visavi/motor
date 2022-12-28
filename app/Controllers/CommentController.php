@@ -46,6 +46,10 @@ class CommentController extends Controller
             abort(404, 'Статья не найдена!');
         }
 
+        if (! $story->active) {
+            abort(403, 'Статья еще не опубликована!');
+        }
+
         $input = (array) $request->getParsedBody();
 
         $this->validator

@@ -10,7 +10,7 @@ use MotorORM\CollectionPaginate;
     <?php foreach ($stories as $story): ?>
         <article class="section shadow p-3 mb-3">
             <div class="float-end js-rating">
-                <?php if ($story->active === false && isAdmin()): ?>
+                <?php if ($story->active === false && ($story->user_id === getUser('id') || isAdmin())): ?>
                     <span class="badge text-bg-danger">Не опубликовано</span>
                 <?php endif; ?>
 

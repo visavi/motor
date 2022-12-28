@@ -23,7 +23,11 @@ use App\Models\User;
             <div>ID: <?= $user->id ?></div>
             <div>Логин: <?= $user->login ?></div>
             <div>Роль: <?= $user->getRole() ?></div>
-            <div>Имя: <?= escape($user->name) ?></div>
+
+            <?php if ($user->name): ?>
+                <div>Имя: <?= escape($user->name) ?></div>
+            <?php endif; ?>
+
             <div>Регистрация: <?= date('d.m.Y', $user->created_at) ?></div>
 
             <div class="mt-3"><i class="bi bi-card-heading"></i> <a href="/users/<?= $user->login ?>/stories">Все статьи <?= $user->getName() ?></a></div>

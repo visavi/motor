@@ -21,7 +21,7 @@ use App\Models\Story;
 
 <div class="section shadow p-3 mb-3">
     <div class="float-end js-rating">
-        <?php if ($story->active === false && isAdmin()): ?>
+        <?php if ($story->active === false): ?>
             <span class="badge text-bg-danger">Не опубликовано</span>
         <?php endif; ?>
 
@@ -153,12 +153,14 @@ use App\Models\Story;
         </div>
     <?php endif; ?>
 
-    <?php if (isUser()): ?>
-        <?= $this->fetch('comments/_form', compact('story')) ?>
-    <?php else: ?>
-        <div class="alert alert-danger">
-            <i class="bi bi-exclamation-circle-fill text-danger"></i>
-            Для выполнения действия необходимо авторизоваться!
-        </div>
+    <?php if ($story->active): ?>
+        <?php if (isUser()): ?>
+            <?= $this->fetch('comments/_form', compact('story')) ?>
+        <?php else: ?>
+            <div class="alert alert-danger">
+                <i class="bi bi-exclamation-circle-fill text-danger"></i>
+                Для выполнения действия необходимо авторизоваться!
+            </div>
+        <?php endif; ?>
     <?php endif; ?>
 </div>
