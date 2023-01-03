@@ -31,7 +31,7 @@ use App\Repositories\UserRepository;
     </a>
 </div>
 
-<div class="section shadow p-3 mb-3">
+<div class="section shadow border p-3 mb-3">
     <h5>Активность</h5>
     <?php $commentRepository = new CommentRepository(); ?>
 
@@ -53,7 +53,7 @@ use App\Repositories\UserRepository;
     </div>
 </div>
 
-<div class="section shadow p-3 mb-3">
+<div class="section shadow border p-3 mb-3">
     <h5>Теги</h5>
 
     <?php $tagRepository = new TagRepository(); ?>

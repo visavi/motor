@@ -8,7 +8,7 @@ use MotorORM\CollectionPaginate;
 
 <?php if ($stories->isNotEmpty()): ?>
     <?php foreach ($stories as $story): ?>
-        <article class="section shadow p-3 mb-3">
+        <article class="section shadow border p-3 mb-3">
             <div class="float-end js-rating">
                 <?php if ($story->active === false && ($story->user_id === getUser('id') || isAdmin())): ?>
                     <span class="badge text-bg-danger">Не опубликовано</span>
@@ -43,7 +43,7 @@ use MotorORM\CollectionPaginate;
                 <span><?= $story->user->getProfile() ?></span>
             </div>
 
-            <small class="post-date text-muted fst-italic ms-1">
+            <small class="post-date text-body-secondary fst-italic ms-1">
                 <?= date('d.m.Y H:i', $story->created_at) ?>
             </small>
 

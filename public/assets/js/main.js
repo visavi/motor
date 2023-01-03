@@ -52,12 +52,6 @@ $(function () {
         .find('.invalid-feedback').show();
 });
 
-openSearch = function () {
-    $('.js-form-search').toggle();
-
-    return false;
-};
-
 /* Переход к форме ввода */
 postJump = function () {
     $('html, body').animate({

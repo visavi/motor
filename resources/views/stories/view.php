@@ -47,7 +47,7 @@ use App\Models\Story;
         <span><?= $story->user->getProfile() ?></span>
     </div>
 
-    <small class="post-date text-muted fst-italic ms-1">
+    <small class="post-date text-body-secondary fst-italic ms-1">
         <?= date('d.m.Y H:i', $story->created_at) ?>
     </small>
 
@@ -107,16 +107,16 @@ use App\Models\Story;
                 <div class="float-end text-end">
                     <?php if (getUser() && getUser('id') !== $comment->user_id): ?>
                         <a href="#" onclick="return postReply(this)" data-bs-toggle="tooltip" title="Ответить">
-                            <i class="bi bi-reply text-muted"></i>
+                            <i class="bi bi-reply text-body-secondary"></i>
                         </a>
                         <a href="#" onclick="return postQuote(this)" data-bs-toggle="tooltip" title="Цитировать">
-                            <i class="bi bi-chat-quote text-muted"></i>
+                            <i class="bi bi-chat-quote text-body-secondary"></i>
                         </a>
                     <?php endif; ?>
 
                     <?php if (isAdmin()): ?>
-                        <a href="/<?= $story->id ?>/comments/<?= $comment->id ?>/edit"><i class="bi bi-pencil text-muted"></i></a>
-                        <a href="/<?= $story->id ?>/comments/<?= $comment->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg text-muted"></i></a>
+                        <a href="/<?= $story->id ?>/comments/<?= $comment->id ?>/edit"><i class="bi bi-pencil text-body-secondary"></i></a>
+                        <a href="/<?= $story->id ?>/comments/<?= $comment->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg text-body-secondary"></i></a>
                     <?php endif; ?>
 
                     <div class="js-rating">
@@ -143,7 +143,7 @@ use App\Models\Story;
                     <?= bbCode($comment->text) ?>
                 </div>
 
-                <small class="post-date text-muted fst-italic"><?= date('d.m.Y H:i', $comment->created_at) ?></small>
+                <small class="post-date text-body-secondary fst-italic"><?= date('d.m.Y H:i', $comment->created_at) ?></small>
             </div>
         <?php endforeach; ?>
     <?php else: ?>

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru">
+<html lang="ru" data-bs-theme="light">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -51,6 +51,7 @@
 
 <script src="<?= $this->asset('/assets/js/jquery-3.6.0.min.js') ?>"></script>
 <script src="<?= $this->asset('/assets/js/bootstrap.bundle.min.js') ?>"></script>
+<script src="<?= $this->asset('/assets/js/theme-toggler.js') ?>"></script>
 <script src="<?= $this->asset('/assets/js/jquery.caret.min.js') ?>"></script>
 <script src="<?= $this->asset('/assets/js/markitup.js') ?>"></script>
 <script src="<?= $this->asset('/assets/js/markitup-set.js') ?>"></script>

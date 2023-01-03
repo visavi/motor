@@ -26,10 +26,10 @@ use MotorORM\CollectionPaginate;
             <div class="float-end text-end">
                 <?php if (getUser() && getUser('id') !== $message->user_id): ?>
                     <a href="#" onclick="return postReply(this)" data-bs-toggle="tooltip" title="Ответить">
-                        <i class="bi bi-reply text-muted"></i>
+                        <i class="bi bi-reply text-body-secondary"></i>
                     </a>
                     <a href="#" onclick="return postQuote(this)" data-bs-toggle="tooltip" title="Цитировать">
-                        <i class="bi bi-chat-quote text-muted"></i>
+                        <i class="bi bi-chat-quote text-body-secondary"></i>
                     </a>
                 <?php endif; ?>
             </div>
@@ -54,7 +54,7 @@ use MotorORM\CollectionPaginate;
                 <?= bbCode($message->text) ?>
             </div>
 
-            <small class="post-date text-muted fst-italic"><?= date('d.m.Y H:i', $message->created_at) ?></small>
+            <small class="post-date text-body-secondary fst-italic"><?= date('d.m.Y H:i', $message->created_at) ?></small>
 
             <?php if (isAdmin()): ?>
                 <div class="float-end">
