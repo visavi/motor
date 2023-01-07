@@ -71,7 +71,7 @@
         allowClear: true,
         suggestionsThreshold: 2,
         max: <?= setting('story.tags_max') ?>,
-        separator: ',',
+        separator: [','],
         addOnBlur: true,
     });
 </script>
