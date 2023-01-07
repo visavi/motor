@@ -8,6 +8,7 @@
     <title><?= $this->section('title', 'Motor CMS') ?></title>
 
     <link href="<?= $this->asset('/assets/css/bootstrap.min.css') ?>" rel="stylesheet">
+    <link href="<?= $this->asset('/assets/css/variables.css') ?>" rel="stylesheet">
     <link href="<?= $this->asset('/assets/css/bootstrap-icons.css') ?>" rel="stylesheet">
     <link href="<?= $this->asset('/assets/css/markitup.css') ?>" rel="stylesheet">
     <link href="<?= $this->asset('/assets/css/prettify.css') ?>" rel="stylesheet">

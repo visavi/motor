@@ -1,52 +1,19 @@
-:root,[data-bs-theme="light"]{
-  --baseBg: #f8f9fa;
-  --baseColor: #000;
-  --baseTag: #00f;
-  --baseEmphasis: #a8a8a2;
-  --baseNumber: #f92672;
-  --baseCode: green;
-  --baseAttr: #00f;
-  --baseSymbol: #66d9ef;
-  --baseClass: #a31515;
-  --baseStr: #6f42c1;
-  --baseComment: #75715e;
-  --baseDocTag: grey;
-  --baseFun: #dc322f;
-  --baseAtv: #d44950;
-  --baseDec: #75715e;
-}[data-bs-theme="dark"]{
-   --baseBg: #282c34;
-   --baseColor: #f8f8f2;
-   --baseTag: #66d9ef;
-   --baseEmphasis: #a8a8a2;
-   --baseNumber: #ae81ff;
-   --baseCode: #a6e22e;
-   --baseAttr: #f92672;
-   --baseSymbol: #66d9ef;
-   --baseClass: #f8f8f2;
-   --baseStr: #e6db74;
-   --baseComment: #75715e;
-   --baseFun: #dc322f;
-   --baseAtv: #d44950;
-   --baseDec: #75715e;
- }
-
-.prettyprint .com { color: var(--baseComment); }
-.prettyprint .lit { color: var(--baseNumber); }
-.prettyprint .pun, .prettyprint .opn, .prettyprint .clo { color: var(--baseEmphasis); }
-.prettyprint .fun { color: var(--baseFun); }
-.prettyprint .str { color: var(--baseStr); }
-.prettyprint .atv { color: var(--baseAtv); }
-.prettyprint .kwd { color: var(--baseAttr); }
-.prettyprint .tag { color: var(--baseTag); }
-.prettyprint .typ, .prettyprint .var { color: var(--baseClass); }
-.prettyprint .dec { color: var(--baseDec); }
-.prettyprint .atn { color: var(--baseSymbol); }
-.prettyprint .pln { color: var(--baseCode); }
+.prettyprint .com { color: var(--base-comment); }
+.prettyprint .lit { color: var(--base-number); }
+.prettyprint .pun, .prettyprint .opn, .prettyprint .clo { color: var(--base-emphasis); }
+.prettyprint .fun { color: var(--base-fun); }
+.prettyprint .str { color: var(--base-str); }
+.prettyprint .atv { color: var(--base-atv); }
+.prettyprint .kwd { color: var(--base-attr); }
+.prettyprint .tag { color: var(--base-tag); }
+.prettyprint .typ, .prettyprint .var { color: var(--base-class); }
+.prettyprint .dec { color: var(--base-dec); }
+.prettyprint .atn { color: var(--base-symbol); }
+.prettyprint .pln { color: var(--base-code); }
 
 .prettyprint {
-  background: var(--baseBg);
-  color: var(--baseColor);
+  background: var(--base-bg);
+  color: var(--base-color);
   display: block;
   white-space: pre;
   overflow-x:auto;

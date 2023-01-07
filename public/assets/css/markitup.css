@@ -108,7 +108,7 @@
 .markItUp .markItUpButton a {
     font-size: 16px;
     cursor: pointer;
-    color: #333;
+    color: var(--base-color);
 }
 .markItUp .bb-color ul {
     width: 80px;
