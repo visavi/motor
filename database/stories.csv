@@ -1,1 +1,1 @@
-id,user_id,slug,title,text,tags,rating,reads,locked,created_at
+id,user_id,slug,active,title,text,rating,reads,locked,created_at
