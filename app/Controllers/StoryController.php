@@ -119,24 +119,35 @@ class StoryController extends Controller
         Response $response,
         Slug $slug,
     ): Response {
-        $user  = getUser();
-        $input = (array) $request->getParsedBody();
-        $tags = array_map('sanitize', $input['tags'] ?? []);
+        $user    = getUser();
+        $input   = (array) $request->getParsedBody();
+        $tags    = array_map('sanitize', $input['tags'] ?? []);
+        $created = time();
 
         $this->validator
             ->required(['csrf', 'title', 'text', 'tags'])
             ->same('csrf', $this->session->get('csrf'), 'Неверный идентификатор сессии, повторите действие!')
             ->length('title', setting('story.title_min_length'), setting('story.title_max_length'))
             ->length('text', setting('story.text_min_length'), setting('story.text_max_length'))
-            ->custom(count($tags) <= setting('story.tags_max'), ['tags' => 'Превышено максимальное количество тегов'])
-            ->boolean('locked');
+            ->custom(count($tags) <= setting('story.tags_max'), ['tags' => 'Превышено максимальное количество тегов!'])
+            ->boolean('locked')
+            ->boolean('active')
+            ->boolean('delay');
 
-            foreach ($tags as $tag) {
-                $this->validator->custom(
-                    Str::length($tag) >= setting('story.tags_min_length') && Str::length($tag) <= setting('story.tags_max_length'),
-                    ['tags' => sprintf('Длина тегов должна быть от %d до %d символов!', setting('story.tags_min_length'), setting('story.tags_max_length'))]
-                );
-            }
+        foreach ($tags as $tag) {
+            $this->validator->custom(
+                Str::length($tag) >= setting('story.tags_min_length') && Str::length($tag) <= setting('story.tags_max_length'),
+                ['tags' => sprintf('Длина тегов должна быть от %d до %d символов!', setting('story.tags_min_length'), setting('story.tags_max_length'))]
+            );
+        }
+
+        if (! empty($input['delay']) && isAdmin()) {
+            $created = ! empty($input['created']) ? strtotime($input['created']) : 0;
+            $this->validator->custom(
+                $created > time(),
+                ['created' => 'Дата отложенной публикации должна быть больше текущего времени!']
+            );
+        }
 
         if ($this->validator->isValid($input)) {
             $slugify = $slug->slugify($input['title']);
@@ -150,7 +161,7 @@ class StoryController extends Controller
                 'reads'      => 0,
                 'active'     => isAdmin() ? $input['active'] ?? true : setting('story.active'),
                 'locked'     => isAdmin() ? $input['locked'] ?? false : false,
-                'created_at' => time(),
+                'created_at' => $created,
             ]);
 
             foreach ($tags as $value) {
@@ -242,7 +253,9 @@ class StoryController extends Controller
             ->length('title', setting('story.title_min_length'), setting('story.title_max_length'))
             ->length('text', setting('story.text_min_length'), setting('story.text_max_length'))
             ->custom(count($tags) <= setting('story.tags_max'), ['tags' => 'Превышено максимальное количество тегов'])
-            ->boolean('locked');
+            ->boolean('locked')
+            ->boolean('active')
+            ->boolean('delay');
 
         foreach ($tags as $tag) {
             $this->validator->custom(
@@ -251,25 +264,34 @@ class StoryController extends Controller
             );
         }
 
-        Tag::query()->where('story_id', $story->id)->delete();
-
-        foreach ($tags as $value) {
-            Tag::query()->create([
-                'story_id' => $story->id,
-                'tag'      => Str::lower($value),
-            ]);
+        if (! empty($input['delay']) && isAdmin()) {
+            $created = ! empty($input['created']) ? strtotime($input['created']) : 0;
+            $this->validator->custom(
+                $created > time(),
+                ['created' => 'Дата отложенной публикации должна быть больше текущего времени!']
+            );
         }
 
         if ($this->validator->isValid($input)) {
             $slugify = $slug->slugify($input['title']);
 
             $story->update([
-                'title'  => sanitize($input['title']),
-                'slug'   => $slugify,
-                'text'   => sanitize($input['text']),
-                'active' => isAdmin() ? $input['active'] ?? $story->active : $story->active,
-                'locked' => isAdmin() ? $input['locked'] ?? $story->locked : $story->locked,
+                'title'      => sanitize($input['title']),
+                'slug'       => $slugify,
+                'text'       => sanitize($input['text']),
+                'active'     => isAdmin() ? $input['active'] ?? $story->active : $story->active,
+                'locked'     => isAdmin() ? $input['locked'] ?? $story->locked : $story->locked,
+                'created_at' => $created ?? $story->created_at,
             ]);
+
+            Tag::query()->where('story_id', $story->id)->delete();
+
+            foreach ($tags as $value) {
+                Tag::query()->create([
+                    'story_id' => $story->id,
+                    'tag'      => Str::lower($value),
+                ]);
+            }
 
             $this->session->set('flash', ['success' => 'Статья успешно изменена!']);
 

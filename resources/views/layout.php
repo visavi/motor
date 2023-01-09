@@ -16,6 +16,7 @@
     <link href="<?= $this->asset('/assets/css/fancybox.css') ?>" rel="stylesheet">
     <link href="<?= $this->asset('/assets/css/bootstrap-tags.css') ?>" rel="stylesheet">
     <link href="<?= $this->asset('/assets/css/main.css') ?>" rel="stylesheet">
+    <?= $this->section('styles') ?>
     <link href="/favicon.ico" rel="icon" type="image/x-icon" >
     <meta name="theme-color" content="#7952b3">
 </head>
@@ -50,7 +51,7 @@
 
 <?= $this->fetch('footer') ?>
 
-<script src="<?= $this->asset('/assets/js/jquery-3.6.0.min.js') ?>"></script>
+<script src="<?= $this->asset('/assets/js/jquery-3.6.3.min.js') ?>"></script>
 <script src="<?= $this->asset('/assets/js/bootstrap.bundle.min.js') ?>"></script>
 <script src="<?= $this->asset('/assets/js/theme-toggler.js') ?>"></script>
 <script src="<?= $this->asset('/assets/js/jquery.caret.min.js') ?>"></script>
@@ -75,6 +76,7 @@
         addOnBlur: true,
     });
 </script>
+<?= $this->section('scripts') ?>
 
 </body>
 </html>

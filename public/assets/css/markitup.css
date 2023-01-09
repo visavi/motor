@@ -22,10 +22,10 @@
 
 .markItUpPreviewFrame {
     overflow: auto;
-    background-color: #FFFFFF;
     width: 100%;
     margin: 5px 0;
-    border: 1px solid #ced4da;
+    background-color: var(--bs-form-control-bg);
+    border: var(--bs-border-width) solid var(--bs-border-color);
     border-radius: 0.25rem;
 }
 
@@ -38,6 +38,8 @@
 }
 .markItUpHeader ul li:hover > ul {
     display:block;
+    background-color: var(--bs-form-control-bg);
+    z-index: 1;
 }
 
 .markItUpHeader ul .markItUpDropMenu:after {
@@ -55,13 +57,14 @@
     position:absolute;
     top:22px; left:0;
     background: #fff;
-    border:1px solid #ccc;
+    border: 1px solid var(--bs-border-color);
     border-radius: 5px;
 }
 .markItUpHeader ul ul li {
     float:none;
-    border-bottom:1px solid #ccc;
+    border-bottom: 1px solid var(--bs-border-color);
 }
+
 .markItUpHeader ul ul .markItUpDropMenu:after {
     content: "\F231";
     font-family: "bootstrap-icons";
@@ -93,29 +96,28 @@
 }
 .markItUpHeader ul ul a {
     display:block;
-    color: #333;
-    font-size: 12px;
     text-indent:0;
     width:100px;
     padding: 2px 5px;
     background-position:2px 50%;
 }
 .markItUpHeader ul ul a:hover  {
-    color: #bbb;
+    background-color: var(--bs-tertiary-bg);
 }
 
 /* ------------------------------------------------------------------- */
 .markItUp .markItUpButton a {
     font-size: 16px;
     cursor: pointer;
-    color: var(--base-color);
+    color: var(--bs-body-color);
 }
+
 .markItUp .bb-color ul {
     width: 80px;
     padding: 1px;
 }
 .markItUp .bb-color  li {
-    border: 1px solid white;
+    border: 1px solid var(--bs-border-color);
     width: 25px;
     height: 25px;
     overflow: hidden;

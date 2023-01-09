@@ -21,4 +21,4 @@ use MotorORM\Collection;
     </nav>
 <?php $this->stop() ?>
 
-<?= $this->fetch('stories/_form', compact('story', 'files')) ?>
+<?= $this->fetch('stories/_form', ['story' => $story, 'files' => $files, 'template' => $this]) ?>

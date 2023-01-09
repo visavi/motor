@@ -25,6 +25,10 @@ use App\Models\Story;
             <span class="badge text-bg-danger">Не опубликовано</span>
         <?php endif; ?>
 
+        <?php if ($story->created_at > time()): ?>
+            <span class="badge text-bg-warning">Отложенная публикация</span>
+        <?php endif; ?>
+
         <?php if (getUser('id') !== $story->user_id): ?>
             <a href="#" class="post-rating-down<?= $story->poll->vote === '-' ? ' active': '' ?>" onclick="return changeRating(this);" data-id="<?= $story->id ?>" data-vote="-" data-type="story" data-csrf="<?= session('csrf') ?>"><i class="bi bi-arrow-down"></i></a>
         <?php endif; ?>

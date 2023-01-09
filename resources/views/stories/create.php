@@ -19,7 +19,7 @@ use MotorORM\Collection;
 <?php $this->stop() ?>
 
 <?php if(setting('story.allow_posting') || isAdmin()): ?>
-    <?= $this->fetch('stories/_form', compact('files')) ?>
+    <?= $this->fetch('stories/_form', ['files' => $files, 'template' => $this]) ?>
 <?php else: ?>
     <div class="alert alert-danger">
         <i class="bi bi-exclamation-circle-fill text-danger"></i>

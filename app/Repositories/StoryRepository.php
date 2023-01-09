@@ -47,7 +47,8 @@ class StoryRepository implements RepositoryInterface
     {
         return Story::query()
             ->when(! isAdmin(), function (Story $query) {
-                $query->active();
+                $query->active()
+                    ->where('created_at', '<', time());
             })
             ->orderByDesc('locked')
             ->orderByDesc('created_at')
@@ -66,6 +67,9 @@ class StoryRepository implements RepositoryInterface
     public function getStoriesByUserId(int $userId, int $perPage): CollectionPaginate
     {
         return Story::query()
+            ->when(! isAdmin(), function (Story $query) {
+                $query->where('created_at', '<', time());
+            })
             ->where('user_id', $userId)
             ->orderByDesc('locked')
             ->orderByDesc('created_at')
@@ -89,6 +93,8 @@ class StoryRepository implements RepositoryInterface
             ->pluck('story_id');
 
         return Story::query()
+            ->active()
+            ->where('created_at', '<', time())
             ->whereIn('id', $tags)
             ->orderByDesc('created_at')
             ->paginate($perPage);
@@ -105,6 +111,8 @@ class StoryRepository implements RepositoryInterface
     public function getStoriesBySearch(string $search, int $perPage): CollectionPaginate
     {
         return Story::query()
+            ->active()
+            ->where('created_at', '<', time())
             ->where('text', 'like', $search)
             ->orderByDesc('created_at')
             ->paginate($perPage)
