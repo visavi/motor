@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Controllers\BBCodeController;
 use App\Controllers\CommentController;
 use App\Controllers\FavoriteController;
+use App\Controllers\HomeController;
 use App\Controllers\RatingController;
 use App\Controllers\SearchController;
 use App\Controllers\StoryController;
@@ -29,16 +30,11 @@ return function (App $app) {
         return $response;
     });*/
 
-    //$app->get('/', [HomeController::class, 'home']);
+    $app->get('/', [HomeController::class, 'index']);
 
-    $app->group('', function (Group $group) {
-        $group->get('/', [StoryController::class, 'index']);
-        $group->get('/stories', [StoryController::class, 'index']);
+    $app->group('/stories', function (Group $group) {
+        $group->get('', [StoryController::class, 'index']);
         $group->get('/{slug:[\w\-]+\-[\d]+}', [StoryController::class, 'view']);
-
-        $group->get('/tag', [TagController::class, 'tag']);
-        $group->get('/tags', [TagController::class, 'index']);
-        $group->get('/tags/{tag:.+}', [TagController::class, 'search']);
 
         // For user
         $group->group('', function (Group $group) {
@@ -57,6 +53,11 @@ return function (App $app) {
             $group->delete('', [CommentController::class, 'destroy']);
         })->add(CheckAdminMiddleware::class);
     });
+
+    // Tags
+    $app->get('/tag', [TagController::class, 'tag']);
+    $app->get('/tags', [TagController::class, 'index']);
+    $app->get('/tags/{tag:.+}', [TagController::class, 'search']);
 
     // For user group
     $app->group('', function (Group $group) {

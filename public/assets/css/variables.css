@@ -1,5 +1,8 @@
 :root,
 [data-bs-theme="light"] {
+    --bs-body-bg: #f8f9fa;
+    --bs-body-bg-rgb: 248,249,250;
+
     --bd-blue: #2e8cc2;
     --bd-blue-rgb: 46,140,194;
     --bd-blue-bg: var(--bd-blue);
@@ -21,6 +24,9 @@
     --base-dec: #75715e;
 }
 [data-bs-theme="dark"] {
+    --bs-body-bg: #2b3035;
+    --bs-body-bg-rgb: 43,48,53;
+
     --bd-blue: #2e8cc2;
     --bd-blue-rgb: 46,140,194;
     --bd-blue-bg: var(--bd-blue);

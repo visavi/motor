@@ -11,7 +11,7 @@ use MotorORM\Collection;
 
 $story ??= null;
 ?>
-<div class="section p-3 shadow cut">
+<div class="section shadow border p-3 cut">
     <form method="post" action="/<?=  $story->id ?? '' ?>">
         <input type="hidden" name="_METHOD" value="<?= $story ? 'PUT' : 'POST' ?>">
         <input type="hidden" name="csrf" value="<?= session('csrf') ?>">

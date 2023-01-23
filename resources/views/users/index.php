@@ -21,7 +21,7 @@ use MotorORM\CollectionPaginate;
 
 <?php if ($users->isNotEmpty()): ?>
     <?php foreach ($users as $user): ?>
-        <div class="section shadow p-3 mb-3">
+        <div class="section shadow border p-3 mb-3">
             <span class="avatar-default mb-3">
                 <?= $user->getAvatar() ?>
             </span>

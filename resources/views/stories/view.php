@@ -19,7 +19,7 @@ use App\Models\Story;
 </nav>
 <?php $this->stop() ?>
 
-<div class="section shadow p-3 mb-3">
+<div class="section shadow border p-3 mb-3">
     <div class="float-end js-rating">
         <?php if ($story->active === false): ?>
             <span class="badge text-bg-danger">Не опубликовано</span>
@@ -101,7 +101,7 @@ use App\Models\Story;
     </div>
 </div>
 
-<div class="section shadow p-3 mb-3" id="comments">
+<div class="section shadow border p-3 mb-3" id="comments">
     <h3>Комментарии <small><?= $story->comments()->count() ?></small></h3>
 
     <?php if ($story->comments->isNotEmpty()): ?>

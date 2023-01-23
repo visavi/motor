@@ -15,7 +15,7 @@
 <?php $this->stop() ?>
 
 <?php if ($tags): ?>
-    <div class="section shadow p-3 mb-3">
+    <div class="section shadow border p-3 mb-3">
         <?php foreach ($tags as $tag => $size): ?>
             <a href="/tags/<?= $tag ?>"><span style="font-size:<?= $size ?>pt"><?= $tag ?></span></a>
         <?php endforeach; ?>

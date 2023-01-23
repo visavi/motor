@@ -6,7 +6,7 @@ use App\Models\Guestbook;
 
 $message ??= null;
 ?>
-<div class="post-form p-3 mt-3 shadow">
+<div class="section shadow border post-form p-3 mt-3">
     <form method="post" action="/guestbook<?= $message ? '/' . $message->id : '' ?>">
         <input type="hidden" name="_METHOD" value="<?= $message ? 'PUT' : 'POST' ?>">
         <input type="hidden" name="csrf" value="<?= session('csrf') ?>">

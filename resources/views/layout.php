@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru" data-bs-theme="light">
+<html lang="ru" data-bs-theme="auto">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,7 +24,7 @@
 
 <?= $this->fetch('header') ?>
 
-<div class="col-lg-10 mx-auto p-3 py-md-4">
+<div class="container-xxl col-lg-10 mx-auto p-3 py-md-4">
     <main>
         <?= $this->fetch('app/_flash') ?>
 
