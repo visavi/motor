@@ -7,13 +7,13 @@ use MotorORM\CollectionPaginate;
 ?>
 <?php $this->layout('layout-docs') ?>
 
-<?php $this->start('title') ?>Rotor CMS<?php $this->stop() ?>
-<?php $this->start('description') ?>Rotor CMS<?php $this->stop() ?>
+<?php $this->start('title') ?>Motor CMS<?php $this->stop() ?>
+<?php $this->start('description') ?>Motor CMS - Легкий и быстрый движок для сайта. Не использует базу данных, не требует особых библиотек на сервере<?php $this->stop() ?>
 
 <div class="bd-masthead mb-3" id="content">
     <div class="container-xxl bd-gutter">
         <div class="col-md-8 mx-auto text-center">
-            <a class="d-flex flex-column flex-lg-row justify-content-center align-items-center mb-4 text-dark lh-sm text-decoration-none" href="/docs/verstions">
+            <a class="d-flex flex-column flex-lg-row justify-content-center align-items-center mb-4 text-dark lh-sm text-decoration-none" href="/docs/versions">
                 <strong class="d-sm-inline-block p-2 me-2 mb-2 mb-lg-0 rounded-3 masthead-notice">Новое в v0.1-beta</strong>
                 <span class="text-muted">Добавлена отложенная публикация статей</span>
             </a>

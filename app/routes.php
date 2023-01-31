@@ -31,6 +31,8 @@ return function (App $app) {
     });*/
 
     $app->get('/', [HomeController::class, 'index']);
+    $app->get('/docs', [HomeController::class, 'docs']);
+    $app->get('/docs/versions', [HomeController::class, 'versions']);
 
     $app->group('/stories', function (Group $group) {
         $group->get('', [StoryController::class, 'index']);

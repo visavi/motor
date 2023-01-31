@@ -17,11 +17,48 @@ class HomeController extends Controller
         protected View $view,
     ) {}
 
+    /**
+     * Main page
+     *
+     * @param Response $response
+     *
+     * @return Response
+     */
     public function index(Response $response): Response
     {
         return $this->view->render(
             $response,
             'home/index',
+        );
+    }
+
+    /**
+     * Docs
+     *
+     * @param Response $response
+     *
+     * @return Response
+     */
+    public function docs(Response $response): Response
+    {
+        return $this->view->render(
+            $response,
+            'home/docs',
+        );
+    }
+
+    /**
+     * Versions
+     *
+     * @param Response $response
+     *
+     * @return Response
+     */
+    public function versions(Response $response): Response
+    {
+        return $this->view->render(
+            $response,
+            'home/versions',
         );
     }
 }
