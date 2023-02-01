@@ -230,3 +230,9 @@ textarea.form-control {
     --bs-gutter-x: 3rem;
 }
 .bi{width:1em;height:1em;vertical-align:-.125em;fill:currentcolor}
+
+@media (min-width: 992px) {
+    .bd-navbar .navbar-brand span {
+        display: none;
+    }
+}
