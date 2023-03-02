@@ -12,7 +12,7 @@ use MotorORM\CollectionPaginate;
 
 <div class="col-md-8 mx-auto text-center">
     <a class="d-flex flex-column flex-lg-row justify-content-center align-items-center mb-4 text-dark lh-sm text-decoration-none" href="/docs/versions">
-        <strong class="d-sm-inline-block p-2 me-2 mb-2 mb-lg-0 rounded-3 masthead-notice">Новое в v0.1-beta</strong>
+        <strong class="d-sm-inline-block p-2 me-2 mb-2 mb-lg-0 rounded-3 masthead-notice">Новое в v0.1.0</strong>
         <span class="text-muted">Добавлена отложенная публикация статей</span>
     </a>
     <!--<img src="logo-shadow.png" width="200" height="165" alt="MotorCMS" class="d-block mx-auto mb-3">-->
@@ -32,7 +32,7 @@ use MotorORM\CollectionPaginate;
         </a>
     </div>
     <p class="text-muted mb-0">
-        Версия <strong>v0.1-beta</strong>
+        Версия <strong>v0.1.0</strong>
         <span class="px-1">&middot;</span>
         <a href="/docs/versions" class="link-secondary text-nowrap">Все версии</a>
     </p>
