@@ -109,8 +109,27 @@
 </svg>
 
 <main>
-    <?= $this->section('content') ?>
+    <div class="bd-masthead mb-3" id="content">
+        <div class="container-xxl bd-gutter">
+
+            <?= $this->fetch('app/_flash') ?>
+
+            <div class="app-title">
+                <?php if ($this->section('header')): ?>
+                    <?= $this->section('header') ?>
+                <?php endif ?>
+
+                <?php if ($this->section('header')): ?>
+                    <?= $this->section('breadcrumb') ?>
+                <?php endif ?>
+            </div>
+
+
+        <?= $this->section('content') ?>
+        </div>
+    </div>
 </main>
+
 <?= $this->fetch('footer') ?>
 
 <script src="<?= $this->asset('/assets/js/jquery-3.6.3.min.js') ?>"></script>

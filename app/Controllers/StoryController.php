@@ -150,12 +150,10 @@ class StoryController extends Controller
         }
 
         if ($this->validator->isValid($input)) {
-            $slugify = $slug->slugify($input['title']);
-
             $story = Story::query()->create([
                 'user_id'    => $user->id,
                 'title'      => sanitize($input['title']),
-                'slug'       => $slugify,
+                'slug'       => $slug->slugify($input['title']),
                 'text'       => sanitize($input['text']),
                 'rating'     => 0,
                 'reads'      => 0,
@@ -183,7 +181,7 @@ class StoryController extends Controller
 
         $this->session->set('flash', ['errors' => $this->validator->getErrors(), 'old' => $input]);
 
-        return $this->redirect($response, '/create');
+        return $this->redirect($response, '/stories/create');
     }
 
     /**
@@ -273,11 +271,9 @@ class StoryController extends Controller
         }
 
         if ($this->validator->isValid($input)) {
-            $slugify = $slug->slugify($input['title']);
-
             $story->update([
                 'title'      => sanitize($input['title']),
-                'slug'       => $slugify,
+                'slug'       => $slug->slugify($input['title']),
                 'text'       => sanitize($input['text']),
                 'active'     => isAdmin() ? $input['active'] ?? $story->active : $story->active,
                 'locked'     => isAdmin() ? $input['locked'] ?? $story->locked : $story->locked,
@@ -293,9 +289,10 @@ class StoryController extends Controller
                 ]);
             }
 
+            $story->refresh();
             $this->session->set('flash', ['success' => 'Статья успешно изменена!']);
 
-            return $this->redirect($response, '/' . $slugify . '-' . $id);
+            return $this->redirect($response, $story->getLink());
         }
 
         $this->session->set('flash', ['errors' => $this->validator->getErrors(), 'old' => $input]);
@@ -339,6 +336,6 @@ class StoryController extends Controller
             $this->session->set('flash', ['errors' => $this->validator->getErrors()]);
         }
 
-        return $this->redirect($response, '/');
+        return $this->redirect($response, '/stories');
     }
 }

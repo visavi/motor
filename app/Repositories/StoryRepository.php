@@ -6,6 +6,7 @@ namespace App\Repositories;
 
 use App\Models\Story;
 use App\Models\Tag;
+use MotorORM\Collection;
 use MotorORM\CollectionPaginate;
 
 class StoryRepository implements RepositoryInterface
@@ -117,5 +118,18 @@ class StoryRepository implements RepositoryInterface
             ->orderByDesc('created_at')
             ->paginate($perPage)
             ->appends(['search' => $search]);
+    }
+
+    /**
+     * Get active stories
+     *
+     * @return Collection<Story>
+     */
+    public function getActiveStories(): Collection
+    {
+        return Story::query()
+            ->active()
+            ->where('created_at', '<', time())
+            ->get();
     }
 }

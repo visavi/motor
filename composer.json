@@ -8,7 +8,7 @@
         "slim/psr7": "^1.6",
         "php-di/slim-bridge": "^3.3",
         "visavi/captcha": "^2.0",
-        "visavi/motor-orm": "dev-master",
+        "visavi/motor-orm": "^3.3",
         "visavi/cleanup": "^1.5",
         "league/plates": "^3.5",
         "intervention/image": "^2.7"

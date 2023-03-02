@@ -11,14 +11,14 @@
         </button>
         <div class="offcanvas-lg offcanvas-end flex-grow-1" id="bdNavbar" aria-labelledby="bdNavbarOffcanvasLabel">
             <div class="offcanvas-header px-4 pb-0">
-                <h5 class="offcanvas-title text-white" id="bdNavbarOffcanvasLabel">Motor CMS</h5>
+                <h5 class="offcanvas-title text-white" id="bdNavbarOffcanvasLabel">MOTOR CMS</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#bdNavbar"></button>
             </div>
             <div class="offcanvas-body p-4 pt-0 p-lg-0">
                 <hr class="d-lg-none text-white-50">
                 <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav">
                     <li class="nav-item col-6 col-lg-auto">
-                        <a class="nav-link py-2 px-0 px-lg-2" href="<?= (new \App\Models\Story())->getPath()?>">Блог</a>
+                        <a class="nav-link py-2 px-0 px-lg-2" href="<?= (new \App\Models\Story())->getPath()?>">Статьи</a>
                     </li>
                     <li class="nav-item col-6 col-lg-auto">
                         <a class="nav-link py-2 px-0 px-lg-2" href="/guestbook">Гостевая</a>

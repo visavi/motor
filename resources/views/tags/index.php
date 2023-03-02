@@ -19,6 +19,7 @@ use MotorORM\CollectionPaginate;
 <nav>
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/"><i class="bi bi-house-door"></i></a></li>
+        <li class="breadcrumb-item"><a href="/stories">Статьи</a></li>
         <li class="breadcrumb-item active">Поиск по тегу</li>
     </ol>
 </nav>

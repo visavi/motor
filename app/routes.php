@@ -40,7 +40,7 @@ return function (App $app) {
 
         // For user
         $group->group('', function (Group $group) {
-            $group->post('/', [StoryController::class, 'store']);
+            $group->post('', [StoryController::class, 'store']);
             $group->get('/create', [StoryController::class, 'create']);
             $group->get('/{id:[0-9]+}/edit', [StoryController::class, 'edit']);
             $group->put('/{id:[0-9]+}', [StoryController::class, 'update']);

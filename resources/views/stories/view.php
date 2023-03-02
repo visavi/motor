@@ -14,6 +14,7 @@ use App\Models\Story;
 <nav>
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/"><i class="bi bi-house-door"></i></a></li>
+        <li class="breadcrumb-item"><a href="/stories">Статьи</a></li>
         <li class="breadcrumb-item active"><?= escape($story->title) ?></li>
     </ol>
 </nav>
@@ -94,8 +95,8 @@ use App\Models\Story;
 
         <?php if ($story->user_id === getUser('id') || isAdmin()): ?>
             <div class="float-end">
-                <a href="/<?= $story->id ?>/edit" title="Редактировать" data-bs-toggle="tooltip"><i class="bi bi-pencil"></i></a>
-                <a href="/<?= $story->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete" title="Удалить" data-bs-toggle="tooltip"><i class="bi bi-x-lg"></i></a>
+                <a href="/stories/<?= $story->id ?>/edit" title="Редактировать" data-bs-toggle="tooltip"><i class="bi bi-pencil"></i></a>
+                <a href="/stories/<?= $story->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete" title="Удалить" data-bs-toggle="tooltip"><i class="bi bi-x-lg"></i></a>
             </div>
         <?php endif; ?>
     </div>
@@ -119,8 +120,8 @@ use App\Models\Story;
                     <?php endif; ?>
 
                     <?php if (isAdmin()): ?>
-                        <a href="/<?= $story->id ?>/comments/<?= $comment->id ?>/edit"><i class="bi bi-pencil text-body-secondary"></i></a>
-                        <a href="/<?= $story->id ?>/comments/<?= $comment->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg text-body-secondary"></i></a>
+                        <a href="/stories/<?= $story->id ?>/comments/<?= $comment->id ?>/edit"><i class="bi bi-pencil text-body-secondary"></i></a>
+                        <a href="/stories/<?= $story->id ?>/comments/<?= $comment->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg text-body-secondary"></i></a>
                     <?php endif; ?>
 
                     <div class="js-rating">

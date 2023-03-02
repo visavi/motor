@@ -9,8 +9,8 @@ use App\Models\Story;
 $comment ??= null;
 ?>
 
-<div class="section shadow border post-form mt-3">
-    <form method="post" action="/<?= $story->id ?>/comments<?= $comment ? '/' . $comment->id : '' ?>">
+<div class="section shadow border p-3 post-form">
+    <form method="post" action="/stories/<?= $story->id ?>/comments<?= $comment ? '/' . $comment->id : '' ?>">
         <input type="hidden" name="_METHOD" value="<?= $comment ? 'PUT' : 'POST' ?>">
         <input type="hidden" name="csrf" value="<?= session('csrf') ?>">
 
