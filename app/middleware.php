@@ -8,10 +8,12 @@ use App\Middleware\StartSessionMiddleware;
 use App\Middleware\TrailingSlashMiddleware;
 use App\Middleware\UserAuthMiddleware;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 use Slim\App;
 use Slim\Middleware\MethodOverrideMiddleware;
 
-return function (App $app, ContainerInterface $container) {
+return function (App $app, ContainerInterface $container)
+{
     /**
      * The routing middleware should be added earlier than the ErrorMiddleware
      * Otherwise exceptions thrown from it will not be handled by the middleware

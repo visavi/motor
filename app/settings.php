@@ -6,7 +6,8 @@ use App\Models\User;
 use App\Services\Setting;
 use DI\ContainerBuilder;
 
-return static function (ContainerBuilder $containerBuilder) {
+return static function (ContainerBuilder $containerBuilder)
+{
     // Global Settings Object
     $containerBuilder->addDefinitions([
         Setting::class => function () {
@@ -87,11 +88,11 @@ return static function (ContainerBuilder $containerBuilder) {
                 ],
 
                 'displayErrorDetails' => true, // Should be set to false in production
-                'logError'            => false,
+                'logError'            => true,
                 'logErrorDetails'     => false,
                 'logger' => [
                     'name' => 'motor-app',
-                    'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/app.log',
+                    'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../storage/logs/app.log',
                     //'level' => Logger::DEBUG,
                 ],
             ]);

@@ -19,7 +19,7 @@ $repositories = require __DIR__ . '/repositories.php';
 $repositories($containerBuilder);
 
 /*if (false) { // Should be set to true in production
-    $containerBuilder->enableCompilation(__DIR__ . '/../var/cache');
+    $containerBuilder->enableCompilation(__DIR__ . '/../storage/cache');
 }*/
 
 // Build PHP-DI Container instance

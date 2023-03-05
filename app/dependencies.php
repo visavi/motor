@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 use App\Services\View;
 use DI\ContainerBuilder;
+use Shieldon\SimpleCache\Cache;
 
 return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions([
         // Set view in Container
         View::class => function() {
             return new View(dirname(__DIR__) . '/resources/views');
+        },
+
+        Cache::class => function() {
+            return new Cache('file', ['storage' => dirname(__DIR__) . '/storage/cache']);
         },
 
         /*ResponseFactoryInterface::class => function (ContainerInterface $container) {

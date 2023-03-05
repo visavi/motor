@@ -8,8 +8,10 @@ config:
   shared_dirs:
     - database
     - public/uploads
+    - storage
   writable_dirs:
     - public/uploads/*
+    - storage/*
 
 hosts:
   motorcms.ru:
