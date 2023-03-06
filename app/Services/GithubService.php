@@ -75,7 +75,7 @@ class GithubService
      *
      * @return array
      */
-    public function getLastRelease()
+    public function getLastRelease(): array
     {
         $releases = $this->sendRequest('releases');
 

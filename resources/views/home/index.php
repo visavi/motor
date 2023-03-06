@@ -9,7 +9,7 @@
 <div class="col-md-8 mx-auto text-center">
     <?php if ($release): ?>
         <a class="d-flex flex-column flex-lg-row justify-content-center align-items-center mb-4 text-dark lh-sm text-decoration-none" href="/docs/versions">
-            <strong class="d-sm-inline-block p-2 me-2 mb-2 mb-lg-0 rounded-3 masthead-notice">Новое в <?= $release['tag_name'] ?></strong>
+            <strong class="d-sm-inline-block p-2 me-2 mb-2 mb-lg-0 rounded-3 masthead-notice w-25">Новое в <?= $release['tag_name'] ?></strong>
             <span class="text-muted"><?= $release['body'] ?></span>
         </a>
     <?php endif; ?>
