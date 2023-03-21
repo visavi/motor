@@ -12,8 +12,6 @@ return static function (ContainerBuilder $containerBuilder)
     $containerBuilder->addDefinitions([
         Setting::class => function () {
             return new Setting([
-                'debug' => true,
-
                 'main' => [
                     'title'       => 'Добро пожаловать',
                     'guest_name'  => 'Гость',
@@ -51,7 +49,7 @@ return static function (ContainerBuilder $containerBuilder)
                 'session' => [
                     'cookie_name'     => 'motor_session',
                     'cookie_domain'   => false,
-                    'cookie_secure'   => true,
+                    'cookie_secure'   => isset($_SERVER['HTTPS']),
                     'cookie_httponly' => true,
                     'cookie_samesite' => 'Lax',
                 ],

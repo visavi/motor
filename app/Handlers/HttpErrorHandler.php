@@ -15,14 +15,11 @@ use Whoops\Util\Misc;
 
 class HttpErrorHandler extends SlimErrorHandler
 {
-    /**
-     * @inheritdoc
-     */
     protected function respond(): Response
     {
         $response = $this->responseFactory->createResponse();
 
-        if ($this->exception instanceof HttpException || ! setting('debug')) {
+        if ($this->exception instanceof HttpException || ! setting('displayErrorDetails')) {
             $code = $this->statusCode;
 
             if (strtolower($this->request->getHeaderLine('X-Requested-With')) === 'xmlhttprequest') {
@@ -50,7 +47,7 @@ class HttpErrorHandler extends SlimErrorHandler
             return $response->withStatus($code);
         }
 
-        if (class_exists(Run::class) && setting('debug')) {
+        if (class_exists(Run::class) && setting('displayErrorDetails')) {
             $handler = Misc::isAjaxRequest() ?
                 new JsonResponseHandler() :
                 new PrettyPageHandler();

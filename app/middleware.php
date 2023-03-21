@@ -7,12 +7,12 @@ use App\Middleware\IpAddressMiddleware;
 use App\Middleware\StartSessionMiddleware;
 use App\Middleware\TrailingSlashMiddleware;
 use App\Middleware\UserAuthMiddleware;
-use Psr\Container\ContainerInterface;
+use App\Services\Setting;
 use Psr\Log\LoggerInterface;
 use Slim\App;
 use Slim\Middleware\MethodOverrideMiddleware;
 
-return function (App $app, ContainerInterface $container)
+return function (App $app)
 {
     /**
      * The routing middleware should be added earlier than the ErrorMiddleware
@@ -49,6 +49,12 @@ return function (App $app, ContainerInterface $container)
      * Note: This middleware should be added last. It will not handle any exceptions/errors
      * for middleware added after it.
      */
-    $errorMiddleware = $app->addErrorMiddleware(true, true, true);
+    $setting = $app->getContainer()->get(Setting::class);
+
+    $errorMiddleware = $app->addErrorMiddleware(
+        $setting->get('displayErrorDetails'),
+        $setting->get('logError'),
+        $setting->get('logErrorDetails'),
+    );
     $errorMiddleware->setDefaultErrorHandler($errorHandler);
 };

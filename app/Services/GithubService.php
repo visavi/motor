@@ -5,23 +5,19 @@ declare(strict_types=1);
 namespace App\Services;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
 use Shieldon\SimpleCache\Cache;
 use Throwable;
 
 class GithubService
 {
     private Client $client;
-    private Cache $cache;
 
-    public function __construct()
+    public function __construct(private Cache $cache)
     {
         $this->client = new Client([
             'base_uri' => 'https://api.github.com/repos/visavi/motor/',
             'timeout'  => 3.0,
         ]);
-
-        $this->cache = app(Cache::class);
     }
 
     /**

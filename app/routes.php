@@ -30,13 +30,13 @@ return function (App $app) {
         return $response;
     });*/
 
-    $app->get('/', [HomeController::class, 'index']);
+    $app->get('/', [HomeController::class, 'index'])->setName('home');
     $app->get('/docs', [HomeController::class, 'docs']);
     $app->get('/docs/versions', [HomeController::class, 'versions']);
     $app->get('/docs/commits', [HomeController::class, 'commits']);
 
     $app->group('/stories', function (Group $group) {
-        $group->get('', [StoryController::class, 'index']);
+        $group->get('', [StoryController::class, 'index'])->setName('stories');
         $group->get('/{slug:[\w\-]+\-[\d]+}', [StoryController::class, 'view']);
 
         // For user
