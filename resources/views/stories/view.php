@@ -137,7 +137,7 @@ use App\Models\Story;
                     </div>
                 </div>
 
-                <div class="post-author mb-1" data-login="<?= $comment->user->getName() ?>">
+                <div class="post-author mb-1" data-login="@<?= $comment->user->login ?>">
                     <span class="avatar-micro">
                         <?= $comment->user->getAvatar() ?>
                     </span>

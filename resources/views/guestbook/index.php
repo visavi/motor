@@ -41,7 +41,7 @@ use MotorORM\CollectionPaginate;
                 </div>
 
                 <?php if ($message->user->id): ?>
-                    <div class="post-author" data-login="<?= $message->user->getName() ?>">
+                    <div class="post-author" data-login="@<?= $message->user->login ?>">
                         <span class="avatar-micro">
                             <?= $message->user->getAvatar() ?>
                         </span>

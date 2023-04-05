@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\Sticker;
+use App\Models\User;
+use Shieldon\SimpleCache\Cache;
 
 /**
  * Класс обработки BB-кодов
@@ -104,10 +106,10 @@ class BBCode
             'pattern' => '/\[youtube\](.*youtu(?:\.be\/|be\.com\/.*(?:vi?\/?=?|embed\/)))([\w-]{11}).*\[\/youtube\]/U',
             'replace' => '<div class="media-file ratio ratio-16x9"><iframe src="//www.youtube.com/embed/$2" allowfullscreen></iframe></div>',
         ],
-/*        'username' => [
+        'username' => [
             'pattern'  => '/(?<=^|\s)@([\w\-]{3,20}+)(?=(\s|,))/',
             'callback' => 'userReplace',
-        ],*/
+        ],
     ];
 
     /**
@@ -283,29 +285,27 @@ class BBCode
      *
      * @return string
      */
-/*    public function userReplace(array $match): string
+    public function userReplace(array $match): string
     {
-        static $listUsers;
+        static $users;
 
-        if (empty($listUsers)) {
-            $listUsers = Cache::remember('users', 3600, static function () {
-                return User::query()
-                    ->select('login', 'name')
-                    ->where('point', '>', 0)
-                    ->get()
-                    ->pluck('name', 'login')
-                    ->toArray();
-            });
+        if (empty($users)) {
+            $cache = app(Cache::class);
+            $users = $cache->get('users');
+            if (! $users) {
+                $users = User::query()->get()->pluck('name', 'login');
+                $cache->set('users', $users, 3600);
+            }
         }
 
-        if (! array_key_exists($match[1], $listUsers)) {
+        if (! array_key_exists($match[1], $users)) {
             return $match[0];
         }
 
-        $name = $listUsers[$match[1]] ?: $match[1];
+        $name = $users[$match[1]] ?: $match[1];
 
-        return '<a href="/users/' . $match[1] . '">' . check($name) . '</a>';
-    }*/
+        return '<a href="/users/' . $match[1] . '">' . escape($name) . '</a>';
+    }
 
     /**
      * Обрабатывет стикеры
