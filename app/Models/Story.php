@@ -248,11 +248,6 @@ class Story extends Model
         return implode(', ', $tagList);
     }
 
-    public function getPath(): string
-    {
-        return '/stories';
-    }
-
     /**
      * Get link
      *
@@ -260,6 +255,6 @@ class Story extends Model
      */
     public function getLink(): string
     {
-         return sprintf('%s/%s-%d', $this->getPath(), $this->slug, $this->id);
+         return route('story-view', ['slug' => sprintf('%s-%d', $this->slug, $this->id)]);
     }
 }

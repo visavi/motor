@@ -76,8 +76,8 @@ use MotorORM\CollectionPaginate;
                     <div class="float-end ms-3">
                         <!-- <i class="bi bi-three-dots-vertical"></i> -->
 
-                        <a href="/stories/<?= $story->id ?>/edit" title="Редактировать" data-bs-toggle="tooltip"><i class="bi bi-pencil"></i></a>
-                        <a href="/stories/<?= $story->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete" title="Удалить" data-bs-toggle="tooltip"><i class="bi bi-x-lg"></i></a>
+                        <a href="<?= route('story-edit', ['id' => $story->id]) ?>" title="Редактировать" data-bs-toggle="tooltip"><i class="bi bi-pencil"></i></a>
+                        <a href="<?= route('story-destroy', ['id' => $story->id]) ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete" title="Удалить" data-bs-toggle="tooltip"><i class="bi bi-x-lg"></i></a>
                     </div>
                 <?php endif; ?>
             </div>

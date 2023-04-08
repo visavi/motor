@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-use App\Factories\ContainerFactory;
+use App\Factories\AppFactory;
 use App\Models\User;
 use App\Services\BBCode;
 use App\Services\Session;
 use App\Services\Setting;
 use App\Services\Str;
 use DI\Container;
+use Slim\App;
 use Slim\Factory\ServerRequestCreatorFactory;
 use Slim\Exception\HttpException;
 
@@ -119,14 +120,29 @@ function formatSize(int $bytes, int $precision = 2): string
  */
 function app(?string $abstract = null): mixed
 {
-    $container = ContainerFactory::getInstance();
+    $app = AppFactory::getInstance();
 
     if ($abstract === null) {
-        return $container;
+        return $app->getContainer();
     }
 
-    return $container->get($abstract);
+    return $app->getContainer()->get($abstract);
 }
+
+/**
+ * Get route by name
+ *
+ * @param string $routeName
+ * @param array  $data
+ * @param array  $queryParams
+ *
+ * @return string
+ */
+function route(string $routeName, array $data = [], array $queryParams = []): string
+{
+    return app(App::class)->getRouteCollector()->getRouteParser()->urlFor( $routeName, $data, $queryParams);
+}
+
 
 /**
  * Get session

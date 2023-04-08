@@ -37,23 +37,23 @@ return function (App $app) {
 
     $app->group('/stories', function (Group $group) {
         $group->get('', [StoryController::class, 'index'])->setName('stories');
-        $group->get('/{slug:[\w\-]+\-[\d]+}', [StoryController::class, 'view']);
+        $group->get('/{slug:[\w\-]+\-[\d]+}', [StoryController::class, 'view'])->setName('story-view');
 
         // For user
         $group->group('', function (Group $group) {
-            $group->post('', [StoryController::class, 'store']);
-            $group->get('/create', [StoryController::class, 'create']);
-            $group->get('/{id:[0-9]+}/edit', [StoryController::class, 'edit']);
-            $group->put('/{id:[0-9]+}', [StoryController::class, 'update']);
-            $group->delete('/{id:[0-9]+}', [StoryController::class, 'destroy']);
-            $group->post('/{id:[0-9]+}/comments', [CommentController::class, 'store']);
+            $group->post('', [StoryController::class, 'store'])->setName('story-store');
+            $group->get('/create', [StoryController::class, 'create'])->setName('story-create');
+            $group->get('/{id:[0-9]+}/edit', [StoryController::class, 'edit'])->setName('story-edit');
+            $group->put('/{id:[0-9]+}', [StoryController::class, 'update'])->setName('story-update');
+            $group->delete('/{id:[0-9]+}', [StoryController::class, 'destroy'])->setName('story-destroy');
+            $group->post('/{id:[0-9]+}/comments', [CommentController::class, 'store'])->setName('story-comment-store');
         })->add(CheckUserMiddleware::class);
 
         // Edit and delete comment (for admin)
         $group->group('/{id:[0-9]+}/comments/{cid:[0-9]+}', function (Group $group) {
-            $group->get('/edit', [CommentController::class, 'edit']);
-            $group->put('', [CommentController::class, 'update']);
-            $group->delete('', [CommentController::class, 'destroy']);
+            $group->get('/edit', [CommentController::class, 'edit'])->setName('story-comment-edit');
+            $group->put('', [CommentController::class, 'update'])->setName('story-comment-update');
+            $group->delete('', [CommentController::class, 'destroy'])->setName('story-comment-destroy');
         })->add(CheckAdminMiddleware::class);
     });
 

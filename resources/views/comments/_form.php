@@ -10,7 +10,7 @@ $comment ??= null;
 ?>
 
 <div class="section shadow border p-3 post-form">
-    <form method="post" action="/stories/<?= $story->id ?>/comments<?= $comment ? '/' . $comment->id : '' ?>">
+    <form method="post" action="<?= route($comment ? 'story-comment-update' : 'story-comment-store', ['id' => $story->id, 'cid' => $comment->id ?? null]) ?>">
         <input type="hidden" name="_METHOD" value="<?= $comment ? 'PUT' : 'POST' ?>">
         <input type="hidden" name="csrf" value="<?= session('csrf') ?>">
 

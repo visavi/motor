@@ -181,7 +181,7 @@ class StoryController extends Controller
 
         $this->session->set('flash', ['errors' => $this->validator->getErrors(), 'old' => $input]);
 
-        return $this->redirect($response, '/stories/create');
+        return $this->redirect($response, route('story-create'));
     }
 
     /**
@@ -336,6 +336,6 @@ class StoryController extends Controller
             $this->session->set('flash', ['errors' => $this->validator->getErrors()]);
         }
 
-        return $this->redirect($response, '/stories');
+        return $this->redirect($response, route('stories'));
     }
 }
