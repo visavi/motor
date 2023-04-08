@@ -41,8 +41,8 @@ return function (App $app) {
 
         // For user
         $group->group('', function (Group $group) {
-            $group->post('', [StoryController::class, 'store'])->setName('story-store');
             $group->get('/create', [StoryController::class, 'create'])->setName('story-create');
+            $group->post('/create', [StoryController::class, 'store'])->setName('story-store');
             $group->get('/{id:[0-9]+}/edit', [StoryController::class, 'edit'])->setName('story-edit');
             $group->put('/{id:[0-9]+}', [StoryController::class, 'update'])->setName('story-update');
             $group->delete('/{id:[0-9]+}', [StoryController::class, 'destroy'])->setName('story-destroy');
