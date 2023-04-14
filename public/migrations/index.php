@@ -16,6 +16,10 @@ ini_set('display_startup_errors', '1');
 
 require __DIR__ . '/../../vendor/autoload.php';
 
+echo 'Миграции не работают<br>';
+exit;
+
+
 // Добавляет поля picture и avatar в users
 $userHeaders = User::query()->headers();
 if (! in_array('picture', $userHeaders, true)) {

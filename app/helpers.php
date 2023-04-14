@@ -140,7 +140,10 @@ function app(?string $abstract = null): mixed
  */
 function route(string $routeName, array $data = [], array $queryParams = []): string
 {
-    return app(App::class)->getRouteCollector()->getRouteParser()->urlFor( $routeName, $data, $queryParams);
+    return app(App::class)
+        ->getRouteCollector()
+        ->getRouteParser()
+        ->urlFor($routeName, $data, $queryParams);
 }
 
 

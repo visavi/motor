@@ -24,11 +24,13 @@
     overflow: auto;
     width: 100%;
     margin: 5px 0;
-    background-color: var(--bs-form-control-bg);
+    background-color: #f9f9fb;
     border: var(--bs-border-width) solid var(--bs-border-color);
     border-radius: 0.25rem;
 }
-
+.markItUpPreviewFrame body{
+    color: #fff;
+}
 /***************************************************************************************/
 /* first row of buttons */
 .markItUpHeader ul li {
