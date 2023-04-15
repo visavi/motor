@@ -3,12 +3,16 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
-use App\Commands\Test;
+use App\Commands\Migrate;
+use App\Commands\MigrateRollback;
 use Symfony\Component\Console\Application;
 
 $application = new Application();
 $application->setName('MotorCMS - https://motorcms.ru');
 
-$application->addCommands([new Test()]);
+$application->addCommands([
+    new Migrate(),
+    new MigrateRollback(),
+]);
 
 $application->run();
