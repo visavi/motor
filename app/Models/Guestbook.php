@@ -19,7 +19,7 @@ use MotorORM\Builder;
  */
 class Guestbook extends Model
 {
-    protected string $filePath = __DIR__ . '/../../database/guestbook.csv';
+    protected string $filePath = __DIR__ . '/../../storage/database/guestbook.csv';
 
     /**
      * Возвращает связь пользователей

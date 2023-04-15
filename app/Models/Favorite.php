@@ -18,7 +18,7 @@ use MotorORM\Builder;
  */
 class Favorite extends Model
 {
-    protected string $filePath = __DIR__ . '/../../database/favorites.csv';
+    protected string $filePath = __DIR__ . '/../../storage/database/favorites.csv';
 
     /**
      * Возвращает связь статьи

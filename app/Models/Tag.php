@@ -12,5 +12,5 @@ namespace App\Models;
  */
 class Tag extends Model
 {
-    protected string $filePath = __DIR__ . '/../../database/tags.csv';
+    protected string $filePath = __DIR__ . '/../../storage/database/tags.csv';
 }

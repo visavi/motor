@@ -55,17 +55,20 @@ class MigrateRollback extends Command
             }
 
             try {
+                $output->writeln('<comment>Rolling back:</comment> ' . $migration->name);
+
                 $class = require_once $migrationPath;
                 $class->down();
-
-                $migration->delete();
-
-                $output->writeln('<info>Rollback:</info> ' . $migration->name);
             } catch (Exception $e) {
                 $output->writeln('<error>' . $e->getMessage() . '</error>');
 
                 return Command::FAILURE;
             }
+
+            usleep(100000);
+            $migration->delete();
+
+            $output->writeln('<info>Rolled back:</info> ' . $migration->name);
         }
 
         return Command::SUCCESS;

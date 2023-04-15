@@ -37,7 +37,7 @@ use MotorORM\Collection;
  */
 class Story extends Model
 {
-    protected string $filePath = __DIR__ . '/../../database/stories.csv';
+    protected string $filePath = __DIR__ . '/../../storage/database/stories.csv';
 
     /**
      * Директория загрузки файлов

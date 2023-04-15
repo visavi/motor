@@ -56,20 +56,23 @@ class Migrate extends Command
 
         foreach ($newMigrations as $migrationName => $migrationPath) {
             try {
+                $output->writeln('<comment>Migrating:</comment> ' . $migrationName);
+
                 $class = require_once $migrationPath;
                 $class->up();
-
-                Migration::query()->create([
-                    'name'  => $migrationName,
-                    'batch' => $lastMigration ? $lastMigration->batch + 1 : 1,
-                ]);
-
-                $output->writeln('<info>Migrated:</info> ' . $migrationName);
             } catch (Exception $e) {
                 $output->writeln('<error>' . $e->getMessage() . '</error>');
 
                 return Command::FAILURE;
             }
+
+            usleep(100000);
+            Migration::query()->create([
+                'name'  => $migrationName,
+                'batch' => $lastMigration ? $lastMigration->batch + 1 : 1,
+            ]);
+
+            $output->writeln('<info>Migrated:</info> ' . $migrationName);
         }
 
         return Command::SUCCESS;

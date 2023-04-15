@@ -13,5 +13,5 @@ namespace App\Models;
  */
 class Migration extends Model
 {
-    protected string $filePath = __DIR__ . '/../../database/migrations.csv';
+    protected string $filePath = __DIR__ . '/../../storage/database/migrations.csv';
 }

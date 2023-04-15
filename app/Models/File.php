@@ -40,7 +40,7 @@ class File extends Model
         'size' => 'int',
     ];
 
-    protected string $filePath = __DIR__ . '/../../database/files.csv';
+    protected string $filePath = __DIR__ . '/../../storage/database/files.csv';
 
     /**
      * Является ли файл картинкой

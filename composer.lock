@@ -2377,16 +2377,16 @@
         },
         {
             "name": "visavi/motor-orm",
-            "version": "v3.4.1",
+            "version": "v3.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/visavi/motor-orm.git",
-                "reference": "4acdc0b5a109c65011a2b397c05e813f44143032"
+                "reference": "c75ac395a284e22b36e9e910908d3fc91aea72cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/visavi/motor-orm/zipball/4acdc0b5a109c65011a2b397c05e813f44143032",
-                "reference": "4acdc0b5a109c65011a2b397c05e813f44143032",
+                "url": "https://api.github.com/repos/visavi/motor-orm/zipball/c75ac395a284e22b36e9e910908d3fc91aea72cf",
+                "reference": "c75ac395a284e22b36e9e910908d3fc91aea72cf",
                 "shasum": ""
             },
             "require": {
@@ -2421,9 +2421,9 @@
             ],
             "support": {
                 "issues": "https://github.com/visavi/motor-orm/issues",
-                "source": "https://github.com/visavi/motor-orm/tree/v3.4.1"
+                "source": "https://github.com/visavi/motor-orm/tree/v3.4.2"
             },
-            "time": "2023-04-15T11:31:57+00:00"
+            "time": "2023-04-15T14:07:34+00:00"
         }
     ],
     "packages-dev": [
