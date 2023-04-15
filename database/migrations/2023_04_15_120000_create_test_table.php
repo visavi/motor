@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Test;
+use App\Models\Model;
 use MotorORM\Migration;
 
 return new class
@@ -12,7 +12,9 @@ return new class
      */
     public function up(): void
     {
-        $migration = new Migration(new Test());
+        $migration = new Migration(new class extends Model {
+            protected string $filePath = __DIR__ . '/../../database/test.csv';
+        });
         $migration->createTable(function (Migration $table) {
             $table->create('id');
             $table->create('title');
@@ -29,7 +31,9 @@ return new class
      */
     public function down(): void
     {
-        $migration = new Migration(new Test());
+        $migration = new Migration(new class extends Model {
+            protected string $filePath = __DIR__ . '/../../database/test.csv';
+        });
         $migration->deleteTable();
     }
 };

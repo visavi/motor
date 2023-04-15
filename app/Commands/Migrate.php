@@ -33,6 +33,8 @@ class Migrate extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $this->createBaseTable();
+
         $migrations = glob(__DIR__ . '/../../database/migrations/*.php');
         $allMigrations = Migration::query()->get()->pluck('name', 'name');
 
@@ -71,5 +73,22 @@ class Migrate extends Command
         }
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * Create base table
+     *
+     * @return void
+     */
+    private function createBaseTable(): void
+    {
+        $migration = new \MotorORM\Migration(new Migration());
+        if (! $migration->hasTable()) {
+            $migration->createTable(function (\MotorORM\Migration $table) {
+                $table->create('id');
+                $table->create('name');
+                $table->create('batch');
+            });
+        }
     }
 }
