@@ -25,7 +25,10 @@ use MotorORM\Collection;
  */
 class Comment extends Model
 {
-    protected string $filePath = __DIR__ . '/../../storage/database/comments.csv';
+    /**
+     * Table name
+     */
+    protected string $table = 'comments';
 
     /**
      * The attributes that should be cast.

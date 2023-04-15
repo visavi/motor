@@ -14,5 +14,8 @@ namespace App\Models;
  */
 class Read extends Model
 {
-    protected string $filePath = __DIR__ . '/../../storage/database/reads.csv';
+    /**
+     * Table name
+     */
+    protected string $table = 'reads';
 }

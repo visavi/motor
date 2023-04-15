@@ -13,5 +13,8 @@ namespace App\Models;
  */
 class Migration extends Model
 {
-    protected string $filePath = __DIR__ . '/../../storage/database/migrations.csv';
+    /**
+     * Table name
+     */
+    protected string $table = 'migrations';
 }

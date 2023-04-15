@@ -11,12 +11,18 @@ use MotorORM\Builder;
  */
 class Model extends Builder
 {
-    public function __construct()
-    {
-        // Override paginate page name
-        //$this->paginateName = 'page';
+    /**
+     * Table dir
+     */
+    protected string $tableDir = __DIR__ . '/../../storage/database';
 
-        // Override paginate template
-        //$this->paginateView = basePath('/resources/views/app/_paginator.php');
-    }
+    /**
+     * Paginate page name
+     */
+    //protected ?string $paginateName = 'page';
+
+    /**
+     * Paginate template
+     */
+    //protected ?string $paginateView = __DIR__ . '/../../resources/views/app/_paginator.php';
 }

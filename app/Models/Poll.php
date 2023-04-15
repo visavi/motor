@@ -16,5 +16,8 @@ namespace App\Models;
  */
 class Poll extends Model
 {
-    protected string $filePath = __DIR__ . '/../../storage/database/polls.csv';
+    /**
+     * Table name
+     */
+    protected string $table = 'polls';
 }

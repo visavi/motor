@@ -34,13 +34,16 @@ class File extends Model
     public const IMAGES = ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'webp'];
 
     /**
+     * Table name
+     */
+    protected string $table = 'files';
+
+    /**
      * The attributes that should be cast.
      */
     protected array $casts = [
         'size' => 'int',
     ];
-
-    protected string $filePath = __DIR__ . '/../../storage/database/files.csv';
 
     /**
      * Является ли файл картинкой

@@ -19,7 +19,10 @@ namespace App\Models;
  */
 class User extends Model
 {
-    protected string $filePath = __DIR__ . '/../../storage/database/users.csv';
+    /**
+     * Table name
+     */
+    protected string $table = 'users';
 
     public const BOSS   = 'boss';   // Владелец
     public const ADMIN  = 'admin';  // Админ

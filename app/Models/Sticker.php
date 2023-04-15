@@ -12,7 +12,10 @@ namespace App\Models;
  */
 class Sticker extends Model
 {
-    protected string $filePath = __DIR__ . '/../../storage/database/stickers.csv';
+    /**
+     * Table name
+     */
+    protected string $table = 'stickers';
 
     /**
      * The attributes that should be cast.
