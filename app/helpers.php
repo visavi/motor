@@ -305,6 +305,18 @@ function publicPath(string $path = ''): string
 }
 
 /**
+ * Get storage path
+ *
+ * @param string $path
+ *
+ * @return string
+ */
+function storagePath(string $path = ''): string
+{
+    return basePath('/storage/' . ltrim($path, '/'));
+}
+
+/**
  * Throw an Exception with the given data.
  *
  * @param int    $code

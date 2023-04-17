@@ -6,7 +6,6 @@ config:
   shared_files:
     - .env
   shared_dirs:
-    - database
     - public/uploads
     - storage
   writable_dirs:
@@ -21,8 +20,18 @@ hosts:
 tasks:
   deploy:
     - deploy:prepare
+    - backup:create
+    - migrate:up
     - deploy:vendors
     - deploy:publish
+
+  backup:create:
+    script:
+      - '{{bin/php}} {{release_path}}/motor backup'
+
+  migrate:up:
+    script:
+      - '{{bin/php}} {{release_path}}/motor migrate'
 
 after:
   deploy:failed: deploy:unlock

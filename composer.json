@@ -5,6 +5,7 @@
         "php": "^8.0.2",
         "ext-curl": "*",
         "ext-mbstring": "*",
+        "ext-zip": "*",
         "guzzlehttp/guzzle": "^7.5",
         "intervention/image": "^2.7",
         "league/plates": "^3.5",

@@ -17,8 +17,6 @@ class MigrateRollback extends Command
      */
     protected function configure(): void
     {
-        parent::configure();
-
         $this->setName('migrate:rollback')
             ->setDescription('Migration rollback');
     }

@@ -3,6 +3,8 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
+use App\Commands\Backup;
+use App\Commands\BackupRestore;
 use App\Commands\Migrate;
 use App\Commands\MigrateRollback;
 use Symfony\Component\Console\Application;
@@ -13,6 +15,8 @@ $application->setName('MotorCMS - https://motorcms.ru');
 $application->addCommands([
     new Migrate(),
     new MigrateRollback(),
+    new Backup(),
+    new BackupRestore(),
 ]);
 
 $application->run();

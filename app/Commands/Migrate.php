@@ -17,8 +17,6 @@ class Migrate extends Command
      */
     protected function configure(): void
     {
-        parent::configure();
-
         $this->setName('migrate')
             ->setDescription('Run migration');
     }
