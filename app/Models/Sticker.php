@@ -15,7 +15,7 @@ class Sticker extends Model
     /**
      * Table name
      */
-    protected string $table = 'stickers';
+    protected string $table = 'stickers.csv';
 
     /**
      * The attributes that should be cast.

@@ -14,7 +14,7 @@ class Model extends Builder
     /**
      * Table dir
      */
-    protected string $tableDir = __DIR__ . '/../../storage/database';
+    protected ?string $tableDir = __DIR__ . '/../../storage/database';
 
     /**
      * Paginate page name

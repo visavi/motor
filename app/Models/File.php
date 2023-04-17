@@ -36,7 +36,7 @@ class File extends Model
     /**
      * Table name
      */
-    protected string $table = 'files';
+    protected string $table = 'files.csv';
 
     /**
      * The attributes that should be cast.

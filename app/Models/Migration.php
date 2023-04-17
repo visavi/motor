@@ -16,5 +16,5 @@ class Migration extends Model
     /**
      * Table name
      */
-    protected string $table = 'migrations';
+    protected string $table = 'migrations.csv';
 }

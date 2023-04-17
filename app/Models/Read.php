@@ -17,5 +17,5 @@ class Read extends Model
     /**
      * Table name
      */
-    protected string $table = 'reads';
+    protected string $table = 'reads.csv';
 }

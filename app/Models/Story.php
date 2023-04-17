@@ -40,7 +40,7 @@ class Story extends Model
     /**
      * Table name
      */
-    protected string $table = 'stories';
+    protected string $table = 'stories.csv';
 
     /**
      * Директория загрузки файлов

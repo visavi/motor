@@ -19,5 +19,5 @@ class Poll extends Model
     /**
      * Table name
      */
-    protected string $table = 'polls';
+    protected string $table = 'polls.csv';
 }

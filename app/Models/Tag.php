@@ -15,5 +15,5 @@ class Tag extends Model
     /**
      * Table name
      */
-    protected string $table = 'tags';
+    protected string $table = 'tags.csv';
 }

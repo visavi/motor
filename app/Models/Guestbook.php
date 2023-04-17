@@ -22,7 +22,7 @@ class Guestbook extends Model
     /**
      * Table name
      */
-    protected string $table = 'guestbook';
+    protected string $table = 'guestbook.csv';
 
     /**
      * Возвращает связь пользователей

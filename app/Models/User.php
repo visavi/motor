@@ -22,7 +22,7 @@ class User extends Model
     /**
      * Table name
      */
-    protected string $table = 'users';
+    protected string $table = 'users.csv';
 
     public const BOSS   = 'boss';   // Владелец
     public const ADMIN  = 'admin';  // Админ

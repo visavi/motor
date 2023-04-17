@@ -21,7 +21,7 @@ class Favorite extends Model
     /**
      * Table name
      */
-    protected string $table = 'favorites';
+    protected string $table = 'favorites.csv';
 
     /**
      * Возвращает связь статьи

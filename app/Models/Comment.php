@@ -28,7 +28,7 @@ class Comment extends Model
     /**
      * Table name
      */
-    protected string $table = 'comments';
+    protected string $table = 'comments.csv';
 
     /**
      * The attributes that should be cast.
