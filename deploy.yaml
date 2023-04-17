@@ -17,21 +17,21 @@ hosts:
     remote_user: www-data
     deploy_path: '/var/www/motorcms.ru'
 
+
+
 tasks:
   deploy:
     - deploy:prepare
+    - deploy:vendors
     - backup:create
     - migrate:up
-    - deploy:vendors
     - deploy:publish
 
   backup:create:
-    script:
-      - '{{bin/php}} {{release_path}}/motor backup'
+    - run: '{{bin/php}} {{release_path}}/motor backup'
 
   migrate:up:
-    script:
-      - '{{bin/php}} {{release_path}}/motor migrate'
+    - run: '{{bin/php}} {{release_path}}/motor migrate'
 
 after:
   deploy:failed: deploy:unlock
