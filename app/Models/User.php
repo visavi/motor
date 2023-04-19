@@ -122,4 +122,24 @@ class User extends Model
 
         return setting('roles.' . $this->role);
     }
+
+    /**
+     * Delete story
+     *
+     * @return int
+     */
+    public function delete(): int
+    {
+        // delete photo
+        if ($this->picture && file_exists(publicPath($this->picture))) {
+            unlink(publicPath($this->picture));
+        }
+
+        // delete avatar
+        if ($this->avatar && file_exists(publicPath($this->avatar))) {
+            unlink(publicPath($this->avatar));
+        }
+
+        return parent::delete();
+    }
 }

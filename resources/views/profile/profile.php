@@ -13,6 +13,7 @@ $isManagement ??= false;
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="bi bi-house-door"></i></a></li>
+            <li class="breadcrumb-item"><a href="<?= route('users') ?>">Пользователи</a></li>
             <li class="breadcrumb-item"><a href="/users/<?= $user->login ?>"><?= $user->login ?></a></li>
             <li class="breadcrumb-item active">Профиль <?= $user->login ?></li>
         </ol>
