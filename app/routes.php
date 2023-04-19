@@ -13,6 +13,7 @@ use App\Controllers\CaptchaController;
 use App\Controllers\GuestbookController;
 use App\Controllers\TagController;
 use App\Controllers\UploadController;
+use App\Controllers\User\AdminController as UserAdminController;
 use App\Controllers\User\ProfileController;
 use App\Controllers\StickerController;
 use App\Controllers\UserController;
@@ -72,9 +73,9 @@ return function (App $app) {
 
         // Profile
         $group->group('/profile', function (Group $group) {
-            $group->get('', [ProfileController::class, 'index']);
-            $group->put('', [ProfileController::class, 'store']);
-            $group->delete('/photo', [ProfileController::class, 'deletePhoto']);
+            $group->get('', [ProfileController::class, 'index'])->setName('profile-edit');
+            $group->put('', [ProfileController::class, 'store'])->setName('profile-store');
+            $group->delete('/photo', [ProfileController::class, 'destroyPhoto'])->setName('profile-photo-destroy');
         });
 
         // Change rating
@@ -98,9 +99,16 @@ return function (App $app) {
     });
 
     $app->group('/users', function (Group $group) {
-        $group->get('', [UserController::class, 'index']);
+        $group->get('', [UserController::class, 'index'])->setName('users');;
         $group->get('/{login:[\w\-]+}', [UserController::class, 'user']);
         $group->get('/{login:[\w\-]+}/stories', [UserStoryController::class, 'index']);
+
+        // Edit and delete user (for admin)
+        $group->group('/{login:[\w\-]+}', function (Group $group) {
+            $group->get('/edit', [UserAdminController::class, 'edit'])->setName('user-edit');
+            $group->put('', [UserAdminController::class, 'store'])->setName('user-store');
+            $group->delete('', [UserAdminController::class, 'destroy'])->setName('user-destroy');
+        })->add(CheckAdminMiddleware::class);
     });
 
     // Favorites

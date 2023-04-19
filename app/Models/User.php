@@ -35,7 +35,7 @@ class User extends Model
     /**
      * All group
      */
-    public const ALL_GROUP = [
+    public const ROLES = [
         self::BOSS,
         self::ADMIN,
         self::MODER,
@@ -43,6 +43,16 @@ class User extends Model
         self::USER,
         self::PENDED,
         self::BANNED,
+    ];
+
+    /**
+     * All group
+     */
+    public const ADMIN_ROLES = [
+        self::BOSS,
+        self::ADMIN,
+        self::MODER,
+        self::EDITOR,
     ];
 
     /**

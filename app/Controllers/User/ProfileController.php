@@ -128,7 +128,7 @@ class ProfileController extends Controller
      * @param Response $response
      * @return Response
      */
-    public function deletePhoto(Request $request, Response $response): Response
+    public function destroyPhoto(Request $request, Response $response): Response
     {
         $input = (array) $request->getParsedBody();
         $this->validator

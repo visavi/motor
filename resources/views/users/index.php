@@ -28,6 +28,12 @@ use MotorORM\CollectionPaginate;
             <a class="fw-bold" href="/users/<?= $user->login ?>"><?= $user->getName() ?></a><br>
             Роль: <?= $user->getRole() ?><br>
             Регистрация: <?= date('d.m.Y', $user->created_at) ?>
+
+            <?php if (isAdmin()): ?>
+                <div class="float-end ms-3">
+                    <a href="<?= route('user-edit', ['login' => $user->login]) ?>" title="Редактировать" data-bs-toggle="tooltip"><i class="bi bi-pencil"></i></a>
+                </div>
+            <?php endif; ?>
         </div>
     <?php endforeach; ?>
 

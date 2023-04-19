@@ -18,7 +18,7 @@ use App\Models\User;
 <?php $this->stop() ?>
 
 <div class="section shadow border p-3">
-    <div class="row">
+    <div class="row mb-3">
         <div class="col-md-6">
             <div>ID: <?= $user->id ?></div>
             <div>Логин: <?= $user->login ?></div>
@@ -43,8 +43,17 @@ use App\Models\User;
     </div>
 
     <?php if (getUser('id') === $user->id): ?>
-        <div class="mt-3">
+        <div>
             <i class="bi bi-person"></i> <a href="/profile">Профиль</a>
+        </div>
+    <?php endif; ?>
+
+    <?php if (isAdmin()): ?>
+        <div>
+            <i class="bi bi-pencil"></i> <a href="<?= route('user-edit', ['login' => $user->login]) ?>">Редактировать</a>
+        </div>
+        <div>
+            <i class="bi bi-x-lg"></i> <a href="<?= route('user-destroy', ['login' => $user->login]) ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete">Удалить</a>
         </div>
     <?php endif; ?>
 </div>
