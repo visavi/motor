@@ -1,6 +1,5 @@
 .form-control-focus {
     color: var(--bs-body-color);
-    background-color: var(--bs-form-control-bg);
     border-color: #86b7fe;
     outline: 0;
     box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 25%);

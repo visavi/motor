@@ -59,7 +59,7 @@ use App\Repositories\UserRepository;
     <?php $tagRepository = new TagRepository(); ?>
 
     <?php foreach ($tagRepository->getPopularTags() as $tag => $count): ?>
-        <a href="/tags/<?= $tag ?>" class="badge text-bg-primary"><?= $tag ?></a>
+        <a href="/tags/<?= $tag ?>" class="badge bg-primary"><?= $tag ?></a>
     <?php endforeach; ?>
 
     <div class="mt-3">

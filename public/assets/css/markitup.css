@@ -24,7 +24,6 @@
     overflow: auto;
     width: 100%;
     margin: 5px 0;
-    background-color: #f9f9fb;
     border: var(--bs-border-width) solid var(--bs-border-color);
     border-radius: 0.25rem;
 }
@@ -40,7 +39,7 @@
 }
 .markItUpHeader ul li:hover > ul {
     display:block;
-    background-color: var(--bs-form-control-bg);
+    background-color: var(--base-bg);
     z-index: 1;
 }
 

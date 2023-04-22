@@ -1,4 +1,4 @@
-<header class="navbar navbar-expand-lg navbar-dark bd-navbar sticky-top">
+<header class="navbar navbar-expand-lg bd-navbar sticky-top">
     <nav class="container-xxl bd-gutter flex-wrap flex-lg-nowrap" aria-label="Main navigation">
         <div class="d-lg-none" style="width: 2.25rem;"></div>
         <a class="navbar-brand logo p-0 me-0 me-lg-2" href="/">
@@ -9,10 +9,10 @@
         <button class="navbar-toggler d-flex d-lg-none order-3 p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#bdNavbar" aria-controls="bdNavbar" aria-expanded="false" aria-label="Toggle navigation">
             <i class="bi bi-three-dots-vertical" aria-hidden="true"></i>
         </button>
-        <div class="offcanvas-lg offcanvas-end flex-grow-1" id="bdNavbar" aria-labelledby="bdNavbarOffcanvasLabel">
+        <div class="offcanvas-lg offcanvas-end flex-grow-1" tabindex="-1" id="bdNavbar" aria-labelledby="bdNavbarOffcanvasLabel" data-bs-scroll="true">
             <div class="offcanvas-header px-4 pb-0">
                 <h5 class="offcanvas-title text-white" id="bdNavbarOffcanvasLabel">MOTOR CMS</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#bdNavbar"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#bdNavbar"></button>
             </div>
             <div class="offcanvas-body p-4 pt-0 p-lg-0">
                 <hr class="d-lg-none text-white-50">

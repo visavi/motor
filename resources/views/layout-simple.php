@@ -22,34 +22,12 @@
 </head>
 <body class="body">
 
-<?= $this->fetch('header') ?>
-
-<div class="container-xxl col-lg-10 mx-auto p-3 py-md-4">
+<div class="container-fluid">
     <main>
         <?= $this->fetch('app/_flash') ?>
-
-        <div class="app-title">
-            <?php if ($this->section('header')): ?>
-                <?= $this->section('header') ?>
-            <?php else: ?>
-                <h1><?= $this->section('title') ?></h1>
-            <?php endif ?>
-
-            <?= $this->section('breadcrumb') ?>
-        </div>
-
-        <div class="row">
-            <div class="col-md-8">
-                <?= $this->section('content') ?>
-            </div>
-            <div class="col-md-4">
-                <?= $this->fetch('sidebar') ?>
-            </div>
-        </div>
+        <?= $this->section('content') ?>
     </main>
 </div>
-
-<?= $this->fetch('footer') ?>
 
 <script src="<?= $this->asset('/assets/js/jquery-3.6.4.min.js') ?>"></script>
 <script src="<?= $this->asset('/assets/js/bootstrap.bundle.min.js') ?>"></script>
@@ -61,22 +39,6 @@
 <script src="<?= $this->asset('/assets/js/toastr.min.js') ?>"></script>
 <script src="<?= $this->asset('/assets/js/fancybox.umd.js') ?>"></script>
 <script src="<?= $this->asset('/assets/js/main.js') ?>"></script>
-
-<script type="module">
-    import Tags from "<?= $this->asset('/assets/js/bootstrap-tags.min.js') ?>"
-    Tags.init(".input-tag", {
-        allowNew: true,
-        server: "/tag",
-        liveServer: true,
-        clearEnd: true,
-        allowClear: true,
-        suggestionsThreshold: 2,
-        max: <?= setting('story.tags_max') ?>,
-        separator: [','],
-        addOnBlur: true,
-    });
-</script>
-<?= $this->section('scripts') ?>
 
 </body>
 </html>

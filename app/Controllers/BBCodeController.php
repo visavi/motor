@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Repositories\StoryRepository;
+use App\Services\View;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -12,6 +14,10 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 class BBCodeController extends Controller
 {
+    public function __construct(
+        protected View $view,
+    ) {}
+
     /**
      * Parse BBCode
      *
@@ -23,9 +29,12 @@ class BBCodeController extends Controller
     public function bbcode(Request $request, Response $response): Response
     {
         $input = (array) $request->getParsedBody();
+        $message = $input['data'] ?? '';
 
-        $response->getBody()->write(bbCode($input['data'] ?? ''));
-
-        return $response;
+        return $this->view->render(
+            $response,
+            'app/_bbcode',
+            compact('message')
+        );
     }
 }
