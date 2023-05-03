@@ -2,26 +2,25 @@
 
 declare(strict_types=1);
 
+use App\Controllers\Admin\SettingController;
 use App\Controllers\BBCodeController;
+use App\Controllers\CaptchaController;
 use App\Controllers\CommentController;
 use App\Controllers\FavoriteController;
+use App\Controllers\GuestbookController;
 use App\Controllers\HomeController;
 use App\Controllers\RatingController;
 use App\Controllers\SearchController;
+use App\Controllers\StickerController;
 use App\Controllers\StoryController;
-use App\Controllers\CaptchaController;
-use App\Controllers\GuestbookController;
 use App\Controllers\TagController;
 use App\Controllers\UploadController;
 use App\Controllers\User\AdminController as UserAdminController;
 use App\Controllers\User\ProfileController;
-use App\Controllers\StickerController;
-use App\Controllers\UserController;
-use App\Controllers\UserStoryController;
+use App\Controllers\User\UserController;
+use App\Controllers\User\UserStoryController;
 use App\Middleware\CheckAdminMiddleware;
 use App\Middleware\CheckUserMiddleware;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 
@@ -86,12 +85,12 @@ return function (App $app) {
     $app->get('/stickers/modal', [StickerController::class, 'modal']);
     $app->post('/bbcode', [BBCodeController::class, 'bbcode']);
 
-    $app->map(['GET', 'POST'], '/login', [UserController::class, 'login']);
-    $app->map(['GET', 'POST'], '/register', [UserController::class, 'register']);
-    $app->post('/logout', [UserController::class, 'logout']);
+    $app->map(['GET', 'POST'], '/login', [UserController::class, 'login'])->setName('login');
+    $app->map(['GET', 'POST'], '/register', [UserController::class, 'register'])->setName('register');
+    $app->post('/logout', [UserController::class, 'logout'])->setName('logout');
 
     $app->group('/guestbook', function (Group $group) {
-        $group->get('', [GuestbookController::class, 'index']);
+        $group->get('', [GuestbookController::class, 'index'])->setName('guestbook');
         $group->post('', [GuestbookController::class, 'store']);
         $group->get('/{id:[0-9]+}/edit', [GuestbookController::class, 'edit']);
         $group->put('/{id:[0-9]+}', [GuestbookController::class, 'update']);
@@ -99,9 +98,9 @@ return function (App $app) {
     });
 
     $app->group('/users', function (Group $group) {
-        $group->get('', [UserController::class, 'index'])->setName('users');;
-        $group->get('/{login:[\w\-]+}', [UserController::class, 'user']);
-        $group->get('/{login:[\w\-]+}/stories', [UserStoryController::class, 'index']);
+        $group->get('', [UserController::class, 'index'])->setName('users');
+        $group->get('/{login:[\w\-]+}', [UserController::class, 'user'])->setName('user');
+        $group->get('/{login:[\w\-]+}/stories', [UserStoryController::class, 'index'])->setName('user-stories');
 
         // Edit and delete user (for admin)
         $group->group('/{login:[\w\-]+}', function (Group $group) {
@@ -113,12 +112,18 @@ return function (App $app) {
 
     // Favorites
     $app->group('/favorites', function (Group $group) {
-        $group->get('', [FavoriteController::class, 'index']);
+        $group->get('', [FavoriteController::class, 'index'])->setName('favorites');
         // Add/delete to favorite
-        $group->post('/{id:[0-9]+}', [FavoriteController::class, 'change']);
+        $group->post('/{id:[0-9]+}', [FavoriteController::class, 'change'])->setName('favorite-change');
     })->add(CheckUserMiddleware::class);
 
     $app->group('/search', function (Group $group) {
         $group->get('', [SearchController::class, 'index']);
     });
+
+    // Admin panel
+    $app->group('/admin', function (Group $group) {
+        $group->get('/settings', [SettingController::class, 'index'])->setName('admin-settings');
+        $group->post('/settings', [SettingController::class, 'store'])->setName('admin-settings-store');
+    })->add(CheckAdminMiddleware::class);
 };

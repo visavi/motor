@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Controllers;
+namespace App\Controllers\User;
 
+use App\Controllers\Controller;
 use App\Models\User;
 use App\Repositories\FileRepository;
 use App\Repositories\ReadRepository;

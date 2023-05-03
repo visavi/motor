@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\User;
+use App\Repositories\SettingRepository;
 use App\Services\Setting;
 use DI\ContainerBuilder;
 
@@ -11,39 +12,41 @@ return static function (ContainerBuilder $containerBuilder)
     // Global Settings Object
     $containerBuilder->addDefinitions([
         Setting::class => function () {
+            $settings = (new SettingRepository())->getSettings();
+
             return new Setting([
                 'main' => [
-                    'title'       => 'Добро пожаловать',
-                    'guest_name'  => 'Гость',
-                    'delete_name' => 'Удаленный',
+                    'title'       => $settings['main.title'],       // Заголовок сайта
+                    'guest_name'  => $settings['main.guest_name'],  // Имя гостя
+                    'delete_name' => $settings['main.delete_name'], // Имя удаленного пользователя
                 ],
 
                 'story' => [
-                    'active'           => true, // Публиковать посты без модерации
-                    'allow_posting'    => true, // Разрешать пользователям публиковать статьи
-                    'per_page'         => 10,   // Количество статей на страницу
-                    'title_min_length' => 5,    // Минимальная длина статьи
-                    'title_max_length' => 50,   // Максимальная длина заголовка
-                    'text_min_length'  => 5,    // Минимальная длина статьи
-                    'text_max_length'  => 5000, // Максимальная длина статьи
-                    'short_words'      => 100,  // Количество слов в сокращенной статье
-                    'tags_max'         => 5,    // Максимальное количество тегов
-                    'tags_min_length'  => 2,    // Минимальное количество символов в теге
-                    'tags_max_length'  => 20,   // Максимальное количество символов в теге
+                    'active'           => $settings['story.active'],           // Публиковать посты без модерации
+                    'allow_posting'    => $settings['story.allow_posting'],    // Разрешать пользователям публиковать статьи
+                    'per_page'         => $settings['story.per_page'],         // Количество статей на страницу
+                    'title_min_length' => $settings['story.title_min_length'], // Минимальная длина заголовка
+                    'title_max_length' => $settings['story.title_max_length'], // Максимальная длина заголовка
+                    'text_min_length'  => $settings['story.text_min_length'],  // Минимальная длина статьи
+                    'text_max_length'  => $settings['story.text_max_length'],  // Максимальная длина статьи
+                    'short_words'      => $settings['story.short_words'],      // Количество слов в сокращенной статье
+                    'tags_max'         => $settings['story.tags_max'],         // Максимальное количество тегов
+                    'tags_min_length'  => $settings['story.tags_min_length'],  // Минимальное количество символов в теге
+                    'tags_max_length'  => $settings['story.tags_max_length'],  // Максимальное количество символов в теге
                 ],
 
                 'comment' => [
-                    'text_min_length'  => 5,
-                    'text_max_length'  => 1000,
+                    'text_min_length'  => $settings['comment.text_min_length'],
+                    'text_max_length'  => $settings['comment.text_max_length'],
                 ],
 
                 'guestbook' => [
-                    'per_page'         => 10,
-                    'text_min_length'  => 5,
-                    'text_max_length'  => 1000,
-                    'name_min_length'  => 3,
-                    'name_max_length'  => 20,
-                    'allow_guests'     => true, // Разрешить гостям писать
+                    'allow_guests'     => $settings['guestbook.allow_guests'],   // Разрешить гостям писать сообщения
+                    'per_page'         => $settings['guestbook.per_page'],
+                    'text_min_length'  => $settings['guestbook.text_min_length'],
+                    'text_max_length'  => $settings['guestbook.text_max_length'],
+                    'name_min_length'  => $settings['guestbook.name_min_length'],
+                    'name_max_length'  => $settings['guestbook.name_max_length'],
                 ],
 
                 'session' => [
@@ -55,15 +58,15 @@ return static function (ContainerBuilder $containerBuilder)
                 ],
 
                 'file' => [
-                    'size_max'   => 1024 * 1000 * 5, // Максимальный вес 5MB
-                    'total_max'  => 5, // Максимальное количество загружаемых файлов
-                    'extensions' => ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'webp'],
+                    'size_max'   => $settings['file.size_max'],  // Максимальный вес
+                    'total_max'  => $settings['file.total_max'], // Максимальное количество загружаемых файлов
+                    'extensions' => explode(',', $settings['file.extensions']),
                 ],
 
                 'image' => [
-                    'resize'     => 1000, // Обрезать изображения px
-                    'weight_max' => null, // Максимальный размер px
-                    'weight_min' => 100,  // Минимальный размер px
+                    'resize'     => $settings['image.resize'],     // Обрезать изображения px
+                    'weight_max' => $settings['image.weight_max'], // Максимальный размер px
+                    'weight_min' => $settings['image.weight_min'], // Минимальный размер px
                 ],
 
                 'roles' => [
@@ -77,12 +80,12 @@ return static function (ContainerBuilder $containerBuilder)
                 ],
 
                 'user' => [
-                    'per_page' => 10,
+                    'per_page' => $settings['user.per_page'],
                 ],
 
                 'captcha' => [
-                    'length'  => 5,            // Количество символов
-                    'symbols' => '0123456789', // Список допустимых символов
+                    'length'  => $settings['captcha.length'], // Количество символов
+                    'symbols' => (string) $settings['captcha.symbols'], // Список допустимых символов
                 ],
 
                 'displayErrorDetails' => true, // Should be set to false in production

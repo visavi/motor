@@ -1,3 +1,8 @@
+<?php
+
+use App\Models\User;
+
+?>
 <header class="navbar navbar-expand-lg bd-navbar sticky-top">
     <nav class="container-xxl bd-gutter flex-wrap flex-lg-nowrap" aria-label="Main navigation">
         <div class="d-lg-none" style="width: 2.25rem;"></div>
@@ -21,10 +26,10 @@
                         <a class="nav-link py-2 px-0 px-lg-2" href="<?= route('stories') ?>">Статьи</a>
                     </li>
                     <li class="nav-item col-6 col-lg-auto">
-                        <a class="nav-link py-2 px-0 px-lg-2" href="/guestbook">Гостевая</a>
+                        <a class="nav-link py-2 px-0 px-lg-2" href="<?= route('guestbook') ?>">Гостевая</a>
                     </li>
                     <li class="nav-item col-6 col-lg-auto">
-                        <a class="nav-link py-2 px-0 px-lg-2 <!--active-->" href="/users">Пользователи</a>
+                        <a class="nav-link py-2 px-0 px-lg-2 <!--active-->" href="<?= route('users') ?>">Пользователи</a>
                     </li>
                 </ul>
 
@@ -112,21 +117,26 @@
                             </a>
 
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-profile" style="--bs-dropdown-min-width: 8rem;">
-                                <li><a class="dropdown-item" href="/users/<?= getUser('login') ?>">Профиль</a></li>
+                                <li><a class="dropdown-item" href="<?= route('user', ['login' => getUser('login')]) ?>">Профиль</a></li>
 
-                                <li><a class="dropdown-item" href="/users/<?= getUser('login') ?>/stories">Мои статьи</a></li>
-                                <li><a class="dropdown-item" href="/favorites">Избранное</a></li>
+                                <li><a class="dropdown-item" href="<?= route('user-stories', ['login' => getUser('login')]) ?>">Мои статьи</a></li>
+                                <li><a class="dropdown-item" href="<?= route('favorites') ?>">Избранное</a></li>
+
+                                <?php if (isAdmin(User::BOSS)): ?>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="<?= route('admin-settings') ?>">Настройки сайта</a></li>
+                                <?php endif; ?>
 
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="/logout" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-confirm="Вы подтверждаете выход?">Выход</a></li>
+                                <li><a class="dropdown-item" href="<?= route('logout') ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-confirm="Вы подтверждаете выход?">Выход</a></li>
                             </ul>
                         </li>
                     <?php else: ?>
                         <li class="nav-item col-6 col-lg-auto">
-                            <a class="nav-link py-2 px-0 px-lg-2" href="/login">Войти</a>
+                            <a class="nav-link py-2 px-0 px-lg-2" href="<?= route('login') ?>">Войти</a>
                         </li>
                         <li class="nav-item col-6 col-lg-auto">
-                            <a class="nav-link py-2 px-0 px-lg-2" href="/register">Регистрация</a>
+                            <a class="nav-link py-2 px-0 px-lg-2" href="<?= route('register') ?>">Регистрация</a>
                         </li>
                     <?php endif; ?>
                 </ul>

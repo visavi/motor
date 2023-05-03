@@ -46,8 +46,8 @@ use Psr\Http\Message\UploadedFileInterface;
 class Validator
 {
     private array $rules;
-    private array $errors;
     private array $input;
+    private array $errors = [];
 
     private array $data = [
         'required'      => 'Поле %s является обязательным',
@@ -841,13 +841,13 @@ class Validator
         if (in_array($extension, $this->images, true)) {
             [$width, $height] = getimagesize($input->getFilePath());
 
-            if (isset($rules['weight_max'])) {
+            if (! empty($rules['weight_max'])) {
                 if ($width > $rules['weight_max'] || $height > $rules['weight_max']) {
                     $this->addError($key, sprintf($this->data['file']['weight_max'], $key, $rules['weight_max']));
                 }
             }
 
-            if (isset($rules['weight_min'])) {
+            if (! empty($rules['weight_min'])) {
                 if ($width < $rules['weight_min'] || $height < $rules['weight_min']) {
                     $this->addError($key, sprintf($this->data['file']['weight_min'], $key, $rules['weight_min']));
                 }
