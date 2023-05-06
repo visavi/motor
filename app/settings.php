@@ -16,9 +16,10 @@ return static function (ContainerBuilder $containerBuilder)
 
             return new Setting([
                 'main' => [
-                    'title'       => $settings['main.title'],       // Заголовок сайта
-                    'guest_name'  => $settings['main.guest_name'],  // Имя гостя
-                    'delete_name' => $settings['main.delete_name'], // Имя удаленного пользователя
+                    'allow_register' => $settings['main.allow_register'], // Разрешить регистрацию
+                    'title'          => $settings['main.title'],          // Заголовок сайта
+                    'guest_name'     => $settings['main.guest_name'],     // Имя гостя
+                    'delete_name'    => $settings['main.delete_name'],    // Имя удаленного пользователя
                 ],
 
                 'story' => [

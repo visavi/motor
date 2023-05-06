@@ -132,4 +132,17 @@ class StoryRepository implements RepositoryInterface
             ->where('created_at', '<', time())
             ->get();
     }
+
+    /**
+     * Get count stories
+     *
+     * @return int
+     */
+    public function getCount(): int
+    {
+        return Story::query()
+            ->active()
+            ->where('created_at', '<', time())
+            ->count();
+    }
 }

@@ -3,6 +3,7 @@
 use App\Models\Comment;
 use App\Repositories\CommentRepository;
 use App\Repositories\GuestbookRepository;
+use App\Repositories\StoryRepository;
 use App\Repositories\TagRepository;
 use App\Repositories\UserRepository;
 
@@ -10,14 +11,20 @@ use App\Repositories\UserRepository;
 ?>
 
 <div class="list-group shadow mb-3">
+    <?php $storyRepository = new StoryRepository(); ?>
+    <a href="<?= route('stories') ?>" class="list-group-item list-group-item-action fw-bold">
+        <i class="bi bi-card-heading"></i>
+        Статьи <span class="badge bg-primary rounded-pill float-end"><?= $storyRepository->getCount() ?></span>
+    </a>
+
     <?php $guestbookRepository = new GuestbookRepository(); ?>
-    <a href="/guestbook" class="list-group-item list-group-item-action fw-bold">
+    <a href="<?= route('guestbook') ?>" class="list-group-item list-group-item-action fw-bold">
         <i class="bi bi-chat-square-text-fill"></i>
         Гостевая книга <span class="badge bg-primary rounded-pill float-end"><?= $guestbookRepository->getCount() ?></span>
     </a>
 
     <?php $userRepository = new UserRepository(); ?>
-    <a href="/users" class="list-group-item list-group-item-action fw-bold">
+    <a href="<?= route('users') ?>" class="list-group-item list-group-item-action fw-bold">
         <i class="bi bi-people-fill"></i>
         Пользователи <span class="badge bg-primary rounded-pill float-end"><?= $userRepository->getCount() ?></span>
     </a>

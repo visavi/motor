@@ -106,6 +106,10 @@ class UserController extends Controller
      */
     public function register(Request $request, Response $response): Response
     {
+        if (! setting('main.allow_register')) {
+            abort(403, 'Регистрация временно приостановлена, пожалуйста зайдите позже!');
+        }
+
         if ($request->getMethod() === 'POST') {
             $input = (array) $request->getParsedBody();
 

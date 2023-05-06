@@ -13,7 +13,7 @@ use League\Plates\Template\Template;
 
     <div class="mb-3">
         <label for="length" class="form-label">Количество символов</label>
-        <input type="text" class="form-control<?= hasError('length') ?>" id="length" name="settings[captcha][length]" value="<?= old('settings.captcha.length',  $settings['captcha.length']) ?>" required>
+        <input type="number" class="form-control<?= hasError('length') ?>" id="length" name="settings[captcha][length]" value="<?= old('settings.captcha.length',  $settings['captcha.length']) ?>" required>
         <div class="invalid-feedback"><?= getError('length') ?></div>
     </div>
 

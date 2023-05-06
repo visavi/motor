@@ -23,13 +23,13 @@ use App\Models\User;
                 <hr class="d-lg-none text-white-50">
                 <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav">
                     <li class="nav-item col-6 col-lg-auto">
-                        <a class="nav-link py-2 px-0 px-lg-2" href="<?= route('stories') ?>">Статьи</a>
+                        <a class="nav-link py-2 px-0 px-lg-2<?= str_starts_with(currentRoute(), route('stories')) ? ' active' : '' ?>" href="<?= route('stories') ?>">Статьи</a>
                     </li>
                     <li class="nav-item col-6 col-lg-auto">
-                        <a class="nav-link py-2 px-0 px-lg-2" href="<?= route('guestbook') ?>">Гостевая</a>
+                        <a class="nav-link py-2 px-0 px-lg-2<?= str_starts_with(currentRoute(), route('guestbook')) ? ' active' : '' ?>" href="<?= route('guestbook') ?>">Гостевая</a>
                     </li>
                     <li class="nav-item col-6 col-lg-auto">
-                        <a class="nav-link py-2 px-0 px-lg-2 <!--active-->" href="<?= route('users') ?>">Пользователи</a>
+                        <a class="nav-link py-2 px-0 px-lg-2<?= str_starts_with(currentRoute(), route('users')) ? ' active' : '' ?>" href="<?= route('users') ?>">Пользователи</a>
                     </li>
                 </ul>
 
@@ -133,10 +133,10 @@ use App\Models\User;
                         </li>
                     <?php else: ?>
                         <li class="nav-item col-6 col-lg-auto">
-                            <a class="nav-link py-2 px-0 px-lg-2" href="<?= route('login') ?>">Войти</a>
+                            <a class="nav-link py-2 px-0 px-lg-2<?= str_starts_with(currentRoute(), route('login')) ? ' active' : '' ?>" href="<?= route('login') ?>">Войти</a>
                         </li>
                         <li class="nav-item col-6 col-lg-auto">
-                            <a class="nav-link py-2 px-0 px-lg-2" href="<?= route('register') ?>">Регистрация</a>
+                            <a class="nav-link py-2 px-0 px-lg-2<?= str_starts_with(currentRoute(), route('register')) ? ' active' : '' ?>" href="<?= route('register') ?>">Регистрация</a>
                         </li>
                     <?php endif; ?>
                 </ul>

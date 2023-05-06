@@ -1,4 +1,5 @@
 name,value
+main.allow_register,1
 main.title,"Добро пожаловать"
 main.guest_name,Гость
 main.delete_name,Удаленный

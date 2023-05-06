@@ -146,6 +146,18 @@ function route(string $routeName, array $data = [], array $queryParams = []): st
         ->urlFor($routeName, $data, $queryParams);
 }
 
+/**
+ * Get current route
+ *
+ * @return string
+ */
+function currentRoute(): string
+{
+    $serverRequestCreator = ServerRequestCreatorFactory::create();
+    $request = $serverRequestCreator->createServerRequestFromGlobals();
+
+    return $request->getUri()->getPath();
+}
 
 /**
  * Get session
