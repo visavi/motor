@@ -18,6 +18,20 @@ use App\Models\User;
 <?php $this->stop() ?>
 
 <div class="section shadow border p-3">
+    <?php if ($user->isBanned()): ?>
+        <div class="alert alert-danger">
+            <i class="bi bi-exclamation-circle-fill"></i>
+            Пользователь забанен!
+        </div>
+    <?php endif; ?>
+
+    <?php if ($user->isPended()): ?>
+        <div class="alert alert-warning">
+            <i class="bi bi-exclamation-circle-fill"></i>
+            Пользователь не подтвердил email!
+        </div>
+    <?php endif; ?>
+
     <div class="row mb-3">
         <div class="col-md-6">
             <div>ID: <?= $user->id ?></div>

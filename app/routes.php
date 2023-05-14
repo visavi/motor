@@ -88,6 +88,7 @@ return function (App $app) {
     $app->map(['GET', 'POST'], '/login', [UserController::class, 'login'])->setName('login');
     $app->map(['GET', 'POST'], '/register', [UserController::class, 'register'])->setName('register');
     $app->post('/logout', [UserController::class, 'logout'])->setName('logout');
+    $app->get('/confirm/{code:[\w\-]+}', [UserController::class, 'confirm'])->setName('confirm');
 
     $app->group('/guestbook', function (Group $group) {
         $group->get('', [GuestbookController::class, 'index'])->setName('guestbook');

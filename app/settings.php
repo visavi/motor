@@ -15,11 +15,23 @@ return static function (ContainerBuilder $containerBuilder)
             $settings = (new SettingRepository())->getSettings();
 
             return new Setting([
+                'app' => [
+                    'name' => 'Motorcms.ru',         // Название сайта
+                    'url'  => 'https://motorcms.ru', // Адрес сайта
+                ],
+
                 'main' => [
-                    'allow_register' => $settings['main.allow_register'], // Разрешить регистрацию
                     'title'          => $settings['main.title'],          // Заголовок сайта
+                    'allow_register' => $settings['main.allow_register'], // Разрешить регистрацию
+                    'confirm_email'  => true,                             // Подтверждать email
                     'guest_name'     => $settings['main.guest_name'],     // Имя гостя
                     'delete_name'    => $settings['main.delete_name'],    // Имя удаленного пользователя
+                ],
+
+                'mailer' => [
+                    'dsn'        => 'smtp://localhost:1025', // Параметры smtp
+                    'from_email' => 'admin@motorcms.ru',     // Email отправителя
+                    'from_name'  => 'Админ',                 // Имя отправителя
                 ],
 
                 'story' => [

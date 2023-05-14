@@ -22,6 +22,16 @@ use MotorORM\CollectionPaginate;
 <?php if ($users->isNotEmpty()): ?>
     <?php foreach ($users as $user): ?>
         <div class="section shadow border p-3 mb-3">
+            <div class="float-end">
+                <?php if ($user->isBanned()): ?>
+                    <span class="badge text-bg-danger"><?= setting('roles.banned') ?></span>
+                <?php endif; ?>
+
+                <?php if ($user->isPended()): ?>
+                    <span class="badge text-bg-warning"><?= setting('roles.pended') ?></span>
+                <?php endif; ?>
+            </div>
+
             <span class="avatar-default mb-3">
                 <?= $user->getAvatar() ?>
             </span>

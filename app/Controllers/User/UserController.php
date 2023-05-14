@@ -7,7 +7,9 @@ namespace App\Controllers\User;
 use App\Controllers\Controller;
 use App\Models\User;
 use App\Repositories\UserRepository;
+use App\Services\Mail;
 use App\Services\Session;
+use App\Services\Str;
 use App\Services\Validator;
 use App\Services\View;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -54,6 +56,10 @@ class UserController extends Controller
      */
     public function login(Request $request, Response $response): Response
     {
+        if (isUser()) {
+            return $this->redirect($response, route('home'));
+        }
+
         if ($request->getMethod() === 'POST') {
             $input = (array) $request->getParsedBody();
 
@@ -110,6 +116,10 @@ class UserController extends Controller
             abort(403, 'Регистрация временно приостановлена, пожалуйста зайдите позже!');
         }
 
+        if (isUser()) {
+            return $this->redirect($response, route('home'));
+        }
+
         if ($request->getMethod() === 'POST') {
             $input = (array) $request->getParsedBody();
 
@@ -132,14 +142,43 @@ class UserController extends Controller
             }
 
             if ($this->validator->isValid($input)) {
-                $password = password_hash($input['password'], PASSWORD_BCRYPT);
+                $confirmEmail = setting('main.confirm_email');
+                $password     = password_hash($input['password'], PASSWORD_BCRYPT);
+                $confirmCode  = $confirmEmail ? Str::random() : '';
+                $role         = $confirmEmail ? User::PENDED : User::USER;
+                $login        = sanitize($input['login']);
+                $email        = strtolower($input['email']);
+
                 User::query()->create([
-                    'login'      => sanitize($input['login']),
-                    'password'   => $password,
-                    'email'      => strtolower($input['email']),
-                    'role'       => User::USER,
-                    'created_at' => time(),
+                    'login'        => $login,
+                    'password'     => $password,
+                    'email'        => $email,
+                    'role'         => $role,
+                    'created_at'   => time(),
+                    'confirmed'    => false,
+                    'confirm_code' => $confirmCode,
                 ]);
+
+                $confirmText = $confirmEmail ? sprintf(
+                    '%sВаш проверочный код: %s',
+                    PHP_EOL,
+                    setting('app.url') . route('confirm', ['code' => $confirmCode])
+                ) : '';
+
+                $data = [
+                    'to_email'   => $email,
+                    'to_name'    => $login,
+                    'subject'    => 'Регистрация на ' . setting('app.name'),
+                    'text'       => sprintf(
+                        'Добро пожаловать! Вы успешно зарегистрировались на сайте %s%s',
+                        setting('app.url'),
+                        $confirmText
+                    ),
+                    'from_email' => setting('mailer.from_email'),
+                    'from_name'  => setting('mailer.from_name'),
+                ];
+
+                Mail::send($data);
 
                 $this->session->set('login', $input['login']);
                 $this->session->set('password', $password);
@@ -218,5 +257,38 @@ class UserController extends Controller
             'users/user',
             compact('user')
         );
+    }
+
+    /**
+     * Confirm email
+     *
+     * @param string $code
+     * @param Response $response
+     *
+     * @return Response
+     */
+    public function confirm(string $code, Response $response): Response
+    {
+        $user = getUser();
+        if (! $user) {
+            $user = User::query()->where('confirm_code', $code)->first();
+        }
+
+        if ($user && $user->role !== User::PENDED) {
+            return $this->redirect($response, route('home'));
+        }
+
+        if ($user && $user->confirm_code === $code) {
+            $user->update([
+                'role'         => User::USER,
+                'confirm_code' => '',
+            ]);
+
+            $this->session->set('flash', ['success' => 'Email успешно подтвержден!']);
+        } else {
+            $this->session->set('flash', ['danger' => 'Проверочный код неверный!']);
+        }
+
+        return $this->redirect($response, route('home'));
     }
 }

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Handlers\HttpErrorHandler;
+use App\Middleware\CheckAccessMiddleware;
 use App\Middleware\IpAddressMiddleware;
 use App\Middleware\StartSessionMiddleware;
 use App\Middleware\TrailingSlashMiddleware;
@@ -25,6 +26,9 @@ return function (App $app)
 
     // Trailing slash middleware
     $app->add(TrailingSlashMiddleware::class);
+
+    // Check access middleware
+    $app->add(CheckAccessMiddleware::class);
 
     // UserAuth middleware
     $app->add(UserAuthMiddleware::class);

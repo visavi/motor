@@ -12,6 +12,13 @@
 <?php $this->stop() ?>
 
 <div class="section shadow border p-3">
+    <?php if (setting('main.confirm_email')): ?>
+        <div class="alert alert-info">
+            <i class="bi bi-exclamation-circle-fill"></i>
+            Включено подтверждение регистрации!
+        </div>
+    <?php endif; ?>
+
     <form method="post">
         <div class="mb-3">
             <label for="login" class="form-label">Логин</label>

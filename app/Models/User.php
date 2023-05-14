@@ -15,6 +15,8 @@ namespace App\Models;
  * @property string $name
  * @property string $picture
  * @property string $avatar
+ * @property bool $confirmed
+ * @property string $confirm_code
  * @property int $created_at
  */
 class User extends Model
@@ -60,6 +62,13 @@ class User extends Model
      */
     public const MALE   = 'male';
     public const FEMALE = 'female';
+
+    /**
+     * The attributes that should be cast.
+     */
+    protected array $casts = [
+        'confirmed' => 'bool',
+    ];
 
     /**
      * Get name
@@ -121,6 +130,26 @@ class User extends Model
         }
 
         return setting('roles.' . $this->role);
+    }
+
+    /**
+     * Check is banned
+     *
+     * @return bool
+     */
+    public function isBanned(): bool
+    {
+        return $this->role === self::BANNED;
+    }
+
+    /**
+     * Check is pended
+     *
+     * @return bool
+     */
+    public function isPended(): bool
+    {
+        return $this->role === self::PENDED;
     }
 
     /**
