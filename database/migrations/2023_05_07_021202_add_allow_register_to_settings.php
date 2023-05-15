@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Setting;
-use MotorORM\Migration;
 
 return new class
 {

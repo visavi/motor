@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Services;
 
 use Symfony\Component\Mailer\Mailer;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
@@ -16,14 +15,6 @@ use Throwable;
  */
 class Mail
 {
-/*    public function __construct(
-        private MailerInterface $mailer,
-        private Email $email,
-    )
-    {
-
-    }*/
-
     /**
      * Send email
      *
@@ -33,7 +24,7 @@ class Mail
      */
     public static function send(array $data): bool
     {
-        //try {
+        try {
             $transport = Transport::fromDsn(setting('mailer.dsn'));
             $mailer = new Mailer($transport);
 
@@ -47,9 +38,9 @@ class Mail
                 ->text($data['text']);
 
             $mailer->send($email);
-        //} catch (Throwable) {
-         //   return false;
-        //}
+        } catch (Throwable) {
+            return false;
+        }
 
         return true;
     }

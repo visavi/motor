@@ -16,22 +16,22 @@ return static function (ContainerBuilder $containerBuilder)
 
             return new Setting([
                 'app' => [
-                    'name' => 'Motorcms.ru',         // Название сайта
-                    'url'  => 'https://motorcms.ru', // Адрес сайта
+                    'name' => $settings['app.name'], // Название сайта
+                    'url'  => $settings['app.url'],  // Адрес сайта
                 ],
 
                 'main' => [
                     'title'          => $settings['main.title'],          // Заголовок сайта
                     'allow_register' => $settings['main.allow_register'], // Разрешить регистрацию
-                    'confirm_email'  => true,                             // Подтверждать email
+                    'confirm_email'  => $settings['main.confirm_email'],  // Подтверждать email
                     'guest_name'     => $settings['main.guest_name'],     // Имя гостя
                     'delete_name'    => $settings['main.delete_name'],    // Имя удаленного пользователя
                 ],
 
                 'mailer' => [
-                    'dsn'        => 'smtp://localhost:1025', // Параметры smtp
-                    'from_email' => 'admin@motorcms.ru',     // Email отправителя
-                    'from_name'  => 'Админ',                 // Имя отправителя
+                    'dsn'        => $settings['mailer.dsn'],        // Параметры smtp (smtp://localhost:1025)
+                    'from_email' => $settings['mailer.from_email'], // Email отправителя
+                    'from_name'  => $settings['mailer.from_name'],  // Имя отправителя
                 ],
 
                 'story' => [

@@ -19,7 +19,9 @@
     <div class="row">
         <div class="col-md-4 section shadow p-3">
             <div class="nav flex-column nav-pills">
+                <a class="nav-link" href="/admin/settings?action=app" id="app">Сайт</a>
                 <a class="nav-link" href="/admin/settings?action=main" id="main">Основные</a>
+                <a class="nav-link" href="/admin/settings?action=mailer" id="main">Почта</a>
                 <a class="nav-link" href="/admin/settings?action=story" id="story">Статьи</a>
                 <a class="nav-link" href="/admin/settings?action=comment" id="comment">Комментарии</a>
                 <a class="nav-link" href="/admin/settings?action=guestbook" id="guestbook">Гостевая</a>

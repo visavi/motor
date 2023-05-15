@@ -17,6 +17,12 @@ use League\Plates\Template\Template;
         <label class="form-check-label" for="allow_register">Разрешить регистрацию</label>
     </div>
 
+    <div class="form-check mb-3">
+        <input type="hidden" value="0" name="settings[main][confirm_email]">
+        <input type="checkbox" class="form-check-input" value="1" name="settings[main][confirm_email]" id="confirm_email"<?= old('settings.main.confirm_email', $settings['main.confirm_email']) ? ' checked' : '' ?>>
+        <label class="form-check-label" for="confirm_email">Подтверждать email</label>
+    </div>
+
     <div class="mb-3">
         <label for="title" class="form-label">Заголовок сайта</label>
         <input type="text" class="form-control<?= hasError('title') ?>" id="title" name="settings[main][title]" value="<?= old('settings.main.title', $settings['main.title']) ?>" required>
