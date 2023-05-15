@@ -57,7 +57,7 @@ class UserController extends Controller
     public function login(Request $request, Response $response): Response
     {
         if (isUser()) {
-            return $this->redirect($response, route('home'));
+            return $this->redirect($response, '/');
         }
 
         if ($request->getMethod() === 'POST') {
@@ -117,7 +117,7 @@ class UserController extends Controller
         }
 
         if (isUser()) {
-            return $this->redirect($response, route('home'));
+            return $this->redirect($response, '/');
         }
 
         if ($request->getMethod() === 'POST') {
@@ -275,7 +275,7 @@ class UserController extends Controller
         }
 
         if ($user && $user->role !== User::PENDED) {
-            return $this->redirect($response, route('home'));
+            return $this->redirect($response, '/');
         }
 
         if ($user && $user->confirm_code === $code) {
@@ -289,6 +289,6 @@ class UserController extends Controller
             $this->session->set('flash', ['danger' => 'Проверочный код неверный!']);
         }
 
-        return $this->redirect($response, route('home'));
+        return $this->redirect($response, '/');
     }
 }

@@ -18,7 +18,7 @@ final class CheckAccessMiddleware implements Middleware
         $user     = getUser();
         $response = $handler->handle($request);
 
-        if ($user && ! in_array(currentRoute(), [route('home'), route('logout')], true)) {
+        if ($user && ! in_array(currentRoute(), ['/', '/logout'], true)) {
             if ($user->isBanned()) {
                 abort(403, 'Вы забанены!');
             }
