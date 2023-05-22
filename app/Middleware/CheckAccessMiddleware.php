@@ -24,7 +24,7 @@ final class CheckAccessMiddleware implements Middleware
             }
 
             if ($user->isPended() && ! str_starts_with(currentRoute(), '/confirm')) {
-                abort(403, 'Необходимо подтвердить email по ссылки в письме!');
+                abort(200, 'Необходимо подтвердить email по ссылки в письме!');
             }
         }
 

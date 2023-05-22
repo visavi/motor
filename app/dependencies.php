@@ -8,8 +8,10 @@ use DI\ContainerBuilder;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use Shieldon\SimpleCache\Cache;
+use Slim\Psr7\Response;
 
 return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions([
@@ -22,15 +24,9 @@ return function (ContainerBuilder $containerBuilder) {
             return new Cache('file', ['storage' => dirname(__DIR__) . '/storage/cache']);
         },
 
-        /*ResponseFactoryInterface::class => function (ContainerInterface $container) {
-            return $container->get(App::class)->getResponseFactory();
+        ResponseInterface::class => function () {
+            return new Response();
         },
-
-        App::class => function (ContainerInterface $container) {
-            AppFactory::setContainer($container);
-
-            return AppFactory::create();
-        },*/
 
         LoggerInterface::class => function (ContainerInterface $container) {
             $setting = $container->get(Setting::class);

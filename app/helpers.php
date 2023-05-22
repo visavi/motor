@@ -331,12 +331,12 @@ function storagePath(string $path = ''): string
 /**
  * Throw an Exception with the given data.
  *
- * @param mixed  $code
+ * @param int  $code
  * @param string $message
  *
  * @return void
  */
-function abort(mixed $code, string $message = ''): void
+function abort(int $code, string $message = ''): void
 {
     $serverRequestCreator = ServerRequestCreatorFactory::create();
     $request = $serverRequestCreator->createServerRequestFromGlobals();

@@ -12,7 +12,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpException;
 use Slim\Interfaces\ErrorHandlerInterface;
-use Slim\Psr7\Response;
 use Throwable;
 use Whoops\Handler\JsonResponseHandler;
 use Whoops\Handler\PrettyPageHandler;
@@ -27,6 +26,7 @@ final class DefaultErrorHandler implements ErrorHandlerInterface
     public function __construct(
         protected View $view,
         protected LoggerInterface $logger,
+        protected ResponseInterface $response,
     ) {}
 
     /**
@@ -47,8 +47,15 @@ final class DefaultErrorHandler implements ErrorHandlerInterface
         bool $logErrors,
         bool $logErrorDetails
     ): ResponseInterface {
-        $response = new Response();
-        $code     = $this->getHttpStatusCode($exception);
+        $code = $this->getHttpStatusCode($exception);
+
+        if (setting('logError')) {
+            $error = $this->getErrorDetails($exception);
+            $error['method'] = $request->getMethod();
+            $error['url']    = $request->getUri()->getPath();
+
+            $this->logger->error($exception->getMessage(), $error);
+        }
 
         if (strtolower($request->getHeaderLine('X-Requested-With')) === 'xmlhttprequest') {
             $error = [
@@ -57,17 +64,9 @@ final class DefaultErrorHandler implements ErrorHandlerInterface
                     'message' => $this->getErrorMessage($exception),
                 ]
             ];
-            $response->getBody()->write((string) json_encode($error));
+            $this->response->getBody()->write((string) json_encode($error));
 
-            return $response->withStatus($code)->withHeader('Content-Type', 'application/json');
-        }
-
-        if (setting('logError')) {
-            $error = $this->getErrorDetails($exception);
-            $error['method'] = $request->getMethod();
-            $error['url']    = $request->getUri()->getPath();
-
-            $this->logger->error($exception->getMessage(), $error);
+            return $this->response->withStatus($code)->withHeader('Content-Type', 'application/json');
         }
 
         if (
@@ -81,14 +80,14 @@ final class DefaultErrorHandler implements ErrorHandlerInterface
             $whoops = new Run();
             $whoops->pushHandler($handler);
 
-            $response->getBody()->write($whoops->handleException($exception));
+            $this->response->getBody()->write($whoops->handleException($exception));
 
-            return $response;
+            return $this->response;
         }
 
         $view = $this->view->exists('errors/' . $code) ? $code : 'default';
         $response = $this->view->render(
-            $response,
+            $this->response,
             'errors/' . $view,
             ['message' => $this->getErrorMessage($exception)]
         );
