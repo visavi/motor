@@ -2,6 +2,7 @@
 
 namespace App\Handlers;
 
+use App\Exceptions\AbortException;
 use App\Services\View;
 use DomainException;
 use Fig\Http\Message\StatusCodeInterface;
@@ -170,7 +171,10 @@ final class DefaultErrorHandler implements ErrorHandlerInterface
             $errorMessage = sprintf('%s Error', $exception->getCode());
         }
 
-        if (setting('displayErrorDetails')) {
+        if (
+            setting('displayErrorDetails')
+            || $exception instanceof AbortException
+        ) {
             $errorMessage = $exception->getMessage();
         }
 

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Exceptions\AbortException;
 use App\Factories\AppFactory;
 use App\Models\User;
 use App\Services\BBCode;
@@ -11,7 +12,6 @@ use App\Services\Str;
 use DI\Container;
 use Slim\App;
 use Slim\Factory\ServerRequestCreatorFactory;
-use Slim\Exception\HttpException;
 
 /**
  * Escape data
@@ -341,7 +341,7 @@ function abort(mixed $code, string $message = ''): void
     $serverRequestCreator = ServerRequestCreatorFactory::create();
     $request = $serverRequestCreator->createServerRequestFromGlobals();
 
-    throw new HttpException($request, $message, $code);
+    throw new AbortException($request, $message, $code);
 }
 
 /**

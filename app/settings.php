@@ -102,7 +102,7 @@ return static function (ContainerBuilder $containerBuilder)
                     'symbols' => (string) $settings['captcha.symbols'], // Список допустимых символов
                 ],
 
-                'displayErrorDetails' => true, // Should be set to false in production
+                'displayErrorDetails' => false, // Should be set to false in production
                 'logError'            => true,
                 'logErrorDetails'     => true,
                 'logger' => [
