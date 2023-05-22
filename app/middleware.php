@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Handlers\HttpErrorHandler;
+use App\Handlers\DefaultErrorHandler;
 use App\Middleware\CheckAccessMiddleware;
 use App\Middleware\IpAddressMiddleware;
 use App\Middleware\StartSessionMiddleware;
@@ -39,9 +39,6 @@ return function (App $app)
     // Ip address middleware
     $app->add(IpAddressMiddleware::class);
 
-    // Define Custom Error Handler
-    $errorHandler = new HttpErrorHandler($app->getCallableResolver(), $app->getResponseFactory());
-
     /**
      * Add Error Middleware
      *
@@ -59,6 +56,9 @@ return function (App $app)
         $setting->get('displayErrorDetails'),
         $setting->get('logError'),
         $setting->get('logErrorDetails'),
+        $app->getContainer()->get(LoggerInterface::class)
     );
-    $errorMiddleware->setDefaultErrorHandler($errorHandler);
+
+    // Define Custom Error Handler
+    $errorMiddleware->setDefaultErrorHandler(DefaultErrorHandler::class);
 };

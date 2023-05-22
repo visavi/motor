@@ -2,8 +2,13 @@
 
 declare(strict_types=1);
 
+use App\Services\Setting;
 use App\Services\View;
 use DI\ContainerBuilder;
+use Monolog\Handler\RotatingFileHandler;
+use Monolog\Logger;
+use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 use Shieldon\SimpleCache\Cache;
 
 return function (ContainerBuilder $containerBuilder) {
@@ -27,19 +32,17 @@ return function (ContainerBuilder $containerBuilder) {
             return AppFactory::create();
         },*/
 
-        /*LoggerInterface::class => function (ContainerInterface $c) {
-            $settings = $c->get(SettingsInterface::class);
+        LoggerInterface::class => function (ContainerInterface $container) {
+            $setting = $container->get(Setting::class);
 
-            $loggerSettings = $settings->get('logger');
-            $logger = new Logger($loggerSettings['name']);
-
-            $processor = new UidProcessor();
-            $logger->pushProcessor($processor);
-
-            $handler = new StreamHandler($loggerSettings['path'], $loggerSettings['level']);
-            $logger->pushHandler($handler);
+            $logger = new Logger($setting->get('logger.name'));
+            $streamHandler = new RotatingFileHandler(
+                $setting->get('logger.path'),
+                $setting->get('logger.maxFiles'),
+                $setting->get('logger.level'));
+            $logger->pushHandler($streamHandler);
 
             return $logger;
-        },*/
+        },
     ]);
 };

@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Repositories\SettingRepository;
 use App\Services\Setting;
 use DI\ContainerBuilder;
+use Monolog\Logger;
 
 return static function (ContainerBuilder $containerBuilder)
 {
@@ -103,11 +104,12 @@ return static function (ContainerBuilder $containerBuilder)
 
                 'displayErrorDetails' => true, // Should be set to false in production
                 'logError'            => true,
-                'logErrorDetails'     => false,
+                'logErrorDetails'     => true,
                 'logger' => [
-                    'name' => 'motor-app',
-                    'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../storage/logs/app.log',
-                    //'level' => Logger::DEBUG,
+                    'name'     => 'motor_app',
+                    'path'     => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../storage/logs/app.log',
+                    'level'    => Logger::DEBUG,
+                    'maxFiles' => 7,
                 ],
             ]);
         }
