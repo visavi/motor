@@ -10,7 +10,7 @@
     <link href="<?= $this->asset('/assets/css/bootstrap.min.css') ?>" rel="stylesheet">
     <link href="<?= $this->asset('/assets/css/variables.css') ?>" rel="stylesheet">
     <link href="<?= $this->asset('/assets/css/docs.css') ?>" rel="stylesheet">
-    <link href="<?= $this->asset('/assets/css/bootstrap-icons.css') ?>" rel="stylesheet">
+    <link href="<?= $this->asset('/assets/css/bootstrap-icons.min.css') ?>" rel="stylesheet">
     <link href="<?= $this->asset('/assets/css/markitup.css') ?>" rel="stylesheet">
     <link href="<?= $this->asset('/assets/css/prettify.css') ?>" rel="stylesheet">
     <link href="<?= $this->asset('/assets/css/toastr.min.css') ?>" rel="stylesheet">

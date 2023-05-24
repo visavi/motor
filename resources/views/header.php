@@ -124,7 +124,7 @@ use App\Models\User;
 
                                 <?php if (isAdmin(User::BOSS)): ?>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="<?= route('admin-settings') ?>">Настройки сайта</a></li>
+                                    <li><a class="dropdown-item" href="<?= route('admin') ?>">Админ-панель</a></li>
                                 <?php endif; ?>
 
                                 <li><hr class="dropdown-divider"></li>

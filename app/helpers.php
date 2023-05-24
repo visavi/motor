@@ -114,6 +114,22 @@ function formatSize(int $bytes, int $precision = 2): string
 }
 
 /**
+ * Возвращает размер файла читаемом формате
+ *
+ * @param string $file
+ *
+ * @return string
+ */
+function formatFileSize(string $file): string
+{
+    if (file_exists($file) && is_file($file)) {
+        return formatSize(filesize($file));
+    }
+
+    return formatSize(0);
+}
+
+/**
  * @param string|null $abstract
  *
  * @return mixed|Container

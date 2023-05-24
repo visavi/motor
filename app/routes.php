@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-use App\Controllers\Admin\SettingController;
+use App\Controllers\Admin\IndexController as AdminIndexController;
+use App\Controllers\Admin\SettingController as AdminSettingController;
+use App\Controllers\Admin\BackupController as AdminBackupController;
 use App\Controllers\BBCodeController;
 use App\Controllers\CaptchaController;
 use App\Controllers\CommentController;
@@ -124,7 +126,13 @@ return function (App $app) {
 
     // Admin panel
     $app->group('/admin', function (Group $group) {
-        $group->get('/settings', [SettingController::class, 'index'])->setName('admin-settings');
-        $group->post('/settings', [SettingController::class, 'store'])->setName('admin-settings-store');
+        $group->get('', [AdminIndexController::class, 'index'])->setName('admin');
+
+        $group->get('/settings', [AdminSettingController::class, 'index'])->setName('admin-settings');
+        $group->post('/settings', [AdminSettingController::class, 'store'])->setName('admin-settings-store');
+
+        $group->get('/backups', [AdminBackupController::class, 'index'])->setName('admin-backups');
+        $group->post('/backups', [AdminBackupController::class, 'create'])->setName('admin-backups-create');
+        $group->delete('/backups/{name:[\w\-\.]+}', [AdminBackupController::class, 'destroy'])->setName('admin-backups-destroy');
     })->add(CheckAdminMiddleware::class);
 };
