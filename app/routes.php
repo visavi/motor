@@ -133,6 +133,7 @@ return function (App $app) {
 
         $group->get('/backups', [AdminBackupController::class, 'index'])->setName('admin-backups');
         $group->post('/backups', [AdminBackupController::class, 'create'])->setName('admin-backups-create');
+        $group->get('/backups/{name:[\w\-\.]+}', [AdminBackupController::class, 'view'])->setName('admin-backups-view');
         $group->delete('/backups/{name:[\w\-\.]+}', [AdminBackupController::class, 'destroy'])->setName('admin-backups-destroy');
     })->add(CheckAdminMiddleware::class);
 };

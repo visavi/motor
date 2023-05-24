@@ -9,7 +9,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="bi bi-house-door"></i></a></li>
-            <li class="breadcrumb-item active"><a href="<?= route('admin') ?>">Админ-панель</a></li>
+            <li class="breadcrumb-item"><a href="<?= route('admin') ?>">Админ-панель</a></li>
             <li class="breadcrumb-item active">Бэкапы</li>
         </ol>
     </nav>
@@ -20,7 +20,7 @@
         <?php foreach ($files as $file): ?>
             <div>
                 <i class="bi bi-file-zip"></i>
-                <?= basename($file) ?> / <?= formatFileSize($file) ?>
+                <a href="<?= route('admin-backups-view', ['name' => basename($file)]) ?>"><?= basename($file) ?></a> / <?= formatFileSize($file) ?>
 
                 <a href="<?= route('admin-backups-destroy', ['name' => basename($file)]) ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg text-body-secondary"></i></a>
             </div>

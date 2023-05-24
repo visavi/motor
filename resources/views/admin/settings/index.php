@@ -10,7 +10,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="bi bi-house-door"></i></a></li>
-            <li class="breadcrumb-item active"><a href="<?= route('admin') ?>">Админ-панель</a></li>
+            <li class="breadcrumb-item"><a href="<?= route('admin') ?>">Админ-панель</a></li>
             <li class="breadcrumb-item active">Настройки сайта</li>
         </ol>
     </nav>

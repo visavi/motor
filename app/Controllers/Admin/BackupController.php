@@ -14,6 +14,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
+use ZipArchive;
 
 /**
  * BackupController
@@ -77,6 +78,43 @@ class BackupController extends Controller
         }
 
         return $this->redirect($response, route('admin-backups'));
+    }
+
+    /**
+     * Admin
+     *
+     * @param string   $name
+     * @param Request  $request
+     * @param Response $response
+     *
+     * @return Response
+     */
+    public function view(string $name, Request $request, Response $response): Response
+    {
+        $filePath  = storagePath('backups/' . $name);
+
+        if (! file_exists($filePath)) {
+            abort(404, 'Бэкап не найден!');
+        }
+
+        $zip = new ZipArchive();
+        if ($zip->open($filePath) !== true) {
+            abort(200, 'Не удалось открыть архив!');
+        }
+
+        $files = [];
+        for ($i = 0; $i < $zip->numFiles; $i++) {
+            $files[] = $zip->statIndex($i);
+        }
+
+        $countFiles = $zip->count();
+        $zip->close();
+
+        return $this->view->render(
+            $response,
+            'admin/backups/view',
+            compact('name', 'files', 'countFiles')
+        );
     }
 
     /**
