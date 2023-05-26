@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e4e0e25a6836211992cfe97c1e80e232",
+    "content-hash": "a59132a2eac40f6d4081aba60c3f8eb1",
     "packages": [
         {
             "name": "doctrine/deprecations",
@@ -3099,21 +3099,21 @@
         },
         {
             "name": "visavi/captcha",
-            "version": "v2.0.0",
+            "version": "v3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/visavi/captcha.git",
-                "reference": "c1041647c824ca55e1046e37e9a087100f92a319"
+                "reference": "6c38f9e86cff976197c6405b8e7e59b31c1685b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/visavi/captcha/zipball/c1041647c824ca55e1046e37e9a087100f92a319",
-                "reference": "c1041647c824ca55e1046e37e9a087100f92a319",
+                "url": "https://api.github.com/repos/visavi/captcha/zipball/6c38f9e86cff976197c6405b8e7e59b31c1685b7",
+                "reference": "6c38f9e86cff976197c6405b8e7e59b31c1685b7",
                 "shasum": ""
             },
             "require": {
                 "ext-gd": "*",
-                "php": ">=7.3.0"
+                "php": ">=8.0.0"
             },
             "type": "library",
             "autoload": {
@@ -3141,9 +3141,9 @@
             ],
             "support": {
                 "issues": "https://github.com/visavi/captcha/issues",
-                "source": "https://github.com/visavi/captcha/tree/v2.0.0"
+                "source": "https://github.com/visavi/captcha/tree/v3.0.0"
             },
-            "time": "2021-09-20T02:05:26+00:00"
+            "time": "2022-03-29T20:37:01+00:00"
         },
         {
             "name": "visavi/cleanup",

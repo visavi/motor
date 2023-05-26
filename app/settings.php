@@ -99,7 +99,7 @@ return static function (ContainerBuilder $containerBuilder)
 
                 'captcha' => [
                     'length'  => $settings['captcha.length'], // Количество символов
-                    'symbols' => (string) $settings['captcha.symbols'], // Список допустимых символов
+                    'symbols' => $settings['captcha.symbols'], // Список допустимых символов
                 ],
 
                 'displayErrorDetails' => false, // Should be set to false in production

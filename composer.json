@@ -16,7 +16,7 @@
         "slim/slim": "^4.11",
         "symfony/console": "^6.0",
         "symfony/mailer": "^6.0",
-        "visavi/captcha": "^2.0",
+        "visavi/captcha": "^3.0",
         "visavi/cleanup": "^1.5",
         "visavi/motor-orm": "^3.5"
     },
