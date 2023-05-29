@@ -33,9 +33,10 @@ return function (App $app) {
     });*/
 
     $app->get('/', [HomeController::class, 'index'])->setName('home');
-    $app->get('/docs', [HomeController::class, 'docs']);
+    $app->get('/docs', [HomeController::class, 'docs'])->setName('docs');
     $app->get('/docs/versions', [HomeController::class, 'versions']);
     $app->get('/docs/commits', [HomeController::class, 'commits']);
+    $app->get('/docs/{page:[\w\-]+}', [HomeController::class, 'page']);
 
     $app->group('/stories', function (Group $group) {
         $group->get('', [StoryController::class, 'index'])->setName('stories');

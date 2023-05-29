@@ -47,7 +47,27 @@ class HomeController extends Controller
     {
         return $this->view->render(
             $response,
-            'home/docs',
+            'docs/index',
+        );
+    }
+
+    /**
+     * Docs pages
+     *
+     * @param string $page
+     * @param Response $response
+     *
+     * @return Response
+     */
+    public function page(string $page, Response $response): Response
+    {
+        if (! $this->view->exists('docs/' . $page)) {
+            abort(404, 'Страница не найдена');
+        }
+
+        return $this->view->render(
+            $response,
+            'docs/' . $page,
         );
     }
 

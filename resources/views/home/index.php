@@ -1,7 +1,7 @@
 <?php
 /** @var array $release */
 ?>
-<?php $this->layout('layout-docs') ?>
+<?php $this->layout('layout-index') ?>
 
 <?php $this->start('title') ?>Motor CMS<?php $this->stop() ?>
 <?php $this->start('description') ?>Motor CMS - Легкий и быстрый движок для сайта. Не использует базу данных, не требует особых библиотек на сервере<?php $this->stop() ?>
