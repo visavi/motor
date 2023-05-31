@@ -8,7 +8,6 @@ use App\Services\GithubService;
 use App\Services\View;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Shieldon\SimpleCache\Cache;
 
 /**
  * HomeController
