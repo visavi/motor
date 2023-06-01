@@ -45,14 +45,9 @@
     <li><a href="#clear">Очистка коллекции (clear)</a></li>
     <li><a href="#slice">Срез коллекции (slice)</a></li>
     <li><a href="#pluck">Получение всех записей по ключу (pluck)</a></li>
-
-    <li><a href="#">Collection Paginate</a></li>
-    <li><a href="#">Получение текущей страницы</a></li>
-    <li><a href="#pagination-count">Получение количества страниц</a></li>
-    <li><a href="#">Получение массива со страницами</a></li>
 </ul>
 
-<h3 id="all">Преобразование коллекции в массив (All)</h3>
+<h3 id="all">Преобразование коллекции в массив (all)</h3>
 Метод all() возвращает заданный массив, представленный коллекцией:
 
 <pre class="prettyprint">
@@ -61,7 +56,7 @@ new Collection([1, 2, 3])->all();
 // [1, 2, 3]
 </pre>
 
-<h3 id="get">Получение элемента по ключу (Get)</h3>
+<h3 id="get">Получение элемента по ключу (get)</h3>
 Метод get() возвращает нужный элемент по заданному ключу. Если ключ не существует, то возвращается null:
 
 <pre class="prettyprint">
@@ -82,7 +77,7 @@ $value = $collection->get('foo', 'default-value');
 // default-value
 </pre>
 
-<h3 id="first">Получение первой записи (First)</h3>
+<h3 id="first">Получение первой записи (first)</h3>
 Метод first() возвращает первый элемент в коллекции. Если коллекция пуста, то вернётся false
 
 <pre class="prettyprint">
@@ -91,7 +86,7 @@ new Collection([1, 2, 3, 4])->first();
 // 1
 </pre>
 
-<h3 id="last">Получение последней записи (Last)</h3>
+<h3 id="last">Получение последней записи (last)</h3>
 Метод last() возвращает последний элемент в коллекции. Если коллекция пуста, то вернётся false
 
 <pre class="prettyprint">
@@ -100,7 +95,7 @@ new Collection([1, 2, 3, 4])->last();
 // 4
 </pre>
 
-<h3 id="pull">Удаление и получение записи из коллекции (Pull)</h3>
+<h3 id="pull">Удаление и получение записи из коллекции (pull)</h3>
 Метод pull() удаляет и возвращает элемент из коллекции по его ключу:
 
 <pre class="prettyprint">
@@ -115,7 +110,7 @@ $collection->all();
 // ['product_id' => 'prod-100']
 </pre>
 
-<h3 id="forget">Удаление записи из коллекции (Forget)</h3>
+<h3 id="forget">Удаление записи из коллекции (forget)</h3>
 Метод forget() удаляет элемент из коллекции по его ключу:
 
 <pre class="prettyprint">
@@ -128,7 +123,7 @@ $collection->all();
 // ['cms' => 'motor']
 </pre>
 
-<h3 id="keys">Получение всех ключей коллекции (Keys)</h3>
+<h3 id="keys">Получение всех ключей коллекции (keys)</h3>
 Метод keys() возвращает все ключи коллекции:
 
 <pre class="prettyprint">
@@ -144,7 +139,7 @@ $keys->all();
 // ['prod-100', 'prod-200']
 </pre>
 
-<h3 id="values">Получение всех значений коллекции (Values)</h3>
+<h3 id="values">Получение всех значений коллекции (values)</h3>
 Метод values() возвращает новую коллекцию со сброшенными ключами и последовательно пронумерованными индексами:
 
 <pre class="prettyprint">
@@ -207,7 +202,7 @@ $collection->search('4', true);
 // false
 </pre>
 
-<h3 id="count">Получение количества записей в коллекции (Count)</h3>
+<h3 id="count">Получение количества записей в коллекции (count)</h3>
 Метод count() возвращает общее количество элементов в коллекции:
 
 <pre class="prettyprint">
@@ -218,7 +213,7 @@ $collection->count();
 // 4
 </pre>
 
-<h3 id="put">Установка значения в коллекции (Put)</h3>
+<h3 id="put">Установка значения в коллекции (put)</h3>
 Метод put() устанавливает заданный ключ и значение в коллекцию:
 
 <pre class="prettyprint">
@@ -230,7 +225,7 @@ $collection->all();
 // ['product_id' => 1, 'name' => 'Desk', 'price' => 100]
 </pre>
 
-<h3 id="push">Добавление записи в коллекцию (Push)</h3>
+<h3 id="push">Добавление записи в коллекцию (push)</h3>
 Метод push() добавляет элемент в конец коллекции:
 
 <pre class="prettyprint">
@@ -262,7 +257,7 @@ $collection->isNotEmpty();
 // true
 </pre>
 
-<h3 id="clear">Очистка коллекции (Clear)</h3>
+<h3 id="clear">Очистка коллекции (clear)</h3>
 <pre class="prettyprint">
 $collection = new Collection([1, 2, 3]);
 $slice = $collection->clear();
@@ -270,7 +265,7 @@ $slice = $collection->clear();
 // []
 </pre>
 
-<h3 id="slice">Срез коллекции (Slice)</h3>
+<h3 id="slice">Срез коллекции (slice)</h3>
 Метод slice() возвращает часть коллекции, начиная с заданного индекса:
 
 <pre class="prettyprint">
@@ -289,7 +284,7 @@ $slice->all();
 // [5, 6]
 </pre>
 
-<h3 id="pluck">Получение всех записей по ключу (Pluck)</h3>
+<h3 id="pluck">Получение всех записей по ключу (pluck)</h3>
 Метод pluck() извлекает все значения по заданному ключу:
 
 <pre class="prettyprint">

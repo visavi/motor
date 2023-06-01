@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2dc5a3dc8e0c2436f22d18288804d135",
+    "content-hash": "b63e4b7ebb0a50ed2e91491d9573b245",
     "packages": [
         {
             "name": "doctrine/deprecations",
@@ -3192,16 +3192,16 @@
         },
         {
             "name": "visavi/motor-orm",
-            "version": "v4.0.0",
+            "version": "v4.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/visavi/motor-orm.git",
-                "reference": "9cc6f7755e5fd75526f47f9103b7823a1879f9e7"
+                "reference": "3a60dc6ea6d9ecdee6300088fd3691810d1de768"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/visavi/motor-orm/zipball/9cc6f7755e5fd75526f47f9103b7823a1879f9e7",
-                "reference": "9cc6f7755e5fd75526f47f9103b7823a1879f9e7",
+                "url": "https://api.github.com/repos/visavi/motor-orm/zipball/3a60dc6ea6d9ecdee6300088fd3691810d1de768",
+                "reference": "3a60dc6ea6d9ecdee6300088fd3691810d1de768",
                 "shasum": ""
             },
             "require": {
@@ -3236,9 +3236,9 @@
             ],
             "support": {
                 "issues": "https://github.com/visavi/motor-orm/issues",
-                "source": "https://github.com/visavi/motor-orm/tree/v4.0.0"
+                "source": "https://github.com/visavi/motor-orm/tree/v4.1.0"
             },
-            "time": "2023-05-31T02:29:33+00:00"
+            "time": "2023-05-31T23:41:26+00:00"
         }
     ],
     "packages-dev": [
