@@ -7,6 +7,7 @@ namespace App\Controllers;
 use App\Models\Comment;
 use App\Repositories\CommentRepository;
 use App\Repositories\StoryRepository;
+use App\Services\NotificationService;
 use App\Services\Session;
 use App\Services\Validator;
 use App\Services\View;
@@ -29,9 +30,10 @@ class CommentController extends Controller
     /**
      * Store
      *
-     * @param int      $id
-     * @param Request  $request
+     * @param int $id
+     * @param Request $request
      * @param Response $response
+     * @param NotificationService $notificationService
      *
      * @return Response
      */
@@ -39,6 +41,7 @@ class CommentController extends Controller
         int $id,
         Request $request,
         Response $response,
+        NotificationService $notificationService,
     ): Response {
         $user = getUser();
         $story = $this->storyRepository->getById($id);
@@ -58,13 +61,17 @@ class CommentController extends Controller
             ->length('text', setting('comment.text_min_length'), setting('comment.text_max_length'));
 
         if ($this->validator->isValid($input)) {
-            Comment::query()->create([
+            $text = sanitize($input['text']);
+
+            $comment = Comment::query()->create([
                 'story_id'   => $story->id,
                 'user_id'    => $user->id,
-                'text'       => sanitize($input['text']),
+                'text'       => $text,
                 'rating'     => 0,
                 'created_at' => time(),
             ]);
+
+            $notificationService->sendNotify($text, $story->getLink() . '#comment_' . $comment->id, $story->title);
 
             $this->session->set('flash', ['success' => 'Комментарий успешно добавлен!']);
         } else {

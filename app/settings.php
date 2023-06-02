@@ -106,7 +106,7 @@ return static function (ContainerBuilder $containerBuilder)
                 'logError'            => true,
                 'logErrorDetails'     => true,
                 'logger' => [
-                    'name'     => 'motor_app',
+                    'name'     => 'motor',
                     'path'     => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../storage/logs/motor.log',
                     'level'    => Logger::DEBUG,
                     'maxFiles' => 7,

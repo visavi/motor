@@ -108,7 +108,7 @@ use App\Models\Story;
     <?php if ($story->comments->isNotEmpty()): ?>
         <?php /** @var Comment $comment */ ?>
         <?php foreach ($story->comments as $comment): ?>
-            <div class="post mb-3">
+            <div class="post mb-3" id="comment_<?= $comment->id ?>">
                 <div class="float-end text-end">
                     <?php if (getUser() && getUser('id') !== $comment->user_id): ?>
                         <a href="#" onclick="return postReply(this)" data-bs-toggle="tooltip" title="Ответить">

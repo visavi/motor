@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Repositories\NotificationRepository;
 
 ?>
 <header class="navbar navbar-expand-lg bd-navbar sticky-top">
@@ -99,7 +100,6 @@ use App\Models\User;
 
                     <?php if (isUser()): ?>
                         <?php if(setting('story.allow_posting') || isAdmin()): ?>
-
                             <li class="nav-item col-6 col-lg-auto">
                                 <a class="nav-link py-2 px-0 px-lg-2" href="<?= route('story-create') ?>">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
@@ -109,6 +109,21 @@ use App\Models\User;
                                 </a>
                             </li>
                         <?php endif; ?>
+
+                        <li class="nav-item col-6 col-lg-auto">
+                            <a class="nav-link py-2 px-0 px-lg-2 position-relative" href="<?= route('notifications') ?>">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z"/>
+                                </svg>
+
+                                <?php $notificationCount = (new NotificationRepository())->getCount(); ?>
+                                <?php if ($notificationCount): ?>
+                                    <span class="position-absolute top-10 start-70 translate-middle badge rounded-pill bg-danger">
+                                        <?= $notificationCount ?>
+                                      </span>
+                                <?php endif; ?>
+                            </a>
+                        </li>
 
                         <li class="nav-item dropdown">
                             <a href="#" class="nav-link d-block text-decoration-none dropdown-toggle" id="bd-profile" data-bs-toggle="dropdown" aria-expanded="false">

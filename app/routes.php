@@ -11,6 +11,7 @@ use App\Controllers\CommentController;
 use App\Controllers\FavoriteController;
 use App\Controllers\GuestbookController;
 use App\Controllers\HomeController;
+use App\Controllers\NotificationController;
 use App\Controllers\RatingController;
 use App\Controllers\SearchController;
 use App\Controllers\StickerController;
@@ -82,6 +83,9 @@ return function (App $app) {
 
         // Change rating
         $group->post('/rating/{id:[0-9]+}', [RatingController::class, 'change']);
+
+        $group->get('/notifications', [NotificationController::class, 'index'])->setName('notifications');
+        $group->delete('/notifications/{id:[0-9]+}', [NotificationController::class, 'destroy']);
     })->add(CheckUserMiddleware::class);
 
     $app->get('/captcha', [CaptchaController::class, 'captcha']);

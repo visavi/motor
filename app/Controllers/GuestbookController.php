@@ -6,6 +6,7 @@ namespace App\Controllers;
 
 use App\Models\Guestbook;
 use App\Repositories\GuestbookRepository;
+use App\Services\NotificationService;
 use App\Services\Session;
 use App\Services\Validator;
 use App\Services\View;
@@ -45,14 +46,16 @@ class GuestbookController extends Controller
     /**
      * Store
      *
-     * @param Request      $request
-     * @param Response     $response
+     * @param Request $request
+     * @param Response $response
+     * @param NotificationService $notificationService
      *
      * @return Response
      */
     public function store(
         Request $request,
         Response $response,
+        NotificationService $notificationService,
     ): Response {
         $user = getUser();
 
@@ -79,12 +82,16 @@ class GuestbookController extends Controller
                 $name = isset($input['name']) ? sanitize($input['name']) : setting('main.guest_name');
             }
 
+            $text = sanitize($input['text']);
+
             Guestbook::query()->create([
                 'user_id'    => $user->id ?? null,
-                'text'       => sanitize($input['text']),
+                'text'       => $text,
                 'name'       => $name ?? null,
                 'created_at' => time(),
             ]);
+
+            $notificationService->sendNotify($text, route('guestbook'), 'Гостевая');
 
             $this->session->set('flash', ['success' => 'Сообщение успешно добавлено!']);
         } else {
