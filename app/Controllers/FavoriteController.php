@@ -42,8 +42,8 @@ class FavoriteController extends Controller
         $favorites = $this->favoriteRepository->getFavorites(setting('story.per_page'));
 
         foreach ($favorites as $key => $favorite) {
-            $favorites->remove($key);
-            $favorites->add($favorite->story);
+            $favorites->forget($key);
+            $favorites->push($favorite->story);
         }
 
         $user    = getUser();

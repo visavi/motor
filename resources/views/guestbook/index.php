@@ -9,6 +9,7 @@ use MotorORM\CollectionPaginate;
 
 <?php $this->start('title') ?>Гостевая книга (Стр. <?= $messages->currentPage() ?>)<?php $this->stop() ?>
 <?php $this->start('description') ?>Гостевая книга (Стр. <?= $messages->currentPage() ?>)<?php $this->stop() ?>
+<?php $this->start('header') ?><h1>Гостевая книга</h1><?php $this->stop() ?>
 
 <?php $this->start('breadcrumb') ?>
     <nav>

@@ -9,6 +9,7 @@ use MotorORM\CollectionPaginate;
 
 <?php $this->start('title') ?>Уведомления (Стр. <?= $notifications->currentPage() ?>)<?php $this->stop() ?>
 <?php $this->start('description') ?>Уведомления (Стр. <?= $notifications->currentPage() ?>)<?php $this->stop() ?>
+<?php $this->start('header') ?><h1>Уведомления</h1><?php $this->stop() ?>
 
 <?php $this->start('breadcrumb') ?>
     <nav>

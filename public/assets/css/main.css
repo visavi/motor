@@ -267,8 +267,6 @@ textarea.form-control {
 }
 .bd-navbar .navbar-toggler,
 .bd-navbar .nav-link{
-    padding-right:.25rem;
-    padding-left:.25rem;
     color:rgba(255,255,255,0.85)
 }
 .bd-navbar .navbar-toggler:hover,
