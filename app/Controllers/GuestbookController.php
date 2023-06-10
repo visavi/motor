@@ -35,19 +35,7 @@ class GuestbookController extends Controller
     public function index(Response $response): Response
     {
         $messages = $this->guestbookRepository->getMessages(setting('guestbook.per_page'));
-
-        $xxx = Guestbook::query()
-            ->orderByDesc('created_at')
-            ->with('user')
-            ->get();
-
-        //dd($messages);
-        dd($messages->slice(2)->all());
-
-        dd($messages->filter(function (Guestbook $guestbook) {
-            return $guestbook->id < 10;
-        }));
-
+        
         return $this->view->render(
             $response,
             'guestbook/index',
