@@ -17,8 +17,8 @@ class TagRepository implements RepositoryInterface
      */
     public function getPopularTags(int $count = 15): array
     {
-        $stories = (new StoryRepository())->getActiveStories()->pluck('id');
-        $tags = Tag::query()->whereIn('story_id', $stories)->get()->pluck('tag');
+        $stories = (new StoryRepository())->getActiveStories()->pluck('id')->all();
+        $tags = Tag::query()->whereIn('story_id', $stories)->get()->pluck('tag')->all();
         $tags = array_count_values($tags);
 
         arsort($tags);

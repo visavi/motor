@@ -45,6 +45,7 @@
     <li><a href="#clear">Очистка коллекции (clear)</a></li>
     <li><a href="#slice">Срез коллекции (slice)</a></li>
     <li><a href="#pluck">Получение всех записей по ключу (pluck)</a></li>
+    <li><a href="#filter">Фильтрация записей (filter)</a></li>
 </ul>
 
 <h3 id="all">Преобразование коллекции в массив (all)</h3>
@@ -271,6 +272,7 @@ $slice = $collection->clear();
 <pre class="prettyprint">
 $collection = new Collection([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 $slice = $collection->slice(4);
+$slice->all();
 
 // [5, 6, 7, 8, 9, 10]
 </pre>
@@ -278,7 +280,6 @@ $slice = $collection->slice(4);
 Если вы хотите ограничить размер получаемой части коллекции, передайте желаемый размер вторым параметром в метод:
 <pre class="prettyprint">
 $slice = $collection->slice(4, 2);
-
 $slice->all();
 
 // [5, 6]
@@ -299,6 +300,31 @@ $slice->all();
 Также вы можете указать, с каким ключом вы хотите получить коллекцию:
 <pre class="prettyprint">
 $collection->pluck('name', 'login');
+$collection->all();
 
 //['Alex' => 'Саня', 'Viktor' => 'Виктор']
+</pre>
+
+<h3 id="filter">Фильтрация записей (filter)</h3>
+Метод filter() фильтрует коллекцию, используя callback-функции, eсли callback-функция возвращает true, данное значение возвращается в результирующую коллекцию:
+
+<pre class="prettyprint">
+$collection = new Collection([1, 2, 3, 4]);
+
+$filtered = $collection->filter(function (int $value, int $key) {
+    return $value > 2;
+});
+
+$filtered->all();
+
+// [3, 4]
+</pre>
+
+Если callback-функция не указана все пустые значения массива array будут удалены
+<pre class="prettyprint">
+$collection = new Collection([1, 2, 3, null, false, '', 0, []]);
+
+$collection->filter()->all();
+
+// [1, 2, 3]
 </pre>

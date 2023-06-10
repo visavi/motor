@@ -34,7 +34,7 @@ class Migrate extends Command
         $this->createBaseTable();
 
         $migrations = glob(__DIR__ . '/../../database/migrations/*.php');
-        $allMigrations = Migration::query()->get()->pluck('name', 'name');
+        $allMigrations = Migration::query()->get()->pluck('name', 'name')->all();
 
         $newMigrations = [];
         foreach ($migrations as $migration) {

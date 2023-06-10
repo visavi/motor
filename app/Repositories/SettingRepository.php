@@ -17,7 +17,8 @@ class SettingRepository implements RepositoryInterface
     {
         $settings = Setting::query()
             ->get()
-            ->pluck('value', 'name');
+            ->pluck('value', 'name')
+            ->all();
 
         return array_map(static function ($value) {
             if (is_numeric($value)) {

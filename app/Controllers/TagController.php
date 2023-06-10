@@ -83,7 +83,7 @@ class TagController extends Controller
         }
 
         $tags = Tag::query()->where('tag', 'like', $search . '%')->limit(10)->get();
-        $tags = array_unique($tags->pluck('tag'));
+        $tags = array_unique($tags->pluck('tag')->all());
 
         $namedTags = [];
         foreach ($tags as $tag) {

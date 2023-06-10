@@ -293,7 +293,7 @@ class BBCode
             $cache = app(Cache::class);
             $users = $cache->get('users');
             if (! $users) {
-                $users = User::query()->get()->pluck('name', 'login');
+                $users = User::query()->get()->pluck('name', 'login')->all();
                 $cache->set('users', $users, 3600);
             }
         }
@@ -319,7 +319,7 @@ class BBCode
         static $stickers;
 
         if (empty($stickers)) {
-            $stickers = Sticker::query()->get()->pluck('path', 'code');
+            $stickers = Sticker::query()->get()->pluck('path', 'code')->all();
             array_walk($stickers, static fn (&$a, $b) => $a = '<img src="' . $a . '" alt="' . $b . '">');
         }
 

@@ -26,7 +26,10 @@ class StickerController extends Controller
      */
     public function modal(Response $response): Response
     {
-        $stickers = Sticker::query()->get()->pluck('path', 'code');
+        $stickers = Sticker::query()
+            ->get()
+            ->pluck('path', 'code')
+            ->all();
 
         $view = $this->view->fetch(
             'stickers/_modal',

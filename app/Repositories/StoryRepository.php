@@ -91,7 +91,8 @@ class StoryRepository implements RepositoryInterface
         $tags = Tag::query()
             ->where('tag', 'like', $tag)
             ->get()
-            ->pluck('story_id');
+            ->pluck('story_id')
+            ->all();
 
         return Story::query()
             ->active()
