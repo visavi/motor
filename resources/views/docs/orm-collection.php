@@ -52,7 +52,7 @@
 Метод all() возвращает заданный массив, представленный коллекцией:
 
 <pre class="prettyprint">
-new Collection([1, 2, 3])->all();
+(new Collection([1, 2, 3]))->all();
 
 // [1, 2, 3]
 </pre>
@@ -79,19 +79,39 @@ $value = $collection->get('foo', 'default-value');
 </pre>
 
 <h3 id="first">Получение первой записи (first)</h3>
-Метод first() возвращает первый элемент в коллекции. Если коллекция пуста, то вернётся false
+Метод first() возвращает первый элемент в коллекции, который проходит заданный тест на истинность:
 
 <pre class="prettyprint">
-new Collection([1, 2, 3, 4])->first();
+(new Collection([1, 2, 3, 4]))->first(function (int $value, int $key) {
+    return $value > 2;
+});
+
+// 3
+</pre>
+
+Вы также можете вызвать first() метод без аргументов, чтобы получить первый элемент в коллекции. Если коллекция пуста, то возвращается null:
+
+<pre class="prettyprint">
+(new Collection([1, 2, 3, 4]))->first();
 
 // 1
 </pre>
 
 <h3 id="last">Получение последней записи (last)</h3>
-Метод last() возвращает последний элемент в коллекции. Если коллекция пуста, то вернётся false
+Метод last() возвращает последний элемент в коллекции, который проходит заданный тест на истинность:
 
 <pre class="prettyprint">
-new Collection([1, 2, 3, 4])->last();
+(new Collection([1, 2, 3, 4]))->last(function (int $value, int $key) {
+    return $value < 3;
+});
+
+// 2
+</pre>
+
+Вы также можете вызвать last() метод без аргументов, чтобы получить последний элемент в коллекции. Если коллекция пуста, то возвращается null:
+
+<pre class="prettyprint">
+(new Collection([1, 2, 3, 4]))->last();
 
 // 4
 </pre>
@@ -171,7 +191,20 @@ $collection->has('product');
 </pre>
 
 <h3 id="contains">Проверка значение на существование (contains)</h3>
-Метод contains() определяет, содержит ли коллекция заданное значение:
+
+Метод contains() определяет, содержит ли коллекция данный элемент. Вы можете передать методу замыкание contains(), чтобы определить, существует ли в коллекции элемент, соответствующий данному критерию истинности:
+
+<pre class="prettyprint">
+$collection = new Collection([1, 2, 3, 4, 5]);
+
+$collection->contains(function (int $value, int $key) {
+    return $value > 5;
+});
+
+/ false
+</pre>
+
+В качестве альтернативы вы можете передать строку методу contains(), чтобы определить, содержит ли коллекция заданное значение элемента:
 
 <pre class="prettyprint">
 $collection = new Collection(['name' => 'Desk', 'price' => 100]);
@@ -201,6 +234,15 @@ $collection->search(4);
 $collection->search('4', true);
 
 // false
+</pre>
+
+В качестве альтернативы вы можете передать собственное замыкание для поиска первого элемента, который проходит указанный тест на истинность:
+<pre class="prettyprint">
+$collection->search(function ($item, $key) {
+    return $item > 5;
+});
+
+// 2
 </pre>
 
 <h3 id="count">Получение количества записей в коллекции (count)</h3>

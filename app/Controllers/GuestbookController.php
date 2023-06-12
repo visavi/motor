@@ -35,7 +35,7 @@ class GuestbookController extends Controller
     public function index(Response $response): Response
     {
         $messages = $this->guestbookRepository->getMessages(setting('guestbook.per_page'));
-        
+
         return $this->view->render(
             $response,
             'guestbook/index',
