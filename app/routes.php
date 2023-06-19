@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Controllers\Admin\IndexController as AdminIndexController;
 use App\Controllers\Admin\SettingController as AdminSettingController;
 use App\Controllers\Admin\BackupController as AdminBackupController;
+use App\Controllers\Admin\LogController as AdminLogController;
 use App\Controllers\BBCodeController;
 use App\Controllers\CaptchaController;
 use App\Controllers\CommentController;
@@ -140,5 +141,7 @@ return function (App $app) {
         $group->post('/backups', [AdminBackupController::class, 'create'])->setName('admin-backups-create');
         $group->get('/backups/{name:[\w\-\.]+}', [AdminBackupController::class, 'view'])->setName('admin-backups-view');
         $group->delete('/backups/{name:[\w\-\.]+}', [AdminBackupController::class, 'destroy'])->setName('admin-backups-destroy');
+
+        $group->get('/logs', [AdminLogController::class, 'index'])->setName('admin-logs');
     })->add(CheckAdminMiddleware::class);
 };

@@ -34,10 +34,10 @@ $story ??= null;
             <label for="tags" class="form-label">Теги</label>
 
             <?php $tags = old('tags', $story ? $story->tags->pluck('tag')->all() : []); ?>
-            <select class="form-select input-tag<?= hasError('tags') ?>" id="tags" name="tags[]" multiple>
-                <option disabled value="">Выберите тег...</option>
+            <select class="form-select input-tag<?= hasError('tags') ?>" id="tags" name="tags[]" multiple required>
+                <option disabled value="">Теги...</option>
                 <?php foreach ($tags as $key => $tag): ?>
-                <option value="<?= $tag ?>" selected="selected"><?= $tag ?></option>
+                <option value="<?= $tag ?>" selected><?= $tag ?></option>
                 <?php endforeach; ?>
             </select>
             <div class="invalid-feedback"><?= getError('tags') ?></div>

@@ -51,7 +51,7 @@
 
 <?= $this->fetch('footer') ?>
 
-<script src="<?= $this->asset('/assets/js/jquery-3.6.4.min.js') ?>"></script>
+<script src="<?= $this->asset('/assets/js/jquery.min.js') ?>"></script>
 <script src="<?= $this->asset('/assets/js/bootstrap.bundle.min.js') ?>"></script>
 <script src="<?= $this->asset('/assets/js/theme-toggler.js') ?>"></script>
 <script src="<?= $this->asset('/assets/js/jquery.caret.min.js') ?>"></script>
