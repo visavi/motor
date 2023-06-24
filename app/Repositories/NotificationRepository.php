@@ -32,6 +32,7 @@ class NotificationRepository implements RepositoryInterface
     {
         return Notification::query()
             ->where('user_id', getUser('id'))
+            ->orderByDesc('created_at')
             ->paginate();
     }
 

@@ -7,7 +7,9 @@ namespace App\Controllers;
 use App\Models\File;
 use App\Models\Story;
 use App\Models\Tag;
+use App\Models\User;
 use App\Repositories\FileRepository;
+use App\Repositories\NotificationRepository;
 use App\Repositories\ReadRepository;
 use App\Repositories\StoryRepository;
 use App\Services\Session;
@@ -118,6 +120,7 @@ class StoryController extends Controller
         Request $request,
         Response $response,
         Slug $slug,
+        NotificationRepository $notificationRepository,
     ): Response {
         $user    = getUser();
         $input   = (array) $request->getParsedBody();
@@ -150,9 +153,11 @@ class StoryController extends Controller
         }
 
         if ($this->validator->isValid($input)) {
+            $title = sanitize($input['title']);
+
             $story = Story::query()->create([
                 'user_id'    => $user->id,
-                'title'      => sanitize($input['title']),
+                'title'      => $title,
                 'slug'       => $slug->slugify($input['title']),
                 'text'       => sanitize($input['text']),
                 'rating'     => 0,
@@ -169,10 +174,26 @@ class StoryController extends Controller
                 ]);
             }
 
+            // Attach files to story
             File::query()
                 ->where('story_id', 0)
                 ->where('user_id', $user->id)
                 ->update(['story_id' => $story->id]);
+
+            // Send notify to admins
+            if (! isAdmin() && ! setting('story.active')) {
+                $admins = User::query()->whereIn('role', User::ADMIN_ROLES)->get();
+
+                $notifyText = sprintf('Пользователь @%s добавил новую статью [b][url=%s]%s[/url][/b]',
+                    $user->login,
+                    $story->getLink(),
+                    $title
+                );
+
+                foreach ($admins as $admin) {
+                    $notificationRepository->createNotification($admin, $notifyText);
+                }
+            }
 
             $this->session->set('flash', ['success' => 'Статья успешно добавлена!']);
 
