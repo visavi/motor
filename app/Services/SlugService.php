@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-class Slug
+class SlugService
 {
     protected string $delimiter = '-';
     protected int $limit = 0;

@@ -11,9 +11,9 @@ use Symfony\Component\Mime\Email;
 use Throwable;
 
 /**
- * Mail class
+ * MailService class
  */
-class Mail
+class MailService
 {
     /**
      * Send email

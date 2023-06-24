@@ -13,7 +13,7 @@ use App\Repositories\NotificationRepository;
 use App\Repositories\ReadRepository;
 use App\Repositories\StoryRepository;
 use App\Services\Session;
-use App\Services\Slug;
+use App\Services\SlugService;
 use App\Services\Str;
 use App\Services\Validator;
 use App\Services\View;
@@ -110,16 +110,17 @@ class StoryController extends Controller
     /**
      * Store
      *
-     * @param Request  $request
-     * @param Response $response
-     * @param Slug     $slug
+     * @param Request                $request
+     * @param Response               $response
+     * @param SlugService            $slugService
+     * @param NotificationRepository $notificationRepository
      *
      * @return Response
      */
     public function store(
-        Request $request,
-        Response $response,
-        Slug $slug,
+        Request                $request,
+        Response               $response,
+        SlugService            $slugService,
         NotificationRepository $notificationRepository,
     ): Response {
         $user    = getUser();
@@ -158,7 +159,7 @@ class StoryController extends Controller
             $story = Story::query()->create([
                 'user_id'    => $user->id,
                 'title'      => $title,
-                'slug'       => $slug->slugify($input['title']),
+                'slug'       => $slugService->slugify($input['title']),
                 'text'       => sanitize($input['text']),
                 'rating'     => 0,
                 'reads'      => 0,
@@ -238,18 +239,18 @@ class StoryController extends Controller
     /**
      * Update
      *
-     * @param int      $id
-     * @param Request  $request
-     * @param Response $response
-     * @param Slug     $slug
+     * @param int         $id
+     * @param Request     $request
+     * @param Response    $response
+     * @param SlugService $slugService
      *
      * @return Response
      */
     public function update(
-        int $id,
-        Request $request,
-        Response $response,
-        Slug $slug,
+        int         $id,
+        Request     $request,
+        Response    $response,
+        SlugService $slugService,
     ): Response
     {
         $user = getUser();
@@ -294,7 +295,7 @@ class StoryController extends Controller
         if ($this->validator->isValid($input)) {
             $story->update([
                 'title'      => sanitize($input['title']),
-                'slug'       => $slug->slugify($input['title']),
+                'slug'       => $slugService->slugify($input['title']),
                 'text'       => sanitize($input['text']),
                 'active'     => isAdmin() ? $input['active'] ?? $story->active : $story->active,
                 'locked'     => isAdmin() ? $input['locked'] ?? $story->locked : $story->locked,

@@ -7,7 +7,7 @@ namespace App\Controllers\User;
 use App\Controllers\Controller;
 use App\Models\User;
 use App\Repositories\UserRepository;
-use App\Services\Mail;
+use App\Services\MailService;
 use App\Services\Session;
 use App\Services\Str;
 use App\Services\Validator;
@@ -178,7 +178,7 @@ class UserController extends Controller
                     'from_name'  => setting('mailer.from_name'),
                 ];
 
-                Mail::send($data);
+                MailService::send($data);
 
                 $this->session->set('login', $input['login']);
                 $this->session->set('password', $password);
