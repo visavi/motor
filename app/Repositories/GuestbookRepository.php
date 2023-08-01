@@ -37,6 +37,9 @@ class GuestbookRepository implements RepositoryInterface
     public function getMessages(int $perPage): CollectionPaginate
     {
         return Guestbook::query()
+            ->when(! isAdmin(), function (Guestbook $query) {
+                $query->active();
+            })
             ->orderByDesc('created_at')
             ->with('user')
             ->paginate($perPage);

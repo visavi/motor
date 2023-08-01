@@ -68,7 +68,8 @@ class GuestbookController extends Controller
         $this->validator
             ->required(['csrf', 'text'])
             ->same('csrf', $this->session->get('csrf'), 'Неверный идентификатор сессии, повторите действие!')
-            ->length('text', setting('guestbook.text_min_length'), setting('guestbook.text_max_length'));
+            ->length('text', setting('guestbook.text_min_length'), setting('guestbook.text_max_length'))
+            ->boolean('active');
 
         if (! $user) {
             $this->validator
@@ -82,18 +83,24 @@ class GuestbookController extends Controller
                 $name = isset($input['name']) ? sanitize($input['name']) : setting('main.guest_name');
             }
 
-            $text = sanitize($input['text']);
+            $text   = sanitize($input['text']);
+            $active = isAdmin() ? true : setting('guestbook.active');
 
             Guestbook::query()->create([
                 'user_id'    => $user->id ?? null,
                 'text'       => $text,
                 'name'       => $name ?? null,
+                'active'     => $active,
                 'created_at' => time(),
             ]);
 
             $notificationService->sendNotify($text, route('guestbook'), 'Гостевая');
 
-            $this->session->set('flash', ['success' => 'Сообщение успешно добавлено!']);
+            $this->session->set('flash', [
+                'success' => $active
+                    ? 'Сообщение успешно добавлено!'
+                    : 'Сообщение будет опубликовано после модерации!'
+            ]);
         } else {
             $this->session->set('flash', ['errors' => $this->validator->getErrors(), 'old' => $input]);
         }
@@ -156,11 +163,13 @@ class GuestbookController extends Controller
         $this->validator
             ->required(['csrf', 'text'])
             ->same('csrf', $this->session->get('csrf'), 'Неверный идентификатор сессии, повторите действие!')
-            ->length('text', setting('guestbook.text_min_length'), setting('guestbook.text_max_length'));
+            ->length('text', setting('guestbook.text_min_length'), setting('guestbook.text_max_length'))
+            ->boolean('active');
 
         if ($this->validator->isValid($input)) {
             $message->update([
-                'text' => sanitize($input['text']),
+                'text'   => sanitize($input['text']),
+                'active' => $input['active'],
             ]);
         } else {
             $this->session->set('flash', ['errors' => $this->validator->getErrors(), 'old' => $input]);

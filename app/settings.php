@@ -56,6 +56,7 @@ return static function (ContainerBuilder $containerBuilder)
 
                 'guestbook' => [
                     'allow_guests'     => $settings['guestbook.allow_guests'],   // Разрешить гостям писать сообщения
+                    'active'           => $settings['guestbook.active'],         // Публиковать сообщения без модерации
                     'per_page'         => $settings['guestbook.per_page'],
                     'text_min_length'  => $settings['guestbook.text_min_length'],
                     'text_max_length'  => $settings['guestbook.text_max_length'],

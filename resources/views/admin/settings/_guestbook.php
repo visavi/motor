@@ -17,6 +17,12 @@ use League\Plates\Template\Template;
         <label class="form-check-label" for="allow_guests">Разрешить гостям писать сообщения</label>
     </div>
 
+    <div class="form-check mb-3">
+        <input type="hidden" value="0" name="settings[guestbook][active]">
+        <input type="checkbox" class="form-check-input" value="1" name="settings[guestbook][active]" id="active"<?= old('settings.guestbook.active', $settings['guestbook.active']) ? ' checked' : '' ?>>
+        <label class="form-check-label" for="active">Публиковать сообщения без модерации</label>
+    </div>
+
     <div class="mb-3">
         <label for="per_page" class="form-label">Количество сообщений на стр.</label>
         <input type="number" class="form-control<?= hasError('per_page') ?>" id="per_page" name="settings[guestbook][per_page]" value="<?= old('settings.guestbook.per_page',  $settings['guestbook.per_page']) ?>" required>

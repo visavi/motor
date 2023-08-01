@@ -26,13 +26,17 @@ use MotorORM\CollectionPaginate;
         <?php foreach ($messages as $message): ?>
             <div class="post mb-3">
                 <div class="float-end text-end">
-                    <?php if (getUser() && getUser('id') !== $message->user_id): ?>
-                        <a href="#" onclick="return postReply(this)" data-bs-toggle="tooltip" title="Ответить">
-                            <i class="bi bi-reply text-body-secondary"></i>
-                        </a>
-                        <a href="#" onclick="return postQuote(this)" data-bs-toggle="tooltip" title="Цитировать">
-                            <i class="bi bi-chat-quote text-body-secondary"></i>
-                        </a>
+                    <?php if ($message->active === false): ?>
+                        <span class="badge text-bg-danger">Не опубликовано</span>
+                    <?php else: ?>
+                        <?php if (getUser() && getUser('id') !== $message->user_id): ?>
+                            <a href="#" onclick="return postReply(this)" data-bs-toggle="tooltip" title="Ответить">
+                                <i class="bi bi-reply text-body-secondary"></i>
+                            </a>
+                            <a href="#" onclick="return postQuote(this)" data-bs-toggle="tooltip" title="Цитировать">
+                                <i class="bi bi-chat-quote text-body-secondary"></i>
+                            </a>
+                        <?php endif; ?>
                     <?php endif; ?>
 
                     <?php if (isAdmin()): ?>

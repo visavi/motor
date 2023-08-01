@@ -26,6 +26,16 @@ $message ??= null;
             <div class="invalid-feedback"><?= getError('text') ?></div>
         </div>
 
+        <?php if ($message && isAdmin()): ?>
+        <div class="mb-3">
+            <div class="form-check">
+                <input type="hidden" value="0" name="active">
+                <input type="checkbox" class="form-check-input" value="1" name="active" id="active"<?= old('active', $message->active ?? true) ? ' checked' : '' ?>>
+                <label for="active" class="form-check-label">Опубликовать</label>
+            </div>
+        </div>
+        <?php endif; ?>
+
         <?php if (! isUser()): ?>
             <?= $this->fetch('app/_captcha') ?>
         <?php endif; ?>
