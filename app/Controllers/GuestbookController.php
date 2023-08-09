@@ -84,7 +84,7 @@ class GuestbookController extends Controller
             }
 
             $text   = sanitize($input['text']);
-            $active = isAdmin() ? true : setting('guestbook.active');
+            $active = isUser() ? true : setting('guestbook.active');
 
             Guestbook::query()->create([
                 'user_id'    => $user->id ?? null,
