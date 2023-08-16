@@ -103,6 +103,13 @@ return static function (ContainerBuilder $containerBuilder)
                     'symbols' => $settings['captcha.symbols'], // Список допустимых символов
                 ],
 
+                'sticker' => [
+                    'size_max'   => $settings['sticker.size_max'],   // Максимальный вес стикера (byte)
+                    'weight_max' => $settings['sticker.weight_max'], // Максимальный размер стикера (px)
+                    'weight_min' => $settings['sticker.weight_min'], // Минимальный размер стикера (px)
+                    'per_page'   => $settings['sticker.per_page'],   // Количество элементов на страницу
+                ],
+
                 'displayErrorDetails' => false, // Should be set to false in production
                 'logError'            => true,
                 'logErrorDetails'     => true,

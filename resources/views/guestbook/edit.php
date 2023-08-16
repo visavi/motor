@@ -15,7 +15,7 @@ use MotorORM\Collection;
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="bi bi-house-door"></i></a></li>
-            <li class="breadcrumb-item"><a href="/guestbook">Гостевая книга</a></li>
+            <li class="breadcrumb-item"><a href="<?= route('guestbook') ?>">Гостевая книга</a></li>
             <li class="breadcrumb-item active">Редактирование</li>
         </ol>
     </nav>

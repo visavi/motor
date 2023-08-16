@@ -38,7 +38,7 @@ class SettingController extends Controller
         $query = $request->getQueryParams();
 
         $settings = $this->settingRepository->getSettings();
-        $action = $query['action'] ?? 'main';
+        $action = $query['action'] ?? 'app';
 
         return $this->view->render(
             $response,

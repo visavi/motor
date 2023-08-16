@@ -6,6 +6,7 @@ use App\Controllers\Admin\IndexController as AdminIndexController;
 use App\Controllers\Admin\SettingController as AdminSettingController;
 use App\Controllers\Admin\BackupController as AdminBackupController;
 use App\Controllers\Admin\LogController as AdminLogController;
+use App\Controllers\Admin\StickerController as AdminStickerController;
 use App\Controllers\BBCodeController;
 use App\Controllers\CaptchaController;
 use App\Controllers\CommentController;
@@ -143,5 +144,11 @@ return function (App $app) {
         $group->delete('/backups/{name:[\w\-\.]+}', [AdminBackupController::class, 'destroy'])->setName('admin-backups-destroy');
 
         $group->get('/logs', [AdminLogController::class, 'index'])->setName('admin-logs');
+
+        $group->get('/stickers', [AdminStickerController::class, 'index'])->setName('admin-stickers');
+        $group->get('/sticker/{id:[0-9]+}/edit', [AdminStickerController::class, 'edit'])->setName('admin-sticker-edit');
+        $group->put('/sticker/{id:[0-9]+}', [AdminStickerController::class, 'update'])->setName('admin-sticker-update');
+        $group->post('/stickers', [AdminStickerController::class, 'store'])->setName('admin-sticker-store');
+        $group->delete('/sticker/{id:[0-9]+}', [AdminStickerController::class, 'destroy'])->setName('admin-sticker-destroy');
     })->add(CheckAdminMiddleware::class);
 };

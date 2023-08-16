@@ -135,7 +135,7 @@ class GuestbookController extends Controller
     }
 
     /**
-     * Store
+     * Update
      *
      * @param int          $id
      * @param Request      $request

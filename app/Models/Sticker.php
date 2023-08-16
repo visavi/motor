@@ -7,7 +7,8 @@ namespace App\Models;
 /**
  * Class Sticker
  *
- * @property string $login
+ * @property int $id
+ * @property string $code
  * @property string $path
  */
 class Sticker extends Model
@@ -18,9 +19,7 @@ class Sticker extends Model
     protected string $table = 'stickers.csv';
 
     /**
-     * The attributes that should be cast.
+     * Директория загрузки файлов
      */
-    protected array $casts = [
-        'code' => 'string',
-    ];
+    public string $uploadPath = '/uploads/stickers';
 }

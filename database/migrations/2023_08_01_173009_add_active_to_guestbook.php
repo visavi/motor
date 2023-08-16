@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Guestbook;
-use App\Models\User;
 use MotorORM\Migration;
 
 return new class

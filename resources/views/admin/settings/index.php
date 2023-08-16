@@ -30,6 +30,7 @@
                 <a class="nav-link" href="/admin/settings?action=image" id="image">Изображения</a>
                 <a class="nav-link" href="/admin/settings?action=captcha" id="captcha">Captcha</a>
                 <a class="nav-link" href="/admin/settings?action=user" id="user">Пользователи</a>
+                <a class="nav-link" href="/admin/settings?action=sticker" id="user">Стикеры</a>
             </div>
         </div>
         <div class="col-md-8 section shadow p-3">

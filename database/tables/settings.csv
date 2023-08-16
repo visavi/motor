@@ -28,6 +28,7 @@ guestbook.text_max_length,1000
 guestbook.name_min_length,3
 guestbook.name_max_length,20
 guestbook.allow_guests,1
+guestbook.active,1
 file.size_max,5242880
 file.total_max,5
 file.extensions,"jpg,jpeg,gif,png,bmp,webp"
@@ -37,3 +38,7 @@ image.weight_min,100
 captcha.length,5
 captcha.symbols,1234567890
 user.per_page,10
+sticker.size_max,10240
+sticker.weight_min,16
+sticker.weight_max,128
+sticker.per_page,20
