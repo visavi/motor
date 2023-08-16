@@ -7,7 +7,7 @@ use MotorORM\CollectionPaginate;
 ?>
 <?php $this->layout('layout') ?>
 
-<?php $this->start('title') ?>Логи<?php $this->stop() ?>
+<?php $this->start('title') ?>Стикеры<?php $this->stop() ?>
 
 <?php $this->start('breadcrumb') ?>
     <nav>
