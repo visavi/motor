@@ -1,4 +1,4 @@
-name,valuegit commit -m 'Добавлены настройки имены сайта, подтверждения email и почты'
+name,value
 app.name,Motorcms.ru
 app.url,https://motorcms.ru
 main.allow_register,1
