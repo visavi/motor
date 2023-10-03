@@ -126,6 +126,7 @@ class StoryController extends Controller
         $user    = getUser();
         $input   = (array) $request->getParsedBody();
         $tags    = array_map('sanitize', $input['tags'] ?? []);
+        $slug    = $slugService->slugify($input['title'] ?? '');
         $created = time();
 
         $this->validator
@@ -153,13 +154,17 @@ class StoryController extends Controller
             );
         }
 
+        if (strlen($slug) < setting('story.title_min_length')) {
+            $this->validator->addError('title', sprintf('Длина заголовка должна быть не менее %d символов!', setting('story.title_min_length')));
+        }
+
         if ($this->validator->isValid($input)) {
             $title = sanitize($input['title']);
 
             $story = Story::query()->create([
                 'user_id'    => $user->id,
                 'title'      => $title,
-                'slug'       => $slugService->slugify($input['title']),
+                'slug'       => $slug,
                 'text'       => sanitize($input['text']),
                 'rating'     => 0,
                 'reads'      => 0,

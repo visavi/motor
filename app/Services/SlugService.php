@@ -111,7 +111,7 @@ class SlugService
     public function slugify($string): string
     {
         // Make sure string is in UTF-8 and strip invalid UTF-8 characters
-        $string = mb_convert_encoding((string) $string, 'UTF-8', mb_list_encodings());
+        // $string = mb_convert_encoding((string) $string, 'UTF-8', mb_list_encodings());
 
         // Make custom replacements
         $string = preg_replace(array_keys($this->replacements), $this->replacements, $string);
