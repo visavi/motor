@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Models\Comment;
 use App\Repositories\CommentRepository;
 use App\Repositories\StoryRepository;
 use App\Services\NotificationService;
@@ -27,17 +26,7 @@ class CommentController extends Controller
         protected CommentRepository $commentRepository,
     ) {}
 
-    /**
-     * Store
-     *
-     * @param int $id
-     * @param Request $request
-     * @param Response $response
-     * @param NotificationService $notificationService
-     *
-     * @return Response
-     */
-    public function store(
+/*    public function storeOld(
         int $id,
         Request $request,
         Response $response,
@@ -63,11 +52,12 @@ class CommentController extends Controller
         if ($this->validator->isValid($input)) {
             $text = sanitize($input['text']);
 
-            $comment = Comment::query()->create([
+            $comment = $this->commentRepository->create([
                 'story_id'   => $story->id,
                 'user_id'    => $user->id,
                 'text'       => $text,
                 'rating'     => 0,
+                'parent_id'  => 0,
                 'created_at' => time(),
             ]);
 
@@ -77,6 +67,86 @@ class CommentController extends Controller
         } else {
             $this->session->set('flash', ['errors' => $this->validator->getErrors(), 'old' => $input]);
         }
+
+        return $this->redirect($response, $story->getLink());
+    }*/
+
+    /**
+     * Store
+     *
+     * @param int $id
+     * @param Request $request
+     * @param Response $response
+     * @param NotificationService $notificationService
+     *
+     * @return Response
+     */
+    public function store(
+        int $id,
+        Request $request,
+        Response $response,
+        NotificationService $notificationService,
+    ) {
+        $user = getUser();
+        $story = $this->storyRepository->getById($id);
+        if (! $story) {
+            abort(404, 'Статья не найдена!');
+        }
+
+        if (! $story->active) {
+            abort(403, 'Статья еще не опубликована!');
+        }
+
+        $input = (array) $request->getParsedBody();
+
+        $this->validator
+            ->required(['csrf', 'text'])
+            ->same('csrf', $this->session->get('csrf'), 'Неверный идентификатор сессии, повторите действие!')
+            ->length('text', setting('comment.text_min_length'), setting('comment.text_max_length'));
+
+        if ($this->validator->isValid($input)) {
+            $text = sanitize($input['text']);
+
+            if (isset($input['parent_id'])) {
+                $parent = $this->commentRepository->getByIdAndStoryId((int) $input['parent_id'], $story->id);
+            }
+
+            $comment = $this->commentRepository->create([
+                'story_id'   => $story->id,
+                'user_id'    => $user->id,
+                'text'       => $text,
+                'rating'     => 0,
+                'parent_id'  => $parent->id ?? 0,
+                'created_at' => time(),
+            ]);
+
+            $notificationService->sendNotify($text, $story->getLink() . '#comment_' . $comment->id, $story->title);
+
+            if (strtolower($request->getHeaderLine('X-Requested-With')) === 'xmlhttprequest') {
+                $commentData = $comment->toArray();
+                $commentData['text'] = bbCode($comment->text);
+                $commentData['created_at'] = date('d.m.Y H:i', time());
+
+                return $this->json($response, [
+                    'success' => true,
+                    'message' => 'Комментарий успешно добавлен!',
+                    'comment' => $commentData,
+                ]);
+            }
+
+            $this->session->set('flash', ['success' => 'Комментарий успешно добавлен!']);
+
+            return $this->redirect($response, $story->getLink());
+        }
+
+        if (strtolower($request->getHeaderLine('X-Requested-With')) === 'xmlhttprequest') {
+            return $this->json($response, [
+                'success' => false,
+                'message' => current($this->validator->getErrors()),
+            ]);
+        }
+
+        $this->session->set('flash', ['errors' => $this->validator->getErrors(), 'old' => $input]);
 
         return $this->redirect($response, $story->getLink());
     }

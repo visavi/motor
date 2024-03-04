@@ -157,6 +157,37 @@ class Story extends Model
     }
 
     /**
+     * Get comments tree
+     *
+     * @param int $parentId
+     * @param int $depth
+     * @param int $maxDepth
+     *
+     * @return array
+     */
+    public function commentsTree(int $parentId = 0, int $depth = 0, int $maxDepth = 5): array
+    {
+        $tree = [];
+
+        foreach ($this->comments as $comment) {
+            $parentNotExists = $parentId === 0
+                && ! $this->comments->contains(function (Comment $value) use ($comment) {
+                    return $value->id === $comment->parent_id;
+                });
+
+            if ($comment->parent_id === $parentId || $parentNotExists) {
+                $comment->depth = $depth;
+
+                $comment->child = $this->commentsTree($comment->id, $depth < $maxDepth ? $depth + 1 : $depth, $maxDepth);
+
+                $tree[] = $comment;
+            }
+        }
+
+        return $tree;
+    }
+
+    /**
      * Delete story
      *
      * @return int
@@ -208,7 +239,7 @@ class Story extends Model
         $more = app(View::class)->fetch('app/_more', ['link' => $this->getLink()]);
 
         if (str_contains($this->text, '[cut]')) {
-            return bbCode(current(explode('[cut]', $this->text))) . $more;
+            return bbCode(current(explode('[cut]', $this->text, 2))) . $more;
         }
 
         if (Str::wordCount($this->text) > $words) {

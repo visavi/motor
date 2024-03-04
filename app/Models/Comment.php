@@ -12,11 +12,12 @@ use MotorORM\Collection;
  * Class Guestbook
  *
  * @property int $id
- * @property string $user_id
- * @property string $story_id
+ * @property int $user_id
+ * @property int $story_id
  * @property string $text
  * @property int $rating
  * @property int $created_at
+ * @property int $parent_id
  *
  * @property-read User $user
  * @property-read Story $story

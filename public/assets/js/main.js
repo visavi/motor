@@ -50,7 +50,55 @@ $(function () {
     $('.markItUp .is-invalid')
         .closest('.markItUpBlock').parent()
         .find('.invalid-feedback').show();
+
+    /*var hash = $(location).attr('hash');
+
+    if (hash.match("^#comment_")) {
+        postReply($(hash));
+    }*/
 });
+
+sendComment = function (el){
+    let form = $(el).closest('.js-form');
+    let url = form.find('form').attr('action');
+
+    let formData = {
+        text: form.find('textarea[name="text"]').val(),
+        csrf: form.find('input[name="csrf"]').val(),
+        parent_id: form.find('input[name="parent_id"]').val(),
+    };
+
+    $.ajax({
+        type: 'post',
+        url: url,
+        data: formData,
+        dataType: 'json',
+        encode: true,
+        success: function (data) {
+            if (data.success) {
+                let currentPost = form.closest('.post');
+                let newPost = $('.js-post').clone().removeClass('js-post').show();
+                let depth = parseInt(currentPost.data('depth')) + 1;
+
+                newPost.find('.post-message').html(data.comment.text);
+                newPost.find('.post-date').text(data.comment.created_at);
+                newPost.attr('id', 'comment_' + data.comment.id).css('margin-left', depth * 20 + 'px');
+
+                newPost.insertAfter(currentPost);
+                form.remove();
+
+                toastr.success(data.message);
+            } else {
+                form.find('textarea[name="text"]').addClass('is-invalid');
+                form.find('.invalid-feedback').text(data.message).css('display', 'block');
+
+                toastr.error(data.message);
+            }
+        }
+    });
+
+    return false;
+};
 
 /* Переход к форме ввода */
 postJump = function () {
@@ -61,41 +109,46 @@ postJump = function () {
 
 /* Ответ на сообщение */
 postReply = function (el) {
-    postJump();
+    $('.js-answer').remove();
 
-    var field  = $('.markItUpEditor');
-    var post   = $(el).closest('.post');
+    var post = $(el).closest('.post');
+    var form = $('.js-form').clone();
+
+    var commentId = post.attr('id').replace(/comment_/, '');
+    form.find("[name='parent_id']").val(commentId);
+
+    form.find('textarea').markItUp(mySettings);
+    form.addClass('js-answer').show();
+
+    $(el).closest('.post').append(form);
+
     var author = post.find('.post-author').data('login');
-
-    var $lastSymbol = field.val().slice(field.val().length - 1);
-    var separ = $.inArray($lastSymbol, ['', '\n']) !== -1 ? '' : '\n';
-
-    field.focus().val(field.val() + separ + author + ', ');
+    form.focus().find('.markItUpEditor').val(author + ', ');
 
     return false;
 };
 
 /* Цитирование сообщения */
 postQuote = function (el) {
-    postJump();
+    $('.js-answer').remove();
 
-    var field   = $('.markItUpEditor');
-    var post    = $(el).closest('.post');
+    var post = $(el).closest('.post');
+    var form = $('.js-form').clone();
+
+    var commentId = post.attr('id').replace(/comment_/, '');
+    form.find("[name='parent_id']").val(commentId);
+
+    form.find('textarea').markItUp(mySettings);
+    form.addClass('js-answer').show();
+
+    $(el).closest('.post').append(form);
+
     var author  = post.find('.post-author').data('login');
     var date    = post.find('.post-date').text();
     var text    = post.find('.post-message').clone();
     var message = $.trim(text.find('blockquote').remove().end().text());
 
-    var $lastSymbol = field.val().slice(field.val().length - 1);
-    var separ = $.inArray($lastSymbol, ['', '\n']) !== -1 ? '' : '\n';
-
-    if (!message) {
-        field.focus().val(field.val() + separ + author + ', ');
-
-        return false;
-    }
-
-    field.focus().val(field.val() + separ + '[quote=' + author + ' ' + date + ']' + message + '[/quote]\n');
+    form.focus().find('.markItUpEditor').val('[quote=' + author + ' ' + date + ']' + message + '[/quote]\n');
 
     return false;
 };
