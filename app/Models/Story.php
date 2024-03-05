@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Services\BBCode;
 use App\Services\Str;
 use App\Services\View;
 use MotorORM\Builder;
@@ -236,17 +237,18 @@ class Story extends Model
      */
     public function shortText(int $words = 100): string
     {
+        $bbCode = new BBCode();
         $more = app(View::class)->fetch('app/_more', ['link' => $this->getLink()]);
 
         if (str_contains($this->text, '[cut]')) {
-            return bbCode(current(explode('[cut]', $this->text, 2))) . $more;
+            return $bbCode->handle(current(explode('[cut]', $this->text, 2))) . $more;
         }
 
         if (Str::wordCount($this->text) > $words) {
-            return bbCodeTruncate($this->text, $words) . $more;
+            return $bbCode->truncate($this->text, $words) . $more;
         }
 
-        return bbCode($this->text);
+        return $bbCode->handle($this->text);
     }
 
     /**
@@ -290,5 +292,10 @@ class Story extends Model
     public function getLink(): string
     {
          return route('story-view', ['slug' => sprintf('%s-%d', $this->slug, $this->id)]);
+    }
+
+    public function getText(): string
+    {
+        return (new BBCode())->handle($this->text);
     }
 }

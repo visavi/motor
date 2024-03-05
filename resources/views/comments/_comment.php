@@ -44,7 +44,7 @@ use App\Models\Story;
     </div>
 
     <div class="post-message">
-        <?= bbCode($comment->text) ?>
+        <?= $comment->getText() ?>
     </div>
 
     <small class="post-date text-body-secondary fst-italic"><?= date('d.m.Y H:i', $comment->created_at) ?></small>

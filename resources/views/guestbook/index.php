@@ -62,7 +62,7 @@ use MotorORM\CollectionPaginate;
                 <?php endif; ?>
 
                 <div class="post-message">
-                    <?= bbCode($message->text) ?>
+                    <?= $message->getText() ?>
                 </div>
 
                 <small class="post-date text-body-secondary fst-italic"><?= date('d.m.Y H:i', $message->created_at) ?></small>

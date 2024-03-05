@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace App\Services;
 
 use GuzzleHttp\Client;
-use Shieldon\SimpleCache\Cache;
+use Symfony\Contracts\Cache\CacheInterface;
 use Throwable;
 
 class GithubService
 {
     private Client $client;
 
-    public function __construct(private Cache $cache)
+    public function __construct(private readonly CacheInterface $cache)
     {
         $this->client = new Client([
             'base_uri' => 'https://api.github.com/repos/visavi/motor/',
@@ -30,26 +30,19 @@ class GithubService
     public function sendRequest(string $uri): array
     {
         try {
-            $content = $this->cache->get($uri);
-            if ($content) {
-                return json_decode($content, true);
-            }
+            return $this->cache->get($uri, function () use ($uri): array {
+                $params = [
+                    'query' => [
+                        'per_page' => 10,
+                    ]
+                ];
 
-            $params = [
-                'query' => [
-                    'per_page' => 10,
-                ]
-            ];
+                $response = $this->client->get($uri, $params);
+                $content = $response->getBody()->getContents();
 
-            $response = $this->client->get($uri, $params);
-            $content = $response->getBody()->getContents();
-
-            if ($content) {
-                $this->cache->set($uri, $content, 3600);
-
-                return json_decode($content, true);
-            }
-        } catch (Throwable $e) {
+                return json_decode($content, true, 512, JSON_THROW_ON_ERROR);
+            });
+        } catch (Throwable) {
             // nothing
         }
 

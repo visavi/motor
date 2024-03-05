@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Services\BBCode;
 use MotorORM\Builder;
 
 /**
@@ -54,5 +55,10 @@ class Guestbook extends Model
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('active', true);
+    }
+
+    public function getText(): string
+    {
+        return (new BBCode())->handle($this->text);
     }
 }

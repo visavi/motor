@@ -38,7 +38,7 @@ use MotorORM\CollectionPaginate;
                 </div>
 
                 <div class="post-message">
-                    <?= bbCode($notification->message) ?>
+                    <?= $notification->getMessage() ?>
                 </div>
 
                 <small class="post-date text-body-secondary fst-italic"><?= date('d.m.Y H:i', $notification->created_at) ?></small>

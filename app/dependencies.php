@@ -10,8 +10,9 @@ use Monolog\Logger;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
-use Shieldon\SimpleCache\Cache;
 use Slim\Psr7\Response;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Contracts\Cache\CacheInterface;
 
 return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions([
@@ -20,8 +21,8 @@ return function (ContainerBuilder $containerBuilder) {
             return new View(dirname(__DIR__) . '/resources/views');
         },
 
-        Cache::class => function() {
-            return new Cache('file', ['storage' => dirname(__DIR__) . '/storage/cache']);
+        CacheInterface::class => function() {
+            return new FilesystemAdapter('cache', 3600, dirname(__DIR__) . '/storage');
         },
 
         ResponseInterface::class => function () {

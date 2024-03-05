@@ -42,7 +42,7 @@ use App\Models\Story;
     </div>
 
     <div class="post-message">
-        <?= bbCode($story->text) ?>
+        <?= $story->getText() ?>
     </div>
 
     <div class="post-author d-inline-block mt-3">

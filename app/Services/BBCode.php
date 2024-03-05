@@ -6,7 +6,7 @@ namespace App\Services;
 
 use App\Models\Sticker;
 use App\Models\User;
-use Shieldon\SimpleCache\Cache;
+use Symfony\Contracts\Cache\CacheInterface;
 
 /**
  * Класс обработки BB-кодов
@@ -111,6 +111,44 @@ class BBCode
             'callback' => 'userReplace',
         ],
     ];
+
+    /**
+     * BBCode
+     *
+     * @param mixed $text
+     * @param bool  $parse
+     *
+     * @return string
+     */
+    public function handle(mixed $text, bool $parse = true): string
+    {
+        $checkText = escape($text);
+
+        if (! $parse) {
+            return $this->clear($checkText);
+        }
+
+        $parseText = $this->parse($checkText);
+
+        return $this->parseStickers($parseText);
+    }
+
+    /**
+     * Возвращает обрезанный текст с закрытием тегов
+     *
+     * @param string $text
+     * @param int    $words
+     * @param string $end
+     *
+     * @return string
+     */
+    public function truncate(string $text, int $words = 20, string $end = '...'): string
+    {
+        $text = Str::words($text, $words, $end);
+        $text = $this->handle($this->closeTags($text));
+
+        return preg_replace('/\[(.*?)]/', '', $text);
+    }
 
     /**
      * Обрабатывает текст
@@ -290,12 +328,11 @@ class BBCode
         static $users;
 
         if (empty($users)) {
-            $cache = app(Cache::class);
-            $users = $cache->get('users');
-            if (! $users) {
-                $users = User::query()->get()->pluck('name', 'login')->all();
-                $cache->set('users', $users, 3600);
-            }
+            $cache = app(CacheInterface::class);
+
+            $users = $cache->get('users', function (): array {
+                return User::query()->get()->pluck('name', 'login')->all();
+            });
         }
 
         if (! array_key_exists($match[1], $users)) {

@@ -124,7 +124,7 @@ class CommentController extends Controller
 
             if (strtolower($request->getHeaderLine('X-Requested-With')) === 'xmlhttprequest') {
                 $commentData = $comment->toArray();
-                $commentData['text'] = bbCode($comment->text);
+                $commentData['text'] = $comment->getText();
                 $commentData['created_at'] = date('d.m.Y H:i', time());
 
                 return $this->json($response, [

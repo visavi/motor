@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Services\BBCode;
 use App\Services\Str;
 use MotorORM\Builder;
 use MotorORM\Collection;
@@ -90,11 +91,12 @@ class Comment extends Model
      */
     public function shortText(int $words = 30): string
     {
+        $bbCode = new BBCode();
         if (Str::wordCount($this->text) > $words) {
-            return bbCodeTruncate($this->text, $words);
+            return $bbCode->truncate($this->text, $words);
         }
 
-        return bbCode($this->text);
+        return $bbCode->handle($this->text);
     }
 
     /**
@@ -128,5 +130,10 @@ class Comment extends Model
         }
 
         return parent::delete();
+    }
+
+    public function getText(): string
+    {
+        return (new BBCode())->handle($this->text);
     }
 }

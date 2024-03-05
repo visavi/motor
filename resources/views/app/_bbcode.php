@@ -5,4 +5,4 @@
 
 <?php $this->start('title') ?>BBCode<?php $this->stop() ?>
 
-<?= bbCode($message) ?>
+<?= $message ?>

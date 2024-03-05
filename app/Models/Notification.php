@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Services\BBCode;
+
 /**
  * Class Notification
  *
@@ -26,4 +28,9 @@ class Notification extends Model
     protected array $casts = [
         'read'  => 'bool',
     ];
+
+    public function getMessage(): string
+    {
+        return (new BBCode())->handle($this->message);
+    }
 }

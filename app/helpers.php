@@ -5,10 +5,8 @@ declare(strict_types=1);
 use App\Exceptions\AbortException;
 use App\Factories\AppFactory;
 use App\Models\User;
-use App\Services\BBCode;
 use App\Services\Session;
 use App\Services\Setting;
-use App\Services\Str;
 use DI\Container;
 use Slim\App;
 use Slim\Factory\ServerRequestCreatorFactory;
@@ -51,47 +49,6 @@ function sanitize(string $str): string
     $str = str_replace($search, '', $str);
 
     return trim($str);
-}
-
-/**
- * BBCode
- *
- * @param mixed $text
- * @param bool  $parse
- *
- * @return string
- */
-function bbCode(mixed $text, bool $parse = true): string
-{
-    $bbCode = new BBCode();
-    $checkText = escape($text);
-
-    if (! $parse) {
-        return $bbCode->clear($checkText);
-    }
-
-    $parseText = $bbCode->parse($checkText);
-
-    return $bbCode->parseStickers($parseText);
-}
-
-/**
- * Возвращает обрезанный текст с закрытием тегов
- *
- * @param string $text
- * @param int    $words
- * @param string $end
- *
- * @return string
- */
-function bbCodeTruncate(string $text, int $words = 20, string $end = '...'): string
-{
-    $bbCode = new BBCode();
-
-    $text = Str::words($text, $words, $end);
-    $text = bbCode($bbCode->closeTags($text));
-
-    return preg_replace('/\[(.*?)]/', '', $text);
 }
 
 /**
