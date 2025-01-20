@@ -4,13 +4,26 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
-use App\Models\Story;
-use App\Models\Tag;
+//use App\Models\Story;
+//use App\Models\Tag;
+use App\Entities\Story;
+use App\Services\Pagination;
+use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use MotorORM\Collection;
 use MotorORM\CollectionPaginate;
+use Doctrine\ORM\EntityRepository;
 
-class StoryRepository implements RepositoryInterface
+class StoryRepository extends EntityRepository
 {
+    public function __construct(
+        protected EntityManagerInterface $em,
+        protected Pagination $pagination,
+    ) {
+        parent::__construct($em, $em->getClassMetadata(Story::class));
+    }
+
     /**
      * Get by id
      *
@@ -18,10 +31,10 @@ class StoryRepository implements RepositoryInterface
      *
      * @return Story|null
      */
-    public function getById(int $id): ?Story
+/*    public function getById(int $id): ?Story
     {
         return Story::query()->find($id);
-    }
+    }*/
 
     /**
      * Get by slug
@@ -30,21 +43,21 @@ class StoryRepository implements RepositoryInterface
      *
      * @return Story|null
      */
-    public function getBySlug(string $slug): ?Story
+/*    public function getBySlug(string $slug): ?Story
     {
         $data = explode('-', $slug);
 
         return Story::query()->find(end($data));
-    }
+    }*/
 
     /**
      * Get stories
      *
      * @param int $perPage
      *
-     * @return CollectionPaginate<Story>
+     *
      */
-    public function getStories(int $perPage): CollectionPaginate
+/*    public function getStories(int $perPage): CollectionPaginate
     {
         return Story::query()
             ->when(! isAdmin(), function (Story $query) {
@@ -55,6 +68,28 @@ class StoryRepository implements RepositoryInterface
             ->orderByDesc('created_at')
             ->with(['user', 'poll', 'comments', 'favorite', 'favorites'])
             ->paginate($perPage);
+    }*/
+
+    public function getStories(int $perPage)/*: CollectionPaginate*/
+    {
+
+
+        dd($this->createQueryBuilder('s'), $this->getClassMetadata(), get_class_methods($this), $this->pagination, $this);
+
+
+        $story = $this->entityManager->getRepository(Story::class);
+        $query = $story->createQueryBuilder('s')
+            ->orderBy('s.locked', 'DESC')
+            ->addOrderBy('s.created_at', 'DESC');
+
+        if (! isAdmin()) {
+            $query->andWhere('s.active = :active')
+                ->andWhere('s.created_at < :datetime')
+                ->setParameter('active', true)
+                ->setParameter('datetime', new DateTime('now'));
+        }
+
+        return $this->pagination->paginate($query, $perPage);
     }
 
     /**

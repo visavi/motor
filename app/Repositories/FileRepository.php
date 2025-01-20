@@ -8,7 +8,7 @@ use App\Models\File;
 use App\Models\Guestbook;
 use MotorORM\Collection;
 
-class FileRepository implements RepositoryInterface
+class FileRepository
 {
     /**
      * @param int $id

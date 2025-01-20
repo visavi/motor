@@ -1,14 +1,13 @@
 <?php
 
-use App\Models\Story;
-use MotorORM\CollectionPaginate;
+use App\Services\Pagination;
 
-/** @var CollectionPaginate|Story[] $stories */
+/** @var Pagination $pagination */
 ?>
 <?php $this->layout('layout') ?>
 
-<?php $this->start('title') ?>Статьи (Стр. <?= $stories->currentPage() ?>)<?php $this->stop() ?>
-<?php $this->start('description') ?>Статьи (Стр. <?= $stories->currentPage() ?>)<?php $this->stop() ?>
+<?php $this->start('title') ?>Статьи (Стр. <?= $pagination->currentPage() ?>)<?php $this->stop() ?>
+<?php $this->start('description') ?>Статьи (Стр. <?= $pagination->currentPage() ?>)<?php $this->stop() ?>
 
 <?php $this->start('header') ?>
     <h1><?= setting('main.title') ?></h1>
@@ -23,4 +22,4 @@ use MotorORM\CollectionPaginate;
 </nav>
 <?php $this->stop() ?>
 
-<?= $this->fetch('stories/_list', compact('stories')) ?>
+<?= $this->fetch('stories/_list', compact('pagination')) ?>

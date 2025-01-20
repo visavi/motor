@@ -9,7 +9,7 @@ use App\Repositories\UserRepository;
 
 /** @var Comment $comment */
 ?>
-
+<?php /*
 <div class="list-group shadow mb-3">
     <?php $storyRepository = new StoryRepository(); ?>
     <a href="<?= route('stories') ?>" class="list-group-item list-group-item-action fw-bold">
@@ -73,3 +73,4 @@ use App\Repositories\UserRepository;
         <a href="/tags">Показать все теги</a>
     </div>
 </div>
+*/?>

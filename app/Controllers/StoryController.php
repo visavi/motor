@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Entities\Story;
 use App\Models\File;
-use App\Models\Story;
+#use App\Models\Story;
 use App\Models\Tag;
 use App\Models\User;
 use App\Repositories\FileRepository;
@@ -32,6 +33,7 @@ class StoryController extends Controller
         protected FileRepository $fileRepository,
         protected StoryRepository $storyRepository,
         protected ReadRepository $readRepository,
+        protected Story $story,
     ) {}
 
     /**
@@ -43,12 +45,30 @@ class StoryController extends Controller
      */
     public function index(Response $response): Response
     {
-        $stories = $this->storyRepository->getStories(setting('story.per_page'));
+        $pagination = $this->storyRepository->getStories(setting('story.per_page'));
+
+ /*
+
+        dd($product->findOneBy(['name' => 'Вася Пупкин']));
+
+
+        $product = new Product();
+        $product->setName('Вася пупкин');
+        $product->setText('Привет буфет 😀😃😄😁😆😅🤣😂🙂🙃🫠😉😊😇🥰😍🤩😘😗');
+
+        $this->entityManager->persist($product);
+        $this->entityManager->flush();
+        
+
+        dd($this->entityManager, $product);
+
+
+        $stories = $this->storyRepository->getStories(setting('story.per_page'));*/
 
         return $this->view->render(
             $response,
             'stories/index',
-            compact('stories')
+            compact('pagination')
         );
     }
 

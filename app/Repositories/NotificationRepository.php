@@ -8,7 +8,7 @@ use App\Models\Notification;
 use App\Models\User;
 use MotorORM\CollectionPaginate;
 
-class NotificationRepository implements RepositoryInterface
+class NotificationRepository
 {
     /**
      * Get by id

@@ -2,9 +2,15 @@
 
 declare(strict_types=1);
 
+use App\Entities\Story;
 use App\Services\Setting;
 use App\Services\View;
 use DI\ContainerBuilder;
+use Doctrine\DBAL\DriverManager;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\ORMSetup;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
 use Psr\Container\ContainerInterface;
@@ -14,7 +20,7 @@ use Slim\Psr7\Response;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Contracts\Cache\CacheInterface;
 
-return function (ContainerBuilder $containerBuilder) {
+return static function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions([
         // Set view in Container
         View::class => function() {
@@ -41,5 +47,32 @@ return function (ContainerBuilder $containerBuilder) {
 
             return $logger;
         },
+
+        EntityManagerInterface::class => function (): EntityManagerInterface {
+            /*$cache = $settings['doctrine']['dev_mode'] ?
+                DoctrineProvider::wrap(new ArrayAdapter()) :
+                DoctrineProvider::wrap(new FilesystemAdapter(directory: $settings['doctrine']['cache_dir']));*/
+
+            $config = ORMSetup::createAttributeMetadataConfiguration(
+                paths: [__DIR__ . '/Entities'],
+                isDevMode: true,
+                /*cache: $cache,*/
+            );
+
+            $connection = DriverManager::getConnection([
+                'dbname'   => 'motor',
+                'user'     => 'root',
+                'password' => 'root',
+                'host'     => 'localhost',
+                'driver'   => 'pdo_mysql',
+                'charset'  => 'utf8mb4',
+            ], $config);
+
+           return new EntityManager($connection, $config);
+        },
+
+/*        ClassMetadata::class => function () {
+            return new ClassMetadata('');
+        },*/
     ]);
 };

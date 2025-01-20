@@ -7,7 +7,7 @@ namespace App\Repositories;
 use App\Models\Read;
 use App\Models\Story;
 
-class ReadRepository implements RepositoryInterface
+class ReadRepository
 {
     /**
      * Exists read

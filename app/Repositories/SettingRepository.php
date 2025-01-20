@@ -6,7 +6,7 @@ namespace App\Repositories;
 
 use App\Models\Setting;
 
-class SettingRepository implements RepositoryInterface
+class SettingRepository
 {
     /**
      * Get setting
