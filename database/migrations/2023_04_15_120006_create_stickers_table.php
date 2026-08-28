@@ -13,10 +13,10 @@ return new class
     public function up(): void
     {
         $migration = new Migration(new Sticker());
-        $migration->createTable(function (Migration $table) {
-            $table->create('code');
-            $table->create('path');
-        });
+        $migration
+            ->create('code')
+            ->create('path')
+            ->createTable();
 
         foreach ($this->seed() as $seed) {
             Sticker::query()->create($seed);

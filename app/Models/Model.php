@@ -4,25 +4,15 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use MotorORM\Builder;
+use MotorORM\Model as BaseModel;
 
 /**
  * Base model
  */
-class Model extends Builder
+abstract class Model extends BaseModel
 {
     /**
      * Table dir
      */
     protected ?string $tableDir = __DIR__ . '/../../storage/database';
-
-    /**
-     * Paginate page name
-     */
-    //protected ?string $paginateName = 'page';
-
-    /**
-     * Paginate template
-     */
-    //protected ?string $paginateView = __DIR__ . '/../../resources/views/app/_paginator.php';
 }

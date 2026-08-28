@@ -7,6 +7,8 @@ use App\Factories\AppFactory;
 use App\Models\User;
 use App\Services\Session;
 use App\Services\Setting;
+use App\Services\View;
+use MotorORM\PagedCollection;
 use DI\Container;
 use Slim\App;
 use Slim\Factory\ServerRequestCreatorFactory;
@@ -256,7 +258,7 @@ function getExtension(string $filename): string
  *
  * @return string
  */
-function uniqueName(string $extension = null): string
+function uniqueName(?string $extension = null): string
 {
     if ($extension) {
         $extension = '.' . $extension;
@@ -362,4 +364,16 @@ function hasError(string $field): string
 function getError(string $field): string
 {
     return session('flash.errors.' . $field, '');
+}
+
+/**
+ * Возвращает ссылки постраничной навигации
+ *
+ * @param PagedCollection $collection
+ *
+ * @return string
+ */
+function pagination(PagedCollection $collection): string
+{
+    return app(View::class)->fetch('app/_paginator', ['pages' => $collection->pages()]);
 }

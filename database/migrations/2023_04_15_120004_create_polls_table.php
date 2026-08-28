@@ -13,14 +13,14 @@ return new class
     public function up(): void
     {
         $migration = new Migration(new Poll());
-        $migration->createTable(function (Migration $table) {
-            $table->create('id');
-            $table->create('user_id');
-            $table->create('entity_id');
-            $table->create('entity_name');
-            $table->create('vote');
-            $table->create('created_at');
-        });
+        $migration
+            ->create('id')
+            ->create('user_id')
+            ->create('entity_id')
+            ->create('entity_name')
+            ->create('vote')
+            ->create('created_at')
+            ->createTable();
     }
 
     /**

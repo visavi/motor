@@ -13,10 +13,10 @@ return new class
     public function up(): void
     {
         $migration = new Migration(new User());
-        $migration->changeTable(function (Migration $table) {
-            $table->create('confirmed')->default(0)->before('created_at');
-            $table->create('confirm_code')->after('confirmed');
-        });
+        $migration
+            ->create('confirmed')->default(0)->before('created_at')
+            ->create('confirm_code')->after('confirmed')
+            ->changeTable();
     }
 
     /**
@@ -27,9 +27,9 @@ return new class
     public function down(): void
     {
         $migration = new Migration(new User());
-        $migration->changeTable(function (Migration $table) {
-            $table->delete('confirmed');
-            $table->delete('confirm_code');
-        });
+        $migration
+            ->delete('confirmed')
+            ->delete('confirm_code')
+            ->changeTable();
     }
 };

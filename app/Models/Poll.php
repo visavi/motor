@@ -20,4 +20,14 @@ class Poll extends Model
      * Table name
      */
     protected string $table = 'polls.csv';
+
+    /**
+     * The attributes that should be cast.
+     */
+    protected array $casts = [
+        'user_id'    => 'int',
+        'entity_id'  => 'int',
+        'created_at' => 'int',
+    ];
+
 }

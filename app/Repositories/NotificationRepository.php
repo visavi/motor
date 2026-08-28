@@ -6,7 +6,7 @@ namespace App\Repositories;
 
 use App\Models\Notification;
 use App\Models\User;
-use MotorORM\CollectionPaginate;
+use MotorORM\Pagination;
 
 class NotificationRepository implements RepositoryInterface
 {
@@ -26,9 +26,9 @@ class NotificationRepository implements RepositoryInterface
     }
 
     /**
-     * @return CollectionPaginate<Notification>
+     * @return Pagination<Notification>
      */
-    public function getNotifications(): CollectionPaginate
+    public function getNotifications(): Pagination
     {
         return Notification::query()
             ->where('user_id', getUser('id'))

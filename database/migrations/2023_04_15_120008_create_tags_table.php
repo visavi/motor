@@ -13,11 +13,11 @@ return new class
     public function up(): void
     {
         $migration = new Migration(new Tag());
-        $migration->createTable(function (Migration $table) {
-            $table->create('id');
-            $table->create('story_id');
-            $table->create('tag');
-        });
+        $migration
+            ->create('id')
+            ->create('story_id')
+            ->create('tag')
+            ->createTable();
     }
 
     /**

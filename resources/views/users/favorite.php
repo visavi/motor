@@ -2,10 +2,10 @@
 
 use App\Models\Story;
 use App\Models\User;
-use MotorORM\CollectionPaginate;
+use MotorORM\Pagination;
 
 /** @var User $user */
-/** @var CollectionPaginate|Story[] $stories */
+/** @var Pagination|Story[] $stories */
 ?>
 <?php $this->layout('layout') ?>
 

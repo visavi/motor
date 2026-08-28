@@ -1,9 +1,9 @@
 <?php
 
 use App\Models\Guestbook;
-use MotorORM\CollectionPaginate;
+use MotorORM\Pagination;
 
-/** @var CollectionPaginate|<Guestbook[] $messages */
+/** @var Pagination|<Guestbook[] $messages */
 ?>
 <?php $this->layout('layout') ?>
 
@@ -69,7 +69,7 @@ use MotorORM\CollectionPaginate;
             </div>
         <?php endforeach; ?>
     </div>
-    <?= $messages->links() ?>
+    <?= pagination($messages) ?>
 <?php else: ?>
     <div class="alert alert-danger">
         <i class="bi bi-exclamation-circle-fill text-danger"></i>

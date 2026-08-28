@@ -1,10 +1,10 @@
 <?php
 
 use App\Models\Story;
-use MotorORM\CollectionPaginate;
+use MotorORM\Pagination;
 
 /** @var string $tag */
-/** @var CollectionPaginate|Story[] $stories */
+/** @var Pagination|Story[] $stories */
 ?>
 <?php $this->layout('layout') ?>
 

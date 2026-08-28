@@ -1,9 +1,9 @@
 <?php
 
 use App\Models\Notification;
-use MotorORM\CollectionPaginate;
+use MotorORM\Pagination;
 
-/** @var CollectionPaginate|Notification[] $notifications */
+/** @var Pagination|Notification[] $notifications */
 ?>
 <?php $this->layout('layout') ?>
 
@@ -45,7 +45,7 @@ use MotorORM\CollectionPaginate;
             </div>
         <?php endforeach; ?>
     </div>
-    <?= $notifications->links() ?>
+    <?= pagination($notifications) ?>
 <?php else: ?>
     <div class="alert alert-danger">
         <i class="bi bi-exclamation-circle-fill text-danger"></i>

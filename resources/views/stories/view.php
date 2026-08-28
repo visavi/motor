@@ -83,9 +83,9 @@ use App\Models\Story;
     <div class="border rounded p-2">
         <div class="d-inline fw-bold fs-6 me-3" title="Избранное" data-bs-toggle="tooltip">
             <?php if (isUser()): ?>
-                <a href="#" onclick="return addFavorite(this);" data-id="<?= $story->id ?>"  data-csrf="<?= session('csrf') ?>"><i class="bi <?= $story->favorite->id ? 'bi-heart-fill' : 'bi-heart' ?>"></i> <?= $story->favorites()->count() ?></a>
+                <a href="#" onclick="return addFavorite(this);" data-id="<?= $story->id ?>"  data-csrf="<?= session('csrf') ?>"><i class="bi <?= $story->favorite->id ? 'bi-heart-fill' : 'bi-heart' ?>"></i> <?= count($story->favorites) ?></a>
             <?php else: ?>
-                <i class="bi bi-heart"></i> <?= $story->favorites()->count() ?>
+                <i class="bi bi-heart"></i> <?= count($story->favorites) ?>
             <?php endif; ?>
         </div>
 
@@ -103,11 +103,11 @@ use App\Models\Story;
 </div>
 
 <div class="section shadow border p-3 mb-3" id="comments">
-    <h3>Комментарии <small><?= $story->comments()->count() ?></small></h3>
+    <h3>Комментарии <small><?= count($story->comments) ?></small></h3>
 
     <?php if ($story->comments->isNotEmpty()): ?>
         <?php /** @var Comment $comment */ ?>
-        <?php foreach ($story->comments as $comment): ?>
+        <?php foreach ($story->commentsTree() as $comment): ?>
             <?= $this->fetch('comments/_comment', compact('story', 'comment')) ?>
         <?php endforeach; ?>
     <?php else: ?>

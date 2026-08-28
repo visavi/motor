@@ -13,12 +13,12 @@ return new class
     public function up(): void
     {
         $migration = new Migration(new Favorite());
-        $migration->createTable(function (Migration $table) {
-            $table->create('id');
-            $table->create('user_id');
-            $table->create('story_id');
-            $table->create('created_at');
-        });
+        $migration
+            ->create('id')
+            ->create('user_id')
+            ->create('story_id')
+            ->create('created_at')
+            ->createTable();
     }
 
     /**

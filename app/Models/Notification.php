@@ -26,9 +26,16 @@ class Notification extends Model
      * The attributes that should be cast.
      */
     protected array $casts = [
-        'read'  => 'bool',
+        'read'       => 'bool',
+        'user_id'    => 'int',
+        'created_at' => 'int',
     ];
 
+    /**
+     * Get message
+     *
+     * @return string
+     */
     public function getMessage(): string
     {
         return (new BBCode())->handle($this->message);

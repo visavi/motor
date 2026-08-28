@@ -6,11 +6,12 @@ namespace App\Models;
 
 use App\Services\BBCode;
 use App\Services\Str;
-use MotorORM\Builder;
 use MotorORM\Collection;
+use MotorORM\Query;
+use MotorORM\Relation;
 
 /**
- * Class Guestbook
+ * Class Comment
  *
  * @property int $id
  * @property int $user_id
@@ -36,52 +37,58 @@ class Comment extends Model
      * The attributes that should be cast.
      */
     protected array $casts = [
-        'rating' => 'int',
+        'rating'     => 'int',
+        'user_id'    => 'int',
+        'story_id'   => 'int',
+        'parent_id'  => 'int',
+        'created_at' => 'int',
     ];
 
     /**
      * Возвращает связь пользователя
      *
-     * return Builder
+     * @return Relation
      */
-    public function user(): Builder
+    public function user(): Relation
     {
-        return $this->HasOne(User::class, 'id', 'user_id');
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 
     /**
      * Возвращает связь статьи
      *
-     * return Builder
+     * @return Relation
      */
-    public function story(): Builder
+    public function story(): Relation
     {
-        return $this->HasOne(Story::class, 'id', 'story_id');
+        return $this->hasOne(Story::class, 'id', 'story_id');
     }
 
     /**
      * Возвращает связь голосования пользователя
      *
-     * @return Builder
+     * @return Relation
      */
-    public function poll(): Builder
+    public function poll(): Relation
     {
-        return $this->hasOne(Poll::class, 'entity_id')
-            ->where('user_id', getUser('id'))
-            ->where('entity_name', 'comment');
+        return $this->hasOne(Poll::class, 'entity_id')->constrain(
+            static fn (Query $query) => $query
+                ->where('user_id', getUser('id'))
+                ->where('entity_name', 'comment')
+        );
     }
 
     /**
      * Возвращает связь голосований
      *
-     * @return Builder
+     * @return Relation
      */
-    public function polls(): Builder
+    public function polls(): Relation
     {
-        return $this->hasMany(Poll::class, 'entity_id')
-            ->where('entity_name', 'comment');
+        return $this->hasMany(Poll::class, 'entity_id')->constrain(
+            static fn (Query $query) => $query->where('entity_name', 'comment')
+        );
     }
-
     /**
      * Возвращает сокращенный текст комментария
      *
@@ -132,6 +139,11 @@ class Comment extends Model
         return parent::delete();
     }
 
+    /**
+     * Get text
+     *
+     * @return string
+     */
     public function getText(): string
     {
         return (new BBCode())->handle($this->text);

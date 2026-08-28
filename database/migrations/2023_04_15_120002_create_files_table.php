@@ -13,16 +13,16 @@ return new class
     public function up(): void
     {
         $migration = new Migration(new File());
-        $migration->createTable(function (Migration $table) {
-            $table->create('id');
-            $table->create('user_id');
-            $table->create('story_id');
-            $table->create('path');
-            $table->create('name');
-            $table->create('ext');
-            $table->create('size');
-            $table->create('created_at');
-        });
+        $migration
+            ->create('id')
+            ->create('user_id')
+            ->create('story_id')
+            ->create('path')
+            ->create('name')
+            ->create('ext')
+            ->create('size')
+            ->create('created_at')
+            ->createTable();
     }
 
     /**

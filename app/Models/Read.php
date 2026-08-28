@@ -18,4 +18,13 @@ class Read extends Model
      * Table name
      */
     protected string $table = 'reads.csv';
+
+    /**
+     * The attributes that should be cast.
+     */
+    protected array $casts = [
+        'story_id'   => 'int',
+        'created_at' => 'int',
+    ];
+
 }

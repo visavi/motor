@@ -13,7 +13,6 @@ use App\Services\Session;
 use App\Services\Validator;
 use App\Services\View;
 use MotorORM\Collection;
-use MotorORM\CollectionPaginate;
 use MotorORM\Pagination;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;

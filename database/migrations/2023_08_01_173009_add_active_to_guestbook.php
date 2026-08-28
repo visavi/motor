@@ -13,9 +13,9 @@ return new class
     public function up(): void
     {
         $migration = new Migration(new Guestbook());
-        $migration->changeTable(function (Migration $table) {
-            $table->create('active')->default(true)->before('created_at');
-        });
+        $migration
+            ->create('active')->default(true)->before('created_at')
+            ->changeTable();
     }
 
     /**
@@ -26,8 +26,8 @@ return new class
     public function down(): void
     {
         $migration = new Migration(new Guestbook());
-        $migration->changeTable(function (Migration $table) {
-            $table->delete('active');
-        });
+        $migration
+            ->delete('active')
+            ->changeTable();
     }
 };

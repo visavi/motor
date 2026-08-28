@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Repositories;
 
 use App\Models\User;
-use MotorORM\CollectionPaginate;
+use MotorORM\Pagination;
 
 class UserRepository implements RepositoryInterface
 {
@@ -36,9 +36,9 @@ class UserRepository implements RepositoryInterface
      *
      * @param int $perPage
      *
-     * @return CollectionPaginate<User>
+     * @return Pagination<User>
      */
-    public function getUsers(int $perPage): CollectionPaginate
+    public function getUsers(int $perPage): Pagination
     {
         return User::query()
             ->orderByDesc('created_at')

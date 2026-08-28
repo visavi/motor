@@ -13,17 +13,17 @@ return new class
     public function up(): void
     {
         $migration = new Migration(new User());
-        $migration->createTable(function (Migration $table) {
-            $table->create('id');
-            $table->create('login');
-            $table->create('password');
-            $table->create('email');
-            $table->create('role');
-            $table->create('name');
-            $table->create('picture');
-            $table->create('avatar');
-            $table->create('created_at');
-        });
+        $migration
+            ->create('id')
+            ->create('login')
+            ->create('password')
+            ->create('email')
+            ->create('role')
+            ->create('name')
+            ->create('picture')
+            ->create('avatar')
+            ->create('created_at')
+            ->createTable();
     }
 
     /**

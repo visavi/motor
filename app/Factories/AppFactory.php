@@ -6,6 +6,7 @@ namespace App\Factories;
 
 use DI\Bridge\Slim\Bridge;
 use DI\Container;
+use MotorORM\Pagination;
 use Slim\App;
 
 /**
@@ -27,6 +28,9 @@ class AppFactory extends Container
 
         // Instantiate App
         $app = Bridge::create($container);
+
+        // The orm reads no globals: say where the current page comes from
+        Pagination::resolvePageUsing(static fn (string $name) => $_GET[$name] ?? 1);
 
         // Register middleware
         $middleware = require __DIR__ . '/../middleware.php';

@@ -7,8 +7,9 @@ namespace App\Models;
 use App\Services\BBCode;
 use App\Services\Str;
 use App\Services\View;
-use MotorORM\Builder;
 use MotorORM\Collection;
+use MotorORM\Query;
+use MotorORM\Relation;
 
 /**
  * Class Story
@@ -24,8 +25,6 @@ use MotorORM\Collection;
  * @property bool $locked
  * @property int $created_at
  *
- * @method $this active()
- *
  * @property-read User $user
  * @property-read Poll $poll
  * @property-read Favorite $favorite
@@ -35,6 +34,7 @@ use MotorORM\Collection;
  * @property-read Collection<Read> $storyReads
  * @property-read Collection<Poll> $polls
  * @property-read Collection<Favorite> $favorites
+ * @method $this active()
  */
 class Story extends Model
 {
@@ -44,26 +44,28 @@ class Story extends Model
     protected string $table = 'stories.csv';
 
     /**
+     * The attributes that should be cast.
+     */
+    protected array $casts = [
+        'active'     => 'bool',
+        'rating'     => 'int',
+        'reads'      => 'int',
+        'locked'     => 'bool',
+        'user_id'    => 'int',
+        'created_at' => 'int',
+    ];
+
+    /**
      * Директория загрузки файлов
      */
     public string $uploadPath = '/uploads/stories';
 
     /**
-     * The attributes that should be cast.
-     */
-    protected array $casts = [
-        'active' => 'bool',
-        'rating' => 'int',
-        'reads'  => 'int',
-        'locked' => 'bool',
-    ];
-
-    /**
      * Возвращает связь пользователя
      *
-     * @return Builder
+     * @return Relation
      */
-    public function user(): Builder
+    public function user(): Relation
     {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
@@ -71,32 +73,35 @@ class Story extends Model
     /**
      * Возвращает связь голосования пользователя
      *
-     * @return Builder
+     * @return Relation
      */
-    public function poll(): Builder
+    public function poll(): Relation
     {
-        return $this->hasOne(Poll::class, 'entity_id')
-            ->where('user_id', getUser('id'))
-            ->where('entity_name', 'story');
+        return $this->hasOne(Poll::class, 'entity_id')->constrain(
+            static fn (Query $query) => $query
+                ->where('user_id', getUser('id'))
+                ->where('entity_name', 'story')
+        );
     }
 
     /**
      * Возвращает связь голосований
      *
-     * @return Builder
+     * @return Relation
      */
-    public function polls(): Builder
+    public function polls(): Relation
     {
-        return $this->hasMany(Poll::class, 'entity_id')
-            ->where('entity_name', 'story');
+        return $this->hasMany(Poll::class, 'entity_id')->constrain(
+            static fn (Query $query) => $query->where('entity_name', 'story')
+        );
     }
 
     /**
      * Возвращает связь просмотров
      *
-     * @return Builder
+     * @return Relation
      */
-    public function storyReads(): Builder
+    public function storyReads(): Relation
     {
         return $this->hasMany(Read::class);
     }
@@ -104,9 +109,9 @@ class Story extends Model
     /**
      * Возвращает связь файлов
      *
-     * @return Builder
+     * @return Relation
      */
-    public function files(): Builder
+    public function files(): Relation
     {
         return $this->hasMany(File::class);
     }
@@ -114,9 +119,9 @@ class Story extends Model
     /**
      * Возвращает связь комментариев
      *
-     * @return Builder
+     * @return Relation
      */
-    public function comments(): Builder
+    public function comments(): Relation
     {
         return $this->hasMany(Comment::class);
     }
@@ -124,20 +129,21 @@ class Story extends Model
     /**
      * Возвращает связь избранного пользователя
      *
-     * @return Builder
+     * @return Relation
      */
-    public function favorite(): Builder
+    public function favorite(): Relation
     {
-        return $this->hasOne(Favorite::class, 'story_id')
-            ->where('user_id', getUser('id'));
+        return $this->hasOne(Favorite::class, 'story_id')->constrain(
+            static fn (Query $query) => $query->where('user_id', getUser('id'))
+        );
     }
 
     /**
      * Возвращает связь с избранным
      *
-     * @return Builder
+     * @return Relation
      */
-    public function favorites(): Builder
+    public function favorites(): Relation
     {
         return $this->hasMany(Favorite::class);
     }
@@ -145,18 +151,24 @@ class Story extends Model
     /**
      * Возвращает связь с тегами
      *
-     * @return Builder
+     * @return Relation
      */
-    public function tags(): Builder
+    public function tags(): Relation
     {
         return $this->hasMany(Tag::class);
     }
 
-    public function scopeActive(Builder $query): Builder
+    /**
+     * Scope active
+     *
+     * @param Query $query
+     *
+     * @return Query
+     */
+    public function scopeActive(Query $query): Query
     {
         return $query->where('active', true);
     }
-
     /**
      * Get comments tree
      *
@@ -291,9 +303,14 @@ class Story extends Model
      */
     public function getLink(): string
     {
-         return route('story-view', ['slug' => sprintf('%s-%d', $this->slug, $this->id)]);
+        return route('story-view', ['slug' => sprintf('%s-%d', $this->slug, $this->id)]);
     }
 
+    /**
+     * Get text
+     *
+     * @return string
+     */
     public function getText(): string
     {
         return (new BBCode())->handle($this->text);

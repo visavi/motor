@@ -1,9 +1,9 @@
 <?php
 
 use App\Models\Story;
-use MotorORM\CollectionPaginate;
+use MotorORM\Pagination;
 
-/** @var CollectionPaginate|Story[] $stories */
+/** @var Pagination|Story[] $stories */
 ?>
 
 <?php if ($stories->isNotEmpty()): ?>
@@ -57,14 +57,14 @@ use MotorORM\CollectionPaginate;
 
             <div class="border rounded p-2">
                 <div class="d-inline fw-bold fs-6 me-3" title="Комментарии" data-bs-toggle="tooltip">
-                    <a href="<?= $story->getLink() ?>#comments"><i class="bi bi-chat"></i> <?= $story->comments()->count() ?></a>
+                    <a href="<?= $story->getLink() ?>#comments"><i class="bi bi-chat"></i> <?= count($story->comments) ?></a>
                 </div>
 
                 <div class="d-inline fw-bold fs-6 me-3" title="Избранное" data-bs-toggle="tooltip">
                     <?php if (isUser()): ?>
-                        <a href="#" onclick="return addFavorite(this);" data-id="<?= $story->id ?>"  data-csrf="<?= session('csrf') ?>"><i class="bi <?= $story->favorite->id ? 'bi-heart-fill' : 'bi-heart' ?>"></i> <?= $story->favorites()->count() ?></a>
+                        <a href="#" onclick="return addFavorite(this);" data-id="<?= $story->id ?>"  data-csrf="<?= session('csrf') ?>"><i class="bi <?= $story->favorite->id ? 'bi-heart-fill' : 'bi-heart' ?>"></i> <?= count($story->favorites) ?></a>
                     <?php else: ?>
-                        <i class="bi bi-heart"></i> <?= $story->favorites()->count() ?>
+                        <i class="bi bi-heart"></i> <?= count($story->favorites) ?>
                     <?php endif; ?>
                 </div>
 
@@ -84,7 +84,7 @@ use MotorORM\CollectionPaginate;
         </article>
     <?php endforeach; ?>
 
-    <?= $stories->links() ?>
+    <?= pagination($stories) ?>
 <?php else: ?>
     <div class="alert alert-danger">
         <i class="bi bi-exclamation-circle-fill text-danger"></i>

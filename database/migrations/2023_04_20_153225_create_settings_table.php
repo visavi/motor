@@ -13,10 +13,10 @@ return new class
     public function up(): void
     {
         $migration = new Migration(new Setting());
-        $migration->createTable(function (Migration $table) {
-            $table->create('name');
-            $table->create('value');
-        });
+        $migration
+            ->create('name')
+            ->create('value')
+            ->createTable();
 
         foreach ($this->seed() as $seed) {
             Setting::query()->create($seed);

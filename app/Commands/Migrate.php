@@ -85,11 +85,11 @@ class Migrate extends Command
     {
         $migration = new \MotorORM\Migration(new Migration());
         if (! $migration->hasTable()) {
-            $migration->createTable(function (\MotorORM\Migration $table) {
-                $table->create('id');
-                $table->create('name');
-                $table->create('batch');
-            });
+            $migration
+                ->create('id')
+                ->create('name')
+                ->create('batch')
+                ->createTable();
         }
     }
 }

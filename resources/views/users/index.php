@@ -1,9 +1,9 @@
 <?php
 
 use App\Models\User;
-use MotorORM\CollectionPaginate;
+use MotorORM\Pagination;
 
-/** @var CollectionPaginate|User[] $users */
+/** @var Pagination|User[] $users */
 ?>
 
 <?php $this->layout('layout') ?>
@@ -47,7 +47,7 @@ use MotorORM\CollectionPaginate;
         </div>
     <?php endforeach; ?>
 
-    <?= $users->links() ?>
+    <?= pagination($users) ?>
 <?php else: ?>
     <div class="alert alert-danger">
         <i class="bi bi-exclamation-circle-fill text-danger"></i>

@@ -7,7 +7,8 @@ namespace App\Repositories;
 use App\Models\Story;
 use App\Models\Tag;
 use MotorORM\Collection;
-use MotorORM\CollectionPaginate;
+use MotorORM\Pagination;
+use MotorORM\Query;
 
 class StoryRepository implements RepositoryInterface
 {
@@ -42,12 +43,12 @@ class StoryRepository implements RepositoryInterface
      *
      * @param int $perPage
      *
-     * @return CollectionPaginate<Story>
+     * @return Pagination<Story>
      */
-    public function getStories(int $perPage): CollectionPaginate
+    public function getStories(int $perPage): Pagination
     {
         return Story::query()
-            ->when(! isAdmin(), function (Story $query) {
+            ->when(! isAdmin(), function (Query $query) {
                 $query->active()
                     ->where('created_at', '<', time());
             })
@@ -63,12 +64,12 @@ class StoryRepository implements RepositoryInterface
      * @param int $userId
      * @param int $perPage
      *
-     * @return CollectionPaginate
+     * @return Pagination
      */
-    public function getStoriesByUserId(int $userId, int $perPage): CollectionPaginate
+    public function getStoriesByUserId(int $userId, int $perPage): Pagination
     {
         return Story::query()
-            ->when(! isAdmin(), function (Story $query) {
+            ->when(! isAdmin(), function (Query $query) {
                 $query->where('created_at', '<', time());
             })
             ->where('user_id', $userId)
@@ -84,12 +85,12 @@ class StoryRepository implements RepositoryInterface
      * @param string $tag
      * @param int    $perPage
      *
-     * @return CollectionPaginate<Story>
+     * @return Pagination<Story>
      */
-    public function getStoriesByTag(string $tag, int $perPage): CollectionPaginate
+    public function getStoriesByTag(string $tag, int $perPage): Pagination
     {
         $tags = Tag::query()
-            ->where('tag', 'like', $tag)
+            ->whereLike('tag', $tag)
             ->get()
             ->pluck('story_id')
             ->all();
@@ -108,14 +109,14 @@ class StoryRepository implements RepositoryInterface
      * @param string $search
      * @param int    $perPage
      *
-     * @return CollectionPaginate<Story>
+     * @return Pagination<Story>
      */
-    public function getStoriesBySearch(string $search, int $perPage): CollectionPaginate
+    public function getStoriesBySearch(string $search, int $perPage): Pagination
     {
         return Story::query()
             ->active()
             ->where('created_at', '<', time())
-            ->where('text', 'like', $search)
+            ->whereLike('text', $search)
             ->orderByDesc('created_at')
             ->paginate($perPage)
             ->appends(['search' => $search]);

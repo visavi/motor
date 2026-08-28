@@ -13,18 +13,18 @@ return new class
     public function up(): void
     {
         $migration = new Migration(new Sticker());
-        $migration->changeTable(function (Migration $table) {
-            $table->create('id')->before('code');
-        });
+        $migration
+            ->create('id')->before('code')
+            ->changeTable();
 
        $stickers = file(storagePath('database/stickers.csv'));
 
        $temp = '';
-       for ($i = 0; $i < count($stickers); $i++) {
-           $temp .= $i === 0 ? $stickers[$i] : $i . $stickers[$i];
-       }
+        foreach ($stickers as $i => $iValue) {
+            $temp .= $i === 0 ? $iValue : $i . $iValue;
+        }
 
-       file_put_contents(storagePath('database/stickers.csv'), $temp, LOCK_EX);
+        file_put_contents(storagePath('database/stickers.csv'), $temp, LOCK_EX);
     }
 
     /**
@@ -35,8 +35,8 @@ return new class
     public function down(): void
     {
         $migration = new Migration(new Sticker());
-        $migration->changeTable(function (Migration $table) {
-            $table->delete('id');
-        });
+        $migration
+            ->delete('id')
+            ->changeTable();
     }
 };

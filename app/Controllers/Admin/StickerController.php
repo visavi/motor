@@ -72,7 +72,7 @@ class StickerController extends Controller
                 'weight_min' => setting('sticker.weight_min'),
             ]);
 
-        $stickerExists = Sticker::query()->where('code', 'lax', $input['code'])->first();
+        $stickerExists = Sticker::query()->whereLike('code', $input['code'])->first();
         if ($stickerExists) {
             $this->validator->addError('code', 'Данный стикер уже существует!');
         }

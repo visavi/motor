@@ -2,7 +2,7 @@
     "name": "visavi/motor",
     "description": "cms",
     "require": {
-        "php": "^8.2",
+        "php": "^8.5",
         "ext-curl": "*",
         "ext-mbstring": "*",
         "ext-zip": "*",
@@ -17,9 +17,7 @@
         "symfony/mailer": "^6.0",
         "visavi/captcha": "^3.0",
         "visavi/cleanup": "^1.5",
-        "visavi/motor-orm": "^4.2",
-        "doctrine/orm": "^3",
-        "doctrine/dbal": "^4",
+        "visavi/motor-orm": "^6.0",
         "symfony/cache": "^7"
     },
     "require-dev": {
@@ -43,7 +41,7 @@
     },
     "config": {
         "platform": {
-            "php": "8.2"
+            "php": "8.5"
         },
         "optimize-autoloader": true,
         "preferred-install": "dist",

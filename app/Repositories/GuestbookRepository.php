@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace App\Repositories;
 
 use App\Models\Guestbook;
-use MotorORM\CollectionPaginate;
+use MotorORM\Pagination;
+use MotorORM\Query;
 
 class GuestbookRepository implements RepositoryInterface
 {
@@ -32,12 +33,12 @@ class GuestbookRepository implements RepositoryInterface
     /**
      * @param int $perPage
      *
-     * @return CollectionPaginate<Guestbook>
+     * @return Pagination<Guestbook>
      */
-    public function getMessages(int $perPage): CollectionPaginate
+    public function getMessages(int $perPage): Pagination
     {
         return Guestbook::query()
-            ->when(! isAdmin(), function (Guestbook $query) {
+            ->when(! isAdmin(), function (Query $query) {
                 $query->active();
             })
             ->orderByDesc('created_at')

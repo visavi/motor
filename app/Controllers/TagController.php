@@ -82,7 +82,7 @@ class TagController extends Controller
             return $this->json($response, []);
         }
 
-        $tags = Tag::query()->where('tag', 'like', $search . '%')->limit(10)->get();
+        $tags = Tag::query()->whereLike('tag', $search . '%')->limit(10)->get();
         $tags = array_unique($tags->pluck('tag')->all());
 
         $namedTags = [];

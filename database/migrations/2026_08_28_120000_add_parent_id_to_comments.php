@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Read;
+use App\Models\Comment;
 use MotorORM\Migration;
 
 return new class
@@ -12,13 +12,10 @@ return new class
      */
     public function up(): void
     {
-        $migration = new Migration(new Read());
+        $migration = new Migration(new Comment());
         $migration
-            ->create('id')
-            ->create('story_id')
-            ->create('ip')
-            ->create('created_at')
-            ->createTable();
+            ->create('parent_id')->default(0)->after('story_id')
+            ->changeTable();
     }
 
     /**
@@ -28,7 +25,9 @@ return new class
      */
     public function down(): void
     {
-        $migration = new Migration(new Read());
-        $migration->deleteTable();
+        $migration = new Migration(new Comment());
+        $migration
+            ->delete('parent_id')
+            ->changeTable();
     }
 };

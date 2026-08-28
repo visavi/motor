@@ -316,7 +316,7 @@ class StoryController extends Controller
                 ]);
             }
 
-            $story->refresh();
+            $story = $story->fresh();
             $this->session->set('flash', ['success' => 'Статья успешно изменена!']);
 
             return $this->redirect($response, $story->getLink());

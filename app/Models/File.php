@@ -42,7 +42,10 @@ class File extends Model
      * The attributes that should be cast.
      */
     protected array $casts = [
-        'size' => 'int',
+        'size'       => 'int',
+        'user_id'    => 'int',
+        'story_id'   => 'int',
+        'created_at' => 'int',
     ];
 
     /**
@@ -52,7 +55,7 @@ class File extends Model
      */
     public function isImage(): bool
     {
-        return in_array($this->ext, self::IMAGES, true);
+        return in_array($this->ext, File::IMAGES, true);
     }
 
     /**
@@ -62,7 +65,7 @@ class File extends Model
      */
     public function isAudio(): bool
     {
-        return in_array($this->ext, self::AUDIO, true);
+        return in_array($this->ext, File::AUDIO, true);
     }
 
     /**
@@ -72,7 +75,7 @@ class File extends Model
      */
     public function isVideo(): bool
     {
-        return in_array($this->ext, self::VIDEO, true);
+        return in_array($this->ext, File::VIDEO, true);
     }
 
     /**

@@ -1,9 +1,9 @@
 <?php
 
 use App\Models\Sticker;
-use MotorORM\CollectionPaginate;
+use MotorORM\Pagination;
 
-/** @var CollectionPaginate|Sticker[] $stickers */
+/** @var Pagination|Sticker[] $stickers */
 ?>
 <?php $this->layout('layout') ?>
 
@@ -31,7 +31,7 @@ use MotorORM\CollectionPaginate;
         </div>
     <?php endforeach; ?>
 
-     <?= $stickers->links() ?>
+     <?= pagination($stickers) ?>
 <?php else: ?>
     <div class="alert alert-danger">
         <i class="bi bi-exclamation-circle-fill text-danger"></i>

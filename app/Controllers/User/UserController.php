@@ -131,12 +131,12 @@ class UserController extends Controller
                 ->minLength(['password', 'password2'], 6)
                 ->equal('password', 'password2');
 
-            $userExists = User::query()->where('login', 'lax', $input['login'])->first();
+            $userExists = User::query()->whereLike('login', $input['login'])->first();
             if ($userExists) {
                 $this->validator->addError('login', 'Данный логин уже занят');
             }
 
-            $emailExists = User::query()->where('email', 'lax', $input['email'])->first();
+            $emailExists = User::query()->whereLike('email', $input['email'])->first();
             if ($emailExists) {
                 $this->validator->addError('email', 'Данный email уже используется');
             }

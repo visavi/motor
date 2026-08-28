@@ -4,17 +4,10 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use MotorORM\Builder;
+use MotorORM\Relation;
 
 /**
  * Class Favorite
- *
- * @property int $id
- * @property string $user_id
- * @property string $story_id
- * @property int $created_at
- *
- * @property-read Story $story
  */
 class Favorite extends Model
 {
@@ -24,12 +17,22 @@ class Favorite extends Model
     protected string $table = 'favorites.csv';
 
     /**
+     * The attributes that should be cast.
+     */
+    protected array $casts = [
+        'user_id'    => 'int',
+        'story_id'   => 'int',
+        'created_at' => 'int',
+    ];
+
+    /**
      * Возвращает связь статьи
      *
-     * @return Builder
+     * @return Relation
      */
-    public function story(): Builder
+    public function story(): Relation
     {
         return $this->hasOne(Story::class, 'id', 'story_id');
     }
+
 }

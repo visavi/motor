@@ -13,18 +13,18 @@ return new class
     public function up(): void
     {
         $migration = new Migration(new Story());
-        $migration->createTable(function (Migration $table) {
-            $table->create('id');
-            $table->create('user_id');
-            $table->create('slug');
-            $table->create('active');
-            $table->create('title');
-            $table->create('text');
-            $table->create('rating');
-            $table->create('reads');
-            $table->create('locked');
-            $table->create('created_at');
-        });
+        $migration
+            ->create('id')
+            ->create('user_id')
+            ->create('slug')
+            ->create('active')
+            ->create('title')
+            ->create('text')
+            ->create('rating')
+            ->create('reads')
+            ->create('locked')
+            ->create('created_at')
+            ->createTable();
     }
 
     /**

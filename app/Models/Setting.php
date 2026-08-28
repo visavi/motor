@@ -23,4 +23,5 @@ class Setting extends Model
     protected array $casts = [
         'name' => 'string',
     ];
+
 }

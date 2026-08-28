@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Services\BBCode;
-use MotorORM\Builder;
+use MotorORM\Query;
+use MotorORM\Relation;
 
 /**
  * Class Guestbook
@@ -17,9 +18,8 @@ use MotorORM\Builder;
  * @property bool $active
  * @property int $created_at
  *
- * @method $this active()
- *
  * @property-read User $user
+ * @method $this active()
  */
 class Guestbook extends Model
 {
@@ -32,15 +32,17 @@ class Guestbook extends Model
      * The attributes that should be cast.
      */
     protected array $casts = [
-        'active' => 'bool',
+        'active'     => 'bool',
+        'user_id'    => 'int',
+        'created_at' => 'int',
     ];
 
     /**
      * Возвращает связь пользователей
      *
-     * @return Builder
+     * @return Relation
      */
-    public function user(): Builder
+    public function user(): Relation
     {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
@@ -48,15 +50,19 @@ class Guestbook extends Model
     /**
      * Scope active
      *
-     * @param Builder $query
+     * @param Query $query
      *
-     * @return Builder
+     * @return Query
      */
-    public function scopeActive(Builder $query): Builder
+    public function scopeActive(Query $query): Query
     {
         return $query->where('active', true);
     }
-
+    /**
+     * Get text
+     *
+     * @return string
+     */
     public function getText(): string
     {
         return (new BBCode())->handle($this->text);

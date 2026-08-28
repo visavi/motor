@@ -26,6 +26,14 @@ class User extends Model
      */
     protected string $table = 'users.csv';
 
+    /**
+     * The attributes that should be cast.
+     */
+    protected array $casts = [
+        'confirmed'  => 'bool',
+        'created_at' => 'int',
+    ];
+
     public const BOSS   = 'boss';   // Владелец
     public const ADMIN  = 'admin';  // Админ
     public const MODER  = 'moder';  // Модератор
@@ -62,13 +70,6 @@ class User extends Model
      */
     public const MALE   = 'male';
     public const FEMALE = 'female';
-
-    /**
-     * The attributes that should be cast.
-     */
-    protected array $casts = [
-        'confirmed' => 'bool',
-    ];
 
     /**
      * Get name
@@ -139,7 +140,7 @@ class User extends Model
      */
     public function isBanned(): bool
     {
-        return $this->role === self::BANNED;
+        return $this->role === User::BANNED;
     }
 
     /**
@@ -149,11 +150,11 @@ class User extends Model
      */
     public function isPended(): bool
     {
-        return $this->role === self::PENDED;
+        return $this->role === User::PENDED;
     }
 
     /**
-     * Delete story
+     * Delete user
      *
      * @return int
      */

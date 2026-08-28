@@ -13,13 +13,13 @@ return new class
     public function up(): void
     {
         $migration = new Migration(new Notification());
-        $migration->createTable(function (Migration $table) {
-            $table->create('id');
-            $table->create('user_id');
-            $table->create('message');
-            $table->create('read');
-            $table->create('created_at');
-        });
+        $migration
+            ->create('id')
+            ->create('user_id')
+            ->create('message')
+            ->create('read')
+            ->create('created_at')
+            ->createTable();
 
 
     }
