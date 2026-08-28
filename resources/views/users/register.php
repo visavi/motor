@@ -11,7 +11,7 @@
     </nav>
 <?php $this->stop() ?>
 
-<div class="section shadow border p-3">
+<div class="card card-body">
     <?php if (setting('main.confirm_email')): ?>
         <div class="alert alert-info">
             <i class="bi bi-exclamation-circle-fill"></i>

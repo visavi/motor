@@ -19,7 +19,7 @@
 <?php $this->stop() ?>
 
 <?php if ($files): ?>
-    <div class="section shadow border p-3 mb-3">
+    <div class="card card-body mb-3">
         <?php foreach ($files as $file): ?>
             <div>
                 <i class="bi bi-filetype-csv"></i>

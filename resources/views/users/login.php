@@ -11,7 +11,7 @@
     </nav>
 <?php $this->stop() ?>
 
-<div class="section shadow border p-3">
+<div class="card card-body">
     <form method="post">
         <div class="mb-3">
             <label for="login" class="form-label">Логин</label>

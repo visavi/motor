@@ -9,39 +9,45 @@
 
     <?= vite() ?>
     <?= $this->section('styles') ?>
-    <link href="/favicon.ico" rel="icon" type="image/x-icon" >
-    <meta name="theme-color" content="#7952b3">
+    <link href="/favicon.ico" rel="icon" type="image/x-icon">
+    <meta name="theme-color" content="#066fd1">
 </head>
-<body class="body">
+<body>
 
-<?= $this->fetch('header') ?>
+<div class="page">
+    <?= $this->fetch('header') ?>
 
-<div class="container-xxl col-lg-10 mx-auto p-3 py-md-4">
-    <main>
-        <?= $this->fetch('app/_flash') ?>
+    <div class="page-wrapper">
+        <div class="page-header d-print-none">
+            <div class="container-xl">
+                <?= $this->section('breadcrumb') ?>
 
-        <div class="app-title">
-            <?php if ($this->section('header')): ?>
-                <?= $this->section('header') ?>
-            <?php else: ?>
-                <h1><?= $this->section('title') ?></h1>
-            <?php endif ?>
-
-            <?= $this->section('breadcrumb') ?>
-        </div>
-
-        <div class="row">
-            <div class="col-md-3">
-                <?= $this->fetch('sidebar-docs') ?>
-            </div>
-            <div class="col-md-9">
-                <?= $this->section('content') ?>
+                <?php if ($this->section('header')): ?>
+                    <?= $this->section('header') ?>
+                <?php else: ?>
+                    <h2 class="page-title"><?= $this->section('title') ?></h2>
+                <?php endif ?>
             </div>
         </div>
-    </main>
+
+        <div class="page-body">
+            <div class="container-xl">
+                <?= $this->fetch('app/_flash') ?>
+
+                <div class="row row-cards">
+                    <div class="col-lg-3">
+                        <?= $this->fetch('sidebar-docs') ?>
+                    </div>
+                    <div class="col-lg-9">
+                        <?= $this->section('content') ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <?= $this->fetch('footer') ?>
+    </div>
 </div>
-
-<?= $this->fetch('footer') ?>
 
 <?= $this->section('scripts') ?>
 

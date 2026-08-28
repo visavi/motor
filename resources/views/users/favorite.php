@@ -13,7 +13,7 @@ use MotorORM\Pagination;
 <?php $this->start('description') ?>Избранные статьи (Стр. <?= $stories->currentPage() ?>)<?php $this->stop() ?>
 
 <?php $this->start('header') ?>
-    <h1>Избранные статьи</h1>
+    <h2 class="page-title">Избранные статьи</h2>
 <?php $this->stop() ?>
 
 <?php $this->start('breadcrumb') ?>

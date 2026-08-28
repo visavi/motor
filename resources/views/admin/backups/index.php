@@ -16,13 +16,13 @@
 <?php $this->stop() ?>
 
 <?php if ($files): ?>
-    <div class="section shadow border p-3 mb-3">
+    <div class="card card-body mb-3">
         <?php foreach ($files as $file): ?>
             <div>
                 <i class="bi bi-file-zip"></i>
                 <a href="<?= route('admin-backups-view', ['name' => basename($file)]) ?>"><?= basename($file) ?></a> / <?= formatFileSize($file) ?>
 
-                <a href="<?= route('admin-backups-destroy', ['name' => basename($file)]) ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg text-body-secondary"></i></a>
+                <a href="<?= route('admin-backups-destroy', ['name' => basename($file)]) ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg text-secondary"></i></a>
             </div>
         <?php endforeach; ?>
     </div>

@@ -11,7 +11,7 @@ use MotorORM\Collection;
 
 $story ??= null;
 ?>
-<div class="section shadow border p-3 cut">
+<div class="card card-body">
     <form method="post" action="<?= route($story ? 'story-update' : 'story-store', ['id' => $story->id ?? null]) ?>">
         <input type="hidden" name="_METHOD" value="<?= $story ? 'PUT' : 'POST' ?>">
         <input type="hidden" name="csrf" value="<?= session('csrf') ?>">

@@ -9,7 +9,7 @@ use App\Models\Story;
 $comment ??= null;
 ?>
 
-<div class="section shadow border p-3 post-form">
+<div class="card card-body post-form">
     <form method="post" action="<?= route($comment ? 'story-comment-update' : 'story-comment-store', ['id' => $story->id, 'cid' => $comment->id ?? null]) ?>">
         <input type="hidden" name="_METHOD" value="<?= $comment ? 'PUT' : 'POST' ?>">
         <input type="hidden" name="csrf" value="<?= session('csrf') ?>">
@@ -49,11 +49,9 @@ $comment ??= null;
         </div>
     </div>
     <div class="post-author mb-1" data-login="@<?= getUser()->login ?>">
-        <span class="avatar-micro">
-            <?= getUser()->getAvatar() ?>
-        </span>
+        <?= getUser()->getAvatar() ?>
         <span><?= getUser()->getProfile() ?></span>
     </div>
     <div class="post-message"></div>
-    <small class="post-date text-body-secondary fst-italic"></small>
+    <small class="post-date text-secondary fst-italic"></small>
 </div>

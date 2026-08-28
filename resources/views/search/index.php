@@ -12,7 +12,7 @@ use MotorORM\Pagination;
 <?php $this->start('description') ?><?= $search ?> (Стр. <?= $stories->currentPage() ?>)<?php $this->stop() ?>
 
 <?php $this->start('header') ?>
-    <h1>Поиск по тексту: <?= $search ?></h1>
+    <h2 class="page-title">Поиск по тексту: <?= $search ?></h2>
 <?php $this->stop() ?>
 
 <?php $this->start('breadcrumb') ?>

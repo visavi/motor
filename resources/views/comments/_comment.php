@@ -11,16 +11,16 @@ use App\Models\Story;
     <div class="float-end text-end">
         <?php if (getUser() && getUser('id') !== $comment->user_id): ?>
             <a href="#" onclick="return postReply(this)" data-bs-toggle="tooltip" title="Ответить">
-                <i class="bi bi-reply text-body-secondary"></i>
+                <i class="bi bi-reply text-secondary"></i>
             </a>
             <a href="#" onclick="return postQuote(this)" data-bs-toggle="tooltip" title="Цитировать">
-                <i class="bi bi-chat-quote text-body-secondary"></i>
+                <i class="bi bi-chat-quote text-secondary"></i>
             </a>
         <?php endif; ?>
 
         <?php if (isAdmin()): ?>
-            <a href="<?= route('story-comment-edit', ['id' => $story->id, 'cid' => $comment->id]) ?>"><i class="bi bi-pencil text-body-secondary"></i></a>
-            <a href="<?= route('story-comment-destroy', ['id' => $story->id, 'cid' => $comment->id]) ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg text-body-secondary"></i></a>
+            <a href="<?= route('story-comment-edit', ['id' => $story->id, 'cid' => $comment->id]) ?>"><i class="bi bi-pencil text-secondary"></i></a>
+            <a href="<?= route('story-comment-destroy', ['id' => $story->id, 'cid' => $comment->id]) ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg text-secondary"></i></a>
         <?php endif; ?>
 
         <div class="js-rating">
@@ -37,9 +37,7 @@ use App\Models\Story;
     </div>
 
     <div class="post-author mb-1" data-login="@<?= $comment->user->login ?>">
-        <span class="avatar-micro">
-            <?= $comment->user->getAvatar() ?>
-        </span>
+        <?= $comment->user->getAvatar() ?>
         <span><?= $comment->user->getProfile() ?></span>
     </div>
 
@@ -47,7 +45,7 @@ use App\Models\Story;
         <?= $comment->getText() ?>
     </div>
 
-    <small class="post-date text-body-secondary fst-italic"><?= date('d.m.Y H:i', $comment->created_at) ?></small>
+    <small class="post-date text-secondary fst-italic"><?= date('d.m.Y H:i', $comment->created_at) ?></small>
 </div>
 
 <?php if (isset($comment->child)): ?>

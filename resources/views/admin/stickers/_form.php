@@ -6,7 +6,7 @@ use App\Models\Sticker;
 
 $sticker ??= null;
 ?>
-<div class="section shadow border post-form p-3 mt-3">
+<div class="card card-body post-form mt-3">
     <form method="post" action="<?= route($sticker ? 'admin-sticker-update' : 'admin-sticker-store', ['id' => $sticker->id]) ?>" enctype="multipart/form-data">
         <input type="hidden" name="_METHOD" value="<?= $sticker ? 'PUT' : 'POST' ?>">
         <input type="hidden" name="csrf" value="<?= session('csrf') ?>">

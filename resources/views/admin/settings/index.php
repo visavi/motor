@@ -18,23 +18,28 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-4 section shadow p-3">
-            <div class="nav flex-column nav-pills">
-                <a class="nav-link" href="/admin/settings?action=app" id="app">Сайт</a>
-                <a class="nav-link" href="/admin/settings?action=main" id="main">Основные</a>
-                <a class="nav-link" href="/admin/settings?action=mailer" id="main">Почта</a>
-                <a class="nav-link" href="/admin/settings?action=story" id="story">Статьи</a>
-                <a class="nav-link" href="/admin/settings?action=comment" id="comment">Комментарии</a>
-                <a class="nav-link" href="/admin/settings?action=guestbook" id="guestbook">Гостевая</a>
-                <a class="nav-link" href="/admin/settings?action=file" id="file">Файлы</a>
-                <a class="nav-link" href="/admin/settings?action=image" id="image">Изображения</a>
-                <a class="nav-link" href="/admin/settings?action=captcha" id="captcha">Captcha</a>
-                <a class="nav-link" href="/admin/settings?action=user" id="user">Пользователи</a>
-                <a class="nav-link" href="/admin/settings?action=sticker" id="user">Стикеры</a>
+        <div class="col-md-4">
+            <div class="card card-body">
+                <div class="nav flex-column nav-pills">
+                    <a class="nav-link" href="/admin/settings?action=app" id="app">Сайт</a>
+                    <a class="nav-link" href="/admin/settings?action=main" id="main">Основные</a>
+                    <a class="nav-link" href="/admin/settings?action=mailer" id="mailer">Почта</a>
+                    <a class="nav-link" href="/admin/settings?action=story" id="story">Статьи</a>
+                    <a class="nav-link" href="/admin/settings?action=comment" id="comment">Комментарии</a>
+                    <a class="nav-link" href="/admin/settings?action=guestbook" id="guestbook">Гостевая</a>
+                    <a class="nav-link" href="/admin/settings?action=file" id="file">Файлы</a>
+                    <a class="nav-link" href="/admin/settings?action=image" id="image">Изображения</a>
+                    <a class="nav-link" href="/admin/settings?action=captcha" id="captcha">Captcha</a>
+                    <a class="nav-link" href="/admin/settings?action=user" id="user">Пользователи</a>
+                    <a class="nav-link" href="/admin/settings?action=sticker" id="sticker">Стикеры</a>
+                </div>
             </div>
         </div>
-        <div class="col-md-8 section shadow p-3">
-            <?= $this->fetch('admin/settings/_' . $action, ['settings' => $settings, 'template' => $this]) ?>
+
+        <div class="col-md-8">
+            <div class="card card-body">
+                <?= $this->fetch('admin/settings/_' . $action, ['settings' => $settings, 'template' => $this]) ?>
+            </div>
         </div>
     </div>
 </div>

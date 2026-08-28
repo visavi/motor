@@ -13,15 +13,13 @@ use MotorORM\Collection;
         </div>
 
         <div class="post-author">
-            <span class="avatar-micro">
-                <?= $comment->user->getAvatar() ?>
-            </span>
+            <?= $comment->user->getAvatar() ?>
             <span><?= $comment->user->getName() ?></span>
         </div>
 
         <div class="section-post">
             <?= $comment->shortText() ?>
-            <small class="text-body-secondary fst-italic ms-1"><?= date('d.m.Y H:i', $comment->created_at) ?></small>
+            <small class="text-secondary fst-italic ms-1"><?= date('d.m.Y H:i', $comment->created_at) ?></small>
         </div>
 
         <div>

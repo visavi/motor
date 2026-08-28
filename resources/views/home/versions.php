@@ -7,7 +7,7 @@
 <?php $this->start('description') ?>Список последних версий Motor CMS<?php $this->stop() ?>
 
 <?php $this->start('header') ?>
-    <h1>Последние версии</h1>
+    <h2 class="page-title">Последние версии</h2>
 <?php $this->stop() ?>
 
 <?php $this->start('breadcrumb') ?>
@@ -20,7 +20,7 @@
 <?php $this->stop() ?>
 
 <?php if ($releases): ?>
-    <div class="section shadow border p-3 mb-3">
+    <div class="card card-body mb-3">
         <?php foreach ($releases as $release): ?>
             <div class="post mb-3">
                 <div class="post-message fw-bold">
@@ -32,12 +32,10 @@
                 </div>
 
                 <div class="post-author fw-light">
-                    <span class="avatar-micro">
-                        <img class="avatar-default rounded-circle" src="<?= $release['author']['avatar_url']?>" alt="Аватар">
-                    </span>
+                    <span class="avatar avatar-sm" style="background-image: url(<?= $release['author']['avatar_url']?>)"></span>
 
                     <span><a href="<?= $release['author']['html_url'] ?>"><?= $release['author']['login'] ?></a></span>
-                    <small class="post-date text-body-secondary fst-italic"><?= date('d.m.Y H:i', strtotime($release['created_at'])) ?></small>
+                    <small class="post-date text-secondary fst-italic"><?= date('d.m.Y H:i', strtotime($release['created_at'])) ?></small>
                 </div>
 
                 <div>

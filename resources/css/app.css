@@ -1,70 +1,111 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,700,700i&display=swap');
+/*
+ * Стили движка поверх Tabler. Всё, что Tabler умеет сам — кнопки, карточки,
+ * формы, навигация — здесь не описывается. Остаётся только своё:
+ * записи, разметка bbcode и загруженные файлы
+ */
 
-html {
-    font-size: 0.9rem;
-}
+/* ── Записи ───────────────────────────────────────────────────────── */
 
-.body {
-    font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-}
-
-a {
-    color: #297dad;
-    text-decoration: none;
-}
-
-.app {
-    background-color: #f9f9fb;
-}
-
-@media (max-width: 768px) {
-    .app {
-        padding: 10px !important;
-    }
-}
-
-.app-title {
-    padding-bottom: 1rem;
-}
-
-.app-title h1 {
-    margin: 0;
-    font-size: 28px;
-    font-weight: 400;
-}
-
-.section {
-    background: rgba(var(--bs-body-bg-rgb), 0.9);
-    border-radius: 5px;
-}
-
-.section h3 {
-    margin-bottom: 1rem;
-}
-
-@media (max-width: 768px) {
-    .section {
-        padding-left: 10px !important;
-        padding-right: 10px !important;
-    }
+.post + .post {
+    border-top: 1px solid var(--tblr-border-color);
+    padding-top: 1rem;
 }
 
 .post-author {
-    font-weight: bold;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .post-message {
     overflow-wrap: break-word;
+    margin: 0.5rem 0;
 }
 
-.breadcrumb {
-    margin-bottom: 0;
-    font-size: 13px;
-    padding: 0;
-    text-align: left;
-    background-color: transparent;
-    margin-top: 10px;
+.post-date {
+    font-size: 0.75rem;
 }
+
+.post-form textarea {
+    resize: vertical;
+}
+
+.post-rating-up.active,
+.post-rating-down.active {
+    color: #fff;
+    padding: 0 0.25rem;
+    display: inline-block;
+    border-radius: var(--tblr-border-radius);
+}
+
+.post-rating-up.active {
+    background-color: var(--tblr-green);
+}
+
+.post-rating-down.active {
+    background-color: var(--tblr-red);
+}
+
+/* ── Разметка bbcode ──────────────────────────────────────────────── */
+
+.spoiler {
+    margin-bottom: 0.5rem;
+}
+
+.spoiler::before {
+    content: "\F231";
+    font-family: "bootstrap-icons";
+    color: var(--tblr-secondary);
+    vertical-align: -0.2em;
+}
+
+.spoiler.spoiler-open::before {
+    content: "\F229";
+}
+
+.spoiler-title {
+    border-bottom: 1px dashed;
+    color: var(--tblr-primary);
+    cursor: pointer;
+}
+
+.spoiler-text,
+.hidden-text {
+    padding: 0.75rem 1rem;
+    margin: 0.5rem 0;
+    background-color: var(--tblr-bg-surface-secondary);
+    border-radius: var(--tblr-border-radius);
+}
+
+.blockquote {
+    padding: 0.5rem 1rem;
+    font-size: 95%;
+    font-style: italic;
+    background: var(--tblr-bg-surface-secondary);
+    border-left: 3px solid var(--tblr-primary);
+    border-radius: 0 var(--tblr-border-radius) var(--tblr-border-radius) 0;
+}
+
+.blockquote::before {
+    content: "\F6B0";
+    font-family: "bootstrap-icons";
+    font-size: 130%;
+    line-height: 1;
+    float: left;
+    margin-right: 0.5rem;
+}
+
+.blockquote-footer {
+    margin: 0;
+}
+
+.cut {
+    display: block;
+    margin-top: 0.5rem;
+}
+
+/* ── Файлы ────────────────────────────────────────────────────────── */
 
 .media-file {
     max-width: 600px;
@@ -72,263 +113,59 @@ a {
 }
 
 .upload-file {
+    display: inline-block;
     margin-right: 0.25rem;
-    background-color: #f5f5f5;
-    padding: 1rem 0.5rem;
-    display: inline;
-    border: 1px solid #dee2e6;
+    padding: 0.5rem;
     font-size: 0.8rem;
-    font-weight: bold;
-}
-
-.spoiler {
-    margin-bottom: 5px;
-}
-
-.spoiler:before {
-    content: "\F231";
-    font-family: "bootstrap-icons";
-    color: #bbb;
-    vertical-align: -0.2em;
-}
-
-.spoiler.spoiler-open:before {
-    content: "\F229";
-}
-
-.spoiler-title {
-    border-bottom: 1px dashed;
-    color: #6da3bd;
-    cursor: pointer;
-    font-weight: normal;
-}
-
-.spoiler-text {
-    padding: 10px 15px;
-    margin: 5px 0;
-    background-color: #f7f7f9;
-}
-
-.hidden-text {
-    padding: 10px 15px;
-    margin: 5px 0;
-    background-color: #f7f7f9;
-}
-
-.post-rating-up.active {
-    color: #fff;
-    background-color: #78c062;
-    padding: 0 3px;
-    display: inline-block;
-    border-radius: 3px;
-}
-
-.post-rating-down.active {
-    color: #fff;
-    background-color: #f75c48;
-    padding: 0 3px;
-    display: inline-block;
-    border-radius: 3px;
+    font-weight: 600;
+    background-color: var(--tblr-bg-surface-secondary);
+    border: 1px solid var(--tblr-border-color);
+    border-radius: var(--tblr-border-radius);
 }
 
 .cursor-pointer {
     cursor: pointer;
 }
 
+/* ── Мелочи ───────────────────────────────────────────────────────── */
+
 textarea.form-control {
     resize: vertical;
 }
 
-.blockquote:before {
-    content: "\F6B0";
-    line-height: 1.0em;
-    font-size: 130%;
-    font-family: "bootstrap-icons";
-    font-weight: 900;
-    float: left;
-    margin-right: 10px;
-}
-
-.blockquote {
-    padding: 8px 15px;
-    font-size: 95%;
-    background: var(--base-bg);
-    border-left: 5px solid;
-    border-color: rgba(var(--bd-blue-rgb), 0.5);
-    font-style:italic;
-}
-
-.blockquote-footer {
-    margin: 0;
-}
-
-.avatar-default {
-    color: #fff;
-    display: inline-block;
-    font-size: 42px;
-    font-weight: 700;
-    height: 64px;
-    text-align: center;
-    text-decoration: none;
-    width: 64px;
-}
-
-.avatar-medium>.avatar-default {
-    font-size: 22px;
-    height: 32px;
-    width: 32px;
-}
-
-.avatar-micro>.avatar-default {
-    font-size: 14px;
-    height: 20px;
-    width: 20px;
+.badge-notification {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(35%, -25%);
+    font-size: 0.65rem;
+    padding: 0.15rem 0.35rem;
 }
 
 @media (max-width: 768px) {
     .pagination .page-link {
         padding: 0.25rem 0.5rem;
-        font-size: 0.7875rem;
-        line-height: 1.5;
+        font-size: 0.79rem;
     }
 }
 
-.app-search {
-    position: relative;
+/* ── Оглавление документации ──────────────────────────────────────── */
+
+.toc-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--tblr-secondary);
+    margin-bottom: 0.5rem;
 }
 
-.app-search-input {
-    padding: 5px 30px 5px 10px;
-    transition: background-color .3s ease;
+.toc-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
-.app-search-button {
-    background: 0 0;
-    border: 0;
-    padding: 0 10px;
-    position: absolute;
-    right: 0;
-    top: 7px;
-}
-
-::-webkit-scrollbar {
-    width: 15px;
-}
-
-::-webkit-scrollbar-track {
-    border-radius: 10px;
-    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-}
-
-::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
-}
-
-::-webkit-scrollbar-corner {
-    background: transparent;
-}
-
-.bd-navbar{
-    padding: .75rem 0;
-    background-color: transparent;
-    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15), inset 0 -1px 0 rgba(255,255,255,0.15)
-}
-.bd-navbar::after {
-    position:absolute;
-    inset:0;
-    z-index:-1;
-    display:block;
-    content:"";
-    background-image:linear-gradient(to bottom, rgba(var(--bd-blue-rgb), 1), rgba(var(--bd-blue-rgb), 0.95))
-}
-@media (max-width: 991.98px){
-    .bd-navbar .bd-navbar-toggle{
-        width:4.25rem
-    }
-}
-.bd-navbar .navbar-toggler{
-    padding:0;margin-right:-.5rem;border:0
-}
-.bd-navbar .navbar-toggler:first-child{
-    margin-left:-.5rem
-}
-.bd-navbar .navbar-toggler .bi{
-    width:1.5rem;height:1.5rem
-}
-.bd-navbar .navbar-toggler:focus{
-    box-shadow:none
-}
-.bd-navbar .navbar-brand svg{
-    color:#fff;transition:.2s ease-in-out transform
-}
-.bd-navbar .navbar-brand svg:hover{
-    transform:rotate(-60deg) scale(1.1)
-}
-.bd-navbar .navbar-toggler,
-.bd-navbar .nav-link{
-    color:rgba(255,255,255,0.85)
-}
-.bd-navbar .navbar-toggler:hover,
-.bd-navbar .navbar-toggler:focus,
-.bd-navbar .nav-link:hover,
-.bd-navbar .nav-link:focus{
-    color:#fff
-}
-
-.bd-navbar .navbar-toggler.active,
-.bd-navbar .nav-link.active{
-    font-weight:600;color:#fff
-}
-
-.bd-navbar .offcanvas-lg{
-    background-color:var(--bd-blue-bg);
-    border-left:0
-}
-@media (max-width: 991.98px){
-    .bd-navbar .offcanvas-lg{
-        box-shadow:0 1rem 3rem rgba(var(--bs-body-color-rgb), 0.175)
-    }
-}
-.bd-navbar .dropdown-toggle:focus:not(:focus-visible){
-    outline:0
-}
-.bd-navbar .dropdown-menu{
-    --bs-dropdown-min-width: 12rem;
-    --bs-dropdown-padding-x: .25rem;
-    --bs-dropdown-padding-y: .25rem;
-    --bs-dropdown-link-hover-bg: rgba(var(--bd-blue-rgb), .1);
-    --bs-dropdown-link-active-bg: rgba(var(--bd-blue-rgb), 1);
-    --bs-dropdown-font-size:.875rem;font-size:.875rem;
-    border-radius:.5rem;
-    box-shadow:0 0.5rem 1rem rgba(var(--bs-body-color-rgb), 0.15)
-}
-.bd-navbar .dropdown-menu li+li{
-    margin-top:.125rem
-}
-.bd-navbar .dropdown-menu .dropdown-item{
-    border-radius:.25rem
-}
-.bd-navbar .dropdown-menu .dropdown-item:active .bi{
-    color:inherit !important
-}
-.bd-navbar .dropdown-menu .active{
-    font-weight:600
-}
-.bd-navbar .dropdown-menu .active .bi{
-    display:block !important
-}
-[data-bs-theme="dark"] .bd-navbar{
-    box-shadow:0 0.5rem 1rem rgba(0,0,0,0.15),inset 0 -1px 0 rgba(255,255,255,0.15)
-}
-
-.bd-gutter {
-    --bs-gutter-x: 3rem;
-}
-.bi{width:1em;height:1em;vertical-align:-.125em;fill:currentcolor}
-
-@media (min-width: 992px) {
-    .bd-navbar .navbar-brand span {
-        display: none;
-    }
+.toc-links li {
+    padding: 0.25rem 0;
 }

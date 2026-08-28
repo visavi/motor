@@ -17,7 +17,7 @@ use App\Models\User;
     </nav>
 <?php $this->stop() ?>
 
-<div class="section shadow border p-3">
+<div class="card card-body">
     <?php if ($user->isBanned()): ?>
         <div class="alert alert-danger">
             <i class="bi bi-exclamation-circle-fill"></i>

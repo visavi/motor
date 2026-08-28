@@ -9,7 +9,7 @@ use MotorORM\Pagination;
 
 <?php $this->start('title') ?>Гостевая книга (Стр. <?= $messages->currentPage() ?>)<?php $this->stop() ?>
 <?php $this->start('description') ?>Гостевая книга (Стр. <?= $messages->currentPage() ?>)<?php $this->stop() ?>
-<?php $this->start('header') ?><h1>Гостевая книга</h1><?php $this->stop() ?>
+<?php $this->start('header') ?><h2 class="page-title">Гостевая книга</h2><?php $this->stop() ?>
 
 <?php $this->start('breadcrumb') ?>
     <nav>
@@ -21,7 +21,7 @@ use MotorORM\Pagination;
 <?php $this->stop() ?>
 
 <?php if ($messages->isNotEmpty()): ?>
-    <div class="section shadow border p-3 mb-3">
+    <div class="card card-body mb-3">
         <?php /** @var Guestbook $comment */ ?>
         <?php foreach ($messages as $message): ?>
             <div class="post mb-3">
@@ -31,32 +31,28 @@ use MotorORM\Pagination;
                     <?php else: ?>
                         <?php if (getUser() && getUser('id') !== $message->user_id): ?>
                             <a href="#" onclick="return postReply(this)" data-bs-toggle="tooltip" title="Ответить">
-                                <i class="bi bi-reply text-body-secondary"></i>
+                                <i class="bi bi-reply text-secondary"></i>
                             </a>
                             <a href="#" onclick="return postQuote(this)" data-bs-toggle="tooltip" title="Цитировать">
-                                <i class="bi bi-chat-quote text-body-secondary"></i>
+                                <i class="bi bi-chat-quote text-secondary"></i>
                             </a>
                         <?php endif; ?>
                     <?php endif; ?>
 
                     <?php if (isAdmin()): ?>
-                        <a href="/guestbook/<?= $message->id ?>/edit"><i class="bi bi-pencil text-body-secondary"></i></a>
-                        <a href="/guestbook/<?= $message->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg text-body-secondary"></i></a>
+                        <a href="/guestbook/<?= $message->id ?>/edit"><i class="bi bi-pencil text-secondary"></i></a>
+                        <a href="/guestbook/<?= $message->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg text-secondary"></i></a>
                     <?php endif; ?>
                 </div>
 
                 <?php if ($message->user->id): ?>
                     <div class="post-author" data-login="@<?= $message->user->login ?>">
-                        <span class="avatar-micro">
-                            <?= $message->user->getAvatar() ?>
-                        </span>
+                        <?= $message->user->getAvatar() ?>
                         <span><a href="/users/<?= $message->user->login ?>"><?= $message->user->getName() ?></a></span>
                     </div>
                 <?php else: ?>
                     <div class="post-author" data-login="<?= $message->name ?? setting('main.guest_name') ?>">
-                        <span class="avatar-micro">
-                            <img class="avatar-default rounded-circle" src="/assets/images/avatar_default.png" alt="Аватар">
-                        </span>
+                        <span class="avatar avatar-sm" style="background-image: url(/assets/images/avatar_default.png)"></span>
                         <span><?= $message->name ?? setting('main.guest_name') ?></span>
                     </div>
                 <?php endif; ?>
@@ -65,7 +61,7 @@ use MotorORM\Pagination;
                     <?= $message->getText() ?>
                 </div>
 
-                <small class="post-date text-body-secondary fst-italic"><?= date('d.m.Y H:i', $message->created_at) ?></small>
+                <small class="post-date text-secondary fst-italic"><?= date('d.m.Y H:i', $message->created_at) ?></small>
             </div>
         <?php endforeach; ?>
     </div>

@@ -7,7 +7,7 @@
 <?php $this->start('description') ?>Список последних изменений Motor CMS<?php $this->stop() ?>
 
 <?php $this->start('header') ?>
-    <h1>Последние изменения</h1>
+    <h2 class="page-title">Последние изменения</h2>
 <?php $this->stop() ?>
 
 <?php $this->start('breadcrumb') ?>
@@ -20,7 +20,7 @@
 <?php $this->stop() ?>
 
 <?php if ($commits): ?>
-    <div class="section shadow border p-3 mb-3">
+    <div class="card card-body mb-3">
         <?php foreach ($commits as $commit): ?>
             <?php
             // Автора нет, если коммит сделан с почты, не привязанной к аккаунту github
@@ -34,9 +34,7 @@
                 </div>
 
                 <div class="post-author fw-light">
-                    <span class="avatar-micro">
-                        <img class="avatar-default rounded-circle" src="<?= $avatar ?>" alt="Аватар">
-                    </span>
+                    <span class="avatar avatar-sm" style="background-image: url(<?= $avatar ?>)"></span>
 
                     <span>
                         <?php if ($author): ?>
@@ -45,7 +43,7 @@
                             <?= $name ?>
                         <?php endif; ?>
                     </span>
-                    <small class="post-date text-body-secondary fst-italic"><?= date('d.m.Y H:i', strtotime($commit['commit']['author']['date'])) ?></small>
+                    <small class="post-date text-secondary fst-italic"><?= date('d.m.Y H:i', strtotime($commit['commit']['author']['date'])) ?></small>
                 </div>
             </div>
         <?php endforeach; ?>

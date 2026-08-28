@@ -9,16 +9,20 @@
 
     <?= vite() ?>
     <?= $this->section('styles') ?>
-    <link href="/favicon.ico" rel="icon" type="image/x-icon" >
-    <meta name="theme-color" content="#7952b3">
+    <link href="/favicon.ico" rel="icon" type="image/x-icon">
+    <meta name="theme-color" content="#066fd1">
 </head>
-<body class="body">
+<body class="d-flex flex-column">
 
-<div class="container-fluid">
-    <main>
+<div class="page page-center">
+    <div class="container container-tight py-4">
+        <div class="text-center mb-4">
+            <a href="/" class="navbar-brand navbar-brand-autodark fs-2 fw-bold">Motor CMS</a>
+        </div>
+
         <?= $this->fetch('app/_flash') ?>
         <?= $this->section('content') ?>
-    </main>
+    </div>
 </div>
 
 </body>

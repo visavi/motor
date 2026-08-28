@@ -4,7 +4,7 @@
 <?php $this->start('description') ?>Motor CMS - Легкий и быстрый движок для сайта. Не использует базу данных, не требует особых библиотек на сервере<?php $this->stop() ?>
 
 <?php $this->start('header') ?>
-    <h1>Документация</h1>
+    <h2 class="page-title">Документация</h2>
 <?php $this->stop() ?>
 
 <?php $this->start('breadcrumb') ?>

@@ -21,7 +21,7 @@ use MotorORM\Pagination;
 
 <?php if ($users->isNotEmpty()): ?>
     <?php foreach ($users as $user): ?>
-        <div class="section shadow border p-3 mb-3">
+        <div class="card card-body mb-3">
             <div class="float-end">
                 <?php if ($user->isBanned()): ?>
                     <span class="badge text-bg-danger"><?= setting('roles.banned') ?></span>
@@ -32,9 +32,7 @@ use MotorORM\Pagination;
                 <?php endif; ?>
             </div>
 
-            <span class="avatar-default mb-3">
-                <?= $user->getAvatar() ?>
-            </span>
+            <div class="mb-3"><?= $user->getAvatar('lg') ?></div>
             <a class="fw-bold" href="/users/<?= $user->login ?>"><?= $user->getName() ?></a><br>
             Роль: <?= $user->getRole() ?><br>
             Регистрация: <?= date('d.m.Y', $user->created_at) ?>

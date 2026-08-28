@@ -8,7 +8,7 @@ use MotorORM\Pagination;
 
 <?php if ($stories->isNotEmpty()): ?>
     <?php foreach ($stories as $story): ?>
-        <article class="section shadow border p-3 mb-3">
+        <article class="card card-body mb-3">
             <div class="float-end js-rating">
                 <?php if ($story->active === false && ($story->user_id === getUser('id') || isAdmin())): ?>
                     <span class="badge text-bg-danger">Не опубликовано</span>
@@ -41,13 +41,11 @@ use MotorORM\Pagination;
             </div>
 
             <div class="post-author d-inline-block mt-3">
-                <span class="avatar-micro">
-                    <?= $story->user->getAvatar() ?>
-                </span>
+                <?= $story->user->getAvatar() ?>
                 <span><?= $story->user->getProfile() ?></span>
             </div>
 
-            <small class="post-date text-body-secondary fst-italic ms-1">
+            <small class="post-date text-secondary fst-italic ms-1">
                 <?= date('d.m.Y H:i', $story->created_at) ?>
             </small>
 

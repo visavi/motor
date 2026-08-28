@@ -18,7 +18,7 @@
 <?php $this->stop() ?>
 
 <?php if ($logs): ?>
-    <div class="section shadow border p-3 mb-3">
+    <div class="card card-body mb-3">
         <div class="mb-3">
             <select class="form-select" id="log" onchange="return selectLog(this);">
                 <?php foreach ($logs as $log): ?>
@@ -30,9 +30,9 @@
         </div>
 
         <?php foreach ($reader as $data): ?>
-            <div class="section shadow border p-3 mb-3">
+            <div class="card card-body mb-3">
                 <i class="bi bi-bug"></i> <b><?= $data['level'] ?></b>
-                <small class="post-date text-body-secondary fst-italic ms-1">
+                <small class="post-date text-secondary fst-italic ms-1">
                     <?= $data['date'] ?>
                 </small>
                 <div>

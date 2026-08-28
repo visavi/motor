@@ -104,19 +104,21 @@ class User extends Model
      *
      * @return string
      */
-    public function getAvatar(): string
+    public function getAvatar(string $size = 'sm'): string
     {
         if (! $this->id) {
-            return '<img class="avatar-default rounded-circle" src="/assets/images/avatar_guest.png" alt="Аватар">';
-        }
-
-        if ($this->avatar && file_exists(publicPath($this->avatar))) {
-            $avatar = '<img class="avatar-default rounded-circle" src="' . $this->avatar . '" alt="Аватар">';
+            $path = '/assets/images/avatar_guest.png';
+        } elseif ($this->avatar && file_exists(publicPath($this->avatar))) {
+            $path = $this->avatar;
         } else {
-            $avatar = '<img class="avatar-default rounded-circle" src="/assets/images/avatar_default.png" alt="Аватар">';
+            $path = '/assets/images/avatar_default.png';
         }
 
-        return $avatar;
+        return sprintf(
+            '<span class="avatar avatar-%s" style="background-image: url(%s)"></span>',
+            escape($size),
+            escape($path),
+        );
     }
 
     /**

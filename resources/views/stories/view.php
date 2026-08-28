@@ -20,7 +20,7 @@ use App\Models\Story;
 </nav>
 <?php $this->stop() ?>
 
-<div class="section shadow border p-3 mb-3">
+<div class="card card-body mb-3">
     <div class="float-end js-rating">
         <?php if ($story->active === false): ?>
             <span class="badge text-bg-danger">Не опубликовано</span>
@@ -46,13 +46,11 @@ use App\Models\Story;
     </div>
 
     <div class="post-author d-inline-block mt-3">
-        <span class="avatar-micro">
-            <?= $story->user->getAvatar() ?>
-        </span>
+        <?= $story->user->getAvatar() ?>
         <span><?= $story->user->getProfile() ?></span>
     </div>
 
-    <small class="post-date text-body-secondary fst-italic ms-1">
+    <small class="post-date text-secondary fst-italic ms-1">
         <?= date('d.m.Y H:i', $story->created_at) ?>
     </small>
 
@@ -102,7 +100,7 @@ use App\Models\Story;
     </div>
 </div>
 
-<div class="section shadow border p-3 mb-3" id="comments">
+<div class="card card-body mb-3" id="comments">
     <h3>Комментарии <small><?= count($story->comments) ?></small></h3>
 
     <?php if ($story->comments->isNotEmpty()): ?>

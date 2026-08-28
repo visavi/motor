@@ -9,7 +9,7 @@ use MotorORM\Pagination;
 
 <?php $this->start('title') ?>Уведомления (Стр. <?= $notifications->currentPage() ?>)<?php $this->stop() ?>
 <?php $this->start('description') ?>Уведомления (Стр. <?= $notifications->currentPage() ?>)<?php $this->stop() ?>
-<?php $this->start('header') ?><h1>Уведомления</h1><?php $this->stop() ?>
+<?php $this->start('header') ?><h2 class="page-title">Уведомления</h2><?php $this->stop() ?>
 
 <?php $this->start('breadcrumb') ?>
     <nav>
@@ -21,12 +21,12 @@ use MotorORM\Pagination;
 <?php $this->stop() ?>
 
 <?php if ($notifications->isNotEmpty()): ?>
-    <div class="section shadow border p-3 mb-3">
+    <div class="card card-body mb-3">
         <?php /** @var Notification $notification */ ?>
         <?php foreach ($notifications as $notification): ?>
             <div class="post mb-3">
                 <div class="float-end text-end">
-                    <a href="/notifications/<?= $notification->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg text-body-secondary"></i></a>
+                    <a href="/notifications/<?= $notification->id ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete"><i class="bi bi-x-lg text-secondary"></i></a>
                 </div>
 
                 <div class="post-author">
@@ -41,7 +41,7 @@ use MotorORM\Pagination;
                     <?= $notification->getMessage() ?>
                 </div>
 
-                <small class="post-date text-body-secondary fst-italic"><?= date('d.m.Y H:i', $notification->created_at) ?></small>
+                <small class="post-date text-secondary fst-italic"><?= date('d.m.Y H:i', $notification->created_at) ?></small>
             </div>
         <?php endforeach; ?>
     </div>

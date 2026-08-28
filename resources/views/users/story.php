@@ -13,7 +13,7 @@ use MotorORM\Pagination;
 <?php $this->start('description') ?>Статьи <?= $user->getName() ?> (Стр. <?= $stories->currentPage() ?>)<?php $this->stop() ?>
 
 <?php $this->start('header') ?>
-    <h1>Статьи <?= $user->getName() ?></h1>
+    <h2 class="page-title">Статьи <?= $user->getName() ?></h2>
 <?php $this->stop() ?>
 
 <?php $this->start('breadcrumb') ?>

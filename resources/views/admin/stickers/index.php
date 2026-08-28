@@ -21,7 +21,7 @@ use MotorORM\Pagination;
 
 <?php if ($stickers->isNotEmpty()): ?>
     <?php foreach ($stickers as $sticker): ?>
-        <div class="section shadow border p-3 mb-3">
+        <div class="card card-body mb-3">
             <img src="<?= $sticker->path ?>" alt=""> <b><?= $sticker->code ?></b>
 
             <div class="float-end ms-3">

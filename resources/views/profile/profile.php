@@ -20,7 +20,7 @@ $isManagement ??= false;
     </nav>
 <?php $this->stop() ?>
 
-<div class="section shadow border p-3">
+<div class="card card-body">
     <form method="post" action="<?= route($isManagement ? 'user-store' : 'profile-store', ['login' => $user->login]) ?>" enctype="multipart/form-data">
         <input type="hidden" name="_METHOD" value="PUT">
         <input type="hidden" name="csrf" value="<?= session('csrf') ?>">

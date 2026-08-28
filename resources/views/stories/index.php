@@ -11,7 +11,7 @@ use MotorORM\Pagination;
 <?php $this->start('description') ?>Статьи (Стр. <?= $stories->currentPage() ?>)<?php $this->stop() ?>
 
 <?php $this->start('header') ?>
-    <h1><?= setting('main.title') ?></h1>
+    <h2 class="page-title"><?= setting('main.title') ?></h2>
 <?php $this->stop() ?>
 
 <?php $this->start('breadcrumb') ?>
