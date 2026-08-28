@@ -61,10 +61,11 @@
         <?php endforeach; ?>
     </div>
 <?php else: ?>
-    <div class="alert alert-danger">
-        <i class="bi bi-exclamation-circle-fill text-danger"></i>
-        Логов еще нет!
-    </div>
+    <?= $this->fetch('app/_empty', [
+        'title'    => 'Логов ещё нет',
+        'subtitle' => 'Здесь появятся записи из storage/logs',
+        'icon'     => 'bi-journal-text',
+    ]) ?>
 <?php endif; ?>
 
 

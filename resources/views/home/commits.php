@@ -50,8 +50,8 @@
     </div>
 
 <?php else: ?>
-    <div class="alert alert-danger">
-        <i class="bi bi-exclamation-circle-fill text-danger"></i>
+    <div class="alert alert-warning" role="alert">
+        <i class="bi bi-exclamation-circle me-1"></i>
         Не удалось получить последние изменения!
     </div>
 <?php endif; ?>

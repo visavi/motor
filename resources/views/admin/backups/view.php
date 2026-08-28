@@ -30,8 +30,9 @@
         <div class="mt-3">Всего таблиц: <?= $countFiles ?></div>
     </div>
 <?php else: ?>
-    <div class="alert alert-danger">
-        <i class="bi bi-exclamation-circle-fill text-danger"></i>
-        Таблиц нет!
-    </div>
+    <?= $this->fetch('app/_empty', [
+        'title'    => 'Таблиц нет',
+        'subtitle' => 'В этом архиве не оказалось ни одной таблицы',
+        'icon'     => 'bi-table',
+    ]) ?>
 <?php endif; ?>

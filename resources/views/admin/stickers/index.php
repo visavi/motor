@@ -33,10 +33,11 @@ use MotorORM\Pagination;
 
      <?= pagination($stickers) ?>
 <?php else: ?>
-    <div class="alert alert-danger">
-        <i class="bi bi-exclamation-circle-fill text-danger"></i>
-        Стикеров еще нет!
-    </div>
+    <?= $this->fetch('app/_empty', [
+        'title'    => 'Стикеров ещё нет',
+        'subtitle' => 'Загрузите первый стикер, чтобы он появился в списке',
+        'icon'     => 'bi-emoji-smile',
+    ]) ?>
 <?php endif; ?>
 
 <?= $this->fetch('admin/stickers/_form') ?>

@@ -24,7 +24,7 @@ $story ??= null;
         <div class="mb-3">
             <label for="text" class="form-label">Текст</label>
             <textarea class="form-control markItUp<?= hasError('text') ?>" id="text" rows="5" name="text" maxlength="<?= setting('story.text_max_length') ?>" required><?= old('text', $story->text ?? null) ?></textarea>
-            <span class="js-textarea-counter"></span>
+            <span class="js-textarea-counter form-hint"></span>
             <div class="invalid-feedback"><?= getError('text') ?></div>
         </div>
 

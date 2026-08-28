@@ -1,4 +1,5 @@
-/* Стили */
+/* Стили. Inter — родной шрифт Tabler, без него всё падает на системный */
+import '@fontsource-variable/inter';
 import '@tabler/core/dist/css/tabler.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import '@fancyapps/ui/dist/fancybox/fancybox.css';

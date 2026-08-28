@@ -22,8 +22,8 @@ use MotorORM\Collection;
 <?php if(setting('story.allow_posting') || isAdmin()): ?>
     <?= $this->fetch('stories/_form', ['files' => $files, 'template' => $this]) ?>
 <?php else: ?>
-    <div class="alert alert-danger">
-        <i class="bi bi-exclamation-circle-fill text-danger"></i>
+    <div class="alert alert-warning" role="alert">
+        <i class="bi bi-exclamation-circle me-1"></i>
         Публикация статей запрещена администратором!
     </div>
 <?php endif; ?>

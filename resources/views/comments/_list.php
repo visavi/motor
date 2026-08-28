@@ -6,24 +6,31 @@ use MotorORM\Collection;
 /** @var Collection<Comment> $comments */
 ?>
 
-<?php foreach ($comments as $comment): ?>
-    <div class="my-3 border-bottom">
-        <div class="float-end">
-            <b><?= $comment->getRating() ?></b>
-        </div>
+<?php if ($comments->isNotEmpty()): ?>
+    <div class="divide-y">
+        <?php foreach ($comments as $comment): ?>
+            <div class="p-3">
+                <div class="d-flex align-items-center gap-2 mb-1">
+                    <span class="post-author">
+                        <?= $comment->user->getAvatar('xs') ?>
+                        <span><?= escape($comment->user->getName()) ?></span>
+                    </span>
+                    <b class="ms-auto"><?= $comment->getRating() ?></b>
+                </div>
 
-        <div class="post-author">
-            <?= $comment->user->getAvatar() ?>
-            <span><?= $comment->user->getName() ?></span>
-        </div>
+                <div class="text-secondary small">
+                    <?= $comment->shortText() ?>
+                </div>
 
-        <div class="section-post">
-            <?= $comment->shortText() ?>
-            <small class="text-secondary fst-italic ms-1"><?= date('d.m.Y H:i', $comment->created_at) ?></small>
-        </div>
-
-        <div>
-            <a href="<?= $comment->story->getLink() ?>" class="small"><i class="bi bi-sticky"></i> <?= escape($comment->story->title) ?></a>
-        </div>
+                <div class="d-flex align-items-center gap-2 mt-1 small">
+                    <a href="<?= $comment->story->getLink() ?>" class="text-truncate">
+                        <i class="bi bi-sticky"></i> <?= escape($comment->story->title) ?>
+                    </a>
+                    <span class="text-secondary ms-auto text-nowrap"><?= date('d.m.Y H:i', $comment->created_at) ?></span>
+                </div>
+            </div>
+        <?php endforeach; ?>
     </div>
-<?php endforeach; ?>
+<?php else: ?>
+    <div class="p-3 text-secondary text-center">Комментариев пока нет</div>
+<?php endif; ?>

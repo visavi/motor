@@ -25,4 +25,7 @@ use MotorORM\Pagination;
 </nav>
 <?php $this->stop() ?>
 
-<?= $this->fetch('stories/_list', compact('stories')) ?>
+<?= $this->fetch('stories/_list', compact('stories') + [
+    'emptyTitle'    => 'С этим тегом статей нет',
+    'emptySubtitle' => 'Посмотрите облако тегов — может, статьи прячутся под соседним',
+]) ?>

@@ -22,7 +22,7 @@ $message ??= null;
         <div class="mb-3">
             <label for="text" class="form-label">Сообщение</label>
             <textarea class="form-control markItUp<?= hasError('text') ?>" id="text" rows="5" name="text" maxlength="<?= setting('guestbook.text_max_length') ?>" required><?= old('text', $message->text ?? null) ?></textarea>
-            <span class="js-textarea-counter"></span>
+            <span class="js-textarea-counter form-hint"></span>
             <div class="invalid-feedback"><?= getError('text') ?></div>
         </div>
 

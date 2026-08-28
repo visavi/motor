@@ -17,13 +17,16 @@
 
 <?php if ($tags): ?>
     <div class="card card-body mb-3">
-        <?php foreach ($tags as $tag => $size): ?>
-            <a href="/tags/<?= $tag ?>"><span style="font-size:<?= $size ?>pt"><?= $tag ?></span></a>
-        <?php endforeach; ?>
+        <div class="d-flex flex-wrap align-items-baseline gap-2">
+            <?php foreach ($tags as $tag => $size): ?>
+                <a href="/tags/<?= urlencode($tag) ?>" style="font-size: <?= $size ?>pt"><?= escape($tag) ?></a>
+            <?php endforeach; ?>
+        </div>
     </div>
 <?php else: ?>
-    <div class="alert alert-danger">
-        <i class="bi bi-exclamation-circle-fill text-danger"></i>
-        Тегов еще нет!
-    </div>
+    <?= $this->fetch('app/_empty', [
+        'title'    => 'Тегов ещё нет',
+        'subtitle' => 'Теги появятся, когда их проставят у статей',
+        'icon'     => 'bi-tags',
+    ]) ?>
 <?php endif; ?>

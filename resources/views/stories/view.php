@@ -100,29 +100,39 @@ use App\Models\Story;
     </div>
 </div>
 
-<div class="card card-body mb-3" id="comments">
-    <h3>Комментарии <small><?= count($story->comments) ?></small></h3>
+<div class="card mb-3" id="comments">
+    <div class="card-header">
+        <h3 class="card-title">Комментарии</h3>
+        <div class="card-actions">
+            <span class="badge bg-secondary-lt"><?= count($story->comments) ?></span>
+        </div>
+    </div>
 
     <?php if ($story->comments->isNotEmpty()): ?>
-        <?php /** @var Comment $comment */ ?>
-        <?php foreach ($story->commentsTree() as $comment): ?>
-            <?= $this->fetch('comments/_comment', compact('story', 'comment')) ?>
-        <?php endforeach; ?>
+        <div class="divide-y">
+            <?php /** @var Comment $comment */ ?>
+            <?php foreach ($story->commentsTree() as $comment): ?>
+                <?= $this->fetch('comments/_comment', compact('story', 'comment')) ?>
+            <?php endforeach; ?>
+        </div>
     <?php else: ?>
-        <div class="alert alert-danger">
-            <i class="bi bi-exclamation-circle-fill text-danger"></i>
-            Комментариев еще нет!
+        <div class="empty">
+            <div class="empty-icon"><i class="bi bi-chat fs-1"></i></div>
+            <p class="empty-title">Комментариев ещё нет</p>
+            <p class="empty-subtitle text-secondary">Будьте первым, кто выскажется</p>
         </div>
     <?php endif; ?>
 
     <?php if ($story->active): ?>
-        <?php if (isUser()): ?>
-            <?= $this->fetch('comments/_form', compact('story')) ?>
-        <?php else: ?>
-            <div class="alert alert-danger">
-                <i class="bi bi-exclamation-circle-fill text-danger"></i>
-                Для выполнения действия необходимо авторизоваться!
-            </div>
-        <?php endif; ?>
+        <div class="card-footer">
+            <?php if (isUser()): ?>
+                <?= $this->fetch('comments/_form', compact('story')) ?>
+            <?php else: ?>
+                <div class="alert alert-warning mb-0" role="alert">
+                    <i class="bi bi-exclamation-circle me-1"></i>
+                    Для выполнения действия необходимо авторизоваться
+                </div>
+            <?php endif; ?>
+        </div>
     <?php endif; ?>
 </div>

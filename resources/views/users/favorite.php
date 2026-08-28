@@ -25,4 +25,7 @@ use MotorORM\Pagination;
 </nav>
 <?php $this->stop() ?>
 
-<?= $this->fetch('stories/_list', compact('stories')) ?>
+<?= $this->fetch('stories/_list', compact('stories') + [
+    'emptyTitle'    => 'В избранном пусто',
+    'emptySubtitle' => 'Отмечайте статьи сердечком, и они соберутся здесь',
+]) ?>

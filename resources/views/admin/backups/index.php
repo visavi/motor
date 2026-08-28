@@ -27,10 +27,11 @@
         <?php endforeach; ?>
     </div>
 <?php else: ?>
-    <div class="alert alert-danger">
-        <i class="bi bi-exclamation-circle-fill text-danger"></i>
-        Бэкапов еще нет!
-    </div>
+    <?= $this->fetch('app/_empty', [
+        'title'    => 'Бэкапов ещё нет',
+        'subtitle' => 'Создайте первый командой php motor backup',
+        'icon'     => 'bi-archive',
+    ]) ?>
 <?php endif; ?>
 
 <form method="post">

@@ -47,8 +47,9 @@ use MotorORM\Pagination;
 
     <?= pagination($users) ?>
 <?php else: ?>
-    <div class="alert alert-danger">
-        <i class="bi bi-exclamation-circle-fill text-danger"></i>
-        Пользователей еще нет!
-    </div>
+    <?= $this->fetch('app/_empty', [
+        'title'    => 'Пользователей ещё нет',
+        'subtitle' => 'Как только кто-то зарегистрируется, он окажется здесь',
+        'icon'     => 'bi-people',
+    ]) ?>
 <?php endif; ?>

@@ -9,7 +9,7 @@ use App\Models\Story;
 $comment ??= null;
 ?>
 
-<div class="card card-body post-form">
+<div class="post-form">
     <form method="post" action="<?= route($comment ? 'story-comment-update' : 'story-comment-store', ['id' => $story->id, 'cid' => $comment->id ?? null]) ?>">
         <input type="hidden" name="_METHOD" value="<?= $comment ? 'PUT' : 'POST' ?>">
         <input type="hidden" name="csrf" value="<?= session('csrf') ?>">
@@ -17,7 +17,7 @@ $comment ??= null;
         <div class="mb-3">
             <label for="text" class="form-label">Сообщение</label>
             <textarea class="form-control markItUp<?= hasError('text') ?>" id="text" rows="5" name="text" maxlength="<?= setting('comment.text_max_length') ?>" required><?= old('text', $comment->text ?? null) ?></textarea>
-            <span class="js-textarea-counter"></span>
+            <span class="js-textarea-counter form-hint"></span>
             <div class="invalid-feedback"><?= getError('text') ?></div>
         </div>
 

@@ -37,4 +37,7 @@ use MotorORM\Pagination;
     </form>
 </div>
 
-<?= $this->fetch('stories/_list', compact('stories')) ?>
+<?= $this->fetch('stories/_list', compact('stories') + [
+    'emptyTitle'    => 'Ничего не найдено',
+    'emptySubtitle' => 'Попробуйте изменить запрос или поискать по другому слову',
+]) ?>
