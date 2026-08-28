@@ -1,0 +1,21 @@
+{
+    "name": "motor",
+    "description": "Motor CMS",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "watch": "vite build --watch"
+    },
+    "dependencies": {
+        "@fancyapps/ui": "^6.1.7",
+        "@tabler/core": "^1.4.0",
+        "bootstrap-icons": "^1.13.1",
+        "bootstrap5-tags": "^1.7.16",
+        "notyf": "^3.10.0"
+    },
+    "devDependencies": {
+        "vite": "^8.0.3"
+    }
+}

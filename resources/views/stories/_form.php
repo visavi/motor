@@ -34,7 +34,7 @@ $story ??= null;
             <label for="tags" class="form-label">Теги</label>
 
             <?php $tags = old('tags', $story ? $story->tags->pluck('tag')->all() : []); ?>
-            <select class="form-select input-tag<?= hasError('tags') ?>" id="tags" name="tags[]" multiple required>
+            <select class="form-select input-tag<?= hasError('tags') ?>" id="tags" name="tags[]" data-max="<?= setting('story.tags_max') ?>" multiple required>
                 <option disabled value="">Теги...</option>
                 <?php foreach ($tags as $key => $tag): ?>
                 <option value="<?= $tag ?>" selected><?= $tag ?></option>
@@ -80,11 +80,9 @@ $story ??= null;
 <?php $template->push('scripts') ?>
     <script>
         showDelayForm = function (el) {
-            if($(el).is(":checked")) {
-                $('.js-created').show(300);
-            } else {
-                $('.js-created').hide(200);
-            }
+            document.querySelectorAll('.js-created').forEach(function (block) {
+                block.hidden = ! el.checked;
+            });
 
             return false;
         };

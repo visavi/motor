@@ -41,8 +41,6 @@
 
 <?php $this->push('scripts') ?>
 <script>
-    $(function () {
-        $('#<?= $action ?>').addClass('active');
-    })
+    document.getElementById('<?= $action ?>')?.classList.add('active');
 </script>
 <?php $this->end() ?>

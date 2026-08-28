@@ -71,13 +71,14 @@
 <?php $this->push('scripts') ?>
     <script>
         showContext = function (el) {
-            $(el).next('.js-context').slideToggle();
+            const context = el.nextElementSibling;
+            context.hidden = ! context.hidden;
 
             return false;
         };
 
         selectLog = function (el) {
-            window.location = '?log=' + $(el).val();
+            window.location = '?log=' + el.value;
 
             return false;
         };

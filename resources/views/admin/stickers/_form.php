@@ -24,7 +24,7 @@ $sticker ??= null;
         <?php if (! $sticker): ?>
             <div class="mb-3">
                 <label for="file" class="btn btn-sm btn-secondary form-label<?= hasError('file') ?>">
-                    <input id="file" type="file" name="file" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
+                    <input id="file" type="file" name="file" onchange="document.getElementById('upload-file-info').textContent = this.files[0].name;" hidden>
                     Прикрепить стикер&hellip;
                 </label>
                 <div class="invalid-feedback"><?= getError('file') ?></div>

@@ -71,7 +71,7 @@ $isManagement ??= false;
                 <?php if (! $isManagement): ?>
                     <div class="mb-3">
                         <label for="picture" class="btn btn-sm btn-secondary form-label<?= hasError('picture') ?>">
-                            <input id="picture" type="file" name="picture" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
+                            <input id="picture" type="file" name="picture" onchange="document.getElementById('upload-file-info').textContent = this.files[0].name;" hidden>
                             Прикрепить фото&hellip;
                         </label>
                         <div class="invalid-feedback"><?= getError('picture') ?></div>

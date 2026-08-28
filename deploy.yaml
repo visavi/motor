@@ -21,9 +21,13 @@ tasks:
   deploy:
     - deploy:prepare
     - deploy:vendors
+    - assets:build
     - backup:create
     - migrate:up
     - deploy:publish
+
+  assets:build:
+    - run: 'cd {{release_path}} && npm ci && npm run build'
 
   backup:create:
     - run: '{{bin/php}} {{release_path}}/motor backup'

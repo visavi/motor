@@ -20,10 +20,8 @@
 
     <script>
         pasteSticker = function (el) {
-            var field = $('.markItUpEditor');
-            var paste = $(el).find('img').attr('alt') + ' ';
-            $('#stickersModal').modal('hide');
-            field.focus().caret(paste);
+            bootstrap.Modal.getInstance(document.getElementById('stickersModal'))?.hide();
+            pasteText(el.querySelector('img').getAttribute('alt') + ' ');
 
             return false;
         };

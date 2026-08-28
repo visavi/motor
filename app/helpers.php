@@ -377,3 +377,44 @@ function pagination(PagedCollection $collection): string
 {
     return app(View::class)->fetch('app/_paginator', ['pages' => $collection->pages()]);
 }
+
+/**
+ * Возвращает теги сборки vite
+ *
+ * Пока идёт npm run dev, файлы берутся с dev-сервера, адрес которого лежит
+ * в public/hot. После npm run build — из public/build по манифесту
+ *
+ * @param string $entry
+ *
+ * @return string
+ *
+ * @throws RuntimeException|JsonException
+ */
+function vite(string $entry = 'resources/js/app.js'): string
+{
+    if (is_file($hotFile = publicPath('hot'))) {
+        $server = rtrim((string) file_get_contents($hotFile));
+
+        return sprintf('<script type="module" src="%1$s/@vite/client"></script>' . PHP_EOL
+            . '<script type="module" src="%1$s/%2$s"></script>', $server, $entry);
+    }
+
+    if (! is_file($manifestFile = publicPath('build/manifest.json'))) {
+        throw new RuntimeException('Сборка не найдена, выполните npm run build');
+    }
+
+    $manifest = json_decode((string) file_get_contents($manifestFile), true, 512, JSON_THROW_ON_ERROR);
+
+    if (! isset($manifest[$entry])) {
+        throw new RuntimeException(sprintf('Точка входа "%s" отсутствует в манифесте сборки', $entry));
+    }
+
+    $tags = [];
+    foreach ($manifest[$entry]['css'] ?? [] as $file) {
+        $tags[] = sprintf('<link rel="stylesheet" href="/build/%s">', $file);
+    }
+
+    $tags[] = sprintf('<script type="module" src="/build/%s"></script>', $manifest[$entry]['file']);
+
+    return implode(PHP_EOL . '    ', $tags);
+}
