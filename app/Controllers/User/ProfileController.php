@@ -9,7 +9,6 @@ use App\Models\User;
 use App\Services\Session;
 use App\Services\Validator;
 use App\Services\View;
-use Intervention\Image\Constraint;
 use Intervention\Image\ImageManager;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -89,17 +88,14 @@ class ProfileController extends Controller
                 $extension = getExtension($input['picture']->getClientFilename());
                 $picturePath = '/uploads/pictures/' . uniqueName($extension);
 
-                $img = $manager->make($input['picture']->getFilePath());
-                $img->resize(setting('image.resize'), setting('image.resize'), static function (Constraint $constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                });
+                $img = $manager->decodePath($input['picture']->getFilePath());
+                $img->scaleDown(setting('image.resize'), setting('image.resize'));
 
                 $img->save(publicPath($picturePath));
 
                 $avatarPath = '/uploads/avatars/' . uniqueName('png');
-                $img = $manager->make($input['picture']->getFilePath());
-                $img->fit(64);
+                $img = $manager->decodePath($input['picture']->getFilePath());
+                $img->cover(64, 64);
                 $img->save(publicPath($avatarPath));
 
                 $this->user->update([

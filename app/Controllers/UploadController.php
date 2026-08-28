@@ -8,7 +8,6 @@ use App\Models\File;
 use App\Models\Story;
 use App\Services\Session;
 use App\Services\Validator;
-use Intervention\Image\Constraint;
 use Intervention\Image\ImageManager;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -86,11 +85,8 @@ class UploadController extends Controller
             $path      = $model->uploadPath . '/' . uniqueName($extension);
 
             if (in_array($extension, File::IMAGES, true)) {
-                $img = $this->imageManager->make($file->getFilePath());
-                $img->resize(setting('image.resize'), setting('image.resize'), static function (Constraint $constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                });
+                $img = $this->imageManager->decodePath($file->getFilePath());
+                $img->scaleDown(setting('image.resize'), setting('image.resize'));
 
                 $img->save(publicPath($path));
             } else {

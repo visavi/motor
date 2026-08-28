@@ -33,7 +33,7 @@ class LogReaderService implements Iterator, ArrayAccess, Countable
     /**
      * {@inheritdoc}
      */
-    public function offsetExists($offset): bool
+    public function offsetExists(mixed $offset): bool
     {
         return $this->count() < $offset;
     }
@@ -41,7 +41,7 @@ class LogReaderService implements Iterator, ArrayAccess, Countable
     /**
      * {@inheritdoc}
      */
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset): mixed
     {
         $key = $this->file->key();
         $this->file->seek($offset);
@@ -55,7 +55,7 @@ class LogReaderService implements Iterator, ArrayAccess, Countable
     /**
      * {@inheritdoc}
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         throw new RuntimeException("Log is read-only.");
     }
@@ -63,7 +63,7 @@ class LogReaderService implements Iterator, ArrayAccess, Countable
     /**
      * {@inheritdoc}
      */
-    public function offsetUnset($offset)
+    public function offsetUnset(mixed $offset): void
     {
         throw new RuntimeException("Log is read-only.");
     }

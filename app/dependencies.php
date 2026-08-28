@@ -5,6 +5,8 @@ declare(strict_types=1);
 use App\Services\Setting;
 use App\Services\View;
 use DI\ContainerBuilder;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
 use Psr\Container\ContainerInterface;
@@ -19,6 +21,11 @@ return function (ContainerBuilder $containerBuilder) {
         // Set view in Container
         View::class => function() {
             return new View(dirname(__DIR__) . '/resources/views');
+        },
+
+        // Image manager needs an explicit driver since intervention/image 4
+        ImageManager::class => function() {
+            return new ImageManager(new Driver());
         },
 
         CacheInterface::class => function() {

@@ -6,7 +6,7 @@ use App\Models\User;
 use App\Repositories\SettingRepository;
 use App\Services\Setting;
 use DI\ContainerBuilder;
-use Monolog\Logger;
+use Monolog\Level;
 
 return static function (ContainerBuilder $containerBuilder)
 {
@@ -116,7 +116,7 @@ return static function (ContainerBuilder $containerBuilder)
                 'logger' => [
                     'name'     => 'motor',
                     'path'     => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../storage/logs/motor.log',
-                    'level'    => Logger::DEBUG,
+                    'level'    => Level::Debug,
                     'maxFiles' => 7,
                 ],
             ]);
