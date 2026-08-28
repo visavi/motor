@@ -22,6 +22,12 @@
 <?php if ($commits): ?>
     <div class="section shadow border p-3 mb-3">
         <?php foreach ($commits as $commit): ?>
+            <?php
+            // Автора нет, если коммит сделан с почты, не привязанной к аккаунту github
+            $author = $commit['author'] ?? null;
+            $name = $author['login'] ?? $commit['commit']['author']['name'] ?? 'Неизвестный';
+            $avatar = $author['avatar_url'] ?? '/assets/images/avatar_default.png';
+            ?>
             <div class="post mb-3">
                 <div class="post-message fw-bold">
                     <a href="<?= $commit['html_url'] ?>"><?= $commit['commit']['message'] ?></a>
@@ -29,10 +35,16 @@
 
                 <div class="post-author fw-light">
                     <span class="avatar-micro">
-                        <img class="avatar-default rounded-circle" src="<?= $commit['author']['avatar_url']?>" alt="Аватар">
+                        <img class="avatar-default rounded-circle" src="<?= $avatar ?>" alt="Аватар">
                     </span>
 
-                    <span><a href="<?= $commit['author']['html_url'] ?>"><?= $commit['author']['login'] ?></a></span>
+                    <span>
+                        <?php if ($author): ?>
+                            <a href="<?= $author['html_url'] ?>"><?= $name ?></a>
+                        <?php else: ?>
+                            <?= $name ?>
+                        <?php endif; ?>
+                    </span>
                     <small class="post-date text-body-secondary fst-italic"><?= date('d.m.Y H:i', strtotime($commit['commit']['author']['date'])) ?></small>
                 </div>
             </div>
