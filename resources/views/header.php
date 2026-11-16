@@ -28,21 +28,10 @@ use App\Repositories\NotificationRepository;
                 </form>
             </div>
 
-            <div class="nav-item dropdown d-none d-md-flex me-2">
-                <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" aria-label="Тема оформления" data-bs-display="static" id="bd-theme">
-                    <i class="bi bi-circle-half"></i>
+            <div class="d-none d-md-flex me-2">
+                <a href="#" class="nav-link px-0" data-bs-theme-value="toggle" aria-label="Сменить тему">
+                    <i class="js-theme-icon bi bi-sun"></i>
                 </a>
-                <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <button type="button" class="dropdown-item" data-bs-theme-value="light">
-                        <i class="bi bi-sun me-2"></i> Светлая
-                    </button>
-                    <button type="button" class="dropdown-item" data-bs-theme-value="dark">
-                        <i class="bi bi-moon-stars me-2"></i> Тёмная
-                    </button>
-                    <button type="button" class="dropdown-item" data-bs-theme-value="auto">
-                        <i class="bi bi-circle-half me-2"></i> Авто
-                    </button>
-                </div>
             </div>
 
             <?php if (isUser()): ?>
@@ -85,9 +74,11 @@ use App\Repositories\NotificationRepository;
                     </div>
                 </div>
             <?php else: ?>
-                <div class="btn-list">
-                    <a href="<?= route('login') ?>" class="btn btn-sm">Войти</a>
-                    <a href="<?= route('register') ?>" class="btn btn-sm btn-primary">Регистрация</a>
+                <div class="d-flex">
+                    <a href="<?= route('login') ?>" class="nav-link px-2" aria-label="Вход">
+                        <i class="bi bi-box-arrow-in-right"></i>
+                        <span class="d-none d-xl-inline ms-1">Войти</span>
+                    </a>
                 </div>
             <?php endif; ?>
         </div>
@@ -112,7 +103,7 @@ use App\Repositories\NotificationRepository;
                         <span class="nav-link-title">Пользователи</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item<?= str_starts_with(currentRoute(), '/tags') ? ' active' : '' ?>">
                     <a class="nav-link" href="/tags">
                         <span class="nav-link-icon"><i class="bi bi-tags"></i></span>
                         <span class="nav-link-title">Теги</span>
@@ -130,6 +121,10 @@ use App\Repositories\NotificationRepository;
             </ul>
 
             <div class="d-md-none mt-2">
+                <a href="#" class="btn w-100 mb-2" data-bs-theme-value="toggle">
+                    <i class="js-theme-icon bi bi-sun me-1"></i> Сменить тему
+                </a>
+
                 <form class="input-icon" action="/search">
                     <input name="search" type="search" class="form-control" placeholder="Поиск&hellip;" aria-label="Поиск" required>
                     <span class="input-icon-addon">

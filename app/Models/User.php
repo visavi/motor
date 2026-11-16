@@ -18,6 +18,7 @@ namespace App\Models;
  * @property bool $confirmed
  * @property string $confirm_code
  * @property int $created_at
+ * @property int $online_at
  */
 class User extends Model
 {
@@ -32,6 +33,7 @@ class User extends Model
     protected array $casts = [
         'confirmed'  => 'bool',
         'created_at' => 'int',
+        'online_at'  => 'int',
     ];
 
     public const BOSS   = 'boss';   // Владелец

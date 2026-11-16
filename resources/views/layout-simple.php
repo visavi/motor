@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru" data-bs-theme="auto">
+<html lang="ru" data-bs-theme="light">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,10 +7,11 @@
     <meta name="generator" content="Motor CMS">
     <title><?= $this->section('title', 'Motor CMS') ?></title>
 
+    <?= $this->fetch('app/_theme') ?>
     <?= vite() ?>
     <?= $this->section('styles') ?>
     <link href="/favicon.ico" rel="icon" type="image/x-icon">
-    <meta name="theme-color" content="#066fd1">
+    <meta name="theme-color" content="#1b1f23">
 </head>
 <body class="d-flex flex-column">
 

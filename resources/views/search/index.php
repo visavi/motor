@@ -8,11 +8,11 @@ use MotorORM\Pagination;
 ?>
 <?php $this->layout('layout') ?>
 
-<?php $this->start('title') ?><?= $search ?> (Стр. <?= $stories->currentPage() ?>)<?php $this->stop() ?>
-<?php $this->start('description') ?><?= $search ?> (Стр. <?= $stories->currentPage() ?>)<?php $this->stop() ?>
+<?php $this->start('title') ?><?= escape($search) ?> (Стр. <?= $stories->currentPage() ?>)<?php $this->stop() ?>
+<?php $this->start('description') ?><?= escape($search) ?> (Стр. <?= $stories->currentPage() ?>)<?php $this->stop() ?>
 
 <?php $this->start('header') ?>
-    <h2 class="page-title">Поиск по тексту: <?= $search ?></h2>
+    <h2 class="page-title">Поиск по тексту: <?= escape($search) ?></h2>
 <?php $this->stop() ?>
 
 <?php $this->start('breadcrumb') ?>
@@ -28,7 +28,7 @@ use MotorORM\Pagination;
 <div class="mb-3">
     <form class="row row-cols-sm-auto g-3" action="/search" method="get"  role="search">
         <div class="col-sm-10">
-            <input type="text" name="search" class="form-control" placeholder="Поиск..." aria-label="Search" value="<?= $search ?>" required>
+            <input type="text" name="search" class="form-control" placeholder="Поиск..." aria-label="Search" value="<?= escape($search) ?>" required>
         </div>
 
         <div class="col-sm-2 d-sm-grid">

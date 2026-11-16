@@ -169,3 +169,8 @@ textarea.form-control {
 .toc-links li {
     padding: 0.25rem 0;
 }
+
+.toc-links a.active {
+    color: var(--tblr-body-color);
+    font-weight: 600;
+}

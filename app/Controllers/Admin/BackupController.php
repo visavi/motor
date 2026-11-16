@@ -4,16 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controllers\Admin;
 
-use App\Commands\Backup;
 use App\Controllers\Controller;
+use App\Services\BackupService;
 use App\Services\Session;
 use App\Services\Validator;
 use App\Services\View;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Symfony\Component\Console\Exception\ExceptionInterface;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\NullOutput;
 use ZipArchive;
 
 /**
@@ -25,6 +22,7 @@ class BackupController extends Controller
         protected Session $session,
         protected Validator $validator,
         protected View $view,
+        protected BackupService $backupService,
     ) {}
 
     /**
@@ -54,8 +52,6 @@ class BackupController extends Controller
      * @param Response $response
      *
      * @return Response
-     *
-     * @throws ExceptionInterface
      */
     public function create(Request $request, Response $response): Response
     {
@@ -66,11 +62,7 @@ class BackupController extends Controller
             ->same('csrf', $this->session->get('csrf'), 'Неверный идентификатор сессии, повторите действие!');
 
         if ($this->validator->isValid($input)) {
-            $command = new Backup();
-
-            $input = new ArrayInput([]);
-            $output = new NullOutput();
-            $command->run($input, $output);
+            $this->backupService->create();
 
             $this->session->set('flash', ['success' => 'Бэкап успешно создан!']);
         } else {

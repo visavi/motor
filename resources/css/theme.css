@@ -1,0 +1,115 @@
+/*
+ * Палитра движка поверх Tabler — направление «Витрина»
+ *
+ * Хвойный зелёный вместо синего по умолчанию, охра для акцентов,
+ * тёплый серый вместо холодного. Меняются только переменные Tabler,
+ * поэтому кнопки, ссылки, бейджи и графики подхватывают цвет сами
+ */
+
+:root,
+[data-bs-theme="light"] {
+    /* Основной цвет */
+    --tblr-primary: #1E5F52;
+    --tblr-primary-rgb: 30, 95, 82;
+    --tblr-primary-fg: #ffffff;
+    --tblr-primary-lt: #e4efec;
+    --tblr-link-color: #1a5449;
+    --tblr-link-color-rgb: 26, 84, 73;
+    --tblr-link-hover-color: #123a32;
+
+    /* Тёплые нейтральные вместо холодных */
+    --tblr-body-bg: #f2f0ec;
+    --tblr-body-color: #191b1f;
+    --tblr-border-color: #e0ddd6;
+    --tblr-border-color-translucent: rgba(25, 27, 31, 0.1);
+    --tblr-bg-surface: #ffffff;
+    --tblr-bg-surface-secondary: #f7f5f1;
+    --tblr-bg-surface-tertiary: #eceae4;
+    --tblr-secondary: #565b63;
+    --tblr-secondary-rgb: 86, 91, 99;
+
+    /* Охра — второй акцент: подсветка, предупреждения, активные вкладки */
+    --tblr-yellow: #f0c24b;
+    --tblr-yellow-rgb: 240, 194, 75;
+    --tblr-warning: #d9a326;
+    --tblr-warning-rgb: 217, 163, 38;
+
+    /* Шапка — графит, а не основной цвет: зелёный остаётся акцентом внутри страницы */
+    --motor-navbar-bg: #1b1f23;
+
+    /* Подсветка кода */
+    --code-bg: #f7f5f1;
+    --code-text: #191b1f;
+    --code-keyword: #1e5f52;
+    --code-string: #8a5a00;
+    --code-number: #a8432a;
+    --code-type: #34557a;
+    --code-comment: #6f6a61;
+    --code-punct: #565b63;
+}
+
+[data-bs-theme="dark"] {
+    --tblr-primary: #4fa08d;
+    --tblr-primary-rgb: 79, 160, 141;
+    --tblr-primary-fg: #0e1a17;
+    --tblr-primary-lt: #17332c;
+    --tblr-link-color: #6ab8a4;
+    --tblr-link-color-rgb: 106, 184, 164;
+    --tblr-link-hover-color: #8ecdbc;
+
+    --tblr-body-bg: #14181a;
+    --tblr-body-color: #e3e6e2;
+    --tblr-border-color: #29302f;
+    --tblr-border-color-translucent: rgba(227, 230, 226, 0.12);
+    --tblr-bg-surface: #1b201f;
+    --tblr-bg-surface-secondary: #171c1b;
+    --tblr-bg-surface-tertiary: #222827;
+    --tblr-secondary: #949c98;
+    --tblr-secondary-rgb: 148, 156, 152;
+
+    --tblr-yellow: #e8bd52;
+    --tblr-yellow-rgb: 232, 189, 82;
+    --tblr-warning: #e8bd52;
+    --tblr-warning-rgb: 232, 189, 82;
+
+    /* В тёмной теме шапка чуть светлее фона, иначе сливается */
+    --motor-navbar-bg: #1e2426;
+
+    --code-bg: #111514;
+    --code-text: #e3e6e2;
+    --code-keyword: #6ab8a4;
+    --code-string: #e8bd52;
+    --code-number: #e48c6c;
+    --code-type: #8fb3d6;
+    --code-comment: #7f8883;
+    --code-punct: #949c98;
+}
+
+/* Шапка — сплошная графитовая заливка */
+.navbar {
+    --tblr-navbar-bg: var(--motor-navbar-bg);
+    --tblr-navbar-color: rgba(255, 255, 255, 0.85);
+    --tblr-navbar-hover-color: #ffffff;
+    --tblr-navbar-active-color: #ffffff;
+    --tblr-navbar-brand-color: #ffffff;
+    --tblr-navbar-border-color: transparent;
+    --tblr-navbar-active-border-color: var(--tblr-yellow);
+    background: var(--motor-navbar-bg);
+    color: var(--tblr-navbar-color);
+}
+
+.navbar .navbar-brand,
+.navbar .nav-link,
+.navbar .navbar-toggler {
+    color: var(--tblr-navbar-color);
+}
+
+.navbar .navbar-brand:hover,
+.navbar .nav-link:hover,
+.navbar .nav-item.active > .nav-link {
+    color: var(--tblr-navbar-active-color);
+}
+
+.navbar .navbar-toggler-icon {
+    --tblr-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255,255,255,0.85%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}

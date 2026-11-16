@@ -25,5 +25,8 @@
         <div class="col">
             <a href="<?= route('admin-stickers') ?>"><i class="bi bi-emoji-smile" style="font-size: 4rem;"></i> Стикеры</a>
         </div>
+        <div class="col">
+            <a href="<?= route('admin-migrations') ?>"><i class="bi bi-layers" style="font-size: 4rem;"></i> Миграции</a>
+        </div>
     </div>
 </div>

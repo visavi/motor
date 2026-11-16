@@ -1,62 +1,68 @@
-/*!
- * Color mode toggler for Bootstrap's docs (https://getbootstrap.com/)
- * Copyright 2011-2022 The Bootstrap Authors
- * Licensed under the Creative Commons Attribution 3.0 Unported License.
+/**
+ * Переключение светлой и тёмной темы
+ *
+ * Тема хранится в localStorage. Если выбора ещё не было, берём тот режим,
+ * который стоит в системе, но дальше решает только кнопка — режима «авто» нет
  */
 
-(() => {
-  'use strict'
+const KEY = 'theme';
 
-  const storedTheme = localStorage.getItem('theme')
+function readTheme() {
+    try {
+        const stored = localStorage.getItem(KEY);
 
-  const getPreferredTheme = () => {
-    if (storedTheme) {
-      return storedTheme
+        if (stored === 'light' || stored === 'dark') {
+            return stored;
+        }
+    } catch {
+        // localStorage может быть недоступен, тогда просто спросим систему
     }
 
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-  }
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
 
-  const setTheme = function (theme) {
-    if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      document.documentElement.setAttribute('data-bs-theme', 'dark')
-    } else {
-      document.documentElement.setAttribute('data-bs-theme', theme)
+function applyTheme(theme) {
+    document.documentElement.setAttribute('data-bs-theme', theme);
+
+    document.querySelectorAll('[data-bs-theme-value]').forEach((toggle) => {
+        toggle.classList.toggle('active', toggle.dataset.bsThemeValue === theme);
+    });
+
+    document.querySelectorAll('.js-theme-icon').forEach((icon) => {
+        icon.className = 'js-theme-icon bi ' + (theme === 'dark' ? 'bi-moon-stars' : 'bi-sun');
+    });
+
+    const navbarBg = getComputedStyle(document.documentElement).getPropertyValue('--motor-navbar-bg').trim();
+
+    if (navbarBg) {
+        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', navbarBg);
     }
-  }
+}
 
-  setTheme(getPreferredTheme())
+applyTheme(readTheme());
 
-  const showActiveTheme = theme => {
-    const activeThemeIcon = document.querySelector('.theme-icon-active use')
-    const btnToActive = document.querySelector(`[data-bs-theme-value="${theme}"]`)
-    const svgOfActiveBtn = btnToActive.querySelector('svg use').getAttribute('href')
+document.addEventListener('DOMContentLoaded', () => {
+    applyTheme(readTheme());
 
-    document.querySelectorAll('[data-bs-theme-value]').forEach(element => {
-      element.classList.remove('active')
-    })
+    document.addEventListener('click', (event) => {
+        const toggle = event.target.closest('[data-bs-theme-value]');
 
-    btnToActive.classList.add('active')
-    activeThemeIcon.setAttribute('href', svgOfActiveBtn)
-  }
+        if (! toggle) {
+            return;
+        }
 
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-    if (storedTheme !== 'light' || storedTheme !== 'dark') {
-      setTheme(getPreferredTheme())
-    }
-  })
+        event.preventDefault();
 
-  window.addEventListener('DOMContentLoaded', () => {
-    showActiveTheme(getPreferredTheme())
+        const theme = toggle.dataset.bsThemeValue === 'toggle'
+            ? (document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark')
+            : toggle.dataset.bsThemeValue;
 
-    document.querySelectorAll('[data-bs-theme-value]')
-      .forEach(toggle => {
-        toggle.addEventListener('click', () => {
-          const theme = toggle.getAttribute('data-bs-theme-value')
-          localStorage.setItem('theme', theme)
-          setTheme(theme)
-          showActiveTheme(theme)
-        })
-      })
-  })
-})()
+        try {
+            localStorage.setItem(KEY, theme);
+        } catch {
+            // Не смогли запомнить — тема продержится до конца страницы
+        }
+
+        applyTheme(theme);
+    });
+});

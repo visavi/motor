@@ -1,22 +1,27 @@
-.prettyprint .com { color: var(--base-comment); }
-.prettyprint .lit { color: var(--base-number); }
-.prettyprint .pun, .prettyprint .opn, .prettyprint .clo { color: var(--base-emphasis); }
-.prettyprint .fun { color: var(--base-fun); }
-.prettyprint .str { color: var(--base-str); }
-.prettyprint .atv { color: var(--base-atv); }
-.prettyprint .kwd { color: var(--base-attr); }
-.prettyprint .tag { color: var(--base-tag); }
-.prettyprint .typ, .prettyprint .var { color: var(--base-class); }
-.prettyprint .dec { color: var(--base-dec); }
-.prettyprint .atn { color: var(--base-symbol); }
-.prettyprint .pln { color: var(--base-code); }
+.prettyprint .pln { color: var(--code-text); }
+.prettyprint .kwd { color: var(--code-keyword); }
+.prettyprint .str,
+.prettyprint .atv { color: var(--code-string); }
+.prettyprint .lit { color: var(--code-number); }
+.prettyprint .typ,
+.prettyprint .var,
+.prettyprint .fun,
+.prettyprint .atn { color: var(--code-type); }
+.prettyprint .tag { color: var(--code-keyword); }
+.prettyprint .com,
+.prettyprint .dec { color: var(--code-comment); font-style: italic; }
+.prettyprint .pun,
+.prettyprint .opn,
+.prettyprint .clo { color: var(--code-punct); }
 
 .prettyprint {
-  background: var(--base-bg);
-  color: var(--base-color);
+  background: var(--code-bg);
+  color: var(--code-text);
+  border: 1px solid var(--tblr-border-color);
+  border-radius: var(--tblr-border-radius);
   display: block;
   white-space: pre;
-  overflow-x:auto;
+  overflow-x: auto;
   word-wrap: normal;
   tab-size: 2;
   padding: 10px;

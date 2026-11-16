@@ -14,6 +14,8 @@ $guestbookRepository = new GuestbookRepository();
 $userRepository = new UserRepository();
 $commentRepository = new CommentRepository();
 $tagRepository = new TagRepository();
+$online = $userRepository->getOnline();
+$onlineCount = $userRepository->getOnlineCount();
 ?>
 
 <div class="card mb-3">
@@ -21,17 +23,17 @@ $tagRepository = new TagRepository();
         <a href="<?= route('stories') ?>" class="list-group-item list-group-item-action d-flex align-items-center">
             <span class="text-secondary me-2"><i class="bi bi-card-heading"></i></span>
             Статьи
-            <span class="badge bg-blue-lt ms-auto"><?= $storyRepository->getCount() ?></span>
+            <span class="badge bg-primary-lt ms-auto"><?= $storyRepository->getCount() ?></span>
         </a>
         <a href="<?= route('guestbook') ?>" class="list-group-item list-group-item-action d-flex align-items-center">
             <span class="text-secondary me-2"><i class="bi bi-chat-square-text"></i></span>
             Гостевая книга
-            <span class="badge bg-blue-lt ms-auto"><?= $guestbookRepository->getCount() ?></span>
+            <span class="badge bg-primary-lt ms-auto"><?= $guestbookRepository->getCount() ?></span>
         </a>
         <a href="<?= route('users') ?>" class="list-group-item list-group-item-action d-flex align-items-center">
             <span class="text-secondary me-2"><i class="bi bi-people"></i></span>
             Пользователи
-            <span class="badge bg-blue-lt ms-auto"><?= $userRepository->getCount() ?></span>
+            <span class="badge bg-primary-lt ms-auto"><?= $userRepository->getCount() ?></span>
         </a>
         <a href="https://github.com/visavi/motor" class="list-group-item list-group-item-action d-flex align-items-center" rel="noopener" target="_blank">
             <span class="text-secondary me-2"><i class="bi bi-github"></i></span>
@@ -41,6 +43,55 @@ $tagRepository = new TagRepository();
             <span class="text-secondary me-2"><i class="bi bi-github"></i></span>
             Motor ORM
         </a>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header">
+        <h3 class="card-title">Сейчас на сайте</h3>
+        <div class="card-actions">
+            <span class="badge bg-green-lt"><?= $onlineCount ?></span>
+        </div>
+    </div>
+
+    <?php if ($online->isNotEmpty()): ?>
+        <div class="list-group list-group-flush">
+            <?php foreach ($online as $user): ?>
+                <a href="/users/<?= $user->login ?>" class="list-group-item list-group-item-action d-flex align-items-center gap-2">
+                    <?= $user->getAvatar('xs') ?>
+                    <span class="text-truncate"><?= escape($user->getName()) ?></span>
+                    <span class="badge bg-secondary-lt ms-auto"><?= $user->getRole() ?></span>
+                </a>
+            <?php endforeach; ?>
+        </div>
+    <?php else: ?>
+        <div class="card-body text-secondary text-center py-3">Никого нет</div>
+    <?php endif; ?>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header">
+        <h3 class="card-title">Статистика</h3>
+    </div>
+    <div class="card-body">
+        <div class="row g-3 text-center">
+            <div class="col-6">
+                <div class="subheader">Статей</div>
+                <div class="h2 mb-0"><?= $storyRepository->getCount() ?></div>
+            </div>
+            <div class="col-6">
+                <div class="subheader">Комментариев</div>
+                <div class="h2 mb-0"><?= $commentRepository->getCount() ?></div>
+            </div>
+            <div class="col-6">
+                <div class="subheader">Сообщений</div>
+                <div class="h2 mb-0"><?= $guestbookRepository->getCount() ?></div>
+            </div>
+            <div class="col-6">
+                <div class="subheader">Пользователей</div>
+                <div class="h2 mb-0"><?= $userRepository->getCount() ?></div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -74,7 +125,7 @@ $tagRepository = new TagRepository();
     <div class="card-body">
         <div class="btn-list">
             <?php foreach ($tagRepository->getPopularTags() as $tag => $count): ?>
-                <a href="/tags/<?= urlencode($tag) ?>" class="badge bg-blue-lt"><?= escape($tag) ?></a>
+                <a href="/tags/<?= urlencode($tag) ?>" class="badge bg-primary-lt"><?= escape($tag) ?></a>
             <?php endforeach; ?>
         </div>
     </div>

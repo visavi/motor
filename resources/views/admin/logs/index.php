@@ -18,47 +18,59 @@
 <?php $this->stop() ?>
 
 <?php if ($logs): ?>
-    <div class="card card-body mb-3">
-        <div class="mb-3">
-            <select class="form-select" id="log" onchange="return selectLog(this);">
-                <?php foreach ($logs as $log): ?>
-                    <option value="<?= basename($log) ?>"<?= $currentLog === basename($log) ? ' selected' : '' ?>>
-                        <?= basename($log) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
+    <div class="card mb-3">
+        <div class="card-header">
+            <h3 class="card-title">Журнал</h3>
+            <div class="card-actions">
+                <select class="form-select form-select-sm" id="log" onchange="return selectLog(this);">
+                    <?php foreach ($logs as $log): ?>
+                        <option value="<?= basename($log) ?>"<?= $currentLog === basename($log) ? ' selected' : '' ?>>
+                            <?= basename($log) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
         </div>
 
-        <?php foreach ($reader as $data): ?>
-            <div class="card card-body mb-3">
-                <i class="bi bi-bug"></i> <b><?= $data['level'] ?></b>
-                <small class="post-date text-secondary fst-italic ms-1">
-                    <?= $data['date'] ?>
-                </small>
-                <div>
-                    Message: <?= $data['message'] ?><br>
+        <div class="table-responsive">
+            <table class="table table-vcenter card-table">
+                <thead>
+                    <tr>
+                        <th class="w-1">Уровень</th>
+                        <th>Сообщение</th>
+                        <th class="w-1">Когда</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($reader as $data): ?>
+                        <tr>
+                            <td>
+                                <span class="badge <?= in_array($data['level'], ['ERROR', 'CRITICAL', 'ALERT', 'EMERGENCY'], true) ? 'bg-red-lt' : 'bg-yellow-lt' ?>">
+                                    <?= escape($data['level']) ?>
+                                </span>
+                            </td>
+                            <td>
+                                <div class="text-break"><?= escape($data['message']) ?></div>
 
-                    <?php if (isset($data['context']['method'])): ?>
-                        Method: <?= $data['context']['method']?><br>
-                    <?php endif; ?>
+                                <?php if (isset($data['context']['method'], $data['context']['url'])): ?>
+                                    <div class="text-secondary small mt-1">
+                                        <?= escape($data['context']['method']) ?> <?= escape($data['context']['url']) ?>
+                                    </div>
+                                <?php endif; ?>
 
-                    <?php if (isset($data['context']['url'])): ?>
-                        URL: <?= $data['context']['url'] ?><br>
-                    <?php endif; ?>
-                </div>
+                                <a href="#" class="small" onclick="return showContext(this);">
+                                    <i class="bi bi-arrow-down-short"></i>
+                                    Полная информация
+                                </a>
 
-                <div>
-                    <a href="#" onclick="return showContext(this);">
-                        <i class="bi bi-arrow-down-short"></i>
-                        Полная информация
-                    </a>
-
-                    <div class="post-message js-context" style="display: none;">
-                        <?= print_r($data['context'], true) ?>
-                    </div>
-                </div>
-            </div>
-        <?php endforeach; ?>
+                                <pre class="post-message js-context mt-2 mb-0 small" hidden><?= escape(print_r($data['context'], true)) ?></pre>
+                            </td>
+                            <td class="text-secondary text-nowrap"><?= escape($data['date']) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 <?php else: ?>
     <?= $this->fetch('app/_empty', [
@@ -67,7 +79,6 @@
         'icon'     => 'bi-journal-text',
     ]) ?>
 <?php endif; ?>
-
 
 <?php $this->push('scripts') ?>
     <script>

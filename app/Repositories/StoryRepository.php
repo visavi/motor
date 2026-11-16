@@ -116,7 +116,7 @@ class StoryRepository implements RepositoryInterface
         return Story::query()
             ->active()
             ->where('created_at', '<', time())
-            ->whereLike('text', $search)
+            ->whereLike('text', '%' . $search . '%')
             ->orderByDesc('created_at')
             ->paginate($perPage)
             ->appends(['search' => $search]);

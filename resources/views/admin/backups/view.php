@@ -19,15 +19,34 @@
 <?php $this->stop() ?>
 
 <?php if ($files): ?>
-    <div class="card card-body mb-3">
-        <?php foreach ($files as $file): ?>
-            <div>
-                <i class="bi bi-filetype-csv"></i>
-                <?= $file['name'] ?> / <?= formatSize($file['size']) ?>
+    <div class="card mb-3">
+        <div class="card-header">
+            <h3 class="card-title">Таблицы в архиве</h3>
+            <div class="card-actions">
+                <span class="badge bg-secondary-lt"><?= $countFiles ?></span>
             </div>
-        <?php endforeach; ?>
-
-        <div class="mt-3">Всего таблиц: <?= $countFiles ?></div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-vcenter card-table">
+                <thead>
+                    <tr>
+                        <th>Таблица</th>
+                        <th class="w-1">Размер</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($files as $file): ?>
+                        <tr>
+                            <td>
+                                <i class="bi bi-filetype-csv text-secondary me-1"></i>
+                                <?= escape($file['name']) ?>
+                            </td>
+                            <td class="text-secondary text-nowrap"><?= formatSize($file['size']) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 <?php else: ?>
     <?= $this->fetch('app/_empty', [

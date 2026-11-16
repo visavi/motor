@@ -6,6 +6,7 @@ use App\Controllers\Admin\IndexController as AdminIndexController;
 use App\Controllers\Admin\SettingController as AdminSettingController;
 use App\Controllers\Admin\BackupController as AdminBackupController;
 use App\Controllers\Admin\LogController as AdminLogController;
+use App\Controllers\Admin\MigrationController as AdminMigrationController;
 use App\Controllers\Admin\StickerController as AdminStickerController;
 use App\Controllers\BBCodeController;
 use App\Controllers\CaptchaController;
@@ -25,6 +26,7 @@ use App\Controllers\User\ProfileController;
 use App\Controllers\User\UserController;
 use App\Controllers\User\UserStoryController;
 use App\Middleware\CheckAdminMiddleware;
+use App\Middleware\CheckBossMiddleware;
 use App\Middleware\CheckUserMiddleware;
 use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
@@ -145,10 +147,13 @@ return function (App $app) {
 
         $group->get('/logs', [AdminLogController::class, 'index'])->setName('admin-logs');
 
+        $group->get('/migrations', [AdminMigrationController::class, 'index'])->setName('admin-migrations');
+        $group->post('/migrations', [AdminMigrationController::class, 'run'])->setName('admin-migrations-run');
+
         $group->get('/stickers', [AdminStickerController::class, 'index'])->setName('admin-stickers');
         $group->get('/sticker/{id:[0-9]+}/edit', [AdminStickerController::class, 'edit'])->setName('admin-sticker-edit');
         $group->put('/sticker/{id:[0-9]+}', [AdminStickerController::class, 'update'])->setName('admin-sticker-update');
         $group->post('/stickers', [AdminStickerController::class, 'store'])->setName('admin-sticker-store');
         $group->delete('/sticker/{id:[0-9]+}', [AdminStickerController::class, 'destroy'])->setName('admin-sticker-destroy');
-    })->add(CheckAdminMiddleware::class);
+    })->add(CheckBossMiddleware::class);
 };

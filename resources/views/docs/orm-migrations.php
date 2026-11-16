@@ -1,6 +1,6 @@
 <?php $this->layout('layout-docs') ?>
 
-<?php $this->start('title') ?>Builder<?php $this->stop() ?>
+<?php $this->start('title') ?>Миграции<?php $this->stop() ?>
 
 <?php $this->start('breadcrumb') ?>
     <nav>
@@ -12,100 +12,156 @@
     </nav>
 <?php $this->stop() ?>
 
-<div class="mb-3">
-    Миграции данных - это процесс изменения структуры БД без потери данных. Обычно миграции БД используются при разработке программного обеспечения, когда необходимо изменять таблицы или добавлять новые поля в уже существующие таблицы.
-</div>
-
-<div class="mb-3">
-    Когда разработчики вносят изменения в схему базы данных, например, добавляют новые таблицы, изменяют существующие или удаляют их, необходимо чтобы эти изменения применились на всех экземплярах БД. Миграции дают возможность автоматизировать этот процесс, сделав его более надежным и быстрым.
-</div>
+<p>
+    Миграции меняют структуру таблиц: создают и удаляют файлы, добавляют, переименовывают и удаляют колонки, не теряя
+    данных. Каждое изменение хранится отдельным файлом в репозитории, поэтому на любой копии сайта структуру можно
+    привести к актуальной одной командой.
+</p>
 
 <ul>
+    <li><a href="#api">Как устроена миграция</a></li>
     <li><a href="#create-table">Создание таблицы</a></li>
     <li><a href="#delete-table">Удаление таблицы</a></li>
-    <li><a href="#create-column">Создание колонок</a></li>
-    <li><a href="#rename-column">Переименовывание колонок</a></li>
+    <li><a href="#create-column">Добавление колонок</a></li>
+    <li><a href="#rename-column">Переименование колонок</a></li>
     <li><a href="#delete-column">Удаление колонок</a></li>
-    <li><a href="#has-table">Проверка существования таблицы</a></li>
-    <li><a href="#has-column">Проверка существования колонки</a></li>
-    <li><a href="#up">Выполнение миграций</a></li>
-    <li><a href="#down">Откат миграций</a></li>
+    <li><a href="#batch">Несколько изменений сразу</a></li>
+    <li><a href="#exists">Проверка существования</a></li>
+    <li><a href="#files">Файлы миграций в Motor CMS</a></li>
+    <li><a href="#commands">Выполнение и откат</a></li>
 </ul>
 
-<div class="mb-3">
-    Для вызова класса миграции необходимо в конструктор передать нужную нам модель
-</div>
-
+<h3 id="api">Как устроена миграция</h3>
+<p>В конструктор передаётся модель таблицы:</p>
 <pre class="prettyprint">
-$migration = new Migration(new Test());
+use MotorORM\Migration;
+
+$migration = new Migration(new Story());
 </pre>
+
+<p>
+    Изменения перечисляются по цепочке, а последний вызов — <code>createTable()</code> или <code>changeTable()</code> —
+    применяет их к файлу.
+</p>
 
 <h3 id="create-table">Создание таблицы</h3>
-Пример создания файла test.csv с пятью полями
 <pre class="prettyprint">
-$migration->createTable(function (Migration $table) {
-    $table->create('id');
-    $table->create('title');
-    $table->create('text');
-    $table->create('user_id');
-    $table->create('created_at');
-});
+$migration
+    ->create('id')
+    ->create('title')
+    ->create('text')
+    ->create('user_id')
+    ->create('created_at')
+    ->createTable();
 </pre>
+
+<p>Первая колонка становится уникальным ключом таблицы.</p>
 
 <h3 id="delete-table">Удаление таблицы</h3>
 <pre class="prettyprint">
 $migration->deleteTable();
 </pre>
 
-<h3 id="create-column">Создание колонок</h3>
+<h3 id="create-column">Добавление колонок</h3>
 <pre class="prettyprint">
-$migration->changeTable(function (Migration $table) {
-    // Создаст колонку text c текстом по умолчанию "Текст" после колонки title
-    $table->create('text')->default('Текст')->after('title');
+$migration
+    # Колонка text со значением «Текст» у существующих строк, после колонки title
+    ->create('text')->default('Текст')->after('title')
 
-    // Создаст колонку test перед колонкой id
-    $table->create('test')->before('id');
-});
+    # Колонка slug перед колонкой text
+    ->create('slug')->before('text')
+
+    ->changeTable();
 </pre>
 
-<h3 id="rename-column">Переименовывание колонок</h3>
+<p>
+    Без <code>after()</code> и <code>before()</code> колонка добавляется в конец, без <code>default()</code> у существующих
+    строк она будет пустой. Не ставьте колонку перед первой: первая колонка — ключ таблицы, и новая займёт его место.
+</p>
+
+<h3 id="rename-column">Переименование колонок</h3>
 <pre class="prettyprint">
-$migration->changeTable(function (Migration $table) {
-    // Переименует user_id в author_id
-    $table->rename('user_id', 'author_id');
-});
+$migration->rename('user_id', 'author_id')->changeTable();
 </pre>
 
 <h3 id="delete-column">Удаление колонок</h3>
 <pre class="prettyprint">
-$migration->changeTable(function (Migration $table) {
-    // Удалит колонку title
-    $table->delete('title');
-});
+$migration->delete('title')->changeTable();
 </pre>
 
-<h3 id="has-table">Проверка существования таблицы</h3>
+<h3 id="batch">Несколько изменений сразу</h3>
+<p>
+    Всё, что перечислено до одного <code>changeTable()</code>, применяется за один проход по файлу. Изменения
+    выполняются по порядку, поэтому колонка, добавленная раньше, уже видна следующему изменению:
+</p>
 <pre class="prettyprint">
-// Проверит существование таблицы
-$migration->hasTable();
+$migration
+    ->create('slug')->after('id')
+    ->create('views')->default(0)->after('slug')
+    ->rename('user_id', 'author_id')
+    ->delete('old_field')
+    ->changeTable();
 </pre>
 
-<h3 id="has-column">Проверит существование колонки</h3>
+<h3 id="exists">Проверка существования</h3>
 <pre class="prettyprint">
-// Проверит существование колонки
-$migration->hasColumn('field');
+$migration->hasTable();             // есть ли файл таблицы
+$migration->hasColumn('slug');      // есть ли колонка
 </pre>
 
-<h3 id="up">Выполнение миграций</h3>
-Данная команда просканирует директорию /database/migrations, найдет все классы в этой директории и вызовет у каждого класса метод up()
+<p>Оба метода только проверяют и ничего не создают.</p>
+
+<h3 id="files">Файлы миграций в Motor CMS</h3>
+<p>
+    Миграции лежат в <code>database/migrations</code>. Имя файла начинается с даты и времени, по ним определяется
+    порядок выполнения: <code>2026_08_29_100000_add_online_at_to_users.php</code>. Файл возвращает объект с методами
+    <code>up()</code> — применить изменение — и <code>down()</code> — отменить его:
+</p>
+<pre class="prettyprint">
+&lt;?php
+
+use App\Models\User;
+use MotorORM\Migration;
+
+return new class
+{
+    public function up(): void
+    {
+        $migration = new Migration(new User());
+        $migration
+            ->create('online_at')->default(0)->after('created_at')
+            ->changeTable();
+    }
+
+    public function down(): void
+    {
+        $migration = new Migration(new User());
+        $migration
+            ->delete('online_at')
+            ->changeTable();
+    }
+};
+</pre>
+
+<p><code>down()</code> должен в точности отменять <code>up()</code>, иначе откат оставит таблицу в промежуточном состоянии.</p>
+
+<h3 id="commands">Выполнение и откат</h3>
+<p>Выполнить все новые миграции:</p>
 <pre class="prettyprint">
 php motor migrate
 </pre>
 
-<h3 id="down">Откат миграций</h3>
-Команда откатывает выполненные раннее миграции
+<p>
+    Команда находит в <code>database/migrations</code> файлы, которых ещё нет в таблице <code>migrations</code>, и
+    вызывает у каждого <code>up()</code>. Миграции, выполненные одним запуском, записываются одной партией.
+</p>
+
+<p>Откатить последнюю партию:</p>
 <pre class="prettyprint">
 php motor migrate:rollback
 </pre>
 
-Миграции позволяют поддерживать состояние файловых таблиц в актуальном виде
+<p>
+    Команда вызывает <code>down()</code> у миграций последнего запуска в обратном порядке. Если миграция упала
+    с ошибкой, выполнение останавливается, а следующие миграции не запускаются.
+</p>

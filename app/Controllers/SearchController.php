@@ -29,8 +29,12 @@ class SearchController extends Controller
      */
     public function index(Request $request, Response $response): Response
     {
-        $query  = $request->getQueryParams();
-        $search = urldecode(escape($query['search'] ?? ''));
+        $search = $request->getQueryParams()['search'] ?? '';
+        $search = is_string($search) ? sanitize($search) : '';
+
+        if ($search === '') {
+            return $this->redirect($response, route('stories'));
+        }
 
         $stories = $this->storyRepository->getStoriesBySearch($search, setting('story.per_page'));
 

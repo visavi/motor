@@ -75,7 +75,7 @@ $isManagement ??= false;
                             Прикрепить фото&hellip;
                         </label>
                         <div class="invalid-feedback"><?= getError('picture') ?></div>
-                        <span class="badge bg-info" id="upload-file-info"></span>
+                        <span class="badge bg-primary-lt" id="upload-file-info"></span>
                     </div>
                 <?php endif; ?>
             </div>

@@ -78,7 +78,7 @@ $emptySubtitle ??= 'Как только появится первая стать
                             <?php if ($story->tags->isNotEmpty()): ?>
                                 <div class="btn-list mt-2">
                                     <?php foreach ($story->tags as $tag): ?>
-                                        <a href="/tags/<?= urlencode($tag->tag) ?>" class="badge bg-blue-lt"><?= escape($tag->tag) ?></a>
+                                        <a href="/tags/<?= urlencode($tag->tag) ?>" class="badge bg-primary-lt"><?= escape($tag->tag) ?></a>
                                     <?php endforeach; ?>
                                 </div>
                             <?php endif; ?>

@@ -12,7 +12,12 @@ use MotorORM\Model as BaseModel;
 abstract class Model extends BaseModel
 {
     /**
-     * Table dir
+     * Path of the table file
+     *
+     * @return string
      */
-    protected ?string $tableDir = __DIR__ . '/../../storage/database';
+    public function getPath(): string
+    {
+        return storagePath('database/' . $this->table);
+    }
 }

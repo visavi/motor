@@ -1,6 +1,6 @@
 <?php $this->layout('layout-docs') ?>
 
-<?php $this->start('title') ?>Builder<?php $this->stop() ?>
+<?php $this->start('title') ?>Коллекции<?php $this->stop() ?>
 
 <?php $this->start('breadcrumb') ?>
     <nav>
@@ -12,361 +12,134 @@
     </nav>
 <?php $this->stop() ?>
 
-<h3>Коллекции</h3>
-<div class="mb-3">
-    Коллекции - это набор инструментов для работы с массивами и коллекциями данных.<br>
-    Коллекции позволяет работать с данными более эффективно и удобно, чем стандартные функции PHP.
-</div>
-<div class="mb-3">
-    Коллекции предоставляет множество методов для работы с коллекциями данных, таких как сортировка, фильтрация, группировка, поиск, преобразование и т.д.<br>
-    Эти методы позволяют быстро и легко получать нужные данные из больших массивов и коллекций.
-</div>
-<div class="mb-3">
-    Кроме того, коллекции поддерживает цепочку методов, которая позволяет выполнять несколько операций над коллекцией данных одновременно. Это значительно упрощает код и повышает его читаемость.
-</div>
+<p>
+    <code>get()</code> и связи <code>hasMany</code> возвращают <code>Collection</code> — обёртку над массивом моделей.
+    Её можно перебирать в <code>foreach</code>, передавать в <code>count()</code> и читать как массив:
+</p>
+<pre class="prettyprint">
+$stories = Story::query()->where('active', 1)->get();
+
+foreach ($stories as $story) {
+    echo $story->title;
+}
+
+count($stories);
+$stories[0]->title;
+</pre>
+
+<p>Коллекцию можно создать и из обычного массива:</p>
+<pre class="prettyprint">
+$collection = new Collection(['php', 'csv', 'orm']);
+</pre>
 
 <ul>
-    <li><a href="#all">Преобразование коллекции в массив (all)</a></li>
-    <li><a href="#get">Получение элемента по ключу (get)</a></li>
-    <li><a href="#first">Получение первой записи (first)</a></li>
-    <li><a href="#last">Получение последней записи (last)</a></li>
-    <li><a href="#pull">Удаление и получение записи из коллекции (pull)</a></li>
-    <li><a href="#forget">Удаление записи из коллекции (forget)</a></li>
-    <li><a href="#keys">Получение всех ключей коллекции (keys)</a></li>
-    <li><a href="#values">Получение всех значений коллекции (values)</a></li>
-    <li><a href="#has">Проверка ключа на существование (has)</a></li>
-    <li><a href="#contains">Проверка значение на существование (contains)</a></li>
-    <li><a href="#search">Поиск значения в коллекции (search)</a></li>
-    <li><a href="#count">Получение количества записей в коллекции (count)</a></li>
-    <li><a href="#put">Установка значения в коллекции (put)</a></li>
-    <li><a href="#push">Добавление записи в коллекцию (push)</a></li>
-    <li><a href="#is-empty">Проверка коллекции на пустоту (isEmpty)</a></li>
-    <li><a href="#is-not-empty">Проверка коллекции на заполненность (isNotEmpty)</a></li>
-    <li><a href="#clear">Очистка коллекции (clear)</a></li>
-    <li><a href="#slice">Срез коллекции (slice)</a></li>
-    <li><a href="#pluck">Получение всех записей по ключу (pluck)</a></li>
-    <li><a href="#filter">Фильтрация записей (filter)</a></li>
+    <li><a href="#read">Получение элементов</a></li>
+    <li><a href="#check">Проверки</a></li>
+    <li><a href="#transform">Преобразования</a></li>
+    <li><a href="#change">Изменение коллекции</a></li>
+    <li><a href="#immutable">Новая коллекция или та же</a></li>
 </ul>
 
-<h3 id="all">Преобразование коллекции в массив (all)</h3>
-Метод all() возвращает заданный массив, представленный коллекцией:
-
+<h3 id="read">Получение элементов</h3>
 <pre class="prettyprint">
-(new Collection([1, 2, 3]))->all();
-
-// [1, 2, 3]
+$stories->all();                  // исходный массив моделей
+$stories->first();                // первый элемент или null
+$stories->last();                 // последний элемент или null
+$stories->get(5);                 // элемент по ключу или null
+$stories->get(5, $default);       // элемент по ключу или значение по умолчанию
+$stories->keys();                 // массив ключей
+$stories->values();               // массив значений с ключами 0, 1, 2…
+$stories->count();                // число элементов
 </pre>
 
-<h3 id="get">Получение элемента по ключу (get)</h3>
-Метод get() возвращает нужный элемент по заданному ключу. Если ключ не существует, то возвращается null:
-
+<p><code>first()</code> и <code>last()</code> принимают замыкание и тогда возвращают первое или последнее подходящее значение:</p>
 <pre class="prettyprint">
-$collection = new Collection(['name' => 'Vantuz', 'cms' => 'motor']);
-
-$value = $collection->get('name');
-
-// Vantuz
+$stories->first(fn (Story $story) => $story->rating &gt; 10);
+$stories->last(fn (Story $story) => $story->locked);
 </pre>
 
-Вторым параметром вы можете передать значение по умолчанию:
-
+<h3 id="check">Проверки</h3>
 <pre class="prettyprint">
-$collection = new Collection(['name' => 'Vantuz', 'cms' => 'motor']);
+$stories->isEmpty();
+$stories->isNotEmpty();
 
-$value = $collection->get('foo', 'default-value');
+# Есть ли ключ
+$stories->has(0);
 
-// default-value
+# Есть ли значение: обычное сравнение, строгое или через замыкание
+$tags->contains('php');
+$tags->contains('1', strict: true);
+$stories->contains(fn (Story $story) => $story->user_id === 1);
+
+# Ключ найденного значения или false
+$tags->search('php');
+$stories->search(fn (Story $story) => $story->rating &gt; 10);
 </pre>
 
-<h3 id="first">Получение первой записи (first)</h3>
-Метод first() возвращает первый элемент в коллекции, который проходит заданный тест на истинность:
-
+<p>В шаблонах удобно проверять коллекцию перед выводом:</p>
 <pre class="prettyprint">
-(new Collection([1, 2, 3, 4]))->first(function (int $value, int $key) {
-    return $value > 2;
-});
-
-// 3
+&lt;?php if ($stories-&gt;isNotEmpty()): ?&gt;
+    &lt;?php foreach ($stories as $story): ?&gt;
+        …
+    &lt;?php endforeach; ?&gt;
+&lt;?php else: ?&gt;
+    Статей пока нет
+&lt;?php endif; ?&gt;
 </pre>
 
-Вы также можете вызвать first() метод без аргументов, чтобы получить первый элемент в коллекции. Если коллекция пуста, то возвращается null:
+<h3 id="transform">Преобразования</h3>
+<p>Эти методы возвращают новую коллекцию, а исходную не трогают.</p>
 
+<p><code>pluck()</code> берёт одну колонку. Вторым аргументом можно указать колонку для ключей:</p>
 <pre class="prettyprint">
-(new Collection([1, 2, 3, 4]))->first();
-
-// 1
+$stories->pluck('title');               // ['Привет, мир', 'Вторая статья']
+$stories->pluck('title', 'id');         // [1 => 'Привет, мир', 2 => 'Вторая статья']
+$stories->pluck('title')->all();        // обычный массив
 </pre>
 
-<h3 id="last">Получение последней записи (last)</h3>
-Метод last() возвращает последний элемент в коллекции, который проходит заданный тест на истинность:
-
+<p><code>keyBy()</code> оставляет сами элементы, но меняет ключи на значения колонки или результат замыкания:</p>
 <pre class="prettyprint">
-(new Collection([1, 2, 3, 4]))->last(function (int $value, int $key) {
-    return $value < 3;
-});
+$users = User::query()->get()->keyBy('id');
+$users->get(5)->login;
 
-// 2
+$users->keyBy(fn (User $user) => strtolower($user->login));
 </pre>
 
-Вы также можете вызвать last() метод без аргументов, чтобы получить последний элемент в коллекции. Если коллекция пуста, то возвращается null:
+<p>
+    При повторе ключа остаётся последний элемент, а элементы без такой колонки отбрасываются.
+</p>
 
+<p><code>filter()</code> оставляет элементы, для которых замыкание вернуло true. Без замыкания убирает пустые значения:</p>
 <pre class="prettyprint">
-(new Collection([1, 2, 3, 4]))->last();
-
-// 4
+$stories->filter(fn (Story $story) => $story->active);
+$collection->filter();
 </pre>
 
-<h3 id="pull">Удаление и получение записи из коллекции (pull)</h3>
-Метод pull() удаляет и возвращает элемент из коллекции по его ключу:
-
+<p><code>slice()</code> вырезает часть коллекции, ключи при этом сохраняются:</p>
 <pre class="prettyprint">
-$collection = new Collection(['product_id' => 'prod-100', 'name' => 'Desk']);
-
-$collection->pull('name');
-
-// 'Desk'
-
-$collection->all();
-
-// ['product_id' => 'prod-100']
+$stories->slice(0, 3);    // первые три
+$stories->slice(5);       // всё начиная с шестого
 </pre>
 
-<h3 id="forget">Удаление записи из коллекции (forget)</h3>
-Метод forget() удаляет элемент из коллекции по его ключу:
-
+<h3 id="change">Изменение коллекции</h3>
+<p>Эти методы меняют коллекцию, на которой вызваны:</p>
 <pre class="prettyprint">
-$collection = new Collection(['name' => 'Vantuz', 'cms' => 'motor']);
-
-$collection->forget('name');
-
-$collection->all();
-
-// ['cms' => 'motor']
+$collection->push('новое');       // добавить в конец
+$collection->put('key', 'value'); // записать по ключу
+$collection->pull('key');         // удалить по ключу и вернуть значение
+$collection->forget('key');       // удалить по ключу
+$collection->clear();             // удалить всё
 </pre>
 
-<h3 id="keys">Получение всех ключей коллекции (keys)</h3>
-Метод keys() возвращает все ключи коллекции:
+<p>Изменения касаются только коллекции в памяти. Чтобы удалить строки из файла, используйте <a href="/docs/orm-builder#write">запрос</a> или <code>$model->delete()</code>.</p>
 
+<h3 id="immutable">Новая коллекция или та же</h3>
+<p>
+    <code>pluck()</code>, <code>keyBy()</code>, <code>filter()</code> и <code>slice()</code> возвращают новую коллекцию.
+    Вызвать такой метод и не использовать результат — почти всегда ошибка, поэтому они помечены атрибутом
+    <code>#[\NoDiscard]</code>, и PHP об этом предупредит:
+</p>
 <pre class="prettyprint">
-$collection = new Collection([
-  'prod-100' => ['product_id' => 'prod-100', 'name' => 'Desk'],
-  'prod-200' => ['product_id' => 'prod-200', 'name' => 'Chair'],
-]);
-
-$keys = $collection->keys();
-
-$keys->all();
-
-// ['prod-100', 'prod-200']
-</pre>
-
-<h3 id="values">Получение всех значений коллекции (values)</h3>
-Метод values() возвращает новую коллекцию со сброшенными ключами и последовательно пронумерованными индексами:
-
-<pre class="prettyprint">
-$collection = new Collection([
-  10 => ['product' => 'Desk', 'price' => 200],
-  11 => ['product' => 'Desk', 'price' => 200]
-]);
-
-$values = $collection->values();
-
-$values->all();
-
-/*[
-    0 => ['product' => 'Desk', 'price' => 200],
-    1 => ['product' => 'Desk', 'price' => 200],
-]*/
-</pre>
-
-<h3 id="has">Проверка ключа на существование (has)</h3>
-Метод has() определяет, существует ли заданный ключ в коллекции:
-
-<pre class="prettyprint">
-$collection = new Collection(['account_id' => 1, 'product' => 'Desk']);
-
-$collection->has('product');
-
-// true
-</pre>
-
-<h3 id="contains">Проверка значение на существование (contains)</h3>
-
-Метод contains() определяет, содержит ли коллекция данный элемент. Вы можете передать методу замыкание contains(), чтобы определить, существует ли в коллекции элемент, соответствующий данному критерию истинности:
-
-<pre class="prettyprint">
-$collection = new Collection([1, 2, 3, 4, 5]);
-
-$collection->contains(function (int $value, int $key) {
-    return $value > 5;
-});
-
-/ false
-</pre>
-
-В качестве альтернативы вы можете передать строку методу contains(), чтобы определить, содержит ли коллекция заданное значение элемента:
-
-<pre class="prettyprint">
-$collection = new Collection(['name' => 'Desk', 'price' => 100]);
-
-$collection->contains('Desk');
-
-// true
-
-$collection->contains('New York');
-
-// false
-</pre>
-
-<h3 id="search">Поиск значения в коллекции (search)</h3>
-Метод search() ищет в коллекции заданное значение и возвращает его ключ при успешном поиске. Если элемент не найден, то возвращается false.
-
-<pre class="prettyprint">
-$collection = new Collection([2, 4, 6, 8]);
-
-$collection->search(4);
-
-// 1
-</pre>
-Поиск проводится с помощью «неточного» сравнения, то есть строка с числовым значением будет считаться равной числу с таким же значением. Чтобы использовать строгое сравнение, передайте true вторым параметром метода:
-
-<pre class="prettyprint">
-$collection->search('4', true);
-
-// false
-</pre>
-
-В качестве альтернативы вы можете передать собственное замыкание для поиска первого элемента, который проходит указанный тест на истинность:
-<pre class="prettyprint">
-$collection->search(function ($item, $key) {
-    return $item > 5;
-});
-
-// 2
-</pre>
-
-<h3 id="count">Получение количества записей в коллекции (count)</h3>
-Метод count() возвращает общее количество элементов в коллекции:
-
-<pre class="prettyprint">
-$collection = new Collection([1, 2, 3, 4]);
-
-$collection->count();
-
-// 4
-</pre>
-
-<h3 id="put">Установка значения в коллекции (put)</h3>
-Метод put() устанавливает заданный ключ и значение в коллекцию:
-
-<pre class="prettyprint">
-$collection = new Collection(['product_id' => 1, 'name' => 'Desk']);
-
-$collection->put('price', 100);
-$collection->all();
-
-// ['product_id' => 1, 'name' => 'Desk', 'price' => 100]
-</pre>
-
-<h3 id="push">Добавление записи в коллекцию (push)</h3>
-Метод push() добавляет элемент в конец коллекции:
-
-<pre class="prettyprint">
-$collection = new Collection([1, 2, 3, 4]);
-
-$collection->push(5);
-$collection->all();
-
-// [1, 2, 3, 4, 5]
-</pre>
-
-<h3 id="is-empty">Проверка коллекции на пустоту (isEmpty)</h3>
-Метод isEmpty() возвращает true, если коллекция пуста. В противном случае вернётся false:
-
-<pre class="prettyprint">
-$collection = new Collection([]);
-$collection->isEmpty();
-
-// true
-</pre>
-
-<h3 id="is-not-empty">Проверка коллекции на заполненность (isNotEmpty)</h3>
-Метод isNotEmpty() возвращает true, если коллекция не пустая. В противном случае вернётся false:
-
-<pre class="prettyprint">
-$collection = new Collection([1, 2, 3]);
-$collection->isNotEmpty();
-
-// true
-</pre>
-
-<h3 id="clear">Очистка коллекции (clear)</h3>
-<pre class="prettyprint">
-$collection = new Collection([1, 2, 3]);
-$slice = $collection->clear();
-
-// []
-</pre>
-
-<h3 id="slice">Срез коллекции (slice)</h3>
-Метод slice() возвращает часть коллекции, начиная с заданного индекса:
-
-<pre class="prettyprint">
-$collection = new Collection([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
-$slice = $collection->slice(4);
-$slice->all();
-
-// [5, 6, 7, 8, 9, 10]
-</pre>
-
-Если вы хотите ограничить размер получаемой части коллекции, передайте желаемый размер вторым параметром в метод:
-<pre class="prettyprint">
-$slice = $collection->slice(4, 2);
-$slice->all();
-
-// [5, 6]
-</pre>
-
-<h3 id="pluck">Получение всех записей по ключу (pluck)</h3>
-Метод pluck() извлекает все значения по заданному ключу:
-
-<pre class="prettyprint">
- $collection = new Collection([
-    ['login' => 'Alex', 'name' => 'Саня'],
-    ['login' => 'Viktor', 'name' => 'Виктор'],
-]);
-
-// ['Саня', 'Виктор']
-</pre>
-
-Также вы можете указать, с каким ключом вы хотите получить коллекцию:
-<pre class="prettyprint">
-$collection->pluck('name', 'login');
-$collection->all();
-
-//['Alex' => 'Саня', 'Viktor' => 'Виктор']
-</pre>
-
-<h3 id="filter">Фильтрация записей (filter)</h3>
-Метод filter() фильтрует коллекцию, используя callback-функции, eсли callback-функция возвращает true, данное значение возвращается в результирующую коллекцию:
-
-<pre class="prettyprint">
-$collection = new Collection([1, 2, 3, 4]);
-
-$filtered = $collection->filter(function (int $value, int $key) {
-    return $value > 2;
-});
-
-$filtered->all();
-
-// [3, 4]
-</pre>
-
-Если callback-функция не указана все пустые значения массива array будут удалены
-<pre class="prettyprint">
-$collection = new Collection([1, 2, 3, null, false, '', 0, []]);
-
-$collection->filter()->all();
-
-// [1, 2, 3]
+$stories->filter(fn ($story) => $story->active);            // предупреждение: результат потерян
+$active = $stories->filter(fn ($story) => $story->active);  // правильно
 </pre>

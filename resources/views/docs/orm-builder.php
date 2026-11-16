@@ -1,487 +1,267 @@
 <?php $this->layout('layout-docs') ?>
 
-<?php $this->start('title') ?>Builder<?php $this->stop() ?>
+<?php $this->start('title') ?>Запросы<?php $this->stop() ?>
 
 <?php $this->start('breadcrumb') ?>
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="bi bi-house-door"></i></a></li>
             <li class="breadcrumb-item"><a href="<?= route('docs') ?>">Документация</a></li>
-            <li class="breadcrumb-item active">Builder</li>
+            <li class="breadcrumb-item active">Запросы</li>
         </ol>
     </nav>
 <?php $this->stop() ?>
 
-<div class="mb-3">
-    ORM (Object-Relational Mapping) - это технология, которая позволяет взаимодействовать с файлами, используя объектно-ориентированный подход. С помощью такой ORM можно работать с данными, хранящимися в файлах, как если бы они были записями в реляционной базе данных.
-</div>
-<div class="mb-3">
-    ORM предоставляет удобный интерфейс для чтения и записи информации в файлы. Она обеспечивает автоматическую генерацию запросов для работы с файлами, что упрощает процесс создания, изменения и удаления данных. Благодаря этому, процесс работы со структурами файловой системы становится более простым и интуитивно понятным.
-</div>
-    <div class="mb-3">
-    Основные преимущества использования файловой ORM включают в себя:<br>
+<p>
+    Запрос начинается с <code>Model::query()</code>. К нему по цепочке добавляются условия, сортировка и лимит,
+    а последний метод — <code>get()</code>, <code>first()</code>, <code>count()</code>, <code>update()</code> и другие —
+    выполняет его.
+</p>
 
-    <ul>
-        <li>Упрощение процесса работы с файлами;</li>
-        <li>Улучшение скорости доступа к данным в файловой системе;</li>
-        <li>Уменьшение количества необходимых действий при работе с файлами;</li>
-        <li>Повышение надежности и безопасности работы с файлами;</li>
-    </ul>
-</div>
-<div class="mb-3">
-    Структура данных CSV совместима, но с некоторыми изменения для более быстрой работы
-</div>
-
-<h3>Возможности</h3>
 <ul>
-    <li><a href="#model">Модели</a></li>
-    <li><a href="#find">Поиск по первичному ключу</a></li>
-    <li><a href="#where">Поиск (where)</a></li>
-    <li><a href="#where-in">Поиск (whereIn)</a></li>
-    <li><a href="#where-not-in">Поиск (whereNotIn)</a></li>
-    <li><a href="#or-where">Поиск (orWhere)</a></li>
-    <li><a href="#limit-offset">Limit - Offset</a></li>
-    <li><a href="#headers">Возврат структуры файла</a></li>
-    <li><a href="#count">Возврат количества записей в файле</a></li>
-    <li><a href="#exists">Возврат информации о существовании записи</a></li>
-    <li><a href="#order">Сортировка строк</a></li>
-    <li><a href="#create">Создание записей</a></li>
-    <li><a href="#update">Обновление записей</a></li>
-    <li><a href="#delete">Удаление записей</a></li>
-    <li><a href="#truncate">Очистка файла</a></li>
-    <li><a href="#like">Частичный поиск (Like)</a></li>
-    <li><a href="#lax">Нестрогий поиск (Lax)</a></li>
-    <li><a href="#casts">Приведение типов (Casts)</a></li>
-    <li><a href="#scope">Условия запросов (Scope)</a></li>
-    <li><a href="#dynamic-scope">Динамические условия</a></li>
-    <li><a href="#when">Условные выражения (Conditional clauses)</a></li>
-    <li><a href="#relations">Связи</a></li>
-    <li><a href="#has-one">Связь один к одному</a></li>
-    <li><a href="#has-many">Связь один ко многим</a></li>
-    <li><a href="#has-many-through">Связь многие ко многим</a></li>
-    <li><a href="#eager-load">Жадная загрузка</a></li>
+    <li><a href="#read">Чтение</a></li>
+    <li><a href="#find">Поиск по ключу</a></li>
+    <li><a href="#where">Условия</a></li>
+    <li><a href="#like">Поиск по шаблону (like)</a></li>
+    <li><a href="#order">Сортировка, лимит и смещение</a></li>
+    <li><a href="#cursor">Обход большой таблицы</a></li>
+    <li><a href="#write">Запись</a></li>
+    <li><a href="#when">Условия по необходимости (when)</a></li>
 </ul>
 
-<div class="mb-3">
-    Работы с изменениями в файле, в том числе и вставка выполняется с блокировкой файла для защиты от случайного удаления данных в случае если несколько пользователей одновременно пишут в файл
-</div>
-
-<div class="mb-3">
-    Первых столбец в файле считается уникальным<br>
-    Может быть строковым и числовым<br>
-    Если столбец строковой, то все вставки должны быть с уже заданным уникальным ключом<br>
-    Если столбец числовой, то уникальный ключ будет генерироваться автоматически
-</div>
-
-
-<h3>Запросы</h3>
-<div class="mb-3">
-    Все запросы проводятся через модели в котором должен быть указан путь к файлу с данными В самих моделях могут быть реализованы дополнительные методы
-</div>
-
-<h3 id="model">Модель</h3>
-
-Все запросы выполняются через модель, для начала работы необходимо создать класс модели в котором нужно указать путь к таблице
+<h3 id="read">Чтение</h3>
 <pre class="prettyprint">
-&lt;?php
+# По ключу: модель или null
+Story::query()->find(1);
 
-use MotorORM\Builder;
+# Первое совпадение: модель или null
+Story::query()->where('user_id', 5)->first();
 
-class TestModel extends Builder
-{
-    public string $table = __DIR__ . '/test.csv';
-}
+# Все совпадения: коллекция, пустая если ничего не нашлось
+Story::query()->where('user_id', 5)->get();
+
+# Есть ли хоть одно совпадение
+Story::query()->where('user_id', 5)->exists();
+
+# Сколько записей подходит
+Story::query()->where('active', 1)->count();
+
+# Названия колонок файла
+Story::query()->headers();
 </pre>
 
-Также в базовом классе можно указать директорию с таблицами, а в самом классе модели достаточно указать имя файла
+<p>
+    <code>first()</code> и <code>exists()</code> прекращают чтение на первом совпадении, поэтому запись в начале
+    файла находят почти мгновенно. Что умеет прочитанная модель, описано в разделе
+    <a href="/docs/orm-models#row">Модель как строка</a>, а что умеет коллекция — в разделе
+    <a href="/docs/orm-collection">Коллекции</a>.
+</p>
 
+<h3 id="find">Поиск по ключу</h3>
 <pre class="prettyprint">
-&lt;?php
+Story::query()->find(1);
 
-namespace App\Models;
-
-use MotorORM\Builder;
-
-class Model extends Builder
-{
-    protected ?string $tableDir = __DIR__ . '/../../storage/database';
-}
-
-class User extends Model
-{
-    protected string $table = 'users.csv';
-}
+# Строковый ключ
+Setting::query()->find('theme');
 </pre>
 
-<h3 id="find">Поиск по первичному ключу</h3>
-<pre class="prettyprint">
-TestModel::query()->find(1);
+<p>
+    <code>find()</code> не читает таблицу построчно. Ключи выдаются по возрастанию, поэтому файл обычно отсортирован
+    по первой колонке, и нужную строку можно найти делением файла пополам. На таблице в 50 000 строк это 2 мс
+    вместо 73.
+</p>
 
-# Если первичный ключ строковой
-TestModel::query()->find('value');
+<p>
+    Если файл не отсортирован, ключ нечисловой или строка повреждена, <code>find()</code> молча переходит на обычный
+    проход по файлу. Ответ при этом всегда верный, меняется только скорость.
+</p>
+
+<p>Деление пополам работает только у «голого» <code>find()</code>. Условия или сортировка перед ним означают полный проход:</p>
+<pre class="prettyprint">
+Story::query()->find(1);                        // деление пополам
+Story::query()->where('active', 1)->find(1);    // полный проход
 </pre>
 
-<h3 id="where">Поиск по заданным значениям</h3>
-
+<h3 id="where">Условия</h3>
 <pre class="prettyprint">
-# Find by name limit 1
-TestModel::query()->where('name', 'Миша')->limit(1)->get();
+# Равенство
+Story::query()->where('user_id', 5)->get();
 
-# Find by name and first 1
-TestModel::query()->where('name', 'Миша')->first();
+# Сравнение: = != &lt;&gt; &gt; &gt;= &lt; &lt;=
+Story::query()->where('rating', '&gt;=', 10)->get();
 
-# Find by name and title
-TestModel::query()->where('name', 'Миша')->where('title', 'Заголовок10')->get();
+# Несколько условий объединяются через «и»
+Story::query()->where('active', 1)->where('rating', '&gt;', 0)->get();
 
-# Get from condition
-TestModel::query()->where('time', '>=', 1231231235)->get();
+# Или
+Story::query()->where('id', 1)->orWhere('id', 2)->get();
 
-# Get first line
-TestModel::query()->first();
+# Значение из списка и не из списка
+Story::query()->whereIn('id', [1, 3, 4, 7])->get();
+Story::query()->whereNotIn('user_id', [2, 3])->get();
 </pre>
 
-<h3 id="where-in">Поиск (whereIn)</h3>
+<p>Замыкание группирует условия, как скобки в SQL. Группы можно вкладывать друг в друга:</p>
 <pre class="prettyprint">
-TestModel::query()->whereIn('id', [1, 3, 4, 7])->get();
-</pre>
-
-<h3 id="where-not-in">Поиск (whereNotIn)</h3>
-<pre class="prettyprint">
-TestModel::query()->whereNotIn('id', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])->get();
-</pre>
-
-<h3 id="or-where">Поиск (orWhere)</h3>
-<pre class="prettyprint">
-# Get records by multiple conditions
-TestModel::query()
-    ->where(function(Builder $builder) {
-        $builder->where('name', 'Миша');
-        $builder->orWhere(function(Builder $builder) {
-            $builder->where('name', 'Петя');
-            $builder->where('title', '<>', '');
-        });
+# active = 1 AND (rating &gt; 10 OR user_id = 1)
+Story::query()
+    ->where('active', 1)
+    ->where(function (Query $query) {
+        $query->where('rating', '&gt;', 10)->orWhere('user_id', 1);
     })
     ->get();
 </pre>
 
-<h3 id="limit-offset">Limit - offset</h3>
+<p>
+    Условие по колонке, которой нет в файле, бросает <code>UnexpectedValueException</code>, а неизвестный оператор —
+    <code>InvalidArgumentException</code>. Опечатка падает сразу, а не возвращает пустой результат.
+</p>
+
+<h3 id="like">Поиск по шаблону (like)</h3>
+<p>Знак <code>%</code> означает «любые символы в этом месте»:</p>
 <pre class="prettyprint">
-# Get first 3 lines
-TestModel::query()->limit(3)->get();
+# Начинается на motor
+Story::query()->whereLike('title', 'motor%')->get();
 
-# Get lines 1 - 10
-$lines = TestModel::query()->offset(0)->limit(10)->get();
+# Заканчивается на motor
+Story::query()->whereLike('title', '%motor')->get();
 
-# Get last 10 records
-$lines = TestModel::query()->orderByDesc('created_at')->offset(0)->limit(10)->get();
+# Содержит motor
+Story::query()->whereLike('title', '%motor%')->get();
+
+# Не содержит motor
+Story::query()->whereNotLike('title', '%motor%')->get();
+
+# Через «или»
+Story::query()->where('id', 1)->orWhereLike('title', '%motor%')->get();
+Story::query()->where('id', 1)->orWhereNotLike('title', '%motor%')->get();
 </pre>
 
+<p>
+    Шаблон без <code>%</code> сравнивается со всем значением целиком, как <code>LIKE</code> в SQL:
+    <code>whereLike('title', 'motor')</code> найдёт только «motor».
+</p>
 
-<h3 id="count">Получение количества записей</h3>
+<p>Регистр по умолчанию не учитывается. Параметр <code>caseSensitive</code> включает точное сравнение:</p>
 <pre class="prettyprint">
-TestModel::query()->where('time', '>', 1231231234)->count();
+# Найдёт admin, Admin, ADMIN
+User::query()->whereLike('login', 'admin')->first();
+
+# Только admin
+User::query()->whereLike('login', 'admin', caseSensitive: true)->first();
 </pre>
 
-<h3 id="exists">Проверка существования записи</h3>
-<pre class="prettyprint">
-TestModel::query()->where('field', 'value')->exists();
-</pre>
+<div class="alert alert-warning">
+    В версиях до 6.0 поиск по шаблону записывался как <code>where('title', 'like', '%motor%')</code>, а без учёта
+    регистра — как <code>where('login', 'lax', 'admin')</code>. Оба варианта больше не работают: используйте
+    <code>whereLike()</code>.
+</div>
 
-<h3 id="order">Сортировка записей</h3>
+<h3 id="order">Сортировка, лимит и смещение</h3>
 <pre class="prettyprint">
-# Сортировка
-TestModel::query()->orderByDesc('created_at')->limit(3)->get();
+# По возрастанию
+Story::query()->orderBy('created_at')->get();
 
-# Двойная сортировка (time desc, id asc)
-Test::query()
-    ->where('name', 'Миша')
-    ->orderByDesc('time')
+# По убыванию
+Story::query()->orderByDesc('created_at')->get();
+
+# По нескольким колонкам, в порядке добавления
+Story::query()
+    ->orderByDesc('rating')
     ->orderBy('id')
-    ->limit(3)
     ->get();
+
+# Записи с 11-й по 20-ю
+Story::query()->offset(10)->limit(10)->get();
 </pre>
 
-<h3 id="headers">Получение колонок</h3>
+<p>
+    Направление сортировки — перечисление <code>SortOrder</code>. Если оно приходит от пользователя, проверьте его
+    через <code>tryFrom()</code>: неизвестное значение станет <code>null</code>, и сработает значение по умолчанию.
+</p>
 <pre class="prettyprint">
-TestModel::query()->headers();
+$sort = SortOrder::tryFrom($_GET['sort'] ?? '') ?? SortOrder::Desc;
+
+Story::query()->orderBy('created_at', $sort)->paginate(10);
 </pre>
 
-<h3 id="create">Создание записей</h3>
+<p>
+    Сортировка держит подходящие строки в памяти, поэтому на большом файле сначала сузьте выборку через
+    <code>where()</code>. С <code>limit()</code> в памяти остаются только строки, которые попадут в ответ.
+</p>
+
+<h3 id="cursor">Обход большой таблицы</h3>
+<p>
+    <code>get()</code> собирает все найденные записи в коллекцию и только потом отдаёт её. <code>cursor()</code>
+    отдаёт записи по одной, и в памяти живёт только текущая:
+</p>
 <pre class="prettyprint">
-TestModel::query()->create(['name' => 'Миша']);
-</pre>
-
-<h3 id="update">Обновление записей</h3>
-<pre class="prettyprint">
-# Обновление полей
-TestModel::query()->where('name', 'Миша')->update(['text' => 'Новый текст']);
-
-# Сохранение записи
-$test = TestModel::query()->where('name', 'Миша')->first();
-$test->text = 'Новый текст';
-$test->save();
-
-# Обновление полей
-$testModel = TestModel::query()->find(17);
-$affectedLines = $testModel->update(['text' => 'Новый текст']);
-</pre>
-
-<h3 id="delete">Удаление записей</h3>
-<pre class="prettyprint">
-# Удаление записи
-TestModel::query()->where('name', 'Миша')->delete();
-
-# Удаление записей в цикле
-$records = TestModel::query()->get();
-foreach($records as $record) {
-    $record->delete();
+foreach (Story::query()->where('active', 1)->cursor() as $story) {
+    echo $story->title;
 }
 </pre>
 
-<h3 id="truncate">Очистка таблицы</h3>
+<p>
+    На таблице в 50 000 строк это 0 МБ памяти против 33 МБ у <code>get()</code> при той же скорости. Подходит
+    для экспорта, пересчёта и других фоновых задач.
+</p>
+
+<p>
+    У курсора есть ограничение: записи не накапливаются, поэтому связи нельзя загрузить пачкой. Обращение к связи
+    внутри цикла читает связанную таблицу на каждой записи. Если в цикле нужны связи, используйте <code>get()</code>.
+</p>
+
+<h3 id="write">Запись</h3>
 <pre class="prettyprint">
-# Truncate file
-TestModel::query()->truncate();
+# Вставка: числовой ключ будет выдан автоматически
+Story::query()->create(['title' => 'Привет', 'user_id' => 1]);
+
+# Вставка со строковым ключом
+Setting::query()->create(['name' => 'theme', 'value' => 'dark']);
+
+# Изменить все подходящие строки, вернёт число изменённых
+Story::query()->where('user_id', 5)->update(['active' => 0]);
+
+# Удалить все подходящие строки, вернёт число удалённых
+Story::query()->where('active', 0)->delete();
+
+# Очистить таблицу, сохранив заголовки
+Story::query()->truncate();
 </pre>
 
-<h3 id="like">Частичный поиск (Like)</h3>
-Поиск по частичному совпадению
+<p>
+    <code>create()</code> возвращает созданную модель. Если ключ уже занят или строковый ключ не передан,
+    он бросает <code>UnexpectedValueException</code>.
+</p>
 
+<p>Изменить или удалить одну уже прочитанную строку можно через саму модель:</p>
 <pre class="prettyprint">
-// Строки начинающиеся на hi
-$test = TestModel::query()->where('tag', 'like', 'hi%')->get();
+$story = Story::query()->find(17);
 
-// Строки заканчивающиеся на hi
-$test = TestModel::query()->where('tag', 'like', '%hi')->get();
-
-// Строки содержащие hi
-$test = TestModel::query()->where('tag', 'like', '%hi%')->get();
-
-// Этот запрос эквивалентен запросу выше
-$test = TestModel::query()->where('tag', 'like', 'hi')->get();
+$story->update(['title' => 'Новый заголовок']);
+$story->delete();
 </pre>
 
-<h3 id="lax">Нестрогий поиск (Lax)</h3>
-
-Поиск по нестрогому совпадению
-
-При поиске orm использует строгое сравнение, чтобы задействовать нестрогий режим, можно использовать lax
-
+<h3 id="when">Условия по необходимости (when)</h3>
+<p>
+    <code>when()</code> добавляет условия, только если первый аргумент истинный. Это избавляет от <code>if</code>
+    вокруг необязательных фильтров:
+</p>
 <pre class="prettyprint">
-// Будут найдено первое совпадение NAME, name, namE, Name итд
-$user = User::query()->where('login', 'lax', 'name')->first();
-</pre>
-
-<h3 id="casts">Приведение типов (Casts)</h3>
-
-По умолчанию все поля полученные из файла строковые
-
-За некоторыми исключениями
-
-Поле primary key - int
-Поля заканчивающиеся на _id и _at - int
-Пустые поля - null
-Для переопределения используйте свойство casts
-
-<pre class="prettyprint">
-class Story extends Model
-{
-    protected array $casts = [
-        'rating' => 'int',
-        'reads'  => 'int',
-        'locked' => 'bool',
-    ];
-}
-</pre>
-
-Поддерживаются следующие типы
-
-<pre class="prettyprint">
-'int', 'integer' => int
-'real', 'float', 'double' => float
-'string' => string
-'bool', 'boolean' => bool
-'object' => json_decode($value, false),
-'array' => json_decode($value, true),
-</pre>
-
-<h3 id="scope">Условия запросов (Scope)</h3>
-
-Каждый scope — это обычный метод, который начинается с префикса scope. Именно по префиксу ORM понимает, что это scope. Внутрь scope передаётся запрос, на который можно навешивать дополнительные условия.
-
-<pre class="prettyprint">
-class Story extends Model
-{
-    public function scopeActive(Builder $query): Builder
-    {
-        return $query->where('active', true);
-    }
-}
-</pre>
-Использование:
-
-<pre class="prettyprint">
-Story::query()
-    ->active()
-    ->paginate($perPage);
-</pre>
-
-<h3 id="dynamic-scope">Динамические условия</h3>
-
-Некоторые scope зависят от параметров, передающихся в процессе составления запроса. Для этого достаточно описать эти параметры внутри scope после параметра $query:
-
-<pre class="prettyprint">
-class Story extends Model
-{
-    public function scopeOfType(Builder $query, string $type): Builder
-    {
-        return $query->where('type', $type);
-    }
-}
-</pre>
-Использование:
-
-<pre class="prettyprint">
-Story::query()
-    ->ofType('new')
-    ->paginate($perPage);
-</pre>
-
-<h3 id="when">Условные выражения (Conditional clauses)</h3>
-
-Иногда вам может понадобиться, чтобы определенный запроса выполнялся на основе другого условия. Например, вы можете захотеть применить where оператор только в том случае, если заданное входное значение присутствует во входящем HTTP-запросе. Вы можете сделать это, используя when метод:
-
-<pre class="prettyprint">
-$active = true;
-
 $stories = Story::query()
-    ->when($active, function (Story $query, $active) {
-        $query->where('active', $active);
+    ->when($userId, function (Query $query, $userId) {
+        $query->where('user_id', $userId);
     })
-    ->get();
+    ->paginate(10);
 </pre>
 
-Метод when выполняет данное замыкание только тогда, когда первый аргумент равен true. Если первый аргумент равен false, замыкание не будет выполнено.
-
-Вы можете передать другое замыкание в качестве третьего аргумента when метода. Это замыкание будет выполняться только в том случае, если первый аргумент оценивается как false. Чтобы проиллюстрировать, как можно использовать эту функцию, мы будем использовать ее для настройки порядка запросов по умолчанию:
-
+<p>Третий аргумент выполняется, когда значение ложное:</p>
 <pre class="prettyprint">
-$sortByVotes = 'sort_by_votes';
-
-$users = Story::query()
-    ->when($sortByVotes, function ($query, $sortByVotes) {
-        $query->orderBy('votes');
-    }, function ($query) {
-        $query->orderBy('name');
-    })
-    ->get();
+$stories = Story::query()
+    ->when(
+        $popular,
+        fn (Query $query) => $query->orderByDesc('rating'),
+        fn (Query $query) => $query->orderByDesc('created_at'),
+    )
+    ->paginate(10);
 </pre>
-
-<h3 id="relations">Связи (Relations)</h3>
-
-В данный момент поддерживается 3 вида связей
-
-hasOne - один к одному
-hasMany - один ко многим
-hasManyThrough - многие ко многим
-
-<h3 id="has-one">Один к одному (hasOne)</h3>
-3 параметра, имя класса, внешний и внутренний ключ
-
-Внешний и внутренний ключ определяются автоматически, за исключением когда имена полей не совпадают с именем класса или если связь обратная belongsTo (Возможно в будущем это будет реализовано)
-
-<pre class="prettyprint">
-// Прямая связь
-class User extends Model
-{
-    public function story(): Builder
-    {
-        return $this->hasOne(Story::class);
-    }
-}
-</pre>
-
-<pre class="prettyprint">
-// Обратная связь
-class Story extends Model
-{
-    public function user(): Builder
-    {
-        return $this->hasOne(User::class, 'id', 'user_id');
-    }
-}
-</pre>
-
-<h3 id="has-many">Один ко многим (hasMany)</h3>
-
-3 параметра, имя класса, внешний и внутренний ключ
-
-Внешний и внутренний ключ определяются автоматически, за исключением когда имена полей не совпадают с именем класса
-
-<pre class="prettyprint">
-class Story extends Model
-{
-    public function comments(): Builder
-    {
-        return $this->hasMany(Comment::class);
-    }
-}
-</pre>
-
-<h3 id="has-many-through">Многие ко многим (hasManyThrough)</h3>
-
-5 параметров, имя конечного класса, имя промежуточного класса, внешние и внутренние ключи
-
-Внешние и внутренние ключи определяются автоматически, за исключением когда имена полей не совпадают с именами классов
-
-<pre class="prettyprint">
-class Story extends Model
-{
-    public function tags(): Builder
-    {
-        return $this->hasManyThrough(Tag::class, TagStory::class);
-    }
-}
-</pre>
-
-<h3 id="eager-load">Жадная загрузка (Eager load)</h3>
-
-По умолчанию все связи с ленивой загрузкой (lazy load)
-
-Связь не будет загружена до тех пор, пока явно не будет вызвана
-
-<div class="mb-3">
-Для того чтобы жадно загрузить данные необходимо вызвать метод with и передать имена связей, которые требуется жадно загрузить
-</div>
-
-<pre class="prettyprint">
-class StoryRepository implements RepositoryInterface
-{
-    public function getStories(int $perPage): CollectionPaginate
-    {
-        return Story::query()
-            ->orderByDesc('locked')
-            ->orderByDesc('created_at')
-            ->with(['user', 'comments'])
-            ->paginate($perPage);
-        }
-    }
-}
-</pre>
-Жадная загрузка извлекает данные используя всего несколько запросов. Это позволяет избежать проблемы N + 1.
-
-Представьте, что у вас есть этот код, который находит 10 сообщений, а затем отображает имя автора каждого сообщения.
-
-<pre class="prettyprint">
-foreach ($storyRepository->getStories(10) as $story) {
-    echo $story->user->login;
-}
-</pre>
-
-<div class="mb-3">
-Без ленивой загрузки при каждой итерации цикла было бы обращение в файловую систему для получения данных, то есть 1 запрос на получение списка постов и 10 на получение пользователей
-</div>
-
-<div class="mb-3">
-Жадная загрузка избавляет от этой проблемы, 1 запрос на получение списка постов и 1 на получение пользователей этих постов
-</div>

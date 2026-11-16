@@ -11,6 +11,12 @@ use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 
 final class UserAuthMiddleware implements Middleware
 {
+    /**
+     * Реже одного раза в минуту отметку не обновляем: каждая запись
+     * переписывает таблицу целиком
+     */
+    private const THROTTLE = 60;
+
     public function __construct(
         private Session $session
     ) {}
@@ -28,6 +34,28 @@ final class UserAuthMiddleware implements Middleware
             }
         }
 
+        $this->markOnline();
+
         return $handler->handle($request);
+    }
+
+    /**
+     * Отмечает время последнего визита пользователя
+     *
+     * @return void
+     */
+    private function markOnline(): void
+    {
+        $user = getUser();
+
+        if (! $user || ! $user->id) {
+            return;
+        }
+
+        if ($user->online_at > time() - self::THROTTLE) {
+            return;
+        }
+
+        $user->update(['online_at' => time()]);
     }
 }

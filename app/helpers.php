@@ -292,7 +292,7 @@ function publicPath(string $path = ''): string
 }
 
 /**
- * Get storage path
+ * Get storage path, MOTOR_STORAGE overrides the storage directory
  *
  * @param string $path
  *
@@ -300,7 +300,9 @@ function publicPath(string $path = ''): string
  */
 function storagePath(string $path = ''): string
 {
-    return basePath('/storage/' . ltrim($path, '/'));
+    $root = getenv('MOTOR_STORAGE') ?: basePath('storage');
+
+    return rtrim($root, '/') . '/' . ltrim($path, '/');
 }
 
 /**

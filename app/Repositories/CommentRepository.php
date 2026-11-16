@@ -78,4 +78,14 @@ class CommentRepository implements RepositoryInterface
             ->with('story')
             ->get();
     }
+
+    /**
+     * Get count comments
+     *
+     * @return int
+     */
+    public function getCount(): int
+    {
+        return Comment::query()->count();
+    }
 }

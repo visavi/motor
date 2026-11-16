@@ -20,18 +20,45 @@ use MotorORM\Pagination;
 <?php $this->stop() ?>
 
 <?php if ($stickers->isNotEmpty()): ?>
-    <?php foreach ($stickers as $sticker): ?>
-        <div class="card card-body mb-3">
-            <img src="<?= $sticker->path ?>" alt=""> <b><?= $sticker->code ?></b>
-
-            <div class="float-end ms-3">
-                <a href="<?= route('admin-sticker-edit', ['id' => $sticker->id]) ?>" title="Редактировать" data-bs-toggle="tooltip"><i class="bi bi-pencil"></i></a>
-                <a href="<?= route('admin-sticker-destroy', ['id' => $sticker->id]) ?>" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete" title="Удалить" data-bs-toggle="tooltip"><i class="bi bi-x-lg"></i></a>
+    <div class="card mb-3">
+        <div class="card-header">
+            <h3 class="card-title">Стикеры</h3>
+            <div class="card-actions">
+                <span class="badge bg-secondary-lt"><?= $stickers->total() ?></span>
             </div>
         </div>
-    <?php endforeach; ?>
+        <div class="table-responsive">
+            <table class="table table-vcenter card-table">
+                <thead>
+                    <tr>
+                        <th class="w-1">Стикер</th>
+                        <th>Код</th>
+                        <th class="w-1"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($stickers as $sticker): ?>
+                        <tr>
+                            <td><img src="<?= $sticker->path ?>" alt="<?= escape($sticker->code) ?>" style="max-height: 32px"></td>
+                            <td><code><?= escape($sticker->code) ?></code></td>
+                            <td>
+                                <div class="btn-list flex-nowrap justify-content-end">
+                                    <a href="<?= route('admin-sticker-edit', ['id' => $sticker->id]) ?>" class="btn btn-icon btn-sm btn-ghost-secondary" title="Редактировать" data-bs-toggle="tooltip">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a href="<?= route('admin-sticker-destroy', ['id' => $sticker->id]) ?>" class="btn btn-icon btn-sm btn-ghost-danger" onclick="return submitForm(this);" data-csrf="<?= session('csrf') ?>" data-method="delete" title="Удалить" data-bs-toggle="tooltip">
+                                        <i class="bi bi-x-lg"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-     <?= pagination($stickers) ?>
+    <?= pagination($stickers) ?>
 <?php else: ?>
     <?= $this->fetch('app/_empty', [
         'title'    => 'Стикеров ещё нет',

@@ -25,3 +25,7 @@
         <button type="submit" class="btn btn-primary">Войти</button>
     </form>
 </div>
+
+<div class="text-center text-secondary mt-3">
+    Ещё нет аккаунта? <a href="<?= route('register') ?>">Зарегистрироваться</a>
+</div>
